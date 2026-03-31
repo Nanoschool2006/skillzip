@@ -1,0 +1,43 @@
+#landing_settings .with_frm_style .frm_switch_block {
+	margin:5px 0;
+}
+
+#landing_settings .frm_form_field {
+	margin: 20px 0 0 0;
+}
+
+#frm_landing_page_url_input_wrapper {
+	position: relative;
+}
+
+#frm_landing_page_url_input_wrapper > span {
+	position: absolute;
+	font-size: 15px;
+	line-height: 1;
+	top: 0;
+	left: 8px;
+	color: rgba(84, 95, 110, 0.4);
+}
+
+#frm_landing_page_url_validation {
+	margin-top: 5px;
+}
+
+#landing_settings .frm_image_preview_frame {
+	margin-top: 4px;
+}
+
+#landing_settings .frm_image_preview_wrapper,
+#landing_settings .frm_empty_url svg {
+	width: 100%;
+	height: auto;
+}
+
+#landing_settings .frm_empty_url svg {
+	margin-top: 0;
+}
+
+#landing_settings .frm_image_styling_frame,
+#landing_settings .frm_choose_image_box {
+	margin-left: 0;
+}

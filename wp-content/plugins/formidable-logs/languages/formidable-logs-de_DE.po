@@ -1,0 +1,140 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Logs plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-logs\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-09T17:07:42+00:00\n"
+"PO-Revision-Date: 2024-08-10 04:41\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-logs\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: de\n"
+"X-Crowdin-File: /[Strategy11.formidable-logs] master/languages/formidable-logs.pot\n"
+"X-Crowdin-File-ID: 2386\n"
+"Language: de_DE\n"
+
+#. Plugin Name of the plugin
+#: formidable-logs.php
+msgid "Formidable Logs"
+msgstr "Formidable Protokolle"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-logs.php
+msgid "http://formidablepro.com/"
+msgstr "http://formidablepro.com/"
+
+#. Description of the plugin
+#: formidable-logs.php
+msgid "Log events from Formidable and other add-ons"
+msgstr "Ereignisse von Formidable und anderen Add-ons protokollieren"
+
+#. Author of the plugin
+#: formidable-logs.php
+msgid "Strategy11"
+msgstr "Strategie11"
+
+#: controllers/FrmLogAppController.php:39
+#: controllers/FrmLogAppController.php:61
+#: controllers/FrmLogAppController.php:63
+#: controllers/FrmLogAppController.php:80
+msgid "Logs"
+msgstr "Protokolle"
+
+#: controllers/FrmLogAppController.php:62
+msgid "Log"
+msgstr "Protokoll"
+
+#: controllers/FrmLogAppController.php:65
+msgid "Search Logs"
+msgstr "Protokolle durchsuchen"
+
+#: controllers/FrmLogAppController.php:66
+msgid "No Logs Found."
+msgstr "Keine Protokolle gefunden."
+
+#: controllers/FrmLogAppController.php:67
+msgid "Add New Log"
+msgstr "Neues Protokoll hinzufügen"
+
+#: controllers/FrmLogAppController.php:68
+msgid "Edit Log"
+msgstr "Protokoll bearbeiten"
+
+#: controllers/FrmLogAppController.php:126
+msgid "Log Details"
+msgstr "Details anmelden"
+
+#: formidable-logs.php:79
+msgid "Formidable Logs requires Formidable Forms to be installed."
+msgstr "Für Formidable Logs muss Formidable Forms installiert sein."
+
+#: formidable-logs.php:81
+msgid "Install Formidable Forms"
+msgstr "Formidable Forms installieren"
+
+#: models/FrmLogCron.php:80
+msgid "Purge the logs in a monthly period"
+msgstr "Bereinige die Protokolle monatlich"
+
+#: models/FrmLogList.php:31
+#: models/FrmLogList.php:151
+msgid "Entry"
+msgstr "Eintrag"
+
+#: models/FrmLogList.php:32
+msgid "Action"
+msgstr "Aktion"
+
+#: models/FrmLogList.php:33
+msgid "Status"
+msgstr "Status"
+
+#: models/FrmLogList.php:38
+msgid "Date"
+msgstr "Datum"
+
+#: models/FrmLogList.php:146
+msgid "%d (Deleted)"
+msgstr "%d (Gelöscht)"
+
+#: views/csv-button.php:15
+msgid "Download CSV"
+msgstr "CSV herunterladen"
+
+#: views/delete-button.php:15
+msgid "Heads up"
+msgstr "Kopf hoch"
+
+#: views/delete-button.php:15
+msgid "ALL logs will be permanently deleted. Want to proceed?"
+msgstr "ALLE Protokolle werden dauerhaft gelöscht. Willst du fortfahren?"
+
+#: views/delete-button.php:16
+msgid "Delete All Logs"
+msgstr "Alle Protokolle löschen"
+
+#: views/settings/logs.php:17
+msgid "Next occurrence will be at"
+msgstr "Das nächste Mal findet dies statt am"
+
+#: views/settings/logs.php:23
+msgid "Automatically delete log entries every 30 days"
+msgstr "Protokoll-Einträge alle 30 Tage automatisch löschen"
+
+#: views/settings/logs.php:24
+msgid "This action will keep the small portion of the latest logs at the end of the 30 days."
+msgstr "Bei dieser Aktion wird ein kleiner Teil der letzten Protokolle am Ende der 30 Tage aufbewahrt."
+
+#: views/show.php:16
+msgid "Response"
+msgstr "Antwort"
+

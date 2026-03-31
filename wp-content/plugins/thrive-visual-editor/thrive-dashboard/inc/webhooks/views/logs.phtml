@@ -1,0 +1,31 @@
+<?php /** @var array $rows */ ?>
+<h2><?php echo esc_html__( 'Logs', 'thrive-dash' ); ?></h2>
+<table class="widefat fixed striped">
+    <thead>
+    <tr>
+        <th><?php echo esc_html__( 'Time', 'thrive-dash' ); ?></th>
+        <th><?php echo esc_html__( 'Status', 'thrive-dash' ); ?></th>
+        <th><?php echo esc_html__( 'Duration (ms)', 'thrive-dash' ); ?></th>
+        <th><?php echo esc_html__( 'Details', 'thrive-dash' ); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if ( empty( $rows ) ) : ?>
+        <tr><td colspan="4"><?php echo esc_html__( 'No logs yet.', 'thrive-dash' ); ?></td></tr>
+    <?php else : foreach ( $rows as $row ) : ?>
+        <tr>
+            <td><?php echo esc_html( $row['timestamp'] ?? '' ); ?></td>
+            <td><?php echo esc_html( (string) ( $row['status_code'] ?? '' ) ); ?></td>
+            <td><?php echo esc_html( (string) ( $row['duration_ms'] ?? '' ) ); ?></td>
+            <td>
+                <details>
+                    <summary><?php echo esc_html__( 'View', 'thrive-dash' ); ?></summary>
+                    <pre><?php echo esc_html( print_r( $row, true ) ); ?></pre>
+                </details>
+            </td>
+        </tr>
+    <?php endforeach; endif; ?>
+    </tbody>
+</table>
+
+

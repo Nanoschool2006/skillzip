@@ -1,0 +1,253 @@
+# Copyright (C) 2025 Strategy11
+# This file is distributed under the same license as the Formidable Google Sheets plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable Google Sheets 1.0.5\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-googlespreadsheet\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-18T15:12:17+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: formidable-google-sheets\n"
+
+#. Plugin Name of the plugin
+#: formidable-googlespreadsheet.php
+msgid "Formidable Google Sheets"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-googlespreadsheet.php
+msgid "https://formidableforms.com/"
+msgstr ""
+
+#. Description of the plugin
+#: formidable-googlespreadsheet.php
+msgid "Send entries to a Google spreadsheet from a form."
+msgstr ""
+
+#. Author of the plugin
+#: formidable-googlespreadsheet.php
+msgid "Strategy11"
+msgstr ""
+
+#: controllers/FrmGoogleSpreadsheetHooksController.php:158
+msgid "Formidable Google Sheets requires an active version of Formidable Pro."
+msgstr ""
+
+#: controllers/FrmGoogleSpreadsheetLogController.php:135
+msgid "Google Sheets I/O"
+msgstr ""
+
+#: controllers/FrmGoogleSpreadsheetSettingsController.php:24
+#: models/FrmGoogleSpreadsheetAction.php:26
+msgid "Google Sheets"
+msgstr ""
+
+#: helpers/FrmGoogleSpreadsheetAppHelper.php:131
+#: helpers/FrmGoogleSpreadsheetAppHelper.php:140
+msgid "Authorize"
+msgstr ""
+
+#: helpers/FrmGoogleSpreadsheetAppHelper.php:136
+msgid "Deauthorize"
+msgstr ""
+
+#: helpers/FrmGoogleSpreadsheetAppHelper.php:248
+#: helpers/FrmGoogleSpreadsheetAppHelper.php:260
+msgid "&mdash; Select &mdash;"
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetAuth.php:50
+msgid "The saved code is missing an expiration. Please deauthorize and then authorize again."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetAuth.php:89
+msgid "Google Sheets has been successfully disconnected."
+msgstr ""
+
+#. translators: %1$s: HTTP Error message(s)
+#: models/FrmGoogleSpreadsheetAuth.php:102
+msgid "Successfully updated but there was an issue deauthorizing with Google for the following reason: (%1$s)"
+msgstr ""
+
+#. translators: %1$s: the fetched URL, %2$s the error message that was returned
+#: models/FrmGoogleSpreadsheetAuth.php:150
+#: models/FrmGoogleSpreadsheetManager.php:422
+msgid "Failed to fetch: %1$s (%2$s)"
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetAuth.php:157
+msgid "There is an issue with your access token. Please try to reauthorize the Google API from the Global settings."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetAuth.php:231
+msgid "The Google API connection failed. Please check the permissions in the Google API console."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetAuth.php:253
+msgid "Google Sheets has been authorized successfully."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetAuth.php:368
+msgid "Google Sheets has been authorized successfully. You can now close this window and reload your global settings."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetManager.php:319
+msgid "There are no entries to send."
+msgstr ""
+
+#. translators: %d is the number of entries processed so far.
+#: models/FrmGoogleSpreadsheetManager.php:363
+msgid "%d entries processed."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetManager.php:442
+msgid "Please map form fields to sheet headers."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetManager.php:477
+#: models/FrmGoogleSpreadsheetManager.php:482
+msgid "Please check your Google API authorization."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetRemoteRequest.php:192
+msgid "Unknown error"
+msgstr ""
+
+#. translators: %1$s: response message
+#: models/FrmGoogleSpreadsheetRemoteRequest.php:204
+msgid "Failed to fetch the contents: %1$s as it returned HTTP status 500."
+msgstr ""
+
+#. translators: %1$s: url, %2$s: status code
+#: models/FrmGoogleSpreadsheetRemoteRequest.php:210
+msgid "Failed to fetch the contents from the URL %1$s as it returned HTTP status %2$s."
+msgstr ""
+
+#: models/FrmGoogleSpreadsheetRemoteRequest.php:245
+msgid "Successful request."
+msgstr ""
+
+#: views/action-settings/options.php:9
+msgid "Select File"
+msgstr ""
+
+#: views/action-settings/options.php:25
+msgid "Select Sheet"
+msgstr ""
+
+#: views/action-settings/options.php:40
+msgid "Clear Cache"
+msgstr ""
+
+#: views/action-settings/options.php:47
+#: views/action-settings/_action_unauthorized.php:3
+#: views/action-settings/_match_fields_error.php:3
+msgid "Oops!"
+msgstr ""
+
+#. translators: %1$s: Google console link HTML %2$s: end link HTML %3$s: Doc link 2 HTML %4$s: end link HTML
+#: views/action-settings/options.php:53
+msgid "Please ensure you have enabled the Google Drive API and Google Sheets API in the %1$sGoogle cloud console%2$s. %3$sLearn more%4$s."
+msgstr ""
+
+#: views/action-settings/options.php:61
+msgid "There are no sheets in your Google Drive. Please create at least one."
+msgstr ""
+
+#: views/action-settings/options.php:71
+msgid "Map Sheet Headers"
+msgstr ""
+
+#: views/action-settings/options.php:86
+msgid "Entry Operations"
+msgstr ""
+
+#: views/action-settings/options.php:88
+msgid "This will append all the existing form entries to the sheet selected above. Remember to map the sheet headers to form fields before sending."
+msgstr ""
+
+#: views/action-settings/options.php:89
+msgid "Send Existing Entries"
+msgstr ""
+
+#: views/action-settings/options.php:94
+msgid "Please select the File and Sheet to which you want to send data."
+msgstr ""
+
+#. translators: %1$s: setting URL, %2$s: end link
+#: views/action-settings/_action_unauthorized.php:7
+msgid "The Google Sheets API is not authorized. Please set it up %1$shere%2$s."
+msgstr ""
+
+#: views/action-settings/_match_fields_error.php:5
+msgid "Please add columns in the selected Google Sheet so you can map fields to the headers."
+msgstr ""
+
+#: views/settings/form.php:15
+msgid "Google Authentication"
+msgstr ""
+
+#. translators: %1$s: Start link HTML %2$s: end link HTML
+#: views/settings/form.php:24
+msgid "Create a Google API project in %1$sGoogle console%2$s."
+msgstr ""
+
+#. translators: %1$s: Start link HTML %2$s: end link HTML
+#: views/settings/form.php:34
+msgid "Copy the %1$sproject keys%2$s and include them below."
+msgstr ""
+
+#: views/settings/form.php:40
+msgid "Click Authorize to complete the connection."
+msgstr ""
+
+#: views/settings/form.php:47
+msgid "Client ID"
+msgstr ""
+
+#: views/settings/form.php:50
+msgid "To change the client ID and client secret, please deauthorize first using the button below."
+msgstr ""
+
+#: views/settings/form.php:59
+msgid "Client Secret"
+msgstr ""
+
+#: js/admin/admin.js:81
+msgid "Dismiss"
+msgstr ""
+
+#: js/admin/admin.js:272
+#: js/admin/admin.js:315
+msgid "Success!"
+msgstr ""
+
+#: js/admin/admin.js:276
+msgid "Authorization failed"
+msgstr ""
+
+#: js/admin/admin.js:317
+msgid "Deauthorization failed"
+msgstr ""
+
+#: js/admin/admin.js:478
+msgid "Heads up!"
+msgstr ""
+
+#: js/admin/admin.js:478
+msgid "This will export all existing entries to the selected Google sheet and may cause duplication. Do you want to proceed?"
+msgstr ""
+
+#: js/admin/admin.js:573
+msgid "Cancel"
+msgstr ""
+
+#: js/admin/admin.js:580
+msgid "Export Now"
+msgstr ""

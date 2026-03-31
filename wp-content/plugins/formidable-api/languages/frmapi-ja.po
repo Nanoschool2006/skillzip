@@ -1,0 +1,258 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable API plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-api\n"
+"Last-Translator: \n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-21T15:28:46+00:00\n"
+"PO-Revision-Date: 2024-08-22 00:45\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: frmapi\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: /[Strategy11.formidable-api] master/languages/frmapi.pot\n"
+"X-Crowdin-File-ID: 2398\n"
+"Language: ja_JP\n"
+
+#. Plugin Name of the plugin
+#: formidable-api.php
+msgid "Formidable API"
+msgstr "Formidable API"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-api.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-api.php
+msgid "Create entries in Formidable via a rest API, and send REST API requests when forms are submitted"
+msgstr "REST API 経由で Formidable にエントリーを作成し、フォームが送信されると REST API リクエストを送信します"
+
+#. Author of the plugin
+#: formidable-api.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#: controllers/FrmAPIAppController.php:933
+msgid "Your API key is incorrect"
+msgstr "API キーが正しくありません"
+
+#: controllers/FrmAPIAppController.php:939
+msgid "You do not have an administrator on this site"
+msgstr "このサイトには管理者がいません"
+
+#: controllers/FrmAPIAppController.php:984
+msgid "Please include id=# and url=\"yoururl.com\" in your shortcode"
+msgstr "ショートコードに id=# と url=\"yoururl.com\" を含めてください"
+
+#: controllers/FrmAPIAppController.php:1511
+msgid "You had an HTTP connection error"
+msgstr "HTTP 接続エラーが発生しました"
+
+#: controllers/FrmAPIAppController.php:1539
+msgid "API:"
+msgstr "API:"
+
+#: controllers/FrmAPIEntriesController.php:224
+msgid "Nothing was found with that id"
+msgstr "その ID では何も見つかりませんでした"
+
+#: controllers/FrmAPIEntriesController.php:280
+#: controllers/FrmAPIv1Controller.php:331
+msgid "Missing form id"
+msgstr "フォーム ID が見つかりません"
+
+#: controllers/FrmAPIEntriesController.php:286
+msgid "Invalid form id %s"
+msgstr "無効なフォームID %s"
+
+#: controllers/FrmAPIEntriesController.php:619
+#: controllers/FrmAPIEntriesController.php:628
+msgid "Invalid entry ID."
+msgstr "無効なエントリー ID です。"
+
+#: controllers/FrmAPIEntriesController.php:750
+#: controllers/FrmAPIEntriesController.php:763
+#: controllers/FrmAPIEntriesController.php:795
+msgid "Sorry, you are not allowed to edit entries"
+msgstr "エントリーを編集する権限がありません"
+
+#: controllers/FrmAPIEntriesController.php:754
+#: controllers/FrmAPIEntriesController.php:767
+msgid "Sorry, you are not allowed to view entries"
+msgstr "エントリーを表示する権限がありません"
+
+#: controllers/FrmAPIEntriesController.php:780
+msgid "Sorry, you are not allowed to create entries"
+msgstr "エントリーを作成する権限がありません"
+
+#: controllers/FrmAPIEntriesController.php:805
+msgid "Sorry, you are not allowed to delete entries"
+msgstr "エントリーを削除する権限がありません"
+
+#: controllers/FrmAPIFieldsController.php:137
+msgid "No \"fields\" data found in the request body"
+msgstr "リクエストボディに \"fields\" データが見つかりません"
+
+#: controllers/FrmAPIFieldsController.php:194
+msgid "Field id not provided."
+msgstr "フィールド ID が提供されていません。"
+
+#: controllers/FrmAPIFieldsController.php:279
+#: controllers/FrmAPIFormsController.php:180
+#: controllers/FrmAPIFormsController.php:202
+msgid "Invalid form ID."
+msgstr "無効なフォーム ID です。"
+
+#: controllers/FrmAPIFieldsController.php:288
+msgid "Invalid URL."
+msgstr "無効な URL です。"
+
+#: controllers/FrmAPIFieldsController.php:354
+msgid "Invalid field ID."
+msgstr "無効なフィールド ID です。"
+
+#: controllers/FrmAPIFieldsController.php:475
+msgid "Sorry, you are not allowed to edit form fields"
+msgstr "フォームフィールドを編集する権限がありません"
+
+#: controllers/FrmAPIFieldsController.php:477
+msgid "Sorry, you are not allowed to view form fields"
+msgstr "フォームフィールドを表示する権限がありません"
+
+#: controllers/FrmAPIFieldsController.php:489
+#: controllers/FrmAPIFormsController.php:388
+msgid "Sorry, you are not allowed to create or edit forms"
+msgstr "フォームを作成したり編集したりする権限がありません"
+
+#: controllers/FrmAPIFieldsController.php:498
+#: controllers/FrmAPIFormsController.php:397
+msgid "Sorry, you are not allowed delete forms"
+msgstr "フォームを削除する権限がありません"
+
+#: controllers/FrmAPIFormsController.php:131
+msgid "Form creation failed"
+msgstr "フォームの作成に失敗しました"
+
+#: controllers/FrmAPIFormsController.php:376
+msgid "Sorry, you are not allowed to edit forms"
+msgstr "フォームを編集する権限がありません"
+
+#: controllers/FrmAPISettingsController.php:240
+msgid "You had an error communicating with that API."
+msgstr "その API との通信中にエラーが発生しました。"
+
+#: controllers/FrmAPISettingsController.php:342
+msgid "Good to go!"
+msgstr "準備万端です !"
+
+#: controllers/FrmAPISettingsController.php:351
+msgid "In many cases, the test connection lets you know if the link is reachable. The receiving API may not return a successful response when the data is not included. Please submit the form to test with data."
+msgstr "多くの場合、テスト接続によりリンクが到達可能かどうかを知ることができます。データが含まれていない場合、API 受信は正常な応答を返さないことがあります。テストするフォームには、データを含めて送信してください。"
+
+#: controllers/FrmAPIStatsController.php:39
+msgid "Sorry, you are not allowed to view stats"
+msgstr "統計を表示する権限がありません"
+
+#: controllers/FrmAPIv1Controller.php:300
+msgid "Entries were Successfully Destroyed"
+msgstr "エントリーは正常に破棄されました"
+
+#: controllers/FrmAPIv1Controller.php:337
+msgid "Invalid form id"
+msgstr "無効なフォーム ID"
+
+#: controllers/FrmAPIv1Controller.php:402
+msgid "You do not have permission to edit entries"
+msgstr "エントリーを編集する権限がありません"
+
+#: models/FrmAPIAction.php:14
+#: models/FrmAPIDb.php:71
+msgid "Send API data"
+msgstr "API データを送信"
+
+#: views/action-settings/options.php:4
+msgid "Notification URL"
+msgstr "通知 URL"
+
+#: views/action-settings/options.php:8
+msgid "Notify this URL when the hook selected above is triggered."
+msgstr "上記で選択したフックがトリガーされた場合、この URL に通知します。"
+
+#: views/action-settings/options.php:13
+msgid "Basic Auth"
+msgstr "基本認証"
+
+#: views/action-settings/options.php:14
+msgid "A colon (:) separated username, password combo for standard HTTP authentication. This key will be provided by the service you are connecting to if it is required."
+msgstr "標準 HTTP 認証用のコロン (:) で区切られたユーザー名とパスワードのコンボ。このキーが必要な場合は、接続先のサービスから提供されます。"
+
+#: views/action-settings/options.php:16
+msgid "Username:Password"
+msgstr "ユーザー名:パスワード"
+
+#: views/action-settings/options.php:19
+msgid "Test Connection"
+msgstr "接続テスト"
+
+#: views/action-settings/options.php:27
+msgid "Data Format"
+msgstr "データ形式"
+
+#: views/action-settings/options.php:28
+msgid "JSON is a standard format for most REST APIs. The Form option will submit a form on another page with any name value pairs of your choosing. If you select Form, there must be a form displayed on the page you submit to."
+msgstr "JSON は大半の REST API の標準フォーマットです。フォームオプションは、選択した任意の名前と値のペアで別のページにフォームを送信します。フォームを選択した場合、送信先のページにフォームが表示されている必要があります。"
+
+#: views/action-settings/options.php:41
+msgid "Method"
+msgstr "方法"
+
+#: views/action-settings/options.php:42
+msgid "The method determines how the data is handled on the receiving end. Generally, POST = create, GET = read, PUT/PATCH = update, DELETE = delete."
+msgstr "メソッドは、受信側でデータがどのように処理されるかを決定します。一般的には、POST = 作成、GET = 読み込み、PUT/PATCH = 更新、DELETE = 削除です。"
+
+#: views/action-settings/options.php:55
+msgid "Character Set"
+msgstr "文字セット"
+
+#: views/action-settings/options.php:56
+msgid "Character Set is a defined list of characters recognized by the computer hardware and software."
+msgstr "文字セットとは、コンピューターのハードウェアとソフトウェアが認識する、定義された文字のリストです。"
+
+#: views/action-settings/options.php:61
+msgid "Select charset"
+msgstr ""
+
+#: views/action-settings/options.php:62
+msgid "Use blog charset"
+msgstr ""
+
+#: views/action-settings/options.php:93
+msgid "Raw Data"
+msgstr "未加工データ"
+
+#: views/action-settings/options.php:96
+msgid "Insert Default"
+msgstr "デフォルトを挿入"
+
+#: views/action-settings/options.php:104
+msgid "Map Data"
+msgstr "地図データ"
+
+#: views/settings/api_key.php:4
+msgid "API Key"
+msgstr "API キー"
+
+#: js/embed-form.js:40
+msgid "API View shortcode"
+msgstr "API ビューショートコード"
+

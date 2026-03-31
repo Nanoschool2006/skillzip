@@ -1,0 +1,68 @@
+# Copyright (C) 2025 Strategy11
+# This file is distributed under the same license as the Formidable Polylang plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable Polylang 1.14\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-polylang\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-06-02T13:46:28+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: formidable-polylang\n"
+
+#. Plugin Name of the plugin
+#: frm-poly.php
+msgid "Formidable Polylang"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: frm-poly.php
+msgid "https://formidableforms.com/"
+msgstr ""
+
+#. Description of the plugin
+#: frm-poly.php
+msgid "Add multilingual support for Formidable"
+msgstr ""
+
+#. Author of the plugin
+#: frm-poly.php
+msgid "Strategy11"
+msgstr ""
+
+#: controllers/FrmPllAppController.php:369
+msgid "Your entry was successfully deleted"
+msgstr ""
+
+#: controllers/FrmPllAppController.php:417
+#: controllers/FrmPllAppController.php:758
+msgid "Save Draft"
+msgstr ""
+
+#: controllers/FrmPllAppController.php:439
+#: controllers/FrmPllAppController.php:756
+msgid "Previous"
+msgstr ""
+
+#: controllers/FrmPllSettingsController.php:15
+#: views/settings/install_polylang.php:2
+msgid "Translate Form"
+msgstr ""
+
+#: controllers/FrmPllSettingsController.php:75
+msgid "Settings Successfully Updated"
+msgstr ""
+
+#. translators: %1$s: Start link HTML, %2$s: end link HTML
+#: views/settings/install_polylang.php:8
+msgid "Oops! You do not have %1$sPolylang%2$s installed. Once you have installed and configured it, come back here to translate your forms."
+msgstr ""
+
+#: views/settings/translate.php:19
+msgid "Please add a language in Polylang for translations to appear."
+msgstr ""

@@ -1,0 +1,38 @@
+.form-table th .description {
+	font-weight: 400;
+}
+
+.frm-image-upload-setting {
+	display: flex;
+	align-items: center;
+}
+
+.frm-image-upload-preview {
+	padding-right: var(--gap-sm);
+}
+
+.frm-image-upload-preview img {
+	width: 120px;
+	height: auto;
+	display: block;
+}
+
+.frm-image-upload-preview img + img {
+	display: none;
+}
+
+.frm-image-upload-btns button:last-child {
+	margin-top: var(--gap-xs);
+}
+
+.frm-image-upload-setting:not(.frm-has-uploaded-image) .frm-image-upload-btns button:last-child {
+	display: none;
+}
+
+#email_settings .wp-picker-container {
+	margin-top: var(--gap-2xs);
+}
+
+#email_settings .wp-picker-container button {
+	margin: 0;
+}

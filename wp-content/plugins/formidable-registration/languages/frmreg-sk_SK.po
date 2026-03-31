@@ -1,0 +1,192 @@
+# Translation of Formidable Registration in Slovak
+# This file is distributed under the same license as the Formidable Registration package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-09-20 15:16:03+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Generator: GlotPress/3.0.0\n"
+"Language: sk\n"
+"Project-Id-Version: Formidable Registration\n"
+
+#: views/lost_password_form.php:28
+msgid "Username or Email Address"
+msgstr "Prihlasovacie meno alebo emailová adresa"
+
+#: controllers/FrmRegActionController.php:607
+msgid "Your username is %s."
+msgstr "Vaše prihlasovacie meno je %s."
+
+#: models/FrmRegGlobalSettings.php:117
+msgid "Sorry, that site already exists!"
+msgstr "Ľutujeme, taký názov je už zaregistrovaný!"
+
+#: views/reset_password_form.php:35
+msgid "Confirm New Password"
+msgstr "Potvrďte nové heslo"
+
+#: views/reset_password_form.php:28
+msgid "New Password"
+msgstr "Nové heslo"
+
+#: views/multisite_settings.php:35
+msgid "Subdirectory or subdomain"
+msgstr "Podadresár alebo subdoména"
+
+#: models/FrmRegResetPWForm.php:137
+msgid "Sorry, we do not accept empty passwords."
+msgstr "Ľutujeme, heslo nemôže byť prázdne."
+
+#: models/FrmRegResetPWForm.php:131
+msgid "The password reset link you used is not valid anymore."
+msgstr "Použitý odkaz na nastavenie hesla už nie je platný."
+
+#: models/FrmRegResetPWForm.php:60
+msgid "Reset Password"
+msgstr "Nastaviť nové heslo"
+
+#: models/FrmRegLostPWForm.php:69
+msgid "An unknown error occurred. Please try again later."
+msgstr "Neočakávaná chyba. Prosím skúste neskôr."
+
+#: models/FrmRegLostPWForm.php:66
+msgid "Your password reset link has expired. Please request a new link below."
+msgstr "Váš odkaz na nastavenie nového hesla exspiroval. Prosím vyžiadajte si nový kliknutím na odkaz nižšie."
+
+#: models/FrmRegLostPWForm.php:63
+msgid "Your password reset link appears to be invalid. Please request a new link below."
+msgstr "Váš odkaz na nastavenie nového hesla sa zdá byť neplatný. Prosím vyžiadajte si nový kliknutím na odkaz nižšie."
+
+#: models/FrmRegLostPWForm.php:60
+msgid "Please enter a username or email address to continue."
+msgstr "Prosím zadajte používateľské meno alebo emailovú adresu."
+
+#: models/FrmRegLostPWForm.php:34
+msgid "Get New Password"
+msgstr "Získať nové heslo"
+
+#: models/FrmRegLoginForm.php:879
+msgid "Forgot your password?"
+msgstr "Zabudli ste heslo?"
+
+#: models/FrmRegLoginForm.php:815
+msgid "Your password has been reset."
+msgstr "Vaše nové heslo bolo nastavené."
+
+#: models/FrmRegLoginForm.php:811
+msgid "A password reset email has been sent to the email address on file for your account, but may take several minutes to show up in your inbox."
+msgstr "Správa s odkazom na nastavenie nového hesla bola odoslaná na emailovú adresu uvedenú vo Vašej registrácii. Môže trvať niekoľko minút, kým sa objaví v prijatej pošte."
+
+#: models/FrmRegLoginForm.php:768
+msgid "An error occurred. Please try again."
+msgstr "Nastala neočakávaná chyba. Prosím skúste znova."
+
+#: models/FrmRegGlobalSettings.php:116
+msgid "Enter your new password below."
+msgstr "Nižšie zadajte svoje nové heslo."
+
+#: models/FrmRegGlobalSettings.php:115
+msgid "Please enter your username or email address. You will receive a link to create a new password via email."
+msgstr "Prosím zadajte svoje prihlasovacie meno alebo emailovú adresu. Následne vám emailom pošleme odkaz na nastavenie nového hesla."
+
+#: models/FrmRegGlobalSettings.php:114
+msgid "Your username cannot be changed at this time."
+msgstr "Vaše prihlasovacie meno nemôže byť zmenené."
+
+#: controllers/FrmRegResetPasswordController.php:200
+msgid "Invalid request."
+msgstr "Neplatná požiadavka."
+
+#: controllers/FrmRegActionController.php:635
+msgid "To set your password, please visit the following address:"
+msgstr "Na nastavenie hesla prosím kliknite na odkaz:"
+
+#: controllers/FrmRegActionController.php:615
+msgid "You may %1$slog in here%2$s with the username and password you have created."
+msgstr "Môžete sa %1$sprihlásiť%2$s s menom a heslom, ktoré ste si vytvorili."
+
+#: controllers/FrmRegActionController.php:582
+msgid "Welcome to %s"
+msgstr "Vitajte na %s"
+
+#: models/FrmRegResetPWForm.php:134
+msgid "The two passwords you entered do not match."
+msgstr "Heslá sa nezhodujú."
+
+#: models/FrmRegGlobalSettings.php:110
+msgid "Please enter a valid email address."
+msgstr "Prosím zadajte platnú emailovú adresu."
+
+#: models/FrmRegGlobalSettings.php:111
+msgid "Please enter a valid username."
+msgstr "Prosím zadajte platné prihlasovacie meno."
+
+#: controllers/FrmRegModerationController.php:410
+msgid "Your account has been activated. Please check your e-mail for a link to set your password."
+msgstr "Vaše konto je aktívne. Prosím skontrolujte svoju emailovú schránku a otvorte správu s odkazom na nastavenie nového hesla."
+
+#: controllers/FrmRegModerationController.php:402
+msgid "Your account is now active. Enjoy!"
+msgstr "Vaše konto je teraz aktívne. Veľa zábavy!"
+
+#: controllers/FrmRegModerationController.php:406
+msgid "Your account has been activated. You may now log in."
+msgstr "Vaše konto je aktívne. Môžete sa prihlásiť."
+
+#: helpers/FrmRegMessagesHelper.php:26
+msgid "That activation link is invalid."
+msgstr "Aktivačný odkaz je neplatný."
+
+#: models/FrmRegLoginForm.php:749
+msgid "The password field is empty."
+msgstr "Pole na heslo je prázdne."
+
+#: models/FrmRegLoginForm.php:746
+msgid "The username field is empty."
+msgstr "Pole na prihlasovacie meno je prázdne."
+
+#: models/FrmRegEmail.php:143
+msgid "Thanks for registering at %s! To complete the activation of your account please click the following link: "
+msgstr "Ďakujeme za registráciu na %s! Na aktiváciu svojho konta prosím kliknite na odkaz:"
+
+#: models/FrmRegEmail.php:127
+msgid "[%s] Activate Your Account"
+msgstr "[%s] Aktivovať konto"
+
+#: helpers/FrmRegMessagesHelper.php:15
+msgid "The activation e-mail has been sent to the e-mail address with which you registered. Please check your email and click on the link provided."
+msgstr "Na emailovú adresu uvedenú v registrácii sme vám poslali správu s aktivačným odkazom. Prosím kliknite naň."
+
+#: models/FrmRegGlobalSettings.php:113
+msgid "Passwords may not contain the character \"\\\"."
+msgstr "Heslo nemôže obsahovať znak \"\\\"."
+
+#: models/FrmRegGlobalSettings.php:112
+msgid "This username is invalid because it uses illegal characters. Please enter a valid username."
+msgstr "Vaše prihlasovacie meno obsahuje nepovolené znaky. Prosím zadajte platné prihlasovacie meno."
+
+#: controllers/FrmRegResetPasswordController.php:309
+#: models/FrmRegLoginForm.php:877 models/FrmRegLoginWidget.php:18
+#: models/FrmRegLoginWidget.php:91 views/_register_settings.php:51
+msgid "Password"
+msgstr "Heslo"
+
+#: models/FrmRegLoginForm.php:876 models/FrmRegLoginWidget.php:17
+#: models/FrmRegLoginWidget.php:90 views/_register_settings.php:27
+msgid "Username"
+msgstr "Prihlasovacie meno"
+
+#: models/FrmRegGlobalSettings.php:107
+msgid "This email address is already registered."
+msgstr "Táto emailová adresa už je zaregistrovaná."
+
+#: models/FrmRegLoginForm.php:878 models/FrmRegLoginWidget.php:19
+#: models/FrmRegLoginWidget.php:92
+msgid "Remember Me"
+msgstr "Pamätajte si ma"
+
+#: models/FrmRegGlobalSettings.php:108
+msgid "This username is already registered."
+msgstr "Toto prihlasovacie meno už je zaregistrované."

@@ -1,0 +1,824 @@
+# Loco Gettext template
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce Integration\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-05 19:21+0530\n"
+"PO-Revision-Date: 2021-05-05 13:54+0000\n"
+"Last-Translator: \n"
+"Language-Team: English (UK)\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Revision-Date: Tue Jan 17 2017 12:28:27 GMT+0530 (IST)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;"
+"__:1;_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;"
+"_x:1,2c;_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;"
+"esc_attr__:1;esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;"
+"esc_html_x:1,2c;comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-SearchPath-0: ..\n"
+"X-Loco-Version: 2.5.2; wp-5.7.1"
+
+#: ../admin/class-bridge-woo-int-admin-notice.php:27
+msgid ""
+"WooCommerce Integration is now compatible with the WooCommerce My-Account "
+"page. </b>"
+msgstr ""
+
+#: ../admin/class-bridge-woo-int-admin-notice.php:28
+msgid " Click here "
+msgstr ""
+
+#: ../admin/class-bridge-woo-int-admin-notice.php:29
+msgid " to check now."
+msgstr ""
+
+#: ../admin/class-bridge-woo-int-admin-notice.php:35
+msgid " Dismiss notice"
+msgstr ""
+
+#: ../admin/class-bridge-woo-int-custom-field-menus.php:40
+#: ../admin/class-bridge-woo-int-custom-field-menus.php:41
+msgid "Custom User Fields"
+msgstr "Custom User Fields s"
+
+#: ../admin/class-bridge-woocommerce-admin.php:117
+msgid "Select any course"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:141
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:264
+msgid "Save Changes"
+msgstr "Save Changes s"
+
+#: ../admin/class-bridge-woocommerce-admin.php:142
+#: ../public/class-bridge-woocommerce-public.php:106
+#: ../public/class-bridge-woocommerce-public.php:413
+msgid "Cancel"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:143
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:360
+msgid "Option Value"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:144
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:361
+msgid "Option Text"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:145
+msgid "Field name should be unique and not empty."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:155
+msgid ""
+"Some users are enrolled to this course. By trashing they will be unenrolled. "
+"Do you still want to continue?"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:156
+msgid ""
+"Some users are enrolled in the selected courses. By trashing they will be "
+"unenrolled. Do you still want to continue?"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:187
+#: ../admin/class-bridge-woocommerce-admin.php:191
+msgid "Products"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:211
+msgid "Synchronize Products"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:216
+msgid "WooCommerce Synchronization Options"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:217
+msgid "Create courses as products."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:226
+msgid "Update courses as products."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:235
+msgid "Publish synchronized products."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:244
+msgid "Synchronize categories."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:277
+msgid "Loading..."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:278
+msgid "Please select proper options."
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:340
+msgid "You cannot rollback this action!"
+msgstr ""
+
+#: ../admin/class-bridge-woocommerce-admin.php:342
+msgid "Unenroll from purchased courses?"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:34
+msgid "Woo Integration"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:54
+msgid "WooCommerce Integration Options"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:61
+msgid "Enable Redirection"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:62
+msgid ""
+"This enables user to redirect to <strong>My Courses</strong> page after "
+"order completion."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:69
+msgid "Associated Courses Section"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:70
+msgid "This shows the associated courses section on the single product page."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:77
+msgid "One Click Checkout"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:78
+msgid ""
+"This enables <strong>Buy Now</strong> button for simple products. Using this,"
+" users will be directly redirected to <strong>Single Cart Checkout</strong> "
+"page and the product will be added to their cart."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:85
+msgid "Buy Now Button Text"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:86
+msgid ""
+"This text will be shown on <strong>Buy Now</strong> button. Default will be "
+"<strong>Buy Now</strong>."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:88
+#: ../public/class-bridge-woocommerce-public.php:456
+msgid "Buy Now"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:93
+msgid "Single Cart Checkout Page"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:94
+msgid ""
+"Add shortcode <code>[bridge_woo_single_cart_checkout]</code> in the selected "
+"page."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:100
+#: ../admin/settings/class-bridge-woocommerce-settings.php:161
+#: ../admin/settings/class-bridge-woocommerce-settings.php:190
+#: ../admin/settings/class-bridge-woocommerce-settings.php:207
+msgid "- Select a page -"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:106
+msgid "WooCommerce My Account Page Settings"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:112
+msgid "Enable Account Creation"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:113
+msgid ""
+"This enables <strong>User creation from woocommerce my account page.</strong>"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:120
+msgid "Update My Account Fields On Moodle"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:121
+msgid ""
+"This enables updating fields on the Moodle from woocommerce My-account page."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:128
+msgid "Show My Courses Page On My Account Page"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:129
+msgid ""
+"This will show My Courses tab in the My-account page. <b>Note : </b> Please "
+"update permalinks once again after enabling this setting."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:142
+msgid "WooCommerce Subscriptions Settings"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:149
+msgid "On Subscription Expiration"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:150
+msgid "Select an action to perform on expiration of Product Subscription."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:171
+msgid "WooCommerce Membership Settings"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:178
+msgid "On Membership Expiration"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:179
+msgid "Select an action to perform on Membership expiration."
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:195
+msgid "On Membership Cancellation"
+msgstr ""
+
+#: ../admin/settings/class-bridge-woocommerce-settings.php:196
+msgid "Select an action to perform on Membership Cancellation."
+msgstr ""
+
+#: ../admin/templates/license-page.php:34
+msgid "Your license key is activated."
+msgstr ""
+
+#: ../admin/templates/license-page.php:38
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:146
+msgid "No response from server. Please try again later."
+msgstr ""
+
+#: ../admin/templates/license-page.php:39
+msgid ""
+"License Activation Failed. Please try again or contact support on "
+"support@wisdmlabs.com"
+msgstr ""
+
+#: ../admin/templates/license-page.php:40
+msgid "Please enter license key."
+msgstr ""
+
+#: ../admin/templates/license-page.php:41
+#: ../admin/templates/license-page.php:46
+#, php-format
+msgid ""
+"Your License Key is already activated at : %s Please deactivate the license "
+"from one of the above site(s) to successfully activate it on your current "
+"site."
+msgstr ""
+
+#: ../admin/templates/license-page.php:41
+msgid "No Activations Left."
+msgstr ""
+
+#: ../admin/templates/license-page.php:42
+msgid "Your license key has Expired. Please, Renew it."
+msgstr ""
+
+#: ../admin/templates/license-page.php:43
+msgid "Your License key is disabled"
+msgstr ""
+
+#: ../admin/templates/license-page.php:44
+msgid "Please enter valid license key"
+msgstr ""
+
+#: ../admin/templates/license-page.php:45
+msgid ""
+"Please try to activate license again. If it does not activate, contact "
+"support on support@wisdmlabs.com"
+msgstr ""
+
+#: ../admin/templates/license-page.php:46
+msgid "Site inactive (Press Activate license to activate plugin)"
+msgstr ""
+
+#: ../admin/templates/license-page.php:47
+msgid "License Key is deactivated"
+msgstr ""
+
+#: ../admin/templates/license-page.php:48
+#, php-format
+msgid ""
+"Following Error Occurred: %s. Please contact support on support@wisdmlabs."
+"com if you are not sure why this error is occurring"
+msgstr ""
+
+#: ../admin/templates/license-page.php:85
+#, php-format
+msgid "%s License Options"
+msgstr ""
+
+#: ../admin/templates/license-page.php:93
+msgid "License Key"
+msgstr ""
+
+#: ../admin/templates/license-page.php:114
+msgid "License Status"
+msgstr ""
+
+#: ../admin/templates/license-page.php:121
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:556
+msgid "Active"
+msgstr ""
+
+#: ../admin/templates/license-page.php:124
+#: ../admin/templates/license-page.php:130
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:559
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:571
+msgid "Not Active"
+msgstr ""
+
+#: ../admin/templates/license-page.php:139
+#: ../admin/templates/license-page.php:154
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:95
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:101
+msgid "Activate License"
+msgstr ""
+
+#: ../admin/templates/license-page.php:146
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:93
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:98
+msgid "Deactivate License"
+msgstr ""
+
+#: ../admin/templates/license-page.php:149
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:96
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:99
+msgid "Renew License"
+msgstr ""
+
+#: ../bridge-woocommerce.php:155
+#, php-format
+msgid "%s deactivated. Install and activate %s and %s for %s to work."
+msgstr ""
+
+#: ../bridge-woocommerce.php:157 ../bridge-woocommerce.php:173
+msgid "WooCommerce"
+msgstr ""
+
+#: ../bridge-woocommerce.php:158 ../bridge-woocommerce.php:188
+msgid "EdwiserBridge"
+msgstr ""
+
+#: ../bridge-woocommerce.php:171 ../bridge-woocommerce.php:186
+#, php-format
+msgid "%s deactivated. Install and activate %s for %s to work."
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:139
+#, php-format
+msgid "Please enter license key for %s"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:153
+msgid "License key is not valid. Please check your license key and try again"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:160
+#, php-format
+msgid "License key for %s is activated."
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:167
+#, php-format
+msgid "License key for %s have been Expired. Please, Renew it"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:174
+#, php-format
+msgid "Please enter valid license key for %s"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:181
+#, php-format
+msgid "License key for %s is Disabled."
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:188
+#, php-format
+msgid "License Key for %s is already activated at : %s"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:331
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:332
+#, php-format
+msgid "%s License"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:519
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:533
+#, php-format
+msgid "License Key for %s is already activated at : "
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:526
+#, php-format
+msgid "Please enter valid license key for %s."
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:540
+msgid "Site inactive(Press Activate license to activate plugin)"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:547
+#, php-format
+msgid "License Key for %s is deactivated"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:562
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:565
+msgid "Expired"
+msgstr ""
+
+#: ../includes/class-bridge-woo-add-plugin-data-in-db.php:568
+msgid "Invalid Key"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:76
+msgid "Moodle Course Enrollment."
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:95
+msgid "Course Enrollment."
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:105
+#, php-format
+msgid "Hi %s"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:113
+msgid ""
+"Thank you for your order. You have been successfully enrolled in the "
+"following courses."
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:142
+msgid "Woocommerce Moodle Course Enrollment"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:153
+msgid "Products List"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:228
+msgid "Product Name"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:229
+#: ../public/templates/associated-courses-product-page.php:14
+msgid "Associated Courses"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:271
+msgid "Test Product"
+msgstr ""
+
+#: ../includes/class-bridge-woo-email-template-manager.php:272
+msgid "Test Course"
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:98
+msgid "First name"
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:103
+msgid "Last name"
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:119
+msgid " First name is required!"
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:122
+msgid " Last name is required!."
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:221
+msgid "Email"
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:221
+msgid " already exist on Moodle please use different email."
+msgstr ""
+
+#: ../includes/class-bridge-woo-my-account-compatibility.php:287
+msgid "My Courses"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-course.php:184
+msgid "Product(s) created."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-course.php:186
+msgid ""
+"Courses for synchronization not found. All products may be already created."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-course.php:295
+msgid "Product(s) updated."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-course.php:297
+msgid "Product for update not found."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-course.php:399
+msgid "Categories synchronized."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-course.php:401
+msgid "Categories not found, Please synchronize course categories before this."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:132
+msgid "Filter by product type"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:145
+msgid "Grouped product"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:148
+msgid "External/Affiliate product"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:151
+msgid "Variable product"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:154
+msgid "Simple product"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:171
+msgid "Downloadable"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-filter.php:179
+msgid "Virtual"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-manager.php:70
+msgid "WooCommerce Integration"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-manager.php:154
+#: ../includes/class-bridge-woocommerce-product-manager.php:296
+#: ../public/class-bridge-woocommerce-public.php:195
+#: ../public/templates/emails/associated-courses-order-email.php:44
+msgid "Courses"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-manager.php:164
+msgid "Associate product with courses."
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-manager.php:209
+msgid "Product Options"
+msgstr ""
+
+#: ../includes/class-bridge-woocommerce-product-manager.php:297
+msgid "Associate product with courses"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-cf-frotnend-handler.php:245
+msgid "Additional Fields"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-cf-frotnend-handler.php:293
+msgid " is a required field."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:46
+msgid "Name"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:47
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:287
+msgid "Type"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:48
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:316
+msgid "Label"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:49
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:336
+msgid "Placeholder"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:50
+msgid "Required"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:51
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:376
+msgid "Enabled"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:52
+msgid "Manage"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:198
+msgid "Edit Row"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:199
+msgid "Delete Row"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:223
+msgid "Currently no fields available."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:254
+msgid "Select Action"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:255
+msgid "Enable"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:256
+msgid "Disable"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:257
+msgid "Remove"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:259
+msgid "Apply"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:260
+msgid " + Add Field"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:282
+msgid "Field Settings"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:288
+msgid "Field type according to which fields will be shown on pages."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:292
+msgid "Text"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:293
+msgid "Number"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:294
+msgid "Textarea"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:295
+msgid "Select"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:296
+msgid "Checkbox"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:303
+msgid "Name *"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:304
+msgid "Field Name which should be same as the Moodle short name."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:307
+msgid "Field Name ( Moodle Short Name ) "
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:309
+msgid "Field name should be same as the "
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:309
+msgid "Moodle field short name. "
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:317
+msgid "Field label which will be shown on the pages for input fields."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:320
+msgid "Field Label"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:326
+msgid "Default Value"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:327
+msgid ""
+"Default value which will be shown while showing fields for thr first type, "
+"If field type is select then option value should be entered here."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:330
+msgid "Field Default value"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:337
+msgid "Placeholder shown for the fields."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:340
+msgid "Field Placeholder"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:346
+msgid "Class"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:347
+msgid "This class will get added on the Field wrapper element."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:350
+msgid "Field Css Class"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:356
+msgid "Options"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:357
+msgid "Options which will get displayed on the selected pages."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:372
+msgid ""
+"By default all pages shown on the checkout page enabling will enable fields "
+"for all selected pages."
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:387
+msgid "Required ( On Checkout only )"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:397
+msgid "Sync On Moodle"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:407
+msgid "Show On Woocommerce My Account Page"
+msgstr ""
+
+#: ../includes/custom-fields/class-bridge-wi-custom-fields-show.php:417
+msgid "Show On Edwiser User Account Page"
+msgstr ""
+
+#: ../public/class-bridge-woocommerce-public.php:107
+msgid "Resume"
+msgstr ""
+
+#: ../public/class-bridge-woocommerce-public.php:171
+msgid "Available courses"
+msgstr ""
+
+#: ../public/class-bridge-woocommerce-public.php:407
+#, php-format
+msgid "You will be redirected to %s within next %s seconds."
+msgstr ""
+
+#: ../public/class-bridge-woocommerce-public.php:408
+msgid "My Courses Page"
+msgstr ""

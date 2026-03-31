@@ -1,0 +1,157 @@
+<div class="tva-boxed-container ta-completion-tab tva-text-center">
+	<div class="ta-completion-tab-header">
+		<div>
+			<div>
+				<h3><?php esc_html_e( 'Celebrate your members success and define course completion behaviour', 'thrive-apprentice' ); ?></h3>
+				<p><?php esc_html_e( 'Design and issue course completion certificates and define what happens when a member completes this course', 'thrive-apprentice' ); ?></p>
+			</div>
+			<img alt="Certificate Image" src="<?php echo TVA_Const::plugin_url( 'admin/includes/assets/img/certificate/course-tab.png' ); ?>" width="103">
+		</div>
+	</div>
+	<div class="ta-completion-tab-content">
+		<div class="ta-completion-tab-columns">
+			<div>
+				<div class="tvd-switch">
+					<label class="tva-d-block">
+						<h4 class="tva-color-blue first">
+							<img align="left" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAsCAYAAADxRjE/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJGSURBVHgB7ZjPK0RRFMePhyLEYlgoIoqFmGJpM/4Bs5PdFFtkYSfzyM5CrC3sZOc/eEqKIuPHglJEyY8pP4Yo6jnnejPemDvpXffd7tN86nRn7mvu/XbmvnO+7wHIJYyxh3HminnQHBJsw7fge+d7FCRigFxqMM4xmp0Yd81LQ7ZoJQRSdAkIEApbJm/+9XaFHYPyukF2/T212/X+cgSlFR39pVXdTeCBIjxmd4nIcp5r3gl1WTaowAYzeRCZ/jktlGmio60SZidawQ8eUx8wOnVMoxnqtIAn3DOU6f6hPdtPDo9Tdkvvhk17ofC4e39tb0T6J63VHmisL6NDbLqFa109GlDw2lI4R7j2JY8nPBB12naCYUCR9qIvrt4gOpyASxwx09PJRMTUWjRPMM0L12m/OTx5ZoKfsGa7BRPCoqkBbO48gB/Q2iPYXHiCCb3bOEcwIZZpXIw3jYZpjEY0TAs0OoYpioZpDQ3TPnjaIr9hkk36iSVNDL6qVQwk8r/8dG3YimGKmsADIn6ad2Z/g3sjsh6PLRMUkNyPeC4GOZlOC66uKoHFmXag0Q8m507hCGuxCFmK3ILJpJA99Iu/JCPzy7TgRsdVkbvSFVY9giSYMIImmDDIn9KHLM+qOQark9iWLx0bSHZQd9iZDprwTBt3C+8b2BGuoSrIKpYkHF95kZ+NU8b9bC7kmUXht3F6V2dDHBQgpY2zhTDjaJjOBQyTND+tkoKfzkdBtCoKolVREK2KYpALdbdtjC3X3A3GOsY1SOITyPNiGg5NwfYAAAAASUVORK5CYII=" alt="Customize course completion behaviour">
+							<?php esc_html_e( 'Customize course completion behaviour ', 'thrive-apprentice' ); ?>
+							<div class="tva-tooltip-parent">
+								<div class="ml-5 tva-flex tva-align-center"><?php tva_get_svg_icon( 'info-solid' ); ?>
+									<div class="tva-custom-tooltip tva-certificates-tooltip">
+										<?php esc_html_e( "Send your members to a course completion page when they mark all lessons complete", 'thrive-apprentice' ); ?>
+									</div>
+								</div>
+							</div>
+						</h4>
+						<h4 class="tva-color-blue">
+							<input type="checkbox" class="click" data-fn="hasCompletedPost" <#= this.model.get( 'has_completed_post' ) ? 'checked="checked"' : '' #>>
+							<span class="tvd-lever"></span>							
+						</h4>
+					</label>
+				</div>				
+				<div class="tva-completed-post-dropdown">
+					<div class="inside-wrapper">
+						<div class="padd-side-40">
+							<select class="change" id="tva-completed-post-type-select" data-fn="completedPostTypeChange">
+								<option value="completed"><?php esc_html_e( 'Redirect to Apprentice course completed page', 'thrive-apprentice' ); ?></option>
+								<option value="custom"><?php esc_html_e( 'Redirect to custom page', 'thrive-apprentice' ); ?></option>
+							</select>
+							<div class="tva-completed-post-options mt-20"></div>
+						</div>	
+						<div class="tva-completed-settings mt-20"></div>
+						<div id="tva-custom-page-warning" class="tva-completion-tab-warning">
+							<?php tva_get_svg_icon( 'completion-info-icon' ); ?>
+							<p><?php esc_html_e( 'Please note that course details will not be available on a custom page. Use this option if you plan to have a generic style of course completed page.', 'thrive-apprentice' ) ?></p>
+						</div>
+					</div>	
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div>
+				<div class="tvd-switch">
+					<label class="tva-d-block">
+						<h4 class="tva-color-blue first">
+							<img align="left" src="data:image/png;base64,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" alt="Award an overall grade for this course">
+							<?php esc_html_e( 'Award an overall grade for this course ', 'thrive-apprentice' ); ?>
+							<div class="tva-tooltip-parent">
+								<div class="ml-5 tva-flex tva-align-center"><?php tva_get_svg_icon( 'info-solid' ); ?>
+									<div class="tva-custom-tooltip tva-certificates-tooltip">
+										<?php esc_html_e( "Grade your students with a final course score based on their performance in assessments.", 'thrive-apprentice' ); ?>
+									</div>
+								</div>
+							</div>
+						</h4>
+						<h4 class="tva-color-blue">
+							<input id="tva-grade-button" type="checkbox" class="click" data-fn="hasCourseGrading" <#= this.model.get( 'has_grade' ) ? 'checked="checked"' : '' #>>
+							<span class="tvd-lever"></span>							
+						</h4>
+					</label>
+				</div>				
+				<div class="tva-grade-dropdown">
+					<div class="inside-wrapper">
+						<div id="tva-custom-grade-warning" class="tva-completion-tab-warning grade-warning">
+							<?php tva_get_svg_icon( 'completion-info-icon' ); ?>
+							<p>
+								<?php esc_html_e( 'Course grades will be a calculation based on assessments that have been added to your course content. You will be able to define how the grade will be calculated and the weighting of each assessments toward the overall grade.', 'thrive-apprentice' ) ?>
+								<a href="https://thrivethemes.com/docs/enabling-course-level-grading-in-thrive-apprentice/" target="_blank" class="tva-external-link"><?php esc_html_e( 'Learn more', 'thrive-apprentice' ); ?></a>
+							</p>
+						</div>
+						<div class="padd-side-40">
+							<label><?php esc_html_e( 'Assessment weighting', 'thrive-apprentice' ); ?></label>
+							<select class="change" id="tva-grade-type-select" data-fn="gradeTypeChange">
+								<option value="weight-equally"><?php esc_html_e( 'Weight all assessments evenly', 'thrive-apprentice' ); ?></option>
+								<option value="weight-manually"><?php esc_html_e( 'Manually weight assessments', 'thrive-apprentice' ); ?></option>
+								<option value="weight-hardcode"><?php esc_html_e( 'Hardcode grade for all students', 'thrive-apprentice' ); ?></option>
+							</select>
+						</div>
+						<div class="tva-grade-settings"></div>		
+						<div class="tva-grade-display-type">
+							<div class="padd-side-40">
+								<label><?php esc_html_e( 'Display grade as', 'thrive-apprentice' ); ?></label>
+								<select class="change" id="tva-display-grade-as" data-fn="displayGradeAsChange">
+									<option value="percentage"><?php esc_html_e( 'Percentage', 'thrive-apprentice' ); ?></option>
+									<option value="score"><?php esc_html_e( 'Score', 'thrive-apprentice' ); ?></option>
+									<option value="category"><?php esc_html_e( 'Category', 'thrive-apprentice' ); ?></option>
+								</select>
+
+								<input type="text" 
+									class="tva-display-grade-as-custom change" 
+									id="tva-display-grade-as-custom" 
+									data-fn="displayGradeAsCustom"
+									data_field="display_as_custom" />
+							</div>
+							<div class="tva-grade-category-wrapper"></div>
+						</div>			
+					</div>	
+				</div>
+				<div class="clearfix"></div>
+			</div>
+			<div>
+				<div id="tva-certificate-column" class="tvd-switch">
+					<label class="tva-d-block">
+						<h4 class="tva-color-blue first">
+							<img align="left" class="issue-certificate-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAAaCAYAAADv/O9kAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAVPSURBVHgBxVhfTFtVGP/OhS1TkNaEDaPYFNTMKGzdsgecqPTBZFAifTHgFsPUxT+Jg5FlsS86wBc1bkN98E80Dv9tPMmMljeLCVMe/IODmGkiu5ZNwZB42xVcBu3Z953e07S397LS23a/5Ob2/O35ne98v+87l0EJ4faEnDGA/cDhEQbg4VhF9fhbxd8qYzBcBjA+P+VVochgUAIIwgnoxX87hEXndQdw6F885x2AIsKSeFV921HGGS6U00JVi+Gq1XjOkmOUshrYcPOTLdK6D+5yQudjt0Ezvu+8fZPoO/N7TDxjoUUI4qMvTF1Z/nScx+edOJnJZol1WW2im9bMGRuNzn7TZ9bBlHhVve8E4/wQ2ARTHFBW0QmMOcCFJN8evFcQXwtzf18B/4EpCOObJyIQXx4R77zXwGBAmw32Z9WbdXbU+f6jHf36i9eguakRwhf/NeuG9QtghfClBegZXBKkG7dWwuiHHqi6pRxyQeTyqiBPp4BIDx9zgcMw1lFVgU+l6XhX7RaYmJyG9r0BKmqRC8FbIRc46to4PXbw+rsXePX2EN/Z+gOPRFf4eqHhGBpLc7yBc+UDycOMY8riTrffzdnKx2hpN+j+6KqtEbtnuqt31IDVbgMe8WMfJa3xc7Ap5csSZNHTX83D9z9qotzqrYbd6AIuQ7+z2E6WJ2sfeHwBwnNh0/+k02VEJLoE07/NyqKKj4a6gz4fHEgRT5K+GiLCRDYSjYmB+ULZ2ABlm1qhDQkNn2jIaJvG49vdNyN8OR20OZ9g34atmceXiNMGJK58C/GrP0E+IE7SLRnjfdrs2JAg7qhv+xJDiD/Quw8CvXstJ6DNMNsQ40a9fDwCM3+swjsoZl2o4BJhXbiItFR3suYHn18U5Ih8aGRXhj+fwpPR88p5aLgnDq8e3pIiYoak31eYthHxh9oP0jo1xjfWgfPu9hbyg2bfi7xQ2KH75vT5yxn1p878I+o7nvklawzVUdt7n81l1Icv/S/qaU67CAy+L3ze6W5vUSCR8NOOBHqsLb1eyGNsPLZjeox+dl9t1phO/WRIv5eQ+mB0jXzge/QB8U4oiW6Fc7adCs1N26BUiKK4GeHIMdTZQeN99eLNOHgUhiq+lm/kAysr3a+fAFJ0I8jPCaTw6aBYnj6nHRBHXR+cSrKiEgqJRp3gWcOxfQ6POFlWhilKT0m8pHJTODNmdpK4qwDE06FwYBopnp3wZcRuffFGyxJpyuCIBBGlsEaKLUlT6DNaVupCenSwA+LK8I6hYFz7jirSgr1tdOlhiggZrd6gp68U6ijO03PkebcIY0YxpPAnLy3Xy/FzwcTkOfFOMK4CSTtJvO+Jl3ghIVNWCkNaninrDpspqxEvHDmeDGd3tfqTCUydD7M23kLJCyUxVkgmMDHTNuOFJRJbhf2HUbBYVcrKjjwuKY7KOJx8c3NGu1UCY1Uv17ft4afpp4qXljo9Zd2DKatSsJRVgq6l5RVdgjz5rvTvtUCucRD9XkSERBRWl0/bupYS0jkxBZ7S/gyeTLuk7HEDK5OXlPTlq6azMauPE/yvjGK5Czbc1NktP0SQT1PIolMgfZpITiDhERRDqQniQ8TSyDAkUhcTdHK842b/n8WHCtHmzizytzR1bEifvzSo9oT68T5wNKfO+PEAt2RInfJqUCSUjDiBhIrepNCk2DLBITeg2C8VfPFXb9HXVfw80QTk63N6qCLBk3fxzZ5xKBVuCPGdbZNZ6awxhhcbN4S4Tlp8EVHozsChA0OX/QxlHSgpcZaMBGfQ0UcXp7zj6W0ofi3o2H4UwA4oAa4BIXWAQnr5nOkAAAAASUVORK5CYII=" alt="Issue course completion certificate">
+							<?php esc_html_e( 'Issue course completion certificate', 'thrive-apprentice' ); ?>
+							<div class="tva-tooltip-parent">
+								<div class="ml-5 tva-flex tva-align-center"><?php tva_get_svg_icon( 'info-solid' ); ?>
+									<div class="tva-custom-tooltip tva-certificates-tooltip">
+										<?php esc_html_e( "Design a course completion certificate that your members can download as a PDF", 'thrive-apprentice' ); ?>
+									</div>
+								</div>
+							</div>
+						</h4>
+						<h4 class="tva-color-blue">
+							<input id="tva-certificate-button" type="checkbox" class="click" data-fn="issueCompletionCertificate" <#= this.model.get( 'has_certificate' ) ? 'checked="checked"' : '' #>>							
+							<span class="tvd-lever"></span>
+						</h4>
+					</label>
+					
+				</div>
+				<div class="tva-certificate-dropdown">
+					<div class="inside-wrapper">
+						<div class="tva-certificate-choose-category"></div>
+						<div class="tva-certificate-edit-with-tar"></div>
+						<div class="mt-20 tva-certificate-download-url"></div>
+					</div>
+				</div>
+				<div id="tva-tpm-active-license-warning" class="tva-completion-tab-warning tva-tooltip-parent">
+					<?php tva_get_svg_icon( 'license-warning' ); ?>
+					<p><?php esc_html_e( 'Certificate creation requires an active Thrive Apprentice license', 'thrive-apprentice' ) ?></p>
+					<div class="tva-custom-tooltip tva-certificates-tooltip">
+						<?php esc_html_e( 'Certificates creation uses Thrive Themes servers and resources to generate the PDFs and there are ongoing costs involved in providing this service. If your license expires, you’ll no longer be able to generate certificates until you purchase a new license.', 'thrive-apprentice' ); ?>
+						<br><?php esc_html_e( 'Review your license ', 'thrive-apprentice' ); ?><a href="https://thrivethemes.com/suite/" target="_blank"><?php esc_html_e( 'here', 'thrive-apprentice' ); ?></a>
+					</div>
+				</div>
+				<div id="tva-tpm-warning" class="tva-completion-tab-warning tva-tooltip-parent">
+					<?php tva_get_svg_icon( 'license-warning' ); ?>
+					<p><?php esc_html_e( 'Certificate creation requires an active thrivethemes.com account connection', 'thrive-apprentice' ) ?></p>
+					<div class="tva-custom-tooltip tva-certificates-tooltip">
+						<?php esc_html_e( 'Connection lost. In order to be able to create a certificate your thrivethemes.com account must be connected.', 'thrive-apprentice' ); ?>
+						<a rel="noopener" href="<?php echo TD_TTW_Update_Manager::get_instance()->get_admin_url() ?>" class="tva-tpm-connect-button"><?php esc_html_e( 'Connect account', 'thrive-apprentice' ) ?></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

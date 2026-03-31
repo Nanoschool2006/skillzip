@@ -1,0 +1,39 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+.wi-asso-courses-wrapper h5 { margin: 0.5em 0 !important; }
+
+#wi-thanq-wrapper .msg { font-weight: bold; }
+
+#wi-countdown { font-size: 1.5em; }
+
+.wi_product { margin-left: 10px !important; }
+
+
+/* Single Cart Checkout Page */
+.wi-scc-wrapper .cart_totals { display: none!important; }
+.wi-scc-wrapper .checkout-button { display: none!important; }
+.wi-scc-wrapper .wc-forward { display: none!important; }
+.wi-scc-wrapper .coupon{ display: none!important; }
+
+
+.eb_woo_int_update_notice_message_cont{
+	overflow: auto;
+    padding: 13px;
+    border-left: 4px solid green;
+}
+.eb-purchase-for-someone-else{
+    display: none;
+}
+#purchase-for-someone-else{
+    position: relative;
+}
+#purchase-for-someone-else-checkbox{
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    margin-right: 0;
+}

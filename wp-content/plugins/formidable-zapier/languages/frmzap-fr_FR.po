@@ -1,0 +1,115 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Zapier plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-zapier\n"
+"Last-Translator: \n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-03-11T15:19:15+00:00\n"
+"PO-Revision-Date: 2024-05-07 13:17\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: frmzap\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: /[Strategy11.formidable-zapier] master/languages/frmzap.pot\n"
+"X-Crowdin-File-ID: 2432\n"
+"Language: fr_FR\n"
+
+#. Plugin Name of the plugin
+msgid "Formidable Zapier"
+msgstr "Formidable Zapier"
+
+#. Plugin URI of the plugin
+msgid "https://formidablepro.com/knowledgebase/formidable-zapier/"
+msgstr "https://formidablepro.com/knowledgebase/formidable-zapier/"
+
+#. Description of the plugin
+msgid "Integrate with everything through Zapier"
+msgstr "Intégrer avec tout via Zapier"
+
+#. Author of the plugin
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#. Author URI of the plugin
+msgid "http://strategy11.com"
+msgstr "http://strategy11.com"
+
+#: controllers/FrmZapApiController.php:110
+msgid "You had an HTTP connection error"
+msgstr "Vous avez eu une erreur de connexion HTTP"
+
+#: controllers/FrmZapAppController.php:206
+msgid "Formidable WebHooks"
+msgstr "Crochets web Formidable"
+
+#: controllers/FrmZapAppController.php:213
+msgid "WebHooks"
+msgstr "Crochets web"
+
+#: controllers/FrmZapAppController.php:214
+msgid "WebHook"
+msgstr "Crochet web"
+
+#: controllers/FrmZapAppController.php:218
+msgid "No WebHooks Found."
+msgstr "Aucun crochet web trouvé."
+
+#: controllers/FrmZapAppController.php:219
+msgid "Add New WebHook"
+msgstr "Ajouter un nouveau crochet web"
+
+#: controllers/FrmZapAppController.php:220
+msgid "Edit WebHook"
+msgstr "Modifier le crochet web"
+
+#: controllers/FrmZapAppController.php:240
+msgid "You are running an outdated version of Formidable. This plugin needs Formidable v3.0+ to work correctly."
+msgstr "Vous utilisez une version obsolète de Formidable. Cette extension nécessite Formidable v3.0+ pour fonctionner correctement."
+
+#: formidable-zapier.php:61
+msgid "Formidable Zapier requires Formidable Forms to be installed."
+msgstr "Pour utiliser Formidable Zapier, l’extension Formidable Forms doit être installée."
+
+#: formidable-zapier.php:63
+msgid "Install Formidable Forms"
+msgstr "Installer Formidable Forms"
+
+#: models/FrmZapAction.php:14
+msgid "Send to Zapier"
+msgstr "Envoyer à Zapier"
+
+#: models/FrmZapAction.php:17
+msgid "Zapier"
+msgstr "Zapier"
+
+#: views/action-settings/zapier_options.php:5
+msgid "This action is only temporary and will be unsubscribed automatically."
+msgstr "Cette action est seulement temporaire et sera automatiquement désinscrite."
+
+#: views/action-settings/zapier_options.php:9
+msgid "Zapier WebHook URL"
+msgstr "URL du crochet web Zapier"
+
+#: views/action-settings/zapier_options.php:14
+msgid "Form actions can be set up in Zapier"
+msgstr "Les actions de formulaire peuvent être configurées dans Zapier"
+
+#: views/action-settings/zapier_options.php:17
+msgid "Get WebHook URL"
+msgstr "Obtenir l’URL du crochet web"
+
+#: views/action-settings/zapier_options.php:21
+msgid "Edit Zap"
+msgstr "Modifier Zap"
+
+#: views/settings/api-key.php:4
+msgid "API Key"
+msgstr "Clé API"
+
