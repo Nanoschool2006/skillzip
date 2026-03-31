@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/edwiserform/events/enrolment/db" VERSION="2018040300" COMMENT="XMLDB file for Moodle local/edwiserformevents/enrolment" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
+    <TABLES>
+        <!-- form definition -->
+        <TABLE NAME="efb_forms_enrolment" COMMENT="This table has the list of Countries(Location)">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="formid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="The formid"/>
+                <FIELD NAME="courses" TYPE="text" LENGTH="200" NOTNULL="false" SEQUENCE="false" COMMENT="Courses list"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for form enrolments"/>
+            </KEYS>
+        </TABLE>
+    </TABLES>
+</XMLDB>

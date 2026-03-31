@@ -1,0 +1,60 @@
+<div class="row edg-filter-content">
+    <div class="col-md-6">
+        <div class="edg-attemptfrom-section">
+            <h4 class="m-0">{{#str}} showattemptfrom, block_edwiser_grader {{/str}}</h4>
+            <div class="edg-af-filters">
+                <div class="edg-uaq d-flex edg-afs-element">
+                    <input type="radio" id="edg-check-uaq" class="edg-filter-radio" name="radio-group" data-filter="uaq" checked><label for="edg-check-uaq"></label>
+                    <span class="edg-filter-text edg-bolded">{{#str}} reportuserswith, mod_quiz {{/str}}</span>
+                </div>
+                <div class="edg-unaq d-flex edg-afs-element">
+                    <input type="radio" id="edg-check-unaq" class="edg-filter-radio" name="radio-group" data-filter="unaq"><label for="edg-check-unaq"></label>
+                    <span class="edg-filter-text">{{#str}} reportuserswithout, mod_quiz {{/str}}</span>
+                </div>
+                <div class="edg-au d-flex edg-afs-element">
+                    <input type="radio" id="edg-check-au" class="edg-filter-radio" name="radio-group" data-filter="au"><label for="edg-check-au"></label>
+                    <span class="edg-filter-text">{{#str}} reportusersall, mod_quiz {{/str}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="edg-rattempts-section">
+            <h4 class="m-0">{{#str}} showattempt, block_edwiser_grader {{/str}}</h4>
+            <div class="edg-ra-filters">
+                <div class="edg-inprogress d-flex edg-ra-element">
+                    <input type="checkbox" id="edg-check-inprogress" class="edg-filter-check edg-filter-state" data-filter="inprogress" checked /><label class="m-0 edg-filter-label" for="edg-check-inprogress"></label>
+                    <span class="edg-filter-text edg-bolded">{{#str}} inprogress, core_completion {{/str}}</span>
+                </div>
+                <div class="edg-overdue d-flex edg-ra-element">
+                    <input type="checkbox" id="edg-check-overdue" class="edg-filter-check edg-filter-state" data-filter="overdue" checked /><label class="m-0 edg-filter-label" for="edg-check-overdue"></label>
+                    <span class="edg-filter-text edg-bolded">{{#str}} overdue, mod_quiz {{/str}}</span>
+                </div>
+                <div class="edg-finished d-flex edg-ra-element">
+                    <input type="checkbox" id="edg-check-finished" class="edg-filter-check edg-filter-state" data-filter="finished" checked /><label class="m-0 edg-filter-label" for="edg-check-finished"></label>
+                    <span class="edg-filter-text edg-bolded">{{#str}} statefinished, mod_quiz {{/str}}</span>
+                </div>
+                <div class="edg-neverfinished d-flex edg-ra-element">
+                    <input type="checkbox" id="edg-check-neverfinished" class="edg-filter-check edg-filter-state" data-filter="neverfinished" checked /><label class="m-0 edg-filter-label" for="edg-check-neverfinished"></label>
+                    <span class="edg-filter-text edg-bolded">{{#str}} stateabandoned, mod_quiz {{/str}}</span>
+                </div>
+                <div class="edg-soau d-flex edg-ra-element">
+                    <input type="checkbox" id="edg-check-soau" class="edg-filter-check" data-filter="soau"/><label class="m-0 edg-filter-label" for="edg-check-soau"></label>
+                    <span class="edg-filter-text">{{#str}} reportshowonlyfinished, block_edwiser_grader {{/str}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="edg-globfilters">
+            <div class="edg-rg d-flex edg-gf-element">
+                <input type="checkbox" id="edg-check-rg" class="edg-filter-check" data-filter="rg"/><label class="m-0 edg-filter-label" for="edg-check-rg"></label>
+                <span class="edg-filter-text">{{#str}} regradedattemptsmsg, block_edwiser_grader {{/str}}</span>
+            </div>
+           <!-- <div class="edg-qm d-flex edg-gf-element">
+                <input type="checkbox" id="edg-check-qm" class="edg-filter-check" data-filter="qm" checked /><label class="m-0 edg-filter-label" for="edg-check-qm"></label>
+                <span class="edg-filter-text edg-bolded">{{#str}} markseachquestion, block_edwiser_grader {{/str}}</span>
+            </div> -->
+        </div>
+    </div>
+</div>

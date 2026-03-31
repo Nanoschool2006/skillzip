@@ -1,0 +1,68 @@
+#epb_custom_modal{
+  $padding-modal-spaces:  20px 25px;
+  .rotate {
+    animation: rotation 2s infinite linear;
+  }
+  &.modal {
+    display: block; 
+    position: fixed; 
+    z-index: 1700; 
+    left: 0;
+    top: 0;
+    width: 100vw; 
+    height: 100vh; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5vh 2vw;
+    border: 1px solid #888;
+    width: 95vw;
+    border-radius: .215rem;
+    max-height: 90vh;
+
+    .modal-header {
+        padding: $padding-modal-spaces;
+        // background-image: linear-gradient(90deg,#3452ff 0%,#ff1053 100%);
+        box-shadow: 0 1px 2px #00000021;
+        .modal-title {
+            text-transform: uppercase;
+            font-weight: 600;
+            font-size: 20px;
+            // color: white;
+        }
+        .close {
+            span {
+                font-size: 28px;
+            }
+            // color: white;
+        }
+    }
+
+    .modal-body{
+        background-color: #f9fafc;
+        overflow: auto;
+    }
+  }
+  
+  @media only screen and (min-width: 600px) {
+    .modal-dialog {
+      max-width: 100%;
+      max-height: 92vh;
+      margin: 25px 30px;
+    }
+    .modal-body {
+        height: 100%;
+        overflow: auto;
+        padding: $padding-modal-spaces;
+    }
+    .modal-footer {
+        padding: $padding-modal-spaces;   
+    }
+  }
+
+  @import "block_card";  
+}

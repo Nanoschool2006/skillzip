@@ -1,0 +1,22 @@
+{{#blocks}}
+<div class="col-xs-12 col-md-4 col-lg-3 col-xl-3 data mt-5" data-parentblock="{{name}}" data-block="{{name}}{{section}}">
+    <div class="card-item h-100 ">
+        <div class="card">
+            <div class="card-header {{#updateavailable}} d-flex justify-content-between {{/updateavailable}}">
+                {{title}} 
+                {{#updateavailable}}
+                    <button class="btn btn-primary update-content " data-blockname="{{section}}" title="{{#str}}updateblockcontent, local_edwiserpagebuilder{{/str}}">
+                        <i class="fa fa-download"></i>
+                    </button>
+                {{/updateavailable}}
+            </div>
+            <a href="{{url}}&amp;bui_addblock={{name}}{{#section}}&amp;section={{section}}{{/section}}" class="list-group-item list-group-item-action p-0">
+                <div class="card-body">
+                    <img class="w-100" src="{{thumbnail}}">
+                </div>
+            </a>
+        </div>
+        {{#section}}<div class="ribbon">Edwiser</div>{{/section}}
+    </div>
+</div>
+{{/blocks}}

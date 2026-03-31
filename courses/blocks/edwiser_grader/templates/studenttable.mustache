@@ -1,0 +1,152 @@
+<div class="edg-grader-attempt-table">
+    <div class="edg-grader-attempt-table-content">
+    	{{#attempts}}
+    		<div class="edg-student-single-record edg-record-{{userid}}" data-studid="{{userid}}">
+    			{{> block_edwiser_grader/studenttablerow }}
+    		    <div class="edg-student-single-record-overlay edg-overlay-{{userid}}"></div>
+            </div>
+    	{{/attempts}}
+        {{^attempts}}
+            <div class="edg-nocourses-message">
+                <span><i class="fa fa-exclamation-triangle" aria-hidden="true"></i></span>
+                <div class="alert alert-info" role="alert">
+                    <p class="m-0">{{#str}} norecordsmessage, block_edwiser_grader {{/str}}</p>
+                </div>
+            </div>
+        {{/attempts}}
+    </div>
+    <div class="edg-ga-skeleton-content">
+        <div class="edg-skeleton-student-row">
+            <div class="edg-skeleton-top-section row mx-0 p-0">
+                <div class="col-md-7 p-0 d-flex">
+                    <div class="edg-skeleton-stinfo">
+                        <div class="edg-skcheck animate"></div>
+                        <div class="edg-skimage animate edg-round"></div>
+                        <div class="edg-sksdetails d-flex flex-column">
+                            <div class="edg-skname animate"></div>
+                            <div class="edg-skemail animate"></div>
+                        </div>
+                    </div>
+                    <div class="edg-skeleton-stgrade-wrap d-flex justify-content-center flex-column">
+                        <div class="edg-skeleton-stgrade-text animate"></div>
+                        <div class="edg-skeleton-stgrade animate"></div>
+                    </div>
+                </div>
+                <div class="col-md-5 p-0 d-flex flex-column justify-content-center">
+                    <div class="edg-skeleton-stattempt animate"></div>
+                    <div class="edg-skeletion-stcompletion animate"></div>
+                </div>
+            </div>
+            <div class="edg-skeleton-bottom-section">
+                <div class="edg-skeleton-qpill-container d-flex">
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="edg-skeleton-student-row">
+            <div class="edg-skeleton-top-section row mx-0 p-0">
+                <div class="col-md-7 p-0 d-flex">
+                    <div class="edg-skeleton-stinfo">
+                        <div class="edg-skcheck animate"></div>
+                        <div class="edg-skimage animate edg-round"></div>
+                        <div class="edg-sksdetails d-flex flex-column">
+                            <div class="edg-skname animate"></div>
+                            <div class="edg-skemail animate"></div>
+                        </div>
+                    </div>
+                    <div class="edg-skeleton-stgrade-wrap d-flex justify-content-center flex-column">
+                        <div class="edg-skeleton-stgrade-text animate"></div>
+                        <div class="edg-skeleton-stgrade animate"></div>
+                    </div>
+                </div>
+                <div class="col-md-5 p-0 d-flex flex-column justify-content-center">
+                    <div class="edg-skeleton-stattempt animate"></div>
+                    <div class="edg-skeletion-stcompletion animate"></div>
+                </div>
+            </div>
+            <div class="edg-skeleton-bottom-section">
+                <div class="edg-skeleton-qpill-container d-flex">
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="edg-skeleton-student-row">
+            <div class="edg-skeleton-top-section row mx-0 p-0">
+                <div class="col-md-7 p-0 d-flex">
+                    <div class="edg-skeleton-stinfo">
+                        <div class="edg-skcheck animate"></div>
+                        <div class="edg-skimage animate edg-round"></div>
+                        <div class="edg-sksdetails d-flex flex-column">
+                            <div class="edg-skname animate"></div>
+                            <div class="edg-skemail animate"></div>
+                        </div>
+                    </div>
+                    <div class="edg-skeleton-stgrade-wrap d-flex justify-content-center flex-column">
+                        <div class="edg-skeleton-stgrade-text animate"></div>
+                        <div class="edg-skeleton-stgrade animate"></div>
+                    </div>
+                </div>
+                <div class="col-md-5 p-0 d-flex flex-column justify-content-center">
+                    <div class="edg-skeleton-stattempt animate"></div>
+                    <div class="edg-skeletion-stcompletion animate"></div>
+                </div>
+            </div>
+            <div class="edg-skeleton-bottom-section">
+                <div class="edg-skeleton-qpill-container d-flex">
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                    <div class="edg-skeleton-question-pill animate">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

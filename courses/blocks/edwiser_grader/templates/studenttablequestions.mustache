@@ -1,0 +1,13 @@
+<div class="edg-question-pill-container d-flex">
+	{{#questionlist}}
+	<button type="button" class="edg-question-pill p-0 align-items-center {{status}} {{#regrademarks}} dryregrade{{/regrademarks}}" data-attempt={{attemptid}} data-qnumber={{slot}}>
+		<span class="edg-question-number d-flex align-items-center justify-content-center">Q{{ slot }}</span>
+        <div class="edg-q-marks">
+            <span class="edg-grade-status d-flex align-items-center justify-content-center">{{ questiongrade }}</span>
+            {{#regrademarks}}
+                <span class="edg-grade-status d-flex align-items-center justify-content-center">{{ regrademarks }}</span>
+            {{/regrademarks}}
+        </div>
+	</button>
+	{{/questionlist}}
+</div>

@@ -1,0 +1,9 @@
+<select name="lusers[]" multiple class="form-control" id="edg-lusers-select">
+	<option class="edg-lusers-skel animate"></option>
+	<option class="edg-lusers-skel animate"></option>
+	<option class="edg-lusers-skel animate"></option>
+	<option class="edg-lusers-skel animate"></option>
+    {{#lusers}}
+        <option class="edg-lusers-name" value="{{ key }}" {{userdisable}}>{{user}} ({{site}})</option>
+    {{/lusers}}
+</select>

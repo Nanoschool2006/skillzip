@@ -1,0 +1,110 @@
+# BEGIN WordPress
+# The directives (lines) between "BEGIN WordPress" and "END WordPress" are
+# dynamically generated, and should only be modified via WordPress filters.
+# Any changes to the directives between these markers will be overwritten.
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+# SOFTACULOUS Block directory browsing
+Options -Indexes
+# SOFTACULOUS Block directory browsing End
+
+# SOFTACULOUS Block access sensitive files
+<FilesMatch "^.*(((?:wp-config)\.(?:php|bak|swp))|php.ini|\.[hH][tT][aApP].*|((?:error_log|readme|license|changelog|-config|-sample)\.(?:php|md|log|txt|htm|html)))$">
+	Require all denied
+</FilesMatch>
+# SOFTACULOUS Block access sensitive files End
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php8_module>
+   php_flag display_errors Off
+   php_flag display_startup_errors Off
+   php_flag log_errors On
+   php_value error_reporting E_ALL & ~E_DEPRECATED & ~E_NOTICE
+   php_value date.timezone "Asia/Kolkata"
+   php_value default_charset "UTF-8"
+   php_value max_execution_time 120
+   php_value max_input_time 120
+   php_value memory_limit 1024M
+   php_value max_input_vars 10000
+   php_value upload_max_filesize 512M
+   php_value post_max_size 512M
+   php_flag zlib.output_compression On
+   php_value output_buffering 4096
+   php_value request_order "GP"
+   php_value variables_order "GPCS"
+   php_value default_socket_timeout 20
+   php_value session.save_handler "files"
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php83"
+   php_value session.gc_maxlifetime 28800
+   php_value session.gc_probability 1
+   php_value session.gc_divisor 1000
+   php_value session.cookie_httponly "1"
+   php_value session.cookie_secure "1           ; requires HTTPS (recommended)"
+   php_value session.cookie_samesite "Lax"
+   php_flag session.use_strict_mode On
+   php_value session.sid_length 48
+   php_value session.sid_bits_per_character 6
+   php_flag session.use_cookies On
+   php_flag session.use_only_cookies On
+   php_flag session.use_trans_sid Off
+   php_value session.lazy_write 1
+</IfModule>
+<IfModule lsapi_module>
+   php_flag display_errors Off
+   php_flag display_startup_errors Off
+   php_flag log_errors On
+   php_value error_reporting E_ALL & ~E_DEPRECATED & ~E_NOTICE
+   php_value date.timezone "Asia/Kolkata"
+   php_value default_charset "UTF-8"
+   php_value max_execution_time 120
+   php_value max_input_time 120
+   php_value memory_limit 1024M
+   php_value max_input_vars 10000
+   php_value upload_max_filesize 512M
+   php_value post_max_size 512M
+   php_flag zlib.output_compression On
+   php_value output_buffering 4096
+   php_value request_order "GP"
+   php_value variables_order "GPCS"
+   php_value default_socket_timeout 20
+   php_value session.save_handler "files"
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php83"
+   php_value session.gc_maxlifetime 28800
+   php_value session.gc_probability 1
+   php_value session.gc_divisor 1000
+   php_value session.cookie_httponly "1"
+   php_value session.cookie_secure "1           ; requires HTTPS (recommended)"
+   php_value session.cookie_samesite "Lax"
+   php_flag session.use_strict_mode On
+   php_value session.sid_length 48
+   php_value session.sid_bits_per_character 6
+   php_flag session.use_cookies On
+   php_flag session.use_only_cookies On
+   php_flag session.use_trans_sid Off
+   php_value session.lazy_write 1
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# This domain inherits the “PHP” package.
+# php -- END cPanel-generated handler, do not edit
+
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+
+deny from 45.86.200.0/24

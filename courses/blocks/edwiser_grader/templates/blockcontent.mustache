@@ -1,0 +1,37 @@
+<div id="edg-main-content" {{#quizpage}}data-page="{{ quizpage }}"{{/quizpage}}>
+	{{#dashboardpage}}
+		{{#courses.0}}
+			<label for="edg-course-sbox" class="m-0 edg-cs-label">{{#str}} selectcourses, block_edwiser_grader {{/str}}</label>
+			<select id="edg-course-sbox" class="edg-course-select form-control">
+				{{#courses}}
+					<option value="{{ id }}">{{{ name }}}</option>
+				{{/courses}}
+			</select>
+				<div class="edg-search-container">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+						</div>
+						<input type="text" class="form-control" id="edg-search-input" placeholder="{{#str}}searchplaceholder, block_edwiser_grader{{/str}}">
+					</div>
+				</div>
+				{{> block_edwiser_grader/quizlist}}
+		{{/courses.0}}
+		{{^courses.0}}
+			<div class="alert alert-info" role="alert">
+				<p>{{#str}} nocoursesmsg, block_edwiser_grader {{/str}}</p>
+			</div>
+		{{/courses.0}}
+	{{/dashboardpage}}
+	{{^dashboardpage}}
+		<div class="edg-search-container">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+				</div>
+				<input type="text" class="form-control" id="edg-search-input" placeholder="{{#str}}searchplaceholder, block_edwiser_grader{{/str}}">
+			</div>
+		</div>
+		{{> block_edwiser_grader/quizlist}}
+	{{/dashboardpage}}
+</div>

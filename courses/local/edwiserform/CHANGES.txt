@@ -1,0 +1,258 @@
+CHANGES for "Edwiser Forms Pro"
+
+October 27, 2020 (Version 1.5.3):
+
+Bug fixes:
+----------
+1. Create fix_auth scheduled task to fix old user account's auth issue occurred due to unselected auth plugin.
+2. Using email as the default authentication method for the registration form.
+   NOTE: Enable Email based registration so the user can confirm their account via confirmation link.
+
+Feature:
+--------
+Added setting in the registration form to disable form's confirmation email.
+
+Tweaks:
+------
+1. Improved IE compatibility.
+2. Saving guest user's submission as anonymous submission.
+
+---------------------------------------------------------------------------------------------
+
+July 30, 2020 (Version 1.5.2):
+
+Bug Fixes:
+----------
+1. Fixed js files not found issue when cachejs is disabled.
+2. Fixed submission listing function issue with Moodle 3.6
+3. Fixed license activation issue with Moodle 3.9.1
+
+Tweaks:
+-------
+1. Showing loader when form definition/settings are being saved.
+2. Improved row panel and condition panel styling across all themes.
+3. Improved stage ribbon styling across all themes.
+4. Added bootstrap button color for form edit page across all themes.
+
+Feature:
+--------
+1. Compatibility with Lambda theme.
+2. Compatibility with Essential theme.
+
+---------------------------------------------------------------------------------------------
+
+July 16, 2020 (Version 1.5.1) Hot fix:
+
+Fixed database prefix issue introduced in usage tracking code.
+
+---------------------------------------------------------------------------------------------
+
+June 26, 2020 (Version 1.5.0):
+
+Bug Fixes:
+----------
+1. Background issue when page is loading slower.
+2. Registration form not found on signup page when form is deleted
+3. Table entry deletion issue with forms list table
+4. Registration form user confirmation url issue
+5. Fixed class not found error when moodle_exception thrown for teacher.
+6. Hiding actions buttons from data list page when user do not permission to create/modify forms.
+
+Tweaks:
+-------
+1. Preventing adding of new conditional logics in row which has recaptcha element.
+2. Styling improvement for form edit page.
+
+Feature:
+--------
+1. Activity completion synchronisation with form submissions
+2. Compatible with Edwiser RemUI, Boost, Adaptable, Moove, Fordson.
+3. Compatible with Moodle 3.9
+
+---------------------------------------------------------------------------------------------
+
+May 22, 2020 (Version 1.4.5):
+
+Bug Fixes:
+----------
+1. Login page rendering issue when countries loaded asynchronously.
+2. Fixed dropdown issue with custom form styling.
+3. Updated empty table messages.
+4. Google recaptcha rendering issue with form editor.
+5. Form submission issue with textarea.
+
+Tweaks:
+-------
+1. Showing "Duplicate field" message on form data page when form element names are duplicate.
+2. Same important FIELD mark position for all form styles.
+
+---------------------------------------------------------------------------------------------
+
+May 15, 2020 (Version 1.4.4):
+
+Bug Fixes:
+----------
+1. Form rendering issue when countries list is not loaded.
+2. Plugin activation issue
+
+---------------------------------------------------------------------------------------------
+
+April 09, 2020 (Version 1.4.3):
+
+Bug Fixes:
+----------
+1. Fixed Add option blank space issue.
+2. Fixed search form issue on forms listing page.
+3. Fixed broken form data list table issue when submission content or element label is HTML.
+4. Preventing HTML content as label in form creation process.
+5. Fixed email structure issue when content is HTML.
+6. Fixed form validation error positioning issue.
+7. Fixed user registration confirmation email issue.
+8. Fixed checkbox value representation in exported data.
+
+Feature:
+--------
+1. Now plugin also work perfectly when jscaching is off.
+2. Showing radio/checkbox label instead of value on form data list page.
+3. Showing radio/checkbox label instead of value in email.
+4. Improved plugin performance and stability.
+
+---------------------------------------------------------------------------------------------
+
+December 19, 2019(Version 1.4.2):
+
+Tweak: Error logging licensing request for debugging.
+
+---------------------------------------------------------------------------------------------
+
+December 05, 2019(Version 1.4.1):
+
+Bug Fixes:
+----------
+1. 99% compatible with Internet Explorer 11.
+2. Fixed database issue for big form data.
+3. Stability and minor bug fixes.
+4. Deleting unlinked files, form data and form on cron.
+5. Fixed cloning issue with Field, Row and Column.
+6. Fixed save changes click issue on Preview tab of Create New Form page.
+7. Synchronised sidebar visibility on Create New Form page.
+8. Fixed registration form confirmation email issue.
+9. Fixed width issue with fullpage form and form preview.
+10. Removed bootstrap and added custom styling for templates.
+
+Feature:
+--------
+1. Added delete submission functionality on Submissions list page.
+2. Added bulk actions(Current delete) menu on Submissions list page.
+3. For Enrolment Form/Event, unenrolling user from selected courses on submission deletion.
+4. For Registration Form/Event, suspending user account on submission deletion.
+5. Added advanced option for Registration Form/Event: Confirm, Suspend, Unsuspend.
+6. Combined and moved all actions like Enrol/Unenrol, Confirm/Suspend/Unsuspend, Delete, etc. under User profile column for better look.
+7. Improve table styling for Forms and Form Submissions table.
+8. Export Form data in Excel Sheet format.
+9. Optimised Forms and Form Submissions listing ajax.
+10. Optimised Formbuilder and Formviewer js.
+11. Reduced file size of plugin js.
+12. On Edwiser Form Activity Create/Edit, Create/Edit form without leaving the page.
+13. Improved Login, Registration form and render js.
+14. Allowing user to overwrite form definition with warning.
+
+---------------------------------------------------------------------------------------------
+
+Auugst 28, 2019(Version 1.3.1):
+
+Bug Fixes:
+----------
+1. Using moodles limit parameters instead of query.
+2. Fixed relative path issue with events upgrade.
+
+---------------------------------------------------------------------------------------------
+
+August 22, 2019(Version 1.3.0):
+
+Bug Fixes:
+----------
+1. Fixed registration form template.
+2. Preventing user login after registration.
+3. Optimized Form actions on form list.
+4. Fixed styling in the step navigation.
+5. Fixed "Allow Data Edit" and "Notify Email" checkbox issue.
+6. Allowing user edit preloaded profile inputs.
+7. Removed services which no longer used. (Fixed undefined services issue on API Documentation page).
+8. Fixed modal styling for all themes.
+9. Fixed column and row cloning.
+10. Fixed misaligned data exporting issue.
+11. Removed password from exported file and email notification.
+12. Various optimization and bug fixes in form building.
+13. Fixed installation and database issue with PostGre and Oracle database.
+
+
+Feature:
+--------
+1. Added "Edwiser Form" link in the sidebar for Admin and Teacher.
+2. Added Live demo page link in the actions list.
+3. Added Form Reset and Form Reload functionality.
+4. Allow user to submit multiple responses in Contact and Support form.
+5. Preventing user from creating login and registration form.
+6. Preloading profile fields in the blank form.
+7. Improved Form List and Form Data List table styling.
+8. Added translation form Spanish, German, French, Polish.
+9. Improved Add New Form page styling.
+10. Added form definition validator.
+11. Improved form responsiveness for Mobile devices and container sizing.
+12. Apply background to form outer area on full page.
+13. Added link to open in full page when form is rendered using shortcode.
+14. Javascript optimization and improvement.
+15. Added validation for suspended and deleted user accounts.
+16. Added validation for password expiry of user.
+17. You can use Radio box selection in conditional logic like dropdown.
+18. Added support for Firefox, Safari and Edge browser.
+19. Added page autoscrolling when dragging row/column.
+
+---------------------------------------------------------------------------------------------
+
+March 15, 2019(Version 1.2.0):
+
+Feature
+-------
+1. Edwiser Forms as an activity - The admin can now apply the Edwiser Forms as an activity in a course.
+2. Forms Scheduling -The Form author can limit the visibility of a form by setting a start date and an end date for that particular form.
+
+---------------------------------------------------------------------------------------------
+
+January 10, 2019(Version 1.1.1):
+
+Bug Fixes:
+----------
+1. send_email name conflict in lib.php and its references
+2. sitekey not found js error when sitekey setting is kept empty
+
+---------------------------------------------------------------------------------------------
+
+December 17, 2018:
+
+File Upload:
+------------
+Implemented file upload functionality. User can use file input field to accept file form users. If user allowed to re-edit his submission then he can delete previous or overwrite previous file with new file.
+
+Form Scheduling:
+----------------
+Now admin can set visibility of form by setting start date and end date for form.
+
+Bug Fixes:
+----------
+1. Reduced plugin size by compressing js files.
+2. Pages will load faster than before.
+3. Added date timestamp to export file name.
+4. Fixed preview form page redirect url.
+5. Fixed 'notifi_email_subject' column missing.
+6. Fixed CURRENT_TIMESTAMP default value issue with MariaDB and Mysql 5.56
+
+---------------------------------------------------------------------------------------------
+
+November 20, 2018:
+
+Bug Fixes:
+----------
+1. Teachers user role can access "View All Forms".
+2. Modal visibility (Message that appears after submission of the form) on the course page.

@@ -1,0 +1,50 @@
+CHANGES for "Edwiser Forms Activity"
+
+June 26, 2020 (Version 1.5.0):
+
+Feature: Activity completion synchronisation with form submissions
+
+---------------------------------------------------------------
+
+April 20, 2020(V1.1.1)
+
+Bug Fix: Fixed form deletion error with older form activities.
+
+---------------------------------------------------------------
+
+November 14, 2019(v1.1.0)
+
+Bug Fixes:
+----------
+Fixed activity completion issue
+
+Tweak
+-----
+1. Add New Form on activity page without leaving it.
+2. Edit selected form on the activity page without leaving it.
+
+--------------------------------------------------------------
+
+Augst 28, 2019(v1.0.2):
+
+Bug Fixes:
+----------
+Fixed course uninstallation and activity deletion issue.
+
+--------------------------------------------------------------
+
+August 22, 2019(v1.0.1):
+
+Tweak
+-----
+Prevent user from opening form in another tab.
+
+--------------------------------------------------------------
+
+March 15, 2019(v1.0.0): First Release
+
+Feature
+-------
+1. User Edwiser Form as an activity in course.
+2. Choose any form while adding activity
+3. Activity completion on form submission.

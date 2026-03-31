@@ -1,0 +1,29 @@
+Version 1.1.0
+-------------
+* Fixes
+1. Fixed bootstrap classes issue with Page structure.
+2. Fixed dry run grade calculation.
+3. When Show student name to teacher setting is disabled then showing anonymous students names in
+    question modal of question based grading.
+4. When Show student name to teacher setting is disabled then removed user profile link from user
+    based grading student cards.
+5. Fixed question repeating issue in question based grading when random question is added in quiz.
+6. Fixed unclickable page issue when modals are opened like response history.
+7. Fixed question based grading search placeholder issue.
+8. Fixed license page opening and activation issue.
+9. Fixed manual grading issue which occurs when description item added in quiz.
+
+* Tweaks
+1. Showing student name on question modal.
+2. Now teacher can scroll entire questions list even if question modal is opened.
+3. Highlighting and scrolling to current clicked student response when question modal is opened.
+4. Applied floating point precision for all the places.
+
+* Feature
+1. Now all teachers can access grader. Removed teacher limit.
+2. Added support to cloze, ddwtos and ddmarker type question.
+
+
+Version 1.0.0
+--------------
+Initial Release.

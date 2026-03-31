@@ -1,0 +1,98 @@
+.blocks, [class*=blocks-] {
+    padding: initial;
+    margin: initial;
+    margin-top: 65px;
+    margin-right: initial;
+    margin-left: initial;
+}
+
+.edg-sinfo-section .fa-users {
+    font-size: 24px;
+}
+
+.edg-sinfo-section .edg-techenrol {
+    margin: 0px 20px !important;
+}
+
+.edg-ausers, .edg-lusers {
+    flex-grow: 1;
+}
+
+#edg-ausers-select, #edg-lusers-select {
+    min-height: 250px;
+    margin-bottom: 10px;
+}
+
+.edg-user-actions {
+    margin: 0px 20px;
+}
+
+.edg-search-user input {
+    max-width: 200px;
+}
+
+.edg-users-section label {
+    font-weight: bold;
+}
+
+#id_ausers option:first-child,
+#id_susers option:first-child {
+    font-weight: bold;
+    background-color: lightgray;
+}
+.edg-sinfo-section h4 {
+    font-size: 1.176rem !important;
+}
+.edg-site-alert {
+    display: none;
+    width: 50%;
+    margin-right: 5%;
+    height: 80px;
+    top: 50px;
+}
+.edg-lsites {
+    width: 225px;
+}
+
+.edg-lusers-skel {
+    display: none;
+    position: relative;
+    background: #eaeaea;
+    margin-top: 4px;
+}
+
+.animate::before {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    left: 0;
+    display: block;
+    content: '';
+    opacity: 1;
+    -webkit-animation: flash 1.5s infinite;
+    background-image: linear-gradient(to right, white , #eaeaea);
+    animation: flash 1.5s infinite;
+}
+
+@keyframes flash {
+  0%   {opacity: 0; width: 0% }
+  50%  {opacity: 0.6; width: 100%;}
+  100% {opacity: 0; width: 0%;}
+}
+@media screen and (max-width: 480px) {
+    .edg-sinfo-section, .edg-sinfo-section div, .edg-users-section {
+        flex-direction: column;
+    }
+    .edg-sinfo-section div {
+        margin-bottom: 10px;
+    }
+    .edg-lsites {
+        margin-left: 0px;
+    }
+    .edg-site-alert {
+        width: auto;
+        top: 0;
+        height: auto;
+    }
+}
