@@ -14450,3 +14450,33 @@
 [31-Mar-2026 07:08:47 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
 [31-Mar-2026 07:08:47 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
 [31-Mar-2026 07:08:47 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:26:38 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:26:45 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:32:02 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[01-Apr-2026 07:32:06 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[01-Apr-2026 07:40:31 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[01-Apr-2026 07:40:38 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[01-Apr-2026 07:40:55 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 861
+[01-Apr-2026 07:51:56 UTC] PHP Warning:  Undefined property: stdClass::$new_version in /usr/local/cpanel/3rdparty/wp-toolkit/plib/vendor/wp-cli/vendor/wp-cli/extension-command/src/Plugin_Command.php on line 869
