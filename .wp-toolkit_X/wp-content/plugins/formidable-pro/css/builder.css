@@ -1,0 +1,513 @@
+.frm-single-settings.frm-type-rte .frm-default-value-wrapper .frmsvg.frm-show-inline-modal {
+	bottom: var(--gap-sm);
+	left: auto;
+	right: 0;
+}
+
+.frm-single-settings.frm-type-rte .frm-default-value-wrapper .tmce-active .frmsvg.frm-show-inline-modal {
+	bottom: var(--gap-lg);
+}
+
+#frm-show-fields .wp-editor-wrap {
+	/* Disable the RTE field in the preview. */
+	pointer-events: none;
+}
+
+.frm_wrap input[type="text"].frm_invalid_field, .frm_wrap input[type="text"].frm_invalid_field:focus {
+	border-color: #B94A48 !important;
+}
+
+.frm_disabled_show_password .frm_show_password_btn {
+	display: none;
+}
+
+/* Rootline */
+#frm-backend-rootline-wrapper:not(.frm_hidden) + .frm-show-rootline-wrapper {
+	display: none;
+}
+
+#frm-backend-rootline-wrapper {
+	padding: 0;
+}
+
+#frm-backend-rootline-wrapper .frm-show-field-settings {
+	padding: 5px;
+	border: 1px solid transparent;
+}
+
+#frm-backend-rootline-wrapper .frm-show-field-settings:hover {
+	background: rgba(65, 153, 253, 0.04);
+	box-shadow: 0 0 1px 0 var(--primary-500);
+	border-color: var(--primary-500);
+}
+
+#frm-backend-rootline-wrapper .frm-show-field-settings.selected {
+	border-color: var(--primary-500);
+}
+
+.frm-backend-rootline ul {
+	list-style-type: none;
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	overflow: hidden;
+	margin: 0;
+}
+
+.frm-backend-rootline li {
+	justify-content: flex-end;
+	display: flex;
+	flex: 1;
+	align-items: center;
+	flex-direction: column;
+}
+
+.frm-backend-rootline[data-type="progress"] li:after {
+	content: '';
+	display: block;
+	height: 12px;
+	background-color: #e2e4e5;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.frm-backend-rootline:not(.frm-rootline-no-lines) li:after {
+	border-right: 1px solid #fff;
+}
+
+.frm-backend-rootline li:first-child:after {
+	background-color: #007aff;
+	border-bottom-left-radius: 7px;
+	border-top-left-radius: 7px;
+}
+
+.frm-backend-rootline li:last-child:after {
+	border-top-right-radius: 7px;
+	border-bottom-right-radius: 7px;
+	border-right: 0;
+}
+
+.frm-backend-rootline.frm-rootline-no-titles .frm-rootline-title,
+.frm-backend-rootline.frm-rootline-no-numbers .frm-progress-bar-numbers,
+.frm-backend-rootline[data-type="rootline"] .frm-progress-bar-numbers {
+	display: none;
+}
+
+.frm-backend-rootline .frm_percent_complete {
+	float: left;
+}
+
+.frm-backend-rootline .frm_pages_complete {
+	float: right;
+}
+
+.frm-backend-rootline[data-type="rootline"] ul {
+	align-items: baseline;
+}
+
+.frm-backend-rootline[data-type="rootline"] li {
+	width: 150px;
+	position: relative;
+	padding: 0 10px;
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.frm-backend-rootline.frm-rootline-no-titles[data-type="rootline"] {
+	min-width: 50px;
+}
+
+.frm-backend-rootline[data-type="rootline"]:not(.frm-rootline-no-lines) li:not(:last-child):after {
+	height: 2px;
+	height: var(--progress-border-size);
+	background: #E5E5E5;
+	background: var(--progress-border-color);
+	content: '';
+	position: absolute;
+	top: 12px;
+	top: calc( ( var(--progress-size) / 2 ) - var(--progress-border-size) );
+	left: 50%;
+	width: 100%;
+	z-index: 1;
+}
+
+.frm-backend-rootline .frm-rootline-number {
+	height: 24px;
+	width: 24px;
+	line-height: 24px;
+	border-radius: 50%;
+	background-color: #e9ecf5;
+	border: 1px solid #eff8fe;
+	text-align: center;
+	z-index: 2;
+}
+
+.frm-backend-rootline li:first-child .frm-rootline-number {
+	border-color: #4386e2;
+	background-color: #579AF6;
+	color: #fff;
+}
+
+.frm-backend-rootline.frm-rootline-no-numbers li:not(.frm-rootline-item-more) .frm-rootline-number {
+	color: transparent !important;
+}
+
+.frm-backend-rootline li.frm_hidden {
+	display: none !important;
+}
+
+/* End Rootline */
+
+.frm-right-panel .frm-single-settings h3.frm_prod_user_def, .frm_prod_type_user_def  {
+	display: none;
+}
+
+.frm-type-address .frm_show_upgrade {
+	cursor: pointer;
+	opacity: .5;
+}
+
+.frm-single-settings.frm-type-address .frm_form_field:has([name^="field_options[admin_only_"]) {
+	/* Make sure the Visibility setting appears on a new line for Address fields so it does not appear beside Country Description */
+	grid-column-start: 1;
+}
+
+.frm_add_watch_lookup_row .frm_add_tag {
+	position: relative;
+	bottom: 2px;
+}
+
+#new_fields .frm_add_watch_lookup_row .frm_add_tag .frmsvg {
+	height: 12px;
+	width: 12px;
+	color: var(--primary-500);
+}
+
+.frm_add_watch_lookup_row .frm_add_tag:before,
+.frm_logic_row .frm_remove_tag:before {
+	content: "";
+}
+
+.frm_logic_row .frm_remove_tag .frmsvg {
+	vertical-align: text-bottom;
+}
+
+.with_frm_style.frm_form_builder input[type=range]::-webkit-slider-runnable-track {
+	-webkit-appearance: none;
+	background-color: transparent !important;
+}
+.with_frm_style.frm_form_builder input[type=range]::-moz-range-track {
+	background-color: transparent !important;
+}
+
+.with_frm_style.frm_form_builder input[type=range]::-moz-range-progress {
+	background-color: transparent !important;
+}
+
+.frm_form_builder input[type="text"] + .frm_show_password_btn svg:last-child {
+	display: none;
+}
+
+.frm_form_builder input[type="text"] + .frm_show_password_btn svg:first-child {
+	display: block;
+}
+
+.frm_logic_rows .frm_logic_row {
+	position: relative;
+	padding: var(--gap-2xs) 11px;
+	margin-top: var(--gap-sm);
+	align-items: stretch;
+}
+
+.frm_logic_rows .frm_logic_row:not(:nth-of-type(3)) {
+	margin-top: 66px;
+}
+
+.frm_logic_rows .frm_logic_row::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 133px;
+	width: 3px;
+	background-color: var(--grey-200);
+}
+
+.frm-logic-rule {
+	position: absolute;
+	top: -48px;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	z-index: -1;
+}
+
+.frm_logic_rows .frm_logic_row:nth-of-type(3) .frm-logic-rule {
+	display: none;
+}
+
+.frm-logic-rule::before,
+.frm-logic-rule::after {
+	content: '';
+	position: absolute;
+	left: 50%;
+	width: 1px;
+	background-color: var(--grey-300);
+}
+
+.frm-logic-rule::before {
+	height: 70px;
+	bottom: 100%;
+}
+
+.frm-logic-rule::after {
+	height: 35px;
+	top: 100%;
+}
+
+.frm-logic-rule-text {
+	font-size: 16px;
+	line-height: 18px;
+	text-transform: uppercase;
+	color: var(--grey-800);
+	background-color: #fff;
+	padding: var(--gap-xs) 11px;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+	box-shadow: var(--box-shadow-xs);
+}
+
+.frm_range_container .frm_range_value {
+	display: inline;
+}
+
+.frm-text-left {
+	text-align: left;
+}
+
+.frm-text-center {
+	text-align: center;
+}
+
+.frm-text-right {
+	text-align: right;
+}
+/**
+ * jQuery datepicker overrides.
+ */
+.frm-datepicker.ui-datepicker .ui-datepicker-prev:before, .frm-datepicker.ui-datepicker .ui-datepicker-next:before {content: '';}
+
+.frm-datepicker.ui-datepicker .ui-datepicker-next span, .frm-datepicker.ui-datepicker .ui-datepicker-prev span {
+	display: block;
+}
+
+.frm-datepicker .ui-icon-circle-triangle-e {
+	transform: rotate(180deg) !important;
+}
+
+.frm-datepicker.ui-widget-content .ui-state-hover .ui-icon {
+	background-image: url(../css/ui-lightness/images/ui-icons_ffffff_256x240.png);
+}
+/**
+ * End jQuery datepicker overrides.
+ */
+
+ /* Slider Type Selector Modal */
+ .frm-slider-type-selector-modal-container {
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	text-align: center;
+	overflow: hidden;
+	padding-bottom: 0.5rem;
+	font-weight: 500;
+ }
+
+ .frm-slider-type-selector-modal-container * {
+	cursor: pointer;
+ }
+
+ .frm-slider-type-selector-modal-container:hover {
+	border: 1px solid var(--primary-500);
+ }
+
+ .frm-slider-type-selector-modal-button {
+	background-color: var(--grey-50);
+	margin-bottom: 0.5rem;
+	height: 128px;
+	width: 243px;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: none;
+	display: block;
+ }
+
+ .frm-slider-type-selector-modal-button:focus-visible {
+	outline: none;
+	box-shadow: none;
+}
+
+.frm-slider-type-selector-modal-button-single {
+	background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22242%22%20height%3D%22128%22%20fill%3D%22none%22%3E%3Cpath%20fill%3D%22%23F9FAFB%22%20d%3D%22M0%200h242v128H0z%22/%3E%3Crect%20width%3D%22178%22%20height%3D%228%22%20x%3D%2232%22%20y%3D%2261%22%20fill%3D%22%23D9EBFF%22%20rx%3D%224%22/%3E%3Crect%20width%3D%2265%22%20height%3D%228%22%20x%3D%2232%22%20y%3D%2261%22%20fill%3D%22%234199FD%22%20rx%3D%224%22/%3E%3Cg%20filter%3D%22url(%23a)%22%3E%3Ccircle%20cx%3D%2296%22%20cy%3D%2264%22%20r%3D%229%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2296%22%20cy%3D%2264%22%20r%3D%227.75%22%20stroke%3D%22%234199FD%22%20stroke-width%3D%222.5%22/%3E%3C/g%3E%3Cdefs%3E%3Cfilter%20id%3D%22a%22%20width%3D%2223.649%22%20height%3D%2223.649%22%20x%3D%2284.175%22%20y%3D%2254.059%22%20color-interpolation-filters%3D%22sRGB%22%20filterUnits%3D%22userSpaceOnUse%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20result%3D%22hardAlpha%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22/%3E%3CfeMorphology%20in%3D%22SourceAlpha%22%20radius%3D%22.941%22%20result%3D%22effect1_dropShadow_903_29984%22/%3E%3CfeOffset%20dy%3D%22.941%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%22.941%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.0627451%200%200%200%200%200.0941176%200%200%200%200%200.156863%200%200%200%200.06%200%22/%3E%3CfeBlend%20in2%3D%22BackgroundImageFix%22%20result%3D%22effect1_dropShadow_903_29984%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20result%3D%22hardAlpha%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22/%3E%3CfeMorphology%20in%3D%22SourceAlpha%22%20radius%3D%22.941%22%20result%3D%22effect2_dropShadow_903_29984%22/%3E%3CfeOffset%20dy%3D%221.883%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%221.883%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.0627451%200%200%200%200%200.0941176%200%200%200%200%200.156863%200%200%200%200.1%200%22/%3E%3CfeBlend%20in2%3D%22effect1_dropShadow_903_29984%22%20result%3D%22effect2_dropShadow_903_29984%22/%3E%3CfeBlend%20in%3D%22SourceGraphic%22%20in2%3D%22effect2_dropShadow_903_29984%22%20result%3D%22shape%22/%3E%3C/filter%3E%3C/defs%3E%3C/svg%3E");
+}
+
+.frm-slider-type-selector-modal-button-range {
+	background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22243%22%20height%3D%22128%22%20fill%3D%22none%22%3E%3Cpath%20fill%3D%22%23F9FAFB%22%20d%3D%22M0%200h243v128H0z%22/%3E%3Crect%20width%3D%22179%22%20height%3D%228%22%20x%3D%2232%22%20y%3D%2261%22%20fill%3D%22%23D9EBFF%22%20rx%3D%224%22/%3E%3Crect%20width%3D%2265%22%20height%3D%228%22%20x%3D%2290%22%20y%3D%2261%22%20fill%3D%22%234199FD%22%20rx%3D%224%22/%3E%3Cg%20filter%3D%22url(%23a)%22%3E%3Ccircle%20cx%3D%2285%22%20cy%3D%2264%22%20r%3D%229%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%2285%22%20cy%3D%2264%22%20r%3D%227.75%22%20stroke%3D%22%234199FD%22%20stroke-width%3D%222.5%22/%3E%3C/g%3E%3Cg%20filter%3D%22url(%23b)%22%3E%3Ccircle%20cx%3D%22159%22%20cy%3D%2264%22%20r%3D%229%22%20fill%3D%22%23fff%22/%3E%3Ccircle%20cx%3D%22159%22%20cy%3D%2264%22%20r%3D%227.75%22%20stroke%3D%22%234199FD%22%20stroke-width%3D%222.5%22/%3E%3C/g%3E%3Cdefs%3E%3Cfilter%20id%3D%22a%22%20width%3D%2223.649%22%20height%3D%2223.649%22%20x%3D%2273.175%22%20y%3D%2254.059%22%20color-interpolation-filters%3D%22sRGB%22%20filterUnits%3D%22userSpaceOnUse%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20result%3D%22hardAlpha%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22/%3E%3CfeMorphology%20in%3D%22SourceAlpha%22%20radius%3D%22.941%22%20result%3D%22effect1_dropShadow_903_30001%22/%3E%3CfeOffset%20dy%3D%22.941%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%22.941%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.0627451%200%200%200%200%200.0941176%200%200%200%200%200.156863%200%200%200%200.06%200%22/%3E%3CfeBlend%20in2%3D%22BackgroundImageFix%22%20result%3D%22effect1_dropShadow_903_30001%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20result%3D%22hardAlpha%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22/%3E%3CfeMorphology%20in%3D%22SourceAlpha%22%20radius%3D%22.941%22%20result%3D%22effect2_dropShadow_903_30001%22/%3E%3CfeOffset%20dy%3D%221.883%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%221.883%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.0627451%200%200%200%200%200.0941176%200%200%200%200%200.156863%200%200%200%200.1%200%22/%3E%3CfeBlend%20in2%3D%22effect1_dropShadow_903_30001%22%20result%3D%22effect2_dropShadow_903_30001%22/%3E%3CfeBlend%20in%3D%22SourceGraphic%22%20in2%3D%22effect2_dropShadow_903_30001%22%20result%3D%22shape%22/%3E%3C/filter%3E%3Cfilter%20id%3D%22b%22%20width%3D%2223.649%22%20height%3D%2223.649%22%20x%3D%22147.176%22%20y%3D%2254.059%22%20color-interpolation-filters%3D%22sRGB%22%20filterUnits%3D%22userSpaceOnUse%22%3E%3CfeFlood%20flood-opacity%3D%220%22%20result%3D%22BackgroundImageFix%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20result%3D%22hardAlpha%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22/%3E%3CfeMorphology%20in%3D%22SourceAlpha%22%20radius%3D%22.941%22%20result%3D%22effect1_dropShadow_903_30001%22/%3E%3CfeOffset%20dy%3D%22.941%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%22.941%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.0627451%200%200%200%200%200.0941176%200%200%200%200%200.156863%200%200%200%200.06%200%22/%3E%3CfeBlend%20in2%3D%22BackgroundImageFix%22%20result%3D%22effect1_dropShadow_903_30001%22/%3E%3CfeColorMatrix%20in%3D%22SourceAlpha%22%20result%3D%22hardAlpha%22%20values%3D%220%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20127%200%22/%3E%3CfeMorphology%20in%3D%22SourceAlpha%22%20radius%3D%22.941%22%20result%3D%22effect2_dropShadow_903_30001%22/%3E%3CfeOffset%20dy%3D%221.883%22/%3E%3CfeGaussianBlur%20stdDeviation%3D%221.883%22/%3E%3CfeColorMatrix%20values%3D%220%200%200%200%200.0627451%200%200%200%200%200.0941176%200%200%200%200%200.156863%200%200%200%200.1%200%22/%3E%3CfeBlend%20in2%3D%22effect1_dropShadow_903_30001%22%20result%3D%22effect2_dropShadow_903_30001%22/%3E%3CfeBlend%20in%3D%22SourceGraphic%22%20in2%3D%22effect2_dropShadow_903_30001%22%20result%3D%22shape%22/%3E%3C/filter%3E%3C/defs%3E%3C/svg%3E");
+}
+/* End Slider Type Selector Modal */
+
+#frm-layout-classes-box .frm_insert_code[data-code="frm_no_border_top"] {
+	display: none;
+}
+
+.frm-single-settings.frm-type-divider #frm-layout-classes-box .frm_insert_code[data-code="frm_no_border_top"] {
+	display: block;
+}
+
+/**
+ * Backwards compatibility @since 6.24
+ */
+.frm-white-space-nowrap {
+	white-space: nowrap;
+}
+
+.frm-pr-lg {
+	padding-right: var(--gap-lg);
+}
+
+.frm-h-stack-xs {
+	display: flex !important;
+	align-items: center;
+	gap: var(--gap-xs);
+}
+
+.frm-range-min::after {
+	display: none;
+}
+
+/* Field Formula */
+.frm-field-formula {
+	--field-formula-height: 136px;
+	--field-formula-buttons-height: 32px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid transparent;
+	border-radius: var(--small-radius);
+}
+
+.frm-field-formula .frm-field-formula-editor {
+	position: absolute;
+	inset: 1px;
+	width: auto;
+	height: calc(var(--field-formula-height) - var(--field-formula-buttons-height));
+	border: 0;
+	padding: 10px;
+	box-shadow: none;
+	outline: 0;
+	resize: none;
+	z-index: 2;
+}
+
+.frm-field-formula .frm-field-formula-editor:focus + .frm-field-formula-height {
+	outline: 2px solid var(--primary-500);
+}
+
+.frm-field-formula-height {
+	height: var(--field-formula-height);
+	background-color: #fff;
+	outline: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+	z-index: 1;
+}
+
+.frm-field-formula .frm-field-formula-buttons {
+	display: flex;
+	flex-direction: row-reverse;
+	gap: var(--gap-2xs);
+	height: var(--field-formula-buttons-height);
+	background-color: var(--grey-200);
+	padding: 6px;
+	border-bottom-left-radius: var(--small-radius);
+	border-bottom-right-radius: var(--small-radius);
+	margin-top: calc(var(--field-formula-buttons-height) * -1);
+	z-index: 2;
+}
+
+.frm-field-formula .frm-field-formula-buttons .frm-field-formula-button {
+	box-sizing: border-box;
+	display: inline-flex;
+	gap: 3px;
+	align-items: center;
+	justify-content: center;
+	font-size: var(--text-xs);
+	line-height: 1;
+	color: var(--grey-500);
+	background-color: #fff;
+	padding: var(--gap-2xs) 6px;
+	border-radius: 4px;
+	box-shadow: var(--box-shadow-xs);
+	margin: 0;
+	cursor: pointer;
+	user-select: none;
+}
+
+.frm-field-formula .frm-field-formula-buttons .frm-field-formula-button:not(.frm-field-formula-insert-field) {
+	width: 20px;
+	font-weight: 600;
+}
+
+.frm-field-formula .frm-field-formula-buttons .frm-field-formula-button:hover {
+	color: var(--primary-500);
+}
+
+.frm-field-formula .frm-inline-modal {
+	top: var(--gap-xs) !important;
+	width: 100%;
+}
+
+.frm-field-formula .frm-inline-modal .frm_code_list {
+	max-height: 150px;
+}
+
+.frm-field-formula .frm-inline-modal .frm_code_list a {
+	font-size: var(--text-sm);
+}
+
+.frm-field-date-or-time-enable-range {
+	cursor: pointer;
+}
+.frm-field-date-or-time-enable-range input[type="checkbox"] {
+	pointer-events: none;
+}
+.frm-field-date-or-time-enable-range.frm-disabled, .frm-field-date-or-time-enable-range.frm-disabled input[type="checkbox"] {
+	pointer-events: none;
+	opacity: 0.7;
+}
+.frm_range_container input[type="range"] {
+	background: linear-gradient(to right, var(--slider-color) 0%, var(--slider-color) 50%, var(--slider-bar-color) 50% 100%);
+}
+.frm-choice-entry-limit {
+	margin-top: 8px;
+	margin-left: 54px;
+	margin-right: 31px;
+}
+.frm-choice-entry-limit span {
+	margin-right: 5px;
+}
+.frm_wrap .frm-choice-entry-limit input[type="number"] {
+	margin-right: 8px;
+}
+.frm-choice-entry-limit .frmsvg {
+	max-width: fit-content;
+}
+#new_fields .frm_grid_container>p.frm_form_field.frm_set_choices_limit,
+.frm_grid_container>p.frm_form_field.frm_show_remaining_quantity {
+	margin-top: 0;
+}
+#frm-remaining-qty-modal .frm_grid_container label {
+	color: var(--grey-700);
+}
+#frm-remaining-qty-modal .frm_grid_container input {
+	width: 100%;
+}

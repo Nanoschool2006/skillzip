@@ -1,0 +1,259 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.options_bridge_woo .select2-container-multi .select2-choices .select2-search-field input{
+	width : 215px !important;
+}
+
+
+
+.options_bridge_woo .select2.select2-container {
+    width: auto !important;
+}
+
+
+
+.eb_woo_int_update_notice_message_cont{
+	overflow: auto;
+    padding: 13px;
+    border-left: 4px solid green;
+}
+
+
+/**
+* Custom field CSS
+*/
+
+.eb_wi_custom_field_tbl{
+    border-spacing: 0;
+    border: 1px solid #ccd0d4;
+    width: 100%;
+    background-color: #fff;
+    text-align: left;
+    box-shadow: 0 1px 1px rgb(0 0 0 / 4%);
+}
+
+.eb_wi_custom_field_tbl tr{
+    cursor: pointer;
+}
+
+.eb_wi_custom_field_tbl *{
+    word-wrap: break-word;
+}
+
+.eb_wi_custom_field_tbl tr th {
+    line-height: 1.4em;
+    border-bottom: 1px solid #ccd0d4;
+    font-weight: 600;
+    color: #555;
+    font-size: 14px;
+    padding: 15px 10px;
+}
+
+.eb_wi_custom_field_tbl tr td {
+    line-height: 1.4em;
+    /* border: 1px solid #ccd0d4; */
+    font-weight: 400;
+    color: #555;
+    font-size: 13px;
+    padding: 10px 10px;
+}
+
+.eb_wi_custom_field_tbl>tbody>:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+
+.button-primary.eb_wi_custom_field_btns, .eb_wi_field_action_wrap .eb_wi_custom_field_btns, .eb_wi_custom_field_btns{
+    /*padding: 2px 15px;*/
+    border-radius: 2px;
+}
+
+.eb_wi_field_action_wrap select.eb_wi_custom_field_btns{
+    font-size: 13px;
+}
+
+
+.eb_wi_field_bulk_action_wrap{
+    background-color: white;
+    padding: 12px;
+    display: flex;
+    border: 1px solid #ccd0d4;
+}
+
+.eb_wi_field_bulk_action_wrap:first-of-type{
+    border-bottom: none;
+}
+
+    
+.eb_wi_field_bulk_action_wrap:last-child{
+    border-top: none;
+}
+
+
+.eb_wi_custom_fields_wrap{
+    margin: 15px;    
+}
+
+
+/*Field pop up fields*/
+
+.eb-wi-cf-pop-up-lbl{
+    width: 25%;
+}
+
+.eb-wi-cf-pop-up-lbl label{
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.eb-wi-cf-pop-up-right-field{
+    width: 75%;
+}
+
+/*.eb-wi-cf-pop-up-right-field select, .eb-wi-cf-pop-up-right-field input[type='text']{*/
+.eb-wi-cf-pop-up-right-field .eb-wi-cf-pop-up-inp{
+    width: 90%;
+    max-width: 100%;
+    padding: 3px 10px;
+}
+
+.eb-wi-cf-pop-up-fields{
+    display: flex;
+    padding: 5px 15px;
+}
+
+
+.eb-wi-cf-dialog .ui-widget-header{
+    border: 0;
+    line-height: 22px;
+    border-bottom: 1px solid #ededed;
+    padding: 15px 12px 15px 30px;
+    font-size: 20px;
+    background-color: white;
+    text-align: left;
+}
+
+
+.eb-wi-cf-dialog{
+    border: 1px solid #c5c5c5;
+    border-radius: 5px;
+    -webkit-box-shadow: 0 0 20px 5px rgb(0 0 0 / 80%);
+    box-shadow: 0 0 20px 5px rgb(0 0 0 / 80%);
+}
+
+.ui-dialog .ui-dialog-content.eb-wi-cf-pop-up-cont{
+    padding: 20px 25px;
+}
+
+
+.eb-wi-cf-dialog .eb-wi-cf-dialog-btn{
+    border-radius: 3px;
+    padding: 4px 20px;
+    letter-spacing: 1px;
+    color: white;
+}
+
+
+.eb-wi-cf-dialog .eb-wi-cf-dialog-cancel-btn{
+    border-radius: 3px;
+    padding: 10px 20px;
+    letter-spacing: 1px;
+}
+
+
+
+.eb-wi-cf-tbl-enabled-lbl{
+    text-align: center;
+}
+
+.eb-wi-cf-pop-up-right-field .eb-wi-cf-dialog-option-inp{
+    width: 39%;
+}
+
+.eb-wi-cf-pop-up-right-field .eb-wi-cf-dialog-option-btn{
+    width: 20%;
+}
+
+.eb-wi-cf-dialog-option-btn span{
+    font-size: 23px;
+    padding: 3px 1px;
+    cursor: pointer;
+}
+
+.wi-cf-dialog-option-add-new{
+    color: #006799;
+}
+
+.wi-cf-dialog-option-remove, .wi-cf-dialog-option-first-remove{
+    color: red;
+}
+
+.eb-wi-cf-dialog-option-inp{
+    margin-right: 3px;
+}
+
+.eb-wi-cf-hide{
+    display: none;
+}
+
+
+.eb_wi_field_action_left, .eb_wi_field_action_right{
+    width: 50%;
+}
+
+.eb_wi_field_action_right{
+    text-align: right;
+}
+
+
+.eb_wi_cf_add_new_field_btn{
+    margin-right: 10px;
+}
+
+
+.eb-wi-cf-pop-up-cont-wrap{
+    display: none;
+}
+
+
+.wi-cf-disable-row{
+    opacity: 0.4;
+}
+
+
+.eb-wi-cf-pop-up-fields .eb-wi-cf-pop-up-right-field .select2.select2-container {
+    width: 90% !important;
+}
+
+.eb-wi-cf-edit{
+    color: #006799;
+}
+
+.eb-wi-cf-remove{
+    color: #dc3232;
+}
+
+
+.wi-cf-dialog-tooltip{
+    vertical-align: middle;
+    padding-right: 5px;
+    float:  right;
+}
+
+
+.wi_cf_error_msg{
+    border: 1px solid red;
+    border-left: 5px solid #dc3232;
+    margin: 0px 15px 5px 15px;
+    padding: 7px 10px;
+    /* color: #dc3232; */
+    width: 85%;
+    display: none;
+}
+
+.eb_wi_field_action_left .eb_wi_cf_bulk_action_btns, .eb_wi_field_action_left .eb_wi_cf_add_new_field_btn{
+    margin: 2px 2px;
+}

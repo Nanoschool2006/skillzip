@@ -1,0 +1,20 @@
+# Translation of Formidable Registration in Polish
+# This file is distributed under the same license as the Formidable Registration package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-09-20 15:05:47+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/3.0.0\n"
+"Language: pl\n"
+"Project-Id-Version: Formidable Registration\n"
+
+#: models/FrmRegGlobalSettings.php:115
+msgid "Please enter your username or email address. You will receive a link to create a new password via email."
+msgstr "Wprowadź swój adres email, jeśli adres jest poprawny otrzymasz link do utworzenia nowego hasła. "
+
+#: models/FrmRegGlobalSettings.php:116
+msgid "Enter your new password below."
+msgstr "Wpisz swoje nowe hasło poniżej."

@@ -1,0 +1,21 @@
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Choose your MailPoet list', 'thrive-cb' ); ?>
+	</div>
+	<div class="control-grid">
+		<select class="api-list tve-mailpoet-list" data-name="list">
+			<# _.each(api.get('lists'), function(item) { #>
+			<#= TVE.tpl( 'util/option', {value:item.id, selected: (api.getConfig('list')==item.id), text: item.name}) #>
+			<# } ) #>
+		</select>
+
+		<span class="click tve-refresh-api-list" data-fn="forceGet" data-tooltip="<?php echo __( 'Refresh', 'thrive-cb' ); ?>" data-side="top"> <?php tcb_icon( 'redo-regular' ) ?></span>
+	</div>
+</div>
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Tags', 'thrive-cb' ); ?>
+	</div>
+	<span class="field-description info-text grey-text"><?php echo sprintf( __( 'We\'d love to let you create and manage tags here, but MailPoet doesn\'t allow it. You can add them directly from %s instead.', 'thrive-cb' ), '<a href="https://www.mailpoet.com/" target="_blank" rel="noopener" style="display: inline; color: #4bb35e;">MailPoet</a>' ); ?></span>
+</div>
+

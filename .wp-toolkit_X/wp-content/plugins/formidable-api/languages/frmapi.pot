@@ -1,0 +1,279 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable API plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable API 1.18\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-api\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-12-11T18:29:10+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: frmapi\n"
+
+#. Plugin Name of the plugin
+#: formidable-api.php
+msgid "Formidable API"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-api.php
+msgid "https://formidableforms.com/"
+msgstr ""
+
+#. Description of the plugin
+#: formidable-api.php
+msgid "Create entries in Formidable via a rest API, and send REST API requests when forms are submitted"
+msgstr ""
+
+#. Author of the plugin
+#: formidable-api.php
+msgid "Strategy11"
+msgstr ""
+
+#: controllers/FrmAPIAppController.php:933
+msgid "Your API key is incorrect"
+msgstr ""
+
+#: controllers/FrmAPIAppController.php:939
+msgid "You do not have an administrator on this site"
+msgstr ""
+
+#: controllers/FrmAPIAppController.php:984
+msgid "Please include id=# and url=\"yoururl.com\" in your shortcode"
+msgstr ""
+
+#: controllers/FrmAPIAppController.php:1556
+msgid "You had an HTTP connection error"
+msgstr ""
+
+#: controllers/FrmAPIAppController.php:1584
+msgid "API:"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:224
+msgid "Nothing was found with that id"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:281
+#: controllers/FrmAPIv1Controller.php:332
+msgid "Missing form id"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:287
+msgid "Invalid form id %s"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:663
+#: controllers/FrmAPIEntriesController.php:672
+msgid "Invalid entry ID."
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:794
+#: controllers/FrmAPIEntriesController.php:807
+#: controllers/FrmAPIEntriesController.php:839
+msgid "Sorry, you are not allowed to edit entries"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:798
+#: controllers/FrmAPIEntriesController.php:811
+msgid "Sorry, you are not allowed to view entries"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:824
+msgid "Sorry, you are not allowed to create entries"
+msgstr ""
+
+#: controllers/FrmAPIEntriesController.php:849
+msgid "Sorry, you are not allowed to delete entries"
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:137
+msgid "No \"fields\" data found in the request body"
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:194
+msgid "Field id not provided."
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:279
+#: controllers/FrmAPIFormsController.php:185
+#: controllers/FrmAPIFormsController.php:207
+msgid "Invalid form ID."
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:288
+msgid "Invalid URL."
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:354
+msgid "Invalid field ID."
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:475
+msgid "Sorry, you are not allowed to edit form fields"
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:477
+msgid "Sorry, you are not allowed to view form fields"
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:489
+#: controllers/FrmAPIFormsController.php:393
+msgid "Sorry, you are not allowed to create or edit forms"
+msgstr ""
+
+#: controllers/FrmAPIFieldsController.php:498
+#: controllers/FrmAPIFormsController.php:402
+msgid "Sorry, you are not allowed delete forms"
+msgstr ""
+
+#: controllers/FrmAPIFormsController.php:136
+msgid "Form creation failed"
+msgstr ""
+
+#: controllers/FrmAPIFormsController.php:381
+msgid "Sorry, you are not allowed to edit forms"
+msgstr ""
+
+#: controllers/FrmAPISettingsController.php:134
+msgid "Existing uses of the old API key will no longer work and <b style=\"color:var(--error-500);\">this action is irreversible</b>."
+msgstr ""
+
+#: controllers/FrmAPISettingsController.php:137
+msgid "This will also break existing Zapier integrations"
+msgstr ""
+
+#: controllers/FrmAPISettingsController.php:259
+msgid "You had an error communicating with that API."
+msgstr ""
+
+#. translators: %1$s: Response code. %2$s: Response message.
+#: controllers/FrmAPISettingsController.php:346
+msgid "There was a %1$s error: %2$s."
+msgstr ""
+
+#: controllers/FrmAPISettingsController.php:360
+msgid "Good to go!"
+msgstr ""
+
+#: controllers/FrmAPISettingsController.php:369
+msgid "In many cases, the test connection lets you know if the link is reachable. The receiving API may not return a successful response when the data is not included. Please submit the form to test with data."
+msgstr ""
+
+#: controllers/FrmAPIStatsController.php:39
+msgid "Sorry, you are not allowed to view stats"
+msgstr ""
+
+#: controllers/FrmAPIv1Controller.php:301
+msgid "Entries were Successfully Destroyed"
+msgstr ""
+
+#: controllers/FrmAPIv1Controller.php:338
+msgid "Invalid form id"
+msgstr ""
+
+#: controllers/FrmAPIv1Controller.php:403
+msgid "You do not have permission to edit entries"
+msgstr ""
+
+#: models/FrmAPIAction.php:14
+#: models/FrmAPIDb.php:71
+msgid "Send API data"
+msgstr ""
+
+#: views/action-settings/options.php:4
+msgid "Notification URL"
+msgstr ""
+
+#: views/action-settings/options.php:8
+msgid "Notify this URL when the hook selected above is triggered."
+msgstr ""
+
+#: views/action-settings/options.php:13
+msgid "Basic Auth"
+msgstr ""
+
+#: views/action-settings/options.php:14
+msgid "A colon (:) separated username, password combo for standard HTTP authentication. This key will be provided by the service you are connecting to if it is required."
+msgstr ""
+
+#: views/action-settings/options.php:16
+msgid "Username:Password"
+msgstr ""
+
+#: views/action-settings/options.php:19
+msgid "Test Connection"
+msgstr ""
+
+#: views/action-settings/options.php:26
+msgid "Data Format"
+msgstr ""
+
+#: views/action-settings/options.php:27
+msgid "JSON is a standard format for most REST APIs. The Form option will submit a form on another page with any name value pairs of your choosing. If you select Form, there must be a form displayed on the page you submit to."
+msgstr ""
+
+#: views/action-settings/options.php:40
+msgid "Method"
+msgstr ""
+
+#: views/action-settings/options.php:41
+msgid "The method determines how the data is handled on the receiving end. Generally, POST = create, GET = read, PUT/PATCH = update, DELETE = delete."
+msgstr ""
+
+#: views/action-settings/options.php:54
+msgid "Character Set"
+msgstr ""
+
+#: views/action-settings/options.php:55
+msgid "Character Set is a defined list of characters recognized by the computer hardware and software."
+msgstr ""
+
+#: views/action-settings/options.php:60
+msgid "Select charset"
+msgstr ""
+
+#: views/action-settings/options.php:61
+msgid "Use blog charset"
+msgstr ""
+
+#: views/action-settings/options.php:92
+msgid "Raw Data"
+msgstr ""
+
+#: views/action-settings/options.php:95
+msgid "Insert Default"
+msgstr ""
+
+#: views/action-settings/options.php:103
+msgid "Map Data"
+msgstr ""
+
+#: views/settings/api_key.php:4
+msgid "API Key"
+msgstr ""
+
+#: views/settings/api_key.php:9
+msgid "Refresh API KEY"
+msgstr ""
+
+#: js/embed-form.js:40
+msgid "API View shortcode"
+msgstr ""
+
+#: js/frmapi-admin.js:146
+msgid "Refresh Key"
+msgstr ""
+
+#: js/frmapi-admin.js:154
+msgid "Cancel"
+msgstr ""
+
+#: js/frmapi-admin.js:188
+msgid "Refresh API Key"
+msgstr ""

@@ -1,0 +1,788 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Registration plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-registration\n"
+"Last-Translator: \n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-07-08T15:35:34+00:00\n"
+"PO-Revision-Date: 2024-07-09 03:42\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: frmreg\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: /[Strategy11.formidable-registration] master/languages/frmreg.pot\n"
+"X-Crowdin-File-ID: 2456\n"
+"Language: ja_JP\n"
+
+#. Plugin Name of the plugin
+#: formidable-registration.php
+msgid "Formidable Registration"
+msgstr "Formidable 登録"
+
+#. Plugin URI of the plugin
+#: formidable-registration.php
+msgid "https://formidableforms.com/knowledgebase/user-registration/"
+msgstr "https://formidableforms.com/knowledgebase/user-registration/"
+
+#. Description of the plugin
+#: formidable-registration.php
+msgid "Register users through a Formidable form"
+msgstr "Formidable フォームを使用してユーザーを登録する"
+
+#. Author of the plugin
+#: formidable-registration.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#. Author URI of the plugin
+#: formidable-registration.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#: controllers/FrmRegActionController.php:59
+msgid "Successful user registration"
+msgstr "ユーザー登録に成功"
+
+#: controllers/FrmRegActionController.php:152
+msgid "User Email Notification"
+msgstr "ユーザーメール通知"
+
+#: controllers/FrmRegActionController.php:243
+msgid "Email Notification"
+msgstr "メール通知"
+
+#: controllers/FrmRegActionController.php:449
+msgid "N/A"
+msgstr "該当なし"
+
+#: controllers/FrmRegActionController.php:548
+msgid "Admin Email Notification"
+msgstr "管理者メール通知"
+
+#: controllers/FrmRegActionController.php:578
+msgid "Welcome to %s"
+msgstr "ようこそ %sへ"
+
+#: controllers/FrmRegActionController.php:593
+msgid "Thanks for creating an account on %s."
+msgstr "%sにアカウントを作成していただきありがとうございます。"
+
+#: controllers/FrmRegActionController.php:603
+msgid "Your username is %s."
+msgstr "あなたのユーザー名は %s です。"
+
+#: controllers/FrmRegActionController.php:611
+msgid "You may %1$slog in here%2$s with the username and password you have created."
+msgstr "作成したユーザー名とパスワードで%1$sこちらからログイン%2$sできます。"
+
+#: controllers/FrmRegActionController.php:631
+msgid "To set your password, please visit the following address:"
+msgstr "パスワードを設定するには、次のアドレスにアクセスしてください:"
+
+#: controllers/FrmRegActionController.php:719
+msgid "User ID"
+msgstr "ユーザー ID"
+
+#: controllers/FrmRegAppController.php:22
+msgid "You are running an outdated version of Formidable. This plugin will not work correctly if you do not update Formidable."
+msgstr "Formidable のバージョンが古いようです。Formidable を更新しない場合、このプラグインが適切に動作しない可能性があります。"
+
+#: controllers/FrmRegModerationController.php:436
+msgid "Your account is now active. Enjoy!"
+msgstr "アカウント登録が完了しました。ご活用ください !"
+
+#: controllers/FrmRegModerationController.php:440
+msgid "Your account has been activated. You may now log in."
+msgstr "アカウントは有効化されています。ログイン可能です。"
+
+#: controllers/FrmRegModerationController.php:444
+msgid "Your account has been activated. Please check your e-mail for a link to set your password."
+msgstr "アカウントが有効になりました。パスワード設定のためのリンクをメールでご確認ください。"
+
+#: controllers/FrmRegResetPasswordController.php:200
+msgid "Invalid request."
+msgstr "無効なリクエスト。"
+
+#: controllers/FrmRegResetPasswordController.php:309
+#: models/FrmRegLoginForm.php:936
+#: models/FrmRegLoginWidget.php:18
+#: models/FrmRegLoginWidget.php:91
+#: views/_register_settings.php:51
+msgid "Password"
+msgstr "パスワード"
+
+#: controllers/FrmRegShortcodesController.php:77
+#: models/FrmRegLoginWidget.php:10
+msgid "Login Form"
+msgstr "ログインフォーム"
+
+#: controllers/FrmRegShortcodesController.php:77
+msgid "Insert a Login Form"
+msgstr "ログインフォームを挿入"
+
+#: controllers/FrmRegShortcodesController.php:100
+#: views/login_widget_settings.php:57
+msgid "Username Label"
+msgstr "ユーザー名ラベル"
+
+#: controllers/FrmRegShortcodesController.php:105
+#: views/login_widget_settings.php:63
+msgid "Password Label"
+msgstr "パスワードラベル"
+
+#: controllers/FrmRegShortcodesController.php:110
+#: views/login_widget_settings.php:69
+msgid "Remember Me Label"
+msgstr "ログイン情報を保存するためのラベル"
+
+#: controllers/FrmRegShortcodesController.php:115
+msgid "Login Button Label"
+msgstr "ログインボタンのラベル"
+
+#: controllers/FrmRegShortcodesController.php:120
+msgid "Logout Label"
+msgstr "ログアウトのラベル"
+
+#: controllers/FrmRegShortcodesController.php:125
+msgid "Display format"
+msgstr "表示形式"
+
+#: controllers/FrmRegShortcodesController.php:128
+msgid "Standard (vertical)"
+msgstr "標準 (縦型)"
+
+#: controllers/FrmRegShortcodesController.php:129
+msgid "Inline (horizontal)"
+msgstr "インライン (横型)"
+
+#: controllers/FrmRegShortcodesController.php:134
+msgid "Require a click to show the login form"
+msgstr "ログインフォームを表示するにはクリックが必要"
+
+#: controllers/FrmRegShortcodesController.php:138
+msgid "Hide the \"Remember Me\" checkbox"
+msgstr "「ログイン情報を保存」チェックボックスを非表示"
+
+#: controllers/FrmRegShortcodesController.php:142
+msgid "Hide the username and password labels"
+msgstr "ユーザー名とパスワードのラベルを非表示"
+
+#: controllers/FrmRegShortcodesController.php:146
+msgid "Hide the login error messages"
+msgstr "ログインエラーメッセージを非表示"
+
+#: controllers/FrmRegShortcodesController.php:150
+msgid "Username Placeholder"
+msgstr "ユーザー名プレースホルダー"
+
+#: controllers/FrmRegShortcodesController.php:155
+msgid "Password Placeholder"
+msgstr "パスワードプレースホルダー"
+
+#: controllers/FrmRegShortcodesController.php:160
+#: views/login_widget_settings.php:41
+msgid "Formidable Style"
+msgstr "Formidable スタイル"
+
+#: controllers/FrmRegShortcodesController.php:177
+#: views/login_widget_settings.php:44
+msgid "Use default Style"
+msgstr "デフォルトのスタイルを使用"
+
+#: controllers/FrmRegShortcodesController.php:181
+#: views/login_widget_settings.php:47
+msgid "default"
+msgstr "デフォルト"
+
+#: helpers/FrmRegActionHelper.php:138
+msgid "Redirect URL"
+msgstr "リダイレクト URL"
+
+#: helpers/FrmRegActionHelper.php:167
+msgid "Open in new tab"
+msgstr "新しいタブで開く"
+
+#: helpers/FrmRegActionHelper.php:193
+msgid "Select a page"
+msgstr "ページを選択"
+
+#: helpers/FrmRegActionHelper.php:200
+msgid "Select a Page"
+msgstr "ページを選択"
+
+#: helpers/FrmRegAppHelper.php:244
+msgid "Require new users to confirm their e-mail address before they may log in."
+msgstr "新規ユーザーに、ログインする前にメールアドレスの確認を要求します。"
+
+#: helpers/FrmRegAppHelper.php:245
+msgid "Require new users to be approved by an administrator before they may log in."
+msgstr "新規ユーザーは、ログインする前に管理者による承認を必要とします。"
+
+#: helpers/FrmRegAppHelper.php:246
+msgid "Select the page where users will be redirected after clicking the activation link."
+msgstr "有効化リンクをクリックした後にユーザーがリダイレクトされるページを選択します。"
+
+#: helpers/FrmRegAppHelper.php:247
+msgid "Create a new subdomain or subdirectory when a user registers with this form."
+msgstr "このフォームへのユーザーによる登録が行われた時点で新しいサブドメインまたはサブディレクトリを作成します。"
+
+#: helpers/FrmRegMessagesHelper.php:15
+msgid "The activation e-mail has been sent to the e-mail address with which you registered. Please check your email and click on the link provided."
+msgstr "登録されたメールアドレスに有効化メールが送信されました。メールをご確認の上、リンクをクリックしてください。"
+
+#: helpers/FrmRegMessagesHelper.php:25
+msgid "That activation link is invalid."
+msgstr "その有効化リンクは無効です。"
+
+#: helpers/FrmRegMessagesHelper.php:42
+msgid "You have not confirmed your e-mail address. %1$sResend activation%2$s?"
+msgstr "メールアドレスの確認が完了していません。%1$s有効化メールを再送しますか%2$s ?"
+
+#: models/FrmRegAction.php:17
+msgid "Register User"
+msgstr "ユーザー登録"
+
+#: models/FrmRegAction.php:35
+msgid "Redirect to Page"
+msgstr "ページへのリダイレクト"
+
+#: models/FrmRegAction.php:40
+msgid "Redirect to URL"
+msgstr "URL へ転送"
+
+#: models/FrmRegEmail.php:144
+msgid "[%s] Activate Your Account"
+msgstr "[%s] アカウントを有効化"
+
+#: models/FrmRegEmail.php:160
+msgid "Thanks for registering at %s! To complete the activation of your account please click the following link: "
+msgstr "%s にご登録いただきありがとうございます ! アカウントの有効化を完了するには、次のリンクをクリックしてください: "
+
+#: models/FrmRegEntry.php:517
+msgid "The following words cannot be used as blog names: %s."
+msgstr "次の語句はブログ名に使用できません: %s。"
+
+#: models/FrmRegGlobalSettings.php:107
+msgid "This email address is already registered."
+msgstr "このメールアドレスはすでに登録されています。"
+
+#: models/FrmRegGlobalSettings.php:108
+msgid "This username is already registered."
+msgstr "このユーザー名はすでに登録されています。"
+
+#: models/FrmRegGlobalSettings.php:109
+msgid "Please enter a valid password."
+msgstr "有効なパスワードを入力してください。"
+
+#: models/FrmRegGlobalSettings.php:110
+msgid "Please enter a valid email address."
+msgstr "有効なメールアドレスを入力してください。"
+
+#: models/FrmRegGlobalSettings.php:111
+msgid "Please enter a valid username."
+msgstr "有効なユーザー名を入力してください。"
+
+#: models/FrmRegGlobalSettings.php:112
+msgid "This username is invalid because it uses illegal characters. Please enter a valid username."
+msgstr "このユーザー名には不正な文字が使用されているため、無効です。有効なユーザー名を入力してください。"
+
+#: models/FrmRegGlobalSettings.php:113
+msgid "Passwords may not contain the character \"\\\"."
+msgstr "パスワードに「\\」文字は使用できません。"
+
+#: models/FrmRegGlobalSettings.php:114
+msgid "Your username cannot be changed at this time."
+msgstr "現時点ではユーザー名を変更できません。"
+
+#: models/FrmRegGlobalSettings.php:115
+msgid "Please enter your username or email address. You will receive a link to create a new password via email."
+msgstr "ユーザー名またはメールアドレスを入力してください。新しいパスワードを発行するリンクがメールで届きます。"
+
+#: models/FrmRegGlobalSettings.php:116
+msgid "Enter your new password below."
+msgstr "以下に新しいパスワードを入力してください。"
+
+#: models/FrmRegGlobalSettings.php:117
+msgid "Sorry, that site already exists!"
+msgstr "このサイト名はすでに使用されています !"
+
+#: models/FrmRegGlobalSettings.php:355
+msgid "The selected Login/Logout page does not include a login form. Please select a page that includes the %s shortcode."
+msgstr "選択したログイン / ログアウトページにログインフォームがありません。%s ショートコードを含むページを選択してください。"
+
+#: models/FrmRegGlobalSettings.php:356
+msgid "The selected Reset Password page does not include a reset password form. Please select a page that includes the %s shortcode."
+msgstr "選択したパスワードリセットページには、パスワードリセットフォームがありません。%s ショートコードを含むページを選択してください。"
+
+#: models/FrmRegGlobalSettings.php:357
+msgid "The selected registration page does not include a registration form. Please select a page that has a registration form that can be viewed when logged out."
+msgstr "選択した登録ページには登録フォームがありません。ログアウトしても表示できる登録フォームがあるページを選択してください。"
+
+#: models/FrmRegLoginForm.php:805
+msgid "The username field is empty."
+msgstr "ユーザー名フィールドは空です。"
+
+#: models/FrmRegLoginForm.php:808
+msgid "The password field is empty."
+msgstr "パスワードフィールドは空です。"
+
+#: models/FrmRegLoginForm.php:811
+msgid "Invalid username or password. %1$sLost your password%2$s?"
+msgstr "ユーザー名またはパスワードが無効です。%1$sパスワードをお忘れですか%2$s ?"
+
+#: models/FrmRegLoginForm.php:827
+msgid "An error occurred. Please try again."
+msgstr "エラーが発生しました。もう一度お試しください。"
+
+#: models/FrmRegLoginForm.php:870
+msgid "A password reset email has been sent to the email address on file for your account, but may take several minutes to show up in your inbox."
+msgstr "パスワードリセット用のメールは、アカウントに登録済みのメールアドレスに送信されましたが、受信トレイに表示されるまで数分かかる場合があります。"
+
+#: models/FrmRegLoginForm.php:874
+msgid "Your password has been reset."
+msgstr "パスワードがリセットされました。"
+
+#: models/FrmRegLoginForm.php:935
+#: models/FrmRegLoginWidget.php:17
+#: models/FrmRegLoginWidget.php:90
+#: views/_register_settings.php:27
+msgid "Username"
+msgstr "ユーザー名"
+
+#: models/FrmRegLoginForm.php:937
+#: models/FrmRegLoginWidget.php:19
+#: models/FrmRegLoginWidget.php:92
+msgid "Remember Me"
+msgstr "ログイン状態を保存する"
+
+#: models/FrmRegLoginForm.php:938
+msgid "Forgot your password?"
+msgstr "パスワードをお忘れですか ?"
+
+#: models/FrmRegLoginForm.php:939
+#: models/FrmRegLoginWidget.php:20
+#: models/FrmRegLoginWidget.php:93
+msgid "Login"
+msgstr "ログイン"
+
+#: models/FrmRegLoginForm.php:940
+msgid "Logout"
+msgstr "ログアウト"
+
+#: models/FrmRegLoginForm.php:941
+msgid "New user? Click here to register"
+msgstr "新規ユーザーですか ? 登録するにはこちらをクリックしてください"
+
+#: models/FrmRegLoginWidget.php:9
+msgid "Add a login form anywhere on your site"
+msgstr "サイトの任意の場所にログインフォームを追加"
+
+#: models/FrmRegLostPWForm.php:34
+msgid "Get New Password"
+msgstr "新規パスワードを取得"
+
+#: models/FrmRegLostPWForm.php:60
+msgid "Please enter a username or email address to continue."
+msgstr "ユーザー名またはメールアドレスを入力してください。"
+
+#: models/FrmRegLostPWForm.php:63
+msgid "Your password reset link appears to be invalid. Please request a new link below."
+msgstr "パスワードリセットリンクが無効のようです。以下で新しいリンクをリクエストしてください。"
+
+#: models/FrmRegLostPWForm.php:66
+msgid "Your password reset link has expired. Please request a new link below."
+msgstr "パスワードリセットリンクの期限が切れています。以下で新しいリンクをリクエストしてください。"
+
+#: models/FrmRegLostPWForm.php:69
+msgid "An unknown error occurred. Please try again later."
+msgstr "不明なエラーが発生しました。後でもう一度お試しください。"
+
+#: models/FrmRegResetPWForm.php:76
+#: views/global_settings.php:138
+msgid "Reset Password"
+msgstr "パスワードをリセット"
+
+#: models/FrmRegResetPWForm.php:147
+msgid "The password reset link you used is not valid anymore."
+msgstr "ご使用のパスワードリセットリンクは無効になっています。"
+
+#: models/FrmRegResetPWForm.php:150
+msgid "The two passwords you entered do not match."
+msgstr "入力された2つのパスワードが一致しません。"
+
+#: models/FrmRegResetPWForm.php:153
+msgid "Sorry, we do not accept empty passwords."
+msgstr "空のパスワードは使用できません。"
+
+#: models/FrmRegResetPWForm.php:193
+msgid "Show password"
+msgstr "パスワードを表示"
+
+#: models/FrmRegResetPWForm.php:200
+msgid "Hide password"
+msgstr "パスワードを非表示"
+
+#: views/email_buttons.php:1
+msgid "Emails"
+msgstr "メール"
+
+#: views/email_buttons.php:3
+msgid "Create admin email"
+msgstr "管理者メールを作成"
+
+#: views/email_buttons.php:6
+msgid "Create user email"
+msgstr "ユーザーメールを作成"
+
+#: views/global_settings.php:9
+msgid "Global Pages"
+msgstr "全般ページ"
+
+#: views/global_settings.php:12
+msgid "Login/Logout Page"
+msgstr "ログイン / ログアウトページ"
+
+#: views/global_settings.php:13
+msgid "Prevent logged-out users from seeing the wp-admin page. Select a page where logged-out users will be redirected when they try to access the wp-admin page or just leave this option blank. Please note that you must have a login form on the selected page."
+msgstr "ログアウトしたユーザーは wp-admin ページを表示できないようにします。ログアウトしたユーザーが wp-admin ページにアクセスしようとした場合にリダイレクトされるページを選択するか、このオプションを空白のままにします。選択したページにはログインフォームが必要であることにご注意ください。"
+
+#: views/global_settings.php:30
+msgid "Reset Password Page"
+msgstr "パスワードのリセットページ"
+
+#: views/global_settings.php:31
+msgid "Select the page where users can reset their password. Please note that you must have a reset password form on the selected page."
+msgstr "ユーザーが自分のパスワードをリセットできるページを選択します。選択したページにはパスワードリセットフォームが必要であることにご注意ください。"
+
+#: views/global_settings.php:46
+msgid "Registration Page"
+msgstr "登録ページ"
+
+#: views/global_settings.php:47
+msgid "Select a page where users can register for your site. Leave this option blank if you would like to allow users to register on the default WordPress registration page. Please note that you must have a registration form on the selected page."
+msgstr "ユーザーがサイトに登録できるページを選択します。デフォルトの WordPress 登録ページでユーザーによる登録を許可する場合には、このオプションを空白のままにします。選択したページには登録フォームが必要であることにご注意ください。"
+
+#: views/global_settings.php:64
+msgid "Default Messages"
+msgstr "デフォルトのメッセージ"
+
+#: views/global_settings.php:65
+msgid "Override the default registration messages."
+msgstr "デフォルトの登録メッセージを上書きします。"
+
+#: views/global_settings.php:69
+msgid "Existing Email"
+msgstr ""
+
+#: views/global_settings.php:70
+msgid "The message displayed when an existing email is entered in a registration form."
+msgstr "登録フォームに既存のメールアドレスが入力されたときに表示されるメッセージ。"
+
+#: views/global_settings.php:76
+msgid "Existing Username"
+msgstr ""
+
+#: views/global_settings.php:77
+msgid "The message displayed when an existing username is entered in a registration form."
+msgstr "登録フォームに既存のユーザー名が入力されたときに表示されるメッセージ。"
+
+#: views/global_settings.php:83
+msgid "Blank Password"
+msgstr ""
+
+#: views/global_settings.php:84
+msgid "The message displayed when a blank password is entered in a registration form."
+msgstr "登録フォームのパスワードが空のときに表示されるメッセージ。"
+
+#: views/global_settings.php:90
+msgid "Blank Email"
+msgstr ""
+
+#: views/global_settings.php:91
+msgid "The message displayed when a blank email is entered in a registration form."
+msgstr "登録フォームのメールアドレスが空の場合に表示されるメッセージ。"
+
+#: views/global_settings.php:97
+msgid "Blank Username"
+msgstr ""
+
+#: views/global_settings.php:98
+msgid "The message displayed when a blank username is entered in a registration form."
+msgstr "登録フォームのユーザー名が空の場合に表示されるメッセージ。"
+
+#: views/global_settings.php:104
+msgid "Illegal Username"
+msgstr ""
+
+#: views/global_settings.php:105
+msgid "The message displayed when an illegal username is entered in a registration form."
+msgstr "登録フォームに不正なユーザー名が入力された場合に表示されるメッセージ。"
+
+#: views/global_settings.php:110
+msgid "Illegal Password"
+msgstr ""
+
+#: views/global_settings.php:111
+msgid "The message displayed when an illegal password is entered in a registration form."
+msgstr "登録フォームに不正なパスワードが入力された場合に表示されるメッセージ。"
+
+#: views/global_settings.php:117
+msgid "Existing Subsite"
+msgstr ""
+
+#: views/global_settings.php:118
+msgid "The message displayed when an existing subsite is entered in a registration form."
+msgstr "登録フォームに既存のサブサイトが入力されたときに表示されるメッセージ。"
+
+#: views/global_settings.php:124
+msgid "Update Username"
+msgstr ""
+
+#: views/global_settings.php:125
+msgid "The message displayed when a logged-in user attempts to change their username."
+msgstr "ログイン中のユーザーがユーザー名の変更を試みたときに表示されるメッセージ。"
+
+#: views/global_settings.php:131
+msgid "Lost Password"
+msgstr "パスワード紛失"
+
+#: views/global_settings.php:132
+msgid "The text that appears at the top of the lost password form."
+msgstr "パスワード紛失フォームの上部に表示されるテキスト。"
+
+#: views/global_settings.php:139
+msgid "The text that appears at the top of the reset password form."
+msgstr "パスワードリセットフォームの上部に表示されるテキスト。"
+
+#: views/login_widget_settings.php:8
+msgid "Title:"
+msgstr "タイトル:"
+
+#: views/login_widget_settings.php:14
+msgid "Display fields in"
+msgstr "フィールドの表示方法"
+
+#: views/login_widget_settings.php:17
+msgid "multiple rows"
+msgstr "複数行"
+
+#: views/login_widget_settings.php:18
+msgid "a single row"
+msgstr "単一行"
+
+#: views/login_widget_settings.php:24
+msgid "Slide the login area"
+msgstr "ログインエリアをスライドさせる"
+
+#: views/login_widget_settings.php:30
+msgid "Include Remember Me checkbox"
+msgstr "「ログイン情報を保存」チェックボックスを組み込む"
+
+#: views/login_widget_settings.php:36
+msgid "Show lost password link"
+msgstr "紛失パスワードのリンクを表示する"
+
+#: views/login_widget_settings.php:52
+msgid "Do not use Formidable styling"
+msgstr "Formidable スタイル設定を使用しない"
+
+#: views/lost_password_form.php:28
+msgid "Username or Email Address"
+msgstr "ユーザー名またはメールアドレス"
+
+#: views/multisite_settings.php:1
+msgid "Multisite"
+msgstr "マルチサイト"
+
+#: views/multisite_settings.php:7
+msgid "Create subsite when user registers"
+msgstr "ユーザー登録時にサブサイトを作成"
+
+#: views/multisite_settings.php:13
+msgid "Blog title"
+msgstr "ブログタイトル"
+
+#: views/multisite_settings.php:17
+#: views/multisite_settings.php:40
+msgid "Automatically generate from username"
+msgstr "ユーザー名から自動生成"
+
+#: views/multisite_settings.php:35
+msgid "Subdirectory or subdomain"
+msgstr "サブディレクトリまたはサブドメイン"
+
+#: views/multisite_settings.php:39
+msgid "Automatically generate from blog title"
+msgstr "ブログタイトルから自動生成"
+
+#: views/permission_settings.php:1
+msgid "Permissions"
+msgstr "権限"
+
+#: views/permission_settings.php:8
+msgid "Allow logged-in users to create new users with this form"
+msgstr "ログイン中のユーザーにこのフォームで新規ユーザーの作成を許可"
+
+#: views/permission_settings.php:9
+msgid "Determine which roles can create new users with this form on the front-end of your site. The selected roles must submit entries on the back-end of your site in order to edit their own profile."
+msgstr "サイトのフロントエンド上のこのフォームを使用して、どの権限グループが新規ユーザーを作成できるかを決定します。選択された権限グループでは、自分自身のプロフィールを編集するために、サイトのバックエンドでエントリーを送信する必要があります。"
+
+#: views/permission_settings.php:17
+msgid "Role required to create new users:"
+msgstr "新規ユーザーの作成に必要な権限グループ:"
+
+#: views/reset_password_form.php:28
+msgid "New Password"
+msgstr "新しいパスワード"
+
+#: views/reset_password_form.php:35
+msgid "Confirm New Password"
+msgstr "新規パスワードを確認"
+
+#: views/show_usermeta.php:12
+msgid "Registration Form Details"
+msgstr "登録フォームの詳細"
+
+#: views/show_usermeta.php:17
+#: views/user_meta_settings.php:13
+#: views/_usermeta_row.php:4
+msgid "Name"
+msgstr "名前"
+
+#: views/show_usermeta.php:18
+#: views/user_meta_settings.php:16
+#: views/_usermeta_row.php:11
+msgid "Value"
+msgstr "値"
+
+#: views/show_usermeta.php:20
+msgid "Edit"
+msgstr "編集"
+
+#: views/show_usermeta.php:49
+msgid "Edit Entry"
+msgstr "エントリーを編集"
+
+#: views/update_database.php:5
+msgid "Your Formidable Registration database needs to be updated.%1$sPlease deactivate and reactivate the plugin or %2$sUpdate Now%3$s"
+msgstr "Formidable 登録データベースを更新する必要があります。%1$sプラグインを一度無効化して再び有効化するか、%2$s今すぐ更新してください%3$s"
+
+#: views/update_formidable.php:4
+msgid "Formidable Registration requires that Formidable Pro version 2.0 or greater be installed. Until then, keep Formidable Registration activated only to continue enjoying this insightful message."
+msgstr "Formidable 登録をご利用いただくには、Formidable Forms バージョン2.0以上がインストールされている必要があります。適切なバージョンがインストールされるまでの間は、Formidable 登録を有効にして、引き続きこのインサイト豊かなメッセージをご覧ください。"
+
+#: views/user_meta_settings.php:1
+msgid "User Meta"
+msgstr "ユーザーメタ"
+
+#: views/user_meta_settings.php:1
+msgid "Add user meta to save submitted values to a user's profile. User meta can be retrieved with the [user_meta key=\"insert_name_here\"] shortcode."
+msgstr "送信された値をユーザーのプロフィールに保存するために、ユーザーメタを追加します。ユーザーメタは [user_meta key=\"insert_name_here\"] ショートコードで取得できます。"
+
+#: views/user_meta_settings.php:6
+msgid "Add"
+msgstr "追加"
+
+#: views/_register_settings.php:3
+msgid "User Email"
+msgstr "ユーザーメール"
+
+#: views/_register_settings.php:4
+msgid "Only Email fields will show here. An email field must be selected if you would like to register new users with this form."
+msgstr "ここにはメールアドレスのフィールドのみが表示されます。このフォームで新規ユーザーを登録する場合は、メールアドレスフィールドを選択する必要があります。"
+
+#: views/_register_settings.php:8
+#: views/_register_settings.php:75
+#: views/_register_settings.php:96
+#: views/_register_settings.php:144
+#: views/_register_settings.php:172
+msgid "None"
+msgstr "なし"
+
+#: views/_register_settings.php:29
+msgid "Automatically generate from email address"
+msgstr "メールアドレスから自動生成"
+
+#: views/_register_settings.php:31
+msgid "Use Full Email Address"
+msgstr "完全な形式のメールアドレスを使用"
+
+#: views/_register_settings.php:53
+msgid "Set with link in email notification"
+msgstr "通知メールにリンクを設定"
+
+#: views/_register_settings.php:73
+msgid "First Name"
+msgstr "名"
+
+#: views/_register_settings.php:94
+msgid "Last Name"
+msgstr "姓"
+
+#: views/_register_settings.php:115
+msgid "Display Name"
+msgstr "表示名"
+
+#: views/_register_settings.php:117
+msgid "Same as Username"
+msgstr "ユーザー名と同一"
+
+#: views/_register_settings.php:119
+msgid "First Last"
+msgstr "名、姓"
+
+#: views/_register_settings.php:122
+msgid "Last First"
+msgstr "姓名"
+
+#: views/_register_settings.php:142
+msgid "Website"
+msgstr "ウェブサイト"
+
+#: views/_register_settings.php:163
+msgid "User Role"
+msgstr "ユーザー権限グループ"
+
+#: views/_register_settings.php:168
+msgid "Avatar"
+msgstr "アバター"
+
+#: views/_register_settings.php:169
+msgid "Only file upload fields will show here."
+msgstr "ここにはファイルアップロードフィールドのみが表示されます。"
+
+#: views/_register_settings.php:193
+msgid "Automatically log in users who submit this form"
+msgstr "このフォームを送信したユーザーを自動的にログインさせる"
+
+#: views/_register_settings.php:197
+msgid "Please note: the automatic login option will appear if you map the Password setting to a Password field in your form."
+msgstr "注意: フォームのパスワードフィールドにパスワード設定をマッピングすると、自動ログインオプションが表示されます。"
+
+#: views/_register_settings.php:205
+msgid "User Moderation"
+msgstr "ユーザー承認"
+
+#: views/_register_settings.php:211
+msgid "Email confirmation"
+msgstr "メールアドレス確認"
+
+#: views/_register_settings.php:260
+msgid "Admin approval"
+msgstr "管理者の承認"
+
+#: views/_register_settings.php:267
+msgid "Please note: the Email Confirmation option will appear if you map the Password setting to a Password field in your form."
+msgstr "注意: フォームのパスワードフィールドにパスワード設定をマッピングすると、メールアドレス確認オプションが表示されます。"
+
+#: views/_usermeta_row.php:14
+msgid "Select Field"
+msgstr "フィールドを選択"
+

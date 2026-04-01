@@ -1,0 +1,241 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Surveys plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-surveys\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-19T12:30:36+00:00\n"
+"PO-Revision-Date: 2024-08-20 00:25\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-surveys\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: de\n"
+"X-Crowdin-File: /[Strategy11.formidable-surveys] master/languages/formidable-surveys.pot\n"
+"X-Crowdin-File-ID: 2448\n"
+"Language: de_DE\n"
+
+#. Plugin Name of the plugin
+#: formidable-surveys.php
+msgid "Formidable Surveys"
+msgstr "Formidable Surveys"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-surveys.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-surveys.php
+msgid "Create survey forms."
+msgstr "Erstelle Umfrageformulare."
+
+#. Author of the plugin
+#: formidable-surveys.php
+msgid "Strategy11"
+msgstr "Strategie11"
+
+#. translators: %1$s: plugin name.
+#: classes/controllers/AppController.php:70
+msgid "You are running an outdated version of %1$s. The Formidable Surveys plugin will not work correctly if you do not update %1$s."
+msgstr "Du benutzt eine veraltete Version von %1$s. Das Formidable Surveys Plugin wird nicht richtig funktionieren, wenn du %1$s nicht aktualisierst."
+
+#: classes/controllers/LikertController.php:276
+msgid "Item"
+msgstr "Element"
+
+#: classes/controllers/LikertController.php:277
+msgid "Items"
+msgstr "Elemente"
+
+#: classes/controllers/LikertController.php:278
+msgid "Add Item"
+msgstr "Element hinzufügen"
+
+#. translators: Plural name.
+#: classes/controllers/LikertController.php:300
+msgid "Bulk Edit %s"
+msgstr "Massenbearbeitung %s"
+
+#: classes/controllers/LikertController.php:1101
+msgid "None"
+msgstr "Keine"
+
+#: classes/controllers/LikertController.php:1224
+msgid "Field ID is empty"
+msgstr "Feld-ID ist leer"
+
+#: classes/controllers/LikertController.php:1229
+msgid "Field not exist"
+msgstr "Feld nicht vorhanden"
+
+#: classes/controllers/LikertController.php:1391
+#: classes/controllers/LikertController.php:1399
+msgid "Question"
+msgstr "Frage"
+
+#: classes/controllers/NPSController.php:166
+msgid "Detractors (0-6)"
+msgstr "Kritiker (0-6)"
+
+#: classes/controllers/NPSController.php:167
+msgid "Passives (7-8)"
+msgstr "Passive (7-8)"
+
+#: classes/controllers/NPSController.php:168
+msgid "Promoters (9-10)"
+msgstr "Promoter (9-10)"
+
+#: classes/controllers/NPSController.php:169
+msgid "Net Promoter Score"
+msgstr "Net Promoter Score"
+
+#: classes/helpers/RankingGraphData.php:46
+msgid "Rank"
+msgstr "Rang"
+
+#: classes/helpers/RankingGraphData.php:47
+msgid "Option Name"
+msgstr "Optionsname"
+
+#: classes/helpers/RankingGraphData.php:48
+msgid "Times at #1"
+msgstr "Zeiten auf Platz 1"
+
+#: classes/helpers/RankingGraphData.php:49
+#: classes/helpers/RankingGraphData.php:56
+msgid "Average Position"
+msgstr "Durchschnittliche Position"
+
+#: classes/models/fields/Likert.php:67
+msgid "Please complete all options in [field_name]"
+msgstr ""
+
+#: classes/models/fields/NPS.php:62
+msgid "Not at all"
+msgstr "Ganz und gar nicht"
+
+#: classes/models/fields/NPS.php:63
+msgid "Extremely likely"
+msgstr "Sehr wahrscheinlich"
+
+#: classes/models/fields/NPS.php:74
+msgid "How likely are you to recommend us to a friend or colleague?"
+msgstr "Wie wahrscheinlich wirst du uns einem Freund oder Kollegen empfehlen?"
+
+#: classes/models/fields/Ranking.php:63
+msgid "Ranking Option 1"
+msgstr "Rangliste Option 1"
+
+#: classes/models/fields/Ranking.php:64
+msgid "Ranking Option 2"
+msgstr "Rangliste Option 2"
+
+#: classes/views/fields/backend/likert-column-options.php:19
+msgid "Collapsible Columns Settings"
+msgstr "Einstellungen für zusammenklappbare Spalten"
+
+#: classes/views/fields/backend/likert-column-options.php:20
+#: classes/views/fields/backend/likert-column-options.php:29
+msgid "Columns"
+msgstr "Spalten"
+
+#: classes/views/fields/backend/likert-column-options.php:28
+msgid "Column"
+msgstr "Spalten"
+
+#: classes/views/fields/backend/likert-column-options.php:30
+msgid "Add Column"
+msgstr "Spalte hinzufügen"
+
+#: classes/views/fields/backend/likert-primary.php:28
+msgid "Use checkboxes"
+msgstr "Checkbox verwenden"
+
+#: classes/views/fields/backend/likert-primary.php:44
+msgid "Repeat column headings"
+msgstr "Spaltenüberschriften wiederholen"
+
+#: classes/views/fields/backend/likert-primary.php:60
+msgid "Separate column values"
+msgstr "Separate Spaltenwerte"
+
+#: classes/views/fields/backend/likert-row-options.php:22
+#: classes/views/fields/backend/likert-row-options.php:31
+msgid "Rows"
+msgstr "Zeilen"
+
+#: classes/views/fields/backend/likert-row-options.php:30
+msgid "Row"
+msgstr "Zeile"
+
+#: classes/views/fields/backend/likert-row-options.php:32
+msgid "Add Row"
+msgstr "Zeile hinzufügen"
+
+#. translators: Likert row ID.
+#: classes/views/fields/backend/likert.php:55
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+#: classes/views/fields/backend/nps-options.php:20
+msgid "Negative Statement"
+msgstr "Negative Aussage"
+
+#: classes/views/fields/backend/nps-options.php:33
+msgid "Positive Statement"
+msgstr "Positive Aussage"
+
+#: classes/views/fields/backend/radio-options.php:56
+msgid "Use images in buttons"
+msgstr "Bilder in Buttons verwenden"
+
+#: classes/views/fields/backend/radio-options.php:76
+msgid "Hide option text"
+msgstr "Optionstext ausblenden"
+
+#: classes/views/fields/backend/radio-options.php:117
+msgid "Text alignment"
+msgstr "Textausrichtung"
+
+#: classes/views/fields/backend/radio-options.php:141
+msgid "Image alignment"
+msgstr "Bildausrichtung"
+
+#: classes/views/fields/backend/ranking-extra-options.php:16
+msgid "Limit selections"
+msgstr "Auswahl begrenzen"
+
+#: classes/views/fields/backend/ranking-extra-options.php:17
+msgid "Specifies the maximum number of items you can choose"
+msgstr "Gibt die maximale Anzahl von Artikeln an, die du auswählen kannst"
+
+#: classes/views/fields/backend/ranking-extra-options.php:23
+msgid "Randomize options"
+msgstr "Optionen zufällig auswählen"
+
+#: classes/views/fields/backend/ranking-extra-options.php:28
+msgid "Limit"
+msgstr "Limit"
+
+#: classes/views/fields/backend/scale-display-format.php:19
+msgid "Display format"
+msgstr "Anzeigeformat"
+
+#. Translators: Negative statement.
+#: classes/views/fields/frontend/nps.php:57
+msgid "0 - %s"
+msgstr "0 - %s"
+
+#. Translators: Positive statement.
+#: classes/views/fields/frontend/nps.php:67
+msgid "10 - %s"
+msgstr "10 - %s"
+

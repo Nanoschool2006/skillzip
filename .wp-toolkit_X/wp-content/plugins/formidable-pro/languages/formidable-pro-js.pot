@@ -1,0 +1,168 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: js/src/builder/builder.js:1025
+msgid "Start %s"
+msgstr ""
+
+#: js/src/builder/builder.js:1026
+msgid "End %s"
+msgstr ""
+
+#: js/src/builder/builder.js:161
+msgid "Choose type of slider"
+msgstr ""
+
+#: js/src/builder/builder.js:2070
+msgid "Page %d"
+msgstr ""
+
+#: js/src/builder/builder.js:246
+msgid "Single"
+msgstr ""
+
+#: js/src/builder/builder.js:247
+msgid "Range"
+msgstr ""
+
+#: js/src/builder/builder.js:625
+msgid "Please enter a valid number."
+msgstr ""
+
+#: js/src/builder/builder.js:631
+msgid "Minimum size cannot be greater than maximum size."
+msgstr ""
+
+#: js/src/builder/builder.js:664
+msgid "Minimum value cannot be greater than maximum value."
+msgstr ""
+
+#: js/src/builder/builder.js:675
+msgid "Minimum gap cannot be greater than maximum gap."
+msgstr ""
+
+#: js/src/builder/builder.js:678
+msgid ""
+"Maximum gap cannot be greater than the difference between minimum and "
+"maximum values."
+msgstr ""
+
+#: js/src/builder/builder.js:684
+msgid "Step value must be greater than 0."
+msgstr ""
+
+#: js/src/builder/builder.js:687
+msgid "Step value must be less than maximum value."
+msgstr ""
+
+#: js/src/builder/builder.js:932
+#. %s: type of the field (date or time)
+msgid ""
+"Disabling the %s range will delete the end %s field. Are you sure you want "
+"to continue?"
+msgstr ""
+
+#: js/src/builder/builder.js:958
+msgid "%s"
+msgstr ""
+
+#: js/src/calculator/block.js:36
+msgid "Display a Calculator Form"
+msgstr ""
+
+#: js/src/calculator/block.js:55
+msgid "This site does not have any calculator forms."
+msgstr ""
+
+#: js/src/calculator/block.js:67
+msgid "Calculator Form"
+msgstr ""
+
+#: js/src/components/license-modal.js:104
+msgid "Get started with Formidable Pro and create advanced custom forms."
+msgstr ""
+
+#: js/src/components/license-modal.js:112
+#. %1$s: HTML start of a tag, %2$s: HTML close of a tag
+msgid ""
+"To activate Formidable Pro, paste your license below. %1$sFind your "
+"license%2$s."
+msgstr ""
+
+#: js/src/components/license-modal.js:69
+msgid "Cancel"
+msgstr ""
+
+#: js/src/components/license-modal.js:93
+msgid "Enter License"
+msgstr ""
+
+#: js/src/components/license-modal.js:95
+msgid "License Activated"
+msgstr ""
+
+#: js/src/view/block.js:27
+msgid "Display a View"
+msgstr ""
+
+#: js/src/view/block.js:31
+msgid "data display"
+msgstr ""
+
+#: js/src/view/block.js:32
+msgid "show entries"
+msgstr ""
+
+#: js/src/view/block.js:43
+msgid "This site does not have any Views."
+msgstr ""
+
+#: js/src/view/inspector.js:41
+msgid "Select a View"
+msgstr ""
+
+#: js/src/view/inspector.js:54
+msgid "Go to View"
+msgstr ""
+
+#: js/src/view/inspector.js:59
+msgid "View Filtering"
+msgstr ""
+
+#: js/src/view/inspector.js:67
+msgid "Limited"
+msgstr ""
+
+#: js/src/view/inspector.js:69
+msgid ""
+"Recommended. Adds automatic paragraphs and line breaks and filters most "
+"shortcodes."
+msgstr ""
+
+#: js/src/view/inspector.js:72
+msgid "Everything"
+msgstr ""
+
+#: js/src/view/inspector.js:74
+msgid ""
+"Use only when shortcodes from other plugins are shown when Limited is "
+"selected. May cause conflicts with some plugins."
+msgstr ""
+
+#: js/src/view/inspector.js:77
+msgid "None"
+msgstr ""
+
+#: js/src/view/inspector.js:87
+msgid "Shortcode"
+msgstr ""
+
+#: js/src/view/viewselect.js:38
+msgid "View"
+msgstr ""
+
+#: js/src/view/viewselect.js:39
+msgid "Views"
+msgstr ""

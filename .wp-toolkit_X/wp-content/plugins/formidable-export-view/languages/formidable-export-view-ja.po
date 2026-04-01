@@ -1,0 +1,219 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-export-view\n"
+"Last-Translator: \n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-09T13:30:53+00:00\n"
+"PO-Revision-Date: 2024-08-09 16:28\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-export-view\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: /[Strategy11.formidable-export-view] master/languages/formidable-export-view.pot\n"
+"X-Crowdin-File-ID: 2484\n"
+"Language: ja_JP\n"
+
+#. Plugin Name of the plugin
+#: formidable-export-view.php
+msgid "Formidable Export View to CSV"
+msgstr "Formidable CSV へのビューのエクスポート"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-export-view.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-export-view.php
+msgid "Export table Views to CSV files"
+msgstr "テーブルビューを CSV ファイルにエクスポート"
+
+#. Author of the plugin
+#: formidable-export-view.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#. Translators: %s: Formidable Pro minimum version number.
+#: controllers/FrmExportViewAppController.php:26
+msgid "Formidable Export View requires Formidable Forms Pro version %s or higher to be installed."
+msgstr "Formidable ビューのエクスポートを使用するには、Formidable Forms Pro バージョン%s以上がインストールされている必要があります。"
+
+#: controllers/FrmExportViewAppController.php:42
+msgid "Formidable Export View requires Formidable Forms Views to be installed."
+msgstr "Formidable ビューのエクスポートを使用するには、Formidable Forms ビューがインストールされている必要があります。"
+
+#: controllers/FrmExportViewCSVController.php:179
+msgid "This View cannot be exported.  It may not be a table View, or it may not have been saved since the FrmExportView add-on was installed."
+msgstr "このビューはエクスポートできません。  ビューがテーブルビューでないか、FrmExportView アドオンのインストール後に保存されていない可能性があります。"
+
+#: controllers/FrmExportViewCSVController.php:180
+#: controllers/FrmExportViewCSVController.php:188
+msgid "You can return to the previous page using your browser's back button."
+msgstr "ブラウザーの戻るボタンで前のページに戻ることができます。"
+
+#. translators: %d - View id.
+#: controllers/FrmExportViewCSVController.php:184
+msgid "View %d is not a table View or it has not been saved since the Formidable Export View add-on was activated.  A CSV file was not created."
+msgstr "ビュー %d がテーブルビューでないか、「Formidable ビューのエクスポート」アドオンの有効化後に保存されていません。 CSV ファイルは作成されませんでした。"
+
+#: controllers/FrmExportViewCSVController.php:187
+msgid "This View has no entries to download."
+msgstr "このビューにはダウンロードできるエントリーがありません。"
+
+#. translators: %d - View id.
+#: controllers/FrmExportViewCSVController.php:193
+msgid "View %d has no entries.  A CSV file was not created."
+msgstr "ビュー %d にエントリーがありません。  CSV ファイルは作成されませんでした。"
+
+#: controllers/FrmExportViewCSVController.php:492
+msgid "The CSV has been saved.  You can use your browser's back button to return to the previous page."
+msgstr "CSV は保存されました。  ブラウザーの戻るボタンで前のページに戻ることができます。"
+
+#: controllers/FrmExportViewCSVController.php:501
+msgid "The CSV could not be saved because a valid location wasn't available or an .htaccess file is blocking access. Please enter a valid location in Global Settings->ExportView or with the frm_export_view_file_location hook or adjust the .htaccess file to allow access. You can use your browser's back button to return to the previous page."
+msgstr "有効な場所が設定されていないか、.htaccess ファイルがアクセスをブロックしているため、CSV を保存できませんでした。「全体設定」->「ExportView」に移動、または frm_export_view_file_location フックを使用して有効な場所を入力するか、.htaccess ファイルを調整してアクセスを許可します。ブラウザーの戻るボタンで前のページに戻ることができます。"
+
+#: controllers/FrmExportViewGlobalSettingsController.php:15
+msgid "Export Views"
+msgstr ""
+
+#: controllers/FrmExportViewGlobalSettingsController.php:73
+msgid "Settings Saved"
+msgstr "設定を保存しました"
+
+#: controllers/FrmExportViewSettingsController.php:15
+msgid "Export View Settings"
+msgstr "ビューのエクスポートの設定"
+
+#. Translators: %s: path to location where CSV export will be saved.
+#: helpers/FrmExportViewCSVHelper.php:186
+msgid "Unable to write to %s to protect your exports."
+msgstr "エクスポートを保護するため、%s に書き込むことはできません。"
+
+#. translators: %1$s - frequency, %2$s - recurring period.
+#: models/FrmExportViewCron.php:61
+msgid "Every %1$s %2$s"
+msgstr "%1$s %2$sごと"
+
+#: models/FrmExportViewShortcode.php:69
+msgid "The [frm-export-view] shortcode needs to have a view param, which should be set to the id or key of the View you would like to export."
+msgstr "[frm-export-view] ショートコードには view パラメータが必要です。このパラメータには、エクスポートするビューの ID またはキーを設定します。"
+
+#: models/FrmExportViewShortcode.php:70
+msgid "Please set the view param of the [frm-export-view] shortcode to the id or key of a View on this site."
+msgstr "[frm-export-view] ショートコードの view パラメータに、このサイトのビューの ID またはキーを設定してください。"
+
+#: models/FrmExportViewShortcode.php:71
+msgid "Please set the view param of the [frm-export-view] shortcode to an All Entries or Dynamic View that is set up as a table."
+msgstr "[frm-export-view] ショートコードの view パラメータを、テーブルとして設定されたすべてのエントリーまたは動的ビューに設定してください。"
+
+#: views/export-view-link.php:2
+#: views/export-view-metabox.php:37
+msgid "Export to CSV"
+msgstr "CSV にエクスポート"
+
+#: views/export-view-metabox.php:3
+msgid "Export Link"
+msgstr "エクスポートリンク"
+
+#: views/export-view-metabox.php:5
+msgid "If selected, a link for the user to download the View as a CSV file will be displayed under the View."
+msgstr "選択した場合、ビューの下に CSV ファイルとしてビューをダウンロードするためのリンクが表示されます。"
+
+#: views/export-view-metabox.php:11
+msgid "Show Export Link with View"
+msgstr "ビューのエクスポートリンクを表示する"
+
+#: views/export-view-metabox.php:16
+msgid "Filename"
+msgstr "ファイル名"
+
+#: views/export-view-metabox.php:18
+msgid "Filename of View export. Leave blank to use View title."
+msgstr "ビューのエクスポートのファイル名。ビューのタイトルを使用する場合は空白のままにします。"
+
+#: views/export-view-metabox.php:24
+msgid "Leave blank to use View title"
+msgstr "ビューのタイトルを使用する場合は空白のままにする"
+
+#: views/export-view-metabox.php:29
+msgid "Export Link Text"
+msgstr "エクスポートリンクのテキスト"
+
+#: views/export-view-metabox.php:31
+msgid "Text of link to download CSV on front-end."
+msgstr "フロントエンドで CSV をダウンロードするためのリンクのテキスト。"
+
+#: views/export-view-metabox.php:41
+msgid "Include params with your CSV export?"
+msgstr "CSV エクスポートにパラメータを含めますか ?"
+
+#: views/export-view-metabox.php:43
+msgid "If selected, params will be available to your View export for filtering and display.  These params can be seen and changed easily using browser tools, so including params is not recommended for Views with sensitive data."
+msgstr "選択した場合、パラメータはビューのエクスポートの絞り込みや表示のために使用できます。  これらのパラメータは、ブラウザーツールを使用して簡単に確認したり変更したりすることができます。そのため、機密データを含むビューにパラメータを含めることはお勧めしません。"
+
+#: views/export-view-metabox.php:49
+msgid "Yes (more flexible, not recommended for Views with sensitive data)"
+msgstr "はい (柔軟性は向上、ただし機密データを含むビューには非推奨)"
+
+#: views/export-view-metabox.php:55
+msgid "No (more secure)"
+msgstr "いいえ (より安全)"
+
+#: views/settings/form.php:4
+msgid "Schedule CSV Export"
+msgstr "CSV エクスポートをスケジュール"
+
+#: views/settings/form.php:6
+msgid "If you don't see a table View on this list, try going to the View and updating it."
+msgstr "このリストにテーブルビューがない場合は、ビューに移動して更新してみてください。"
+
+#: views/settings/form.php:30
+msgid "No Views available for export."
+msgstr "エクスポート可能なビューがありません。"
+
+#: views/settings/form.php:36
+msgid "Frequency"
+msgstr "頻度"
+
+#: views/settings/form.php:43
+msgid "Days"
+msgstr "日"
+
+#: views/settings/form.php:46
+msgid "Months"
+msgstr "月"
+
+#: views/settings/form.php:54
+msgid "Format"
+msgstr "フォーマット"
+
+#: views/settings/form.php:56
+msgid "If your CSV special characters are not working correctly, try a different formatting option."
+msgstr "CSV の特殊文字が正しく機能しない場合は、別の形式設定オプションをお試しください。"
+
+#: views/settings/form.php:71
+msgid "Column separation"
+msgstr "カラム区切り文字"
+
+#: views/settings/form.php:82
+msgid "Destination Directory Path"
+msgstr "宛先ディレクトリパス"
+
+#: views/settings/form.php:89
+msgid "Leave blank to use wp-content/uploads/formidable/exports"
+msgstr "wp-content/uploads/formidable/exports を使用する場合は空白にしてください"
+
+#: views/settings/form.php:92
+msgid "Root"
+msgstr ""
+

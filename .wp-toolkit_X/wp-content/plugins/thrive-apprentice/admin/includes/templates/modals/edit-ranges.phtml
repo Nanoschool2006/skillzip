@@ -1,0 +1,176 @@
+<?php
+
+use TVA\Assessments\Grading\Category as Grading_Category;
+
+?>
+
+<div class="tva-modal-header-outer">
+	<div class="tvd-modal-title"><?php echo __( 'Edit Ranges', 'thrive-apprentice' ); ?></div>
+</div>
+<div class="tvd-modal-content">
+	<div>
+		<div>
+			<div class="tvd-modal-columns tvd-switch" id="tva-edit-ranges">
+				<label class="tva-d-block eq-ranges">
+					<div class="tva-equal-ranges">
+						<?php echo __( 'Equal ranges', 'thrive-apprentice' ); ?>
+						<input id="tva-equal-ranges-pop" 
+							type="checkbox" 
+							class="click" 
+							data-fn="hasEqualRanges" <#= this.model.get( 'equal_ranges' )  ? 'checked="checked"' : '' #>>
+						<span class="tvd-lever"></span>	
+					</div>
+				</label>
+
+				<table>
+					<thead>
+						<tr>
+							<th>
+								<?php echo __( 'Range', 'thrive-apprentice' ); ?>
+								<div class="tva-tooltip-parent">
+									<div class="ml-5 tva-flex tva-align-center"><?php tva_get_svg_icon( 'info-solid' ); ?>
+										<div class="tva-custom-tooltip tva-certificates-tooltip">
+											<?php esc_html_e( "Editing the scores range will automatically adjust the other score ranges. One range cannot overlap with other range", 'thrive-apprentice' ); ?>
+										</div>
+									</div>
+								</div>
+							</th>
+							<th colspan="2">
+								<?php echo __( 'Label', 'thrive-apprentice' ); ?>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="tva-add-category">
+							<td colspan="3">
+								<a href="javascript:void(0)" class="click add-c" data-fn="addCategory">
+									<span class="tva-tooltip-parent">
+										<?php tva_get_svg_icon( 'plus-circle_light' ); ?>
+										<span class="tva-custom-tooltip include-exclude-tooltip">
+											<?php echo __( 'Add a new range', 'thrive-apprentice' ); ?>
+										</span>
+									</span>
+								</a>
+							</td>
+						</tr>
+						<tr class="tva-included">
+							<td class="category-range-container">
+								<input type="text" class="tva-interval-from" value="0"> - <input type="text" class="tva-interval-to" value="49"> 
+							</td>
+							<td class="category-label-container">
+								<input type="text" value="Failed">
+							</td>
+							<td class="remove-category">
+								<a href="javascript:void(0)" class="click rem-c" data-fn="removeCategory">
+									<span class="tva-tooltip-parent">
+										<?php tva_get_svg_icon( 'trash-1' ); ?>
+										<span class="tva-custom-tooltip include-exclude-tooltip">
+											<?php echo __( 'Delete range', 'thrive-apprentice' ); ?>
+										</span>
+									</span>
+								</a>
+							</td>
+						</tr>
+						<tr class="tva-add-category">
+							<td colspan="2">
+								<a href="javascript:void(0)" class="click add-c" data-fn="addCategory">
+									<span class="tva-tooltip-parent">
+										<?php tva_get_svg_icon( 'plus-circle_light' ); ?>
+										<span class="tva-custom-tooltip include-exclude-tooltip">
+											<?php echo __( 'Add a new range', 'thrive-apprentice' ); ?>
+										</span>
+									</span>
+								</a>
+							</td>
+						</tr>
+						<tr class="tva-included">
+							<td class="category-range-container">
+								<input type="text" class="tva-interval-from" value="50"> - <input type="text" class="tva-interval-to tva" value="100"> 
+							</td>
+							<td class="category-label-container">
+								<input type="text" value="Passed">
+							</td>
+							<td class="remove-category">
+								<a href="javascript:void(0)" class="click rem-c" data-fn="removeCategory">
+									<span class="tva-tooltip-parent">
+										<?php tva_get_svg_icon( 'trash-1' ); ?>
+										<span class="tva-custom-tooltip include-exclude-tooltip">
+											<?php echo __( 'Delete range', 'thrive-apprentice' ); ?>
+										</span>
+									</span>
+								</a>
+							</td>
+						</tr>
+						<tr class="tva-add-category">
+							<td colspan="2">
+								<a href="javascript:void(0)" class="click add-c" data-fn="addCategory">
+									<span class="tva-tooltip-parent">
+										<?php tva_get_svg_icon( 'plus-circle_light' ); ?>
+										<span class="tva-custom-tooltip include-exclude-tooltip">
+											<?php echo __( 'Add a new range', 'thrive-apprentice' ); ?>
+										</span>
+									</span>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="tva-empty-warning" class="tva-completion-tab-warning danger-warning">
+					<p>
+						<span><?php esc_html_e( 'The field is required', 'thrive-apprentice' ) ?></span>
+					</p>
+				</div>
+				<div id="tva-gap-warning" class="tva-completion-tab-warning danger-warning">
+					<?php tva_get_svg_icon( 'warning-red' ); ?>
+					<p>
+						<span><?php esc_html_e( 'There is a gap between the ranges, that needs to be fixed. There should be no gap or overlap with other range.', 'thrive-apprentice' ) ?></span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tva-grading-default-categories-select tva-flex tva-align-center tva-space-center">
+		<div class="tva-options-drop">
+			<div class="tva-options-drop-top">
+				<?php tva_get_svg_icon( 'arrow-up-drive' ); ?>
+				<span><?php echo __( 'Load a grades preset', 'thrive-apprentice' ); ?></span>
+				<?php tva_get_svg_icon( 'caret-down_light' ); ?>
+			</div>
+			<ul class="tva-options-drop-ul tva-drop-250 tva-drop-top">
+				<?php foreach ( Grading_Category::get_default_categories() as $key => $value ): ?>
+					<li class="click" data-key="<?php echo $key; ?>" data-fn="loadDefaultRanges"><?php echo $value['label']; ?></li>
+				<?php endforeach; ?>
+			</ul>
+		</div>
+	</div>
+	<div id="tva-ranges-categories-notice" class="tva-grading-replace-categories-notice tva-hide">
+		<div>
+			<div>
+				<span class="tva-grc-title">
+					<?php _e( 'Load preset grades', 'thrive-apprentice' ); ?>
+				</span>
+				<span class="tva-grc-text">
+					<?php _e( 'Are you sure you want to replace the current grades with ', 'thrive-apprentice' ); ?>
+					<strong>Academic grades</strong>?
+				</span>
+			</div>
+			<div>
+				<button class="tva-empty-btn mr-40 click" data-fn="preventReplaceRanges">
+					<?php _e( 'NO, Keep the old grades', 'thrive-apprentice' ); ?>
+				</button>
+				<button class="tva-empty-btn click" data-fn="allowReplaceRanges">
+					<?php _e( 'YES, Load the new grades', 'thrive-apprentice' ); ?>
+				</button>
+			</div>
+		</div>
+		<div></div>
+	</div>
+</div>
+<div class="tva-modal-footer-outer">
+	<button type="button" class="tva-modal-btn tva-modal-btn-grey tvd-modal-cancel click" data-fn="cancelRanges">
+		<?php echo __( 'Cancel', 'thrive-apprentice' ) ?>
+	</button>
+	<button type="button" class="tva-modal-btn tva-modal-btn-fill-green tvd-modal-save click" data-fn="saveRanges">
+		<?php echo __( 'Save', 'thrive-apprentice' ) ?>
+	</button>
+</div>

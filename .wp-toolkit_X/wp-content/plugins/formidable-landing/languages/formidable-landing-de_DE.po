@@ -1,0 +1,143 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Landing Pages plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-landing\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-03-20T14:27:31+00:00\n"
+"PO-Revision-Date: 2024-04-09 15:38\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-landing\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: de\n"
+"X-Crowdin-File: /[Strategy11.formidable-landing] main/languages/formidable-landing.pot\n"
+"X-Crowdin-File-ID: 2476\n"
+"Language: de_DE\n"
+
+#. Plugin Name of the plugin
+#: formidable-landing.php
+msgid "Formidable Landing Pages"
+msgstr "Formidable Landing Pages"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-landing.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-landing.php
+msgid "Create full page forms without distractions."
+msgstr "Erstelle ganzseitige Formulare ohne Ablenkungen."
+
+#. Author of the plugin
+#: formidable-landing.php
+msgid "Strategy11"
+msgstr "Strategie11"
+
+#: classes/controllers/FrmLandingAppController.php:81
+#: classes/controllers/FrmLandingAppController.php:106
+msgid "Landing Pages"
+msgstr "Landing-Pages"
+
+#: classes/controllers/FrmLandingAppController.php:107
+#: classes/controllers/FrmLandingAppController.php:108
+msgid "Landing Page"
+msgstr "Landing Page"
+
+#: classes/controllers/FrmLandingAppController.php:109
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: classes/controllers/FrmLandingAppController.php:110
+msgid "Search Landing Pages"
+msgstr "Landing-Pages suchen"
+
+#: classes/controllers/FrmLandingAppController.php:111
+msgid "No Landing Pages Found."
+msgstr "Keine Landing Pages gefunden."
+
+#: classes/controllers/FrmLandingAppController.php:112
+msgid "Add New Landing Page"
+msgstr "Neue Landing-Page hinzufügen"
+
+#: classes/controllers/FrmLandingAppController.php:113
+#: views/settings/settings.php:49
+msgid "Edit Landing Page"
+msgstr "Bearbeiten Landing Page"
+
+#: classes/controllers/FrmLandingAppController.php:251
+msgid "Open Landing Page"
+msgstr "Landing Page öffnen"
+
+#: classes/controllers/FrmLandingSettingsController.php:111
+msgid "Classic"
+msgstr "Klassisch"
+
+#: classes/controllers/FrmLandingSettingsController.php:116
+msgid "Card"
+msgstr "Karte"
+
+#: classes/controllers/FrmLandingSettingsController.php:121
+msgid "Left"
+msgstr "Links"
+
+#: classes/controllers/FrmLandingSettingsController.php:126
+msgid "Right"
+msgstr "Rechts"
+
+#: classes/controllers/FrmLandingSettingsController.php:225
+msgid "This URL is taken"
+msgstr "Diese URL wird übernommen"
+
+#: classes/controllers/FrmLandingSettingsController.php:227
+msgid "This URL is available"
+msgstr "Diese URL ist verfügbar"
+
+#: formidable-landing.php:74
+msgid "Formidable Landing Pages requires Formidable Forms to be installed."
+msgstr "Für Formidable Landing Pages muss Formidable Forms installiert sein."
+
+#: formidable-landing.php:76
+msgid "Install Formidable Forms"
+msgstr "Formidable Forms installieren"
+
+#: formidable-landing.php:91
+msgid "Formidable Landing Pages requires Formidable Forms Pro to be installed."
+msgstr "Für Formidable Landing Pages muss Formidable Forms Pro installiert sein."
+
+#: views/settings/landing-page-preview-option.php:12
+msgid "On Landing Page"
+msgstr "Auf der Landing Page"
+
+#: views/settings/settings.php:13
+msgid "Create form landing pages without distractions."
+msgstr "Erstelle Formular-Landingpages ohne Störungen."
+
+#: views/settings/settings.php:28
+msgid "Generate form landing page"
+msgstr "Formular Landing Page erstellen"
+
+#: views/settings/settings.php:37
+msgid "Page URL"
+msgstr "Seiten-URL"
+
+#: views/settings/settings.php:41
+msgid "my-form"
+msgstr "mein-formular"
+
+#: views/settings/settings.php:70
+msgid "Upload Image"
+msgstr "Bild hochladen"
+
+#: views/settings/settings.php:87
+msgid "Select Design"
+msgstr "Design auswählen"
+

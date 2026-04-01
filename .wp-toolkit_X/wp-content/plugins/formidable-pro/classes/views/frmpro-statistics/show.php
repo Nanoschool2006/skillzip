@@ -1,0 +1,189 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+?>
+<div id="form_reports_page" class="frm_wrap frm_charts">
+	<?php
+	FrmAppHelper::get_admin_header( array(
+		'label' => __( 'Reports', 'formidable' ),
+		'form'  => $form,
+	) );
+
+	$class     = 'odd';
+	$time_data = $data['time'] ?? '';
+	?>
+	<div class="frm-inner-content wrap">
+		<h2><?php esc_html_e( 'Reports', 'formidable' ); ?></h2>
+		<form method="GET" class="frm-report-filter frm-flex-justify tablenav">
+			<input type="hidden" name="page" value="formidable" />
+			<input type="hidden" name="frm_action" value="reports" />
+			<input type="hidden" name="form" value="<?php echo esc_attr( $form->id ); ?>" />
+
+			<?php
+			if ( ! empty( $entry_status_options ) ) {
+				?>
+			<div class="frm_form_field">
+				<label for="frm_stats_entry_status" class="frm_primary_label">
+					<?php esc_html_e( 'Status', 'formidable' ); ?>
+				</label>
+				<select id="frm_stats_entry_status" name="entry_status">
+					<?php
+					foreach ( $entry_status_options as $val => $label ) {
+						$selected = $selected_status === $val;
+						$params   = array( 'value' => $val );
+						FrmProHtmlHelper::echo_dropdown_option( $label, $selected, $params );
+					}
+					?>
+				</select>
+			</div>
+			<?php } ?>
+			<div class="frm_form_field">
+				<label for="frm_stats_date_range" class="frm_primary_label">
+					<?php esc_html_e( 'Date range', 'formidable-pro' ); ?>
+				</label>
+				<select id="frm_stats_date_range" name="date_range">
+					<?php
+					foreach ( FrmProReportsHelper::get_date_range_options() as $val => $label ) {
+						?>
+						<option value="<?php echo esc_attr( $val ); ?>" <?php selected( $val, $selected_date_range ); ?>><?php echo esc_html( $label ); ?></option>
+						<?php
+					}
+					?>
+				</select>
+			</div>
+			<div class="frm_form_field frm_stats_date_wrapper frm_invisible">
+				<label for="frm_stats_start_date" class="frm_primary_label"><?php esc_html_e( 'Start date', 'formidable-pro' ); ?></label>
+				<input name="start_date" id="frm_stats_start_date" type="date" value="<?php echo $start_date ? esc_attr( gmdate( 'Y-m-d', strtotime( $start_date ) ) ) : ''; ?>" disabled />
+			</div>
+			<div class="frm_form_field frm_stats_date_wrapper frm_invisible">
+				<label for="frm_stats_end_date" class="frm_primary_label"><?php esc_html_e( 'End date', 'formidable-pro' ); ?></label>
+				<input name="end_date" id="frm_stats_end_date" type="date" value="<?php echo $end_date ? esc_attr( gmdate( 'Y-m-d', strtotime( $end_date ) ) ) : ''; ?>" disabled />
+			</div>
+			<div>
+				<br>
+				<button class="frm-button-secondary frm-button-sm" type="submit">
+					<?php esc_html_e( 'Apply', 'formidable' ); ?>
+				</button>
+			</div>
+		</form>
+
+		<div class="frmcenter">
+		<div class="postbox">
+			<div class="inside">
+				<h3><?php esc_html_e( 'Submissions', 'formidable' ); ?></h3>
+				<b><?php echo count( $entries ); ?></b>
+			</div>
+		</div>
+		<?php
+		/**
+		 * Allows running code after submissions box.
+		 *
+		 * @since 6.23
+		 *
+		 * @param array $args
+		 */
+		do_action( 'frm_pro_report_summary_after_submissions', compact( 'form', 'fields', 'date_range' ) );
+		?>
+		<?php if ( isset( $submitted_user_ids ) ) { ?>
+			<div class="postbox">
+				<div class="inside">
+					<h3><?php esc_html_e( 'Users Submitted', 'formidable-pro' ); ?></h3>
+					<b><?php echo count( $submitted_user_ids ); ?> (<?php echo round( count( $submitted_user_ids ) / count( $user_ids ) * 100, 2 ); ?>%)</b>
+				</div>
+			</div>
+		<?php } ?>
+		<div class="clear"></div>
+		</div>
+
+		<div class="frm-inline-pro-tip">
+			<?php if ( $time_data ) { ?>
+				<h3><?php esc_html_e( 'Responses Over Time', 'formidable-pro' ); ?></h3>
+			<?php } ?>
+
+			<?php
+			$pro_tip_utm = array(
+				// This is mapped to campaign now. That key is supported as of 6.25.1.
+				// For backward compatibility, this is using medium for now.
+				'medium'  => 'graphs',
+				'content' => 'graphs-pro-tip',
+			);
+			?>
+
+			<a class="frm-pro-tip frm-pro-tip-end" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $pro_tip_utm, 'knowledgebase/graphs/' ) ); ?>" target="_blank">
+				<span class="frm-pro-tip-text"><?php esc_html_e( 'Pro Tip: Add graphs like this on a page', 'formidable-pro' ); ?></span>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_external_link_icon' ); ?>
+			</a>
+		</div>
+
+		<?php
+		if ( $time_data ) {
+			echo $data['time'];
+		}
+
+		/**
+		 * Allows running code before field report.
+		 *
+		 * @since 6.23
+		 *
+		 * @param array $args
+		 */
+		do_action( 'frm_pro_before_field_report', compact( 'form', 'fields', 'date_range' ) );
+
+		foreach ( $fields as $field ) {
+			if ( ! isset( $data[ $field->id ] ) ) {
+                continue;
+            }
+
+			$post_boxes = FrmProReportsHelper::get_field_boxes( compact( 'field', 'entries' ) );
+
+			if ( empty( $post_boxes ) ) {
+				continue;
+			}
+            ?>
+			<div class="frm_report_box pg_<?php echo esc_attr( $class ); ?>" data-ftype="<?php echo esc_attr( $field->type ); ?>">
+				<h3>
+					<?php echo esc_html( $field->name ); ?>
+				</h3>
+				<?php echo $data[ $field->id ]; ?>
+
+				<?php if ( isset( $data[ $field->id . '_table' ] ) ) { ?>
+					<br/>
+					<?php echo $data[ $field->id . '_table' ]; ?>
+				<?php } ?>
+
+				<div class="frmcenter" style="margin-top:20px;">
+				<?php foreach ( $post_boxes as $box ) { ?>
+				<div class="postbox">
+					<div class="inside">
+						<h3><?php echo esc_html( $box['label'] ); ?></h3>
+						<?php echo esc_html( $box['stat'] ); ?>
+					</div>
+				</div>
+				<?php } ?>
+
+				<?php
+				/**
+				 * Fires after the field report.
+				 *
+				 * @since 5.0.02
+				 *
+				 * @param array $args The arguments. Contains `field`..
+				 */
+				do_action( 'frm_pro_after_field_report', compact( 'field' ) );
+				?>
+			</div>
+
+            <div class="clear"></div>
+            </div>
+        <?php
+			$class = $class === 'odd' ? 'even' : 'odd';
+            unset( $field );
+        }
+
+        if ( isset( $data['month'] ) ) {
+            echo $data['month'];
+        }
+?>
+	</div>
+</div>
