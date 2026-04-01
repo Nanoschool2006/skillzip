@@ -1,0 +1,55 @@
+<div class="edg-action-header d-flex">
+    <div class="edg-checkall-container d-flex align-items-center">
+        <input type="checkbox" id="edg-check-all"/><label class="m-0 edg-checkall-label" for="edg-check-all"></label>
+        <span class="edg-selectall-text">{{#str}} selectall, block_edwiser_grader {{/str}}</span>
+    </div>
+    <div class="d-flex align-items-center justify-content-between edg-search-sort-menu">
+        <div class="edg-left-asection d-flex">
+            <button class="btn btn-default edg-select-filter" data-target="#edgfiltermodal">{{#str}} selectfilters, block_edwiser_grader {{/str}}</button>
+            {{#showname}}
+                <div class="edg-search d-flex align-items-center">
+                    <label for="edg-search-input" class="m-0">{{#str}} search {{/str}}</label>
+                    <input type="text" id="edg-search-input" class="form-control" placeholder="{{#str}} enterusrmsg, block_edwiser_grader {{/str}}">
+                    <button class="btn btn-primary" id="edg-search-btn">{{#str}} go {{/str}}</button>
+                </div>
+            {{/showname}}
+        </div>
+        <div class="edg-right-asection d-flex">
+            <div class="edg-sort d-flex align-items-center">
+                <label for="edg-sort-box">{{#str}} sortby {{/str}}</label>
+                <select class="custom-select" id="edg-sort-box">
+                    <option selected value="1">{{#str}} newestfirst, block_edwiser_grader {{/str}}</option>
+                    <option value="2">{{#str}} oldestfirst, block_edwiser_grader {{/str}}</option>
+                    <option value="3">{{#str}} AtoZ, block_edwiser_grader {{/str}}</option>
+                    <option value="4">{{#str}} ZtoA, block_edwiser_grader {{/str}}</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center edg-action-menu hide">
+        <button class="btn btn-danger edg-delete-attempt">{{#str}} deletedselected, block_edwiser_grader {{/str}}</button>
+        <button class="btn btn-primary edg-regrade-attempt">{{#str}} regradeselected, block_edwiser_grader {{/str}}</button>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="edgfiltermodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="edgfiltermodallabel">{{#str}} setfilters, block_edwiser_grader {{/str}}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger edg-filter-error alert-dismissible hide" role="alert">
+                    <p class="edg-filter-error-msg">{{#str}} filtererrormsg, block_edwiser_grader {{/str}}</p>
+                </div>
+                {{> block_edwiser_grader/filtercontent }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{#str}} applyfilter, block_edwiser_grader {{/str}}</button>
+            </div>
+        </div>
+    </div>
+</div>

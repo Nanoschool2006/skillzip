@@ -1,0 +1,12 @@
+Change Log:
+===========
+
+Version 3.11.0
+
+Initial Version of Edwiser RemUI, made compatible with latest version of Moodle 3.11.
+
+Version 3.11.1
+
+Fix - Forgot password link is not visible on login page.
+Feature - Atto_fullscreen plugin support provided.
+Feature - Added Custom Modal to show Edwiser Page builder blocks.(Available in Edwiser RemUI PRO and Edwiser Course creator suite)

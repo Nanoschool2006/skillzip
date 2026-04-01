@@ -1,0 +1,7 @@
+CHANGES LOG
+
+
+Version 1.0.0
+=============
+
+Initial version of Edwiser Page Builder. It allows users to edit there content dynamically using our page editor.

@@ -1,0 +1,34 @@
+/* Styles for audio widgets. */
+.que.recordrtc .qtype_recordrtc-audio-widget {
+    width: 20em;
+}
+
+/* Styles for video widgets. */
+.que.recordrtc .qtype_recordrtc-ratio-16x9 .qtype_recordrtc-no-recording-placeholder {
+    padding: calc(28.125% - 10.5px) 0;
+}
+.que.recordrtc .qtype_recordrtc-ratio-4x3 .qtype_recordrtc-no-recording-placeholder {
+    padding: calc(37.5% - 10.5px) 0;
+}
+
+/* Other styles used while the question is being attempted. */
+.que.recordrtc .qtype_recordrtc-no-recording-placeholder,
+.que.recordrtc .qtype_recordrtc-time-left {
+    color: #676463;
+    background-color: #f0f0f1;
+}
+.que.recordrtc .qtype_recordrtc-download-icon img {
+    height: 28px;
+    width: 28px;
+}
+.que.recordrtc .specificfeedback {
+    margin: 0 0 0.5em;
+    padding: 0.5em 0.5em 0;
+    background: #fff3bf;
+    border: 1px solid #fff3bf;
+}
+
+/* Styles used on the editing form. */
+body#page-question-type-recordrtc.path-question-type .form-group[data-groupname=timelimitinseconds] .sr-only {
+    display: none;
+}

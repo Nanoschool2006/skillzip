@@ -1,0 +1,61 @@
+{{! Success Message Notification }}
+{{#successmsg}}
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-check"></i> {{#str}} success, block_edwiser_grader {{/str}}</h4>{{{ successmsg }}}
+    </div>
+{{/successmsg}}
+{{! Error Message Notification }}
+{{#errormsg}}
+<div class="alert alert-danger">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+    <h4><i class="icon fa fa-ban"></i> {{#str}} alert, block_edwiser_grader {{/str}}</h4>{{{ errormsg }}}
+</div>
+{{/errormsg}}
+{{! Main Section }}
+{{! Info Section }}
+<div class="edg-sinfo-section d-flex justify-content-between">
+    <div class="d-flex align-items-center">
+        <h4 class="m-0">{{#str}} seatspurchased, block_edwiser_grader {{/str}}: {{ seatspurchased }}</h4>
+        <h4 class="m-0 edg-techenrol">{{#str}} teachersenrolled, block_edwiser_grader {{/str}}: {{ teachersenrolled }}</h4>
+        <h4>{{#str}} licensedsites, block_edwiser_grader {{/str}}:</h4>
+        <select id="edg-lsites-box" class="ml-10 edg-lsites form-control">
+            {{#sites}}
+                <option value="{{ name }}">{{{ name }}}</option>
+            {{/sites}}
+        </select>
+    </div>
+    <a href="https://edwiser.org/rapidgrader/pricing/" class="btn btn-primary">{{#str}} upgradeplan, block_edwiser_grader {{/str}}</a>
+</div>
+<hr>
+{{! Add Remove Users }}
+<form method="POST">
+    <input type="hidden" name="sesskey" value="{{ sesskey }}" />
+    <div class="edg-users-section d-flex">
+        <div class="edg-ausers form-group">
+            <label for="edg-ausers-select">{{#str}} allusers, block_edwiser_grader {{/str}}</label>
+            <div class="form-group d-flex edg-search-user align-items-center">
+                <input type="text" class="form-control edg-ausers-input" placeholder="{{#str}} search, block_edwiser_grader {{/str}}">
+            </div>
+            <select name="ausers[]" multiple class="form-control" id="edg-ausers-select">
+                {{#ausers}}
+                    <option value="{{id}}">{{ name }}</option>
+                {{/ausers}}
+            </select>
+        </div>
+        <div class="edg-site-alert alert alert-icon alert-info alert-block alert-dismissible fade show">
+            <h4><i class="icon fa fa-info font-size-18"></i> {{#str}} addremovemsg, block_edwiser_grader {{/str}}</h4>
+        </div>
+        <div class="edg-user-actions d-flex align-items-center flex-column justify-content-center">
+            <button class="btn btn-secondary mb-1 mb-10 edg-add-user-btn" type="submit" name="adduser" value="adduser" disabled>Add</button>
+            <button class="btn btn-secondary edg-remove-user-btn" type="submit" name="removeuser" value="removeuser" disabled>Remove</button>
+        </div>
+        <div class="edg-lusers form-group">
+            <label for="edg-lusers-select">{{#str}} licensedusers, block_edwiser_grader {{/str}}</label>
+            <div class="form-group d-flex edg-search-user align-items-center">
+                <input type="text" class="form-control edg-lusers-input" placeholder="{{#str}} search, block_edwiser_grader {{/str}}">
+            </div>
+            {{> block_edwiser_grader/licensedusers }}
+        </div>
+    </div>
+</form>

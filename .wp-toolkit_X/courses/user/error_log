@@ -1,0 +1,3 @@
+[14-Jan-2026 05:02:00 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library 'xsl.so' (tried: /opt/cpanel/ea-php83/root/usr/lib64/php/modules/xsl.so (/lib64/libxslt.so.1: undefined symbol: valuePush, version LIBXML2_2.4.30), /opt/cpanel/ea-php83/root/usr/lib64/php/modules/xsl.so.so (/opt/cpanel/ea-php83/root/usr/lib64/php/modules/xsl.so.so: cannot open shared object file: No such file or directory)) in Unknown on line 0
+[14-Jan-2026 05:02:00 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0
+[10-Feb-2026 00:04:39 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0

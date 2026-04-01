@@ -1,0 +1,41 @@
+<?php  // Moodle configuration file
+
+
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
+
+$CFG->dbtype    = 'mariadb';
+$CFG->dblibrary = 'native';
+$CFG->dbhost    = 'localhost';
+$CFG->dbname    = 'p2387927_moodle';
+$CFG->dbuser    = 'p2387927_moodle';
+$CFG->dbpass    = 'mSI4)2Sp(5';
+$CFG->prefix    = 'mdlfi_';
+$CFG->dboptions = array (
+  'dbpersist' => 0,
+  'dbport' => '',
+  'dbsocket' => '',
+  'dbcollation' => 'utf8_general_ci',
+);
+
+$CFG->wwwroot   = 'https://skillzip.com/courses';
+$CFG->dataroot  = '/home/p2387927/moodledata_skillzip';
+$CFG->admin     = 'admin';
+
+$CFG->directorypermissions = 0777;
+
+require_once(__DIR__ . '/lib/setup.php');
+
+
+
+
+// There is no php closing tag in this file,
+// it is intentional because it prevents trailing whitespace problems!
+
+@ini_set('display_errors', '1');
+@ini_set('display_startup_errors', '1');
+define('DEBUG', true);
+define('DEBUG_DEVELOPER', true);
+
+

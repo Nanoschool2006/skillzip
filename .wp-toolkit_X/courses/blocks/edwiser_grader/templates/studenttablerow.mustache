@@ -1,0 +1,89 @@
+{{! User Info and Attempt Section }}
+<div class="edg-student-top-section row mx-0 p-0">
+	<div class="col-md-7 d-flex edg-single-student">
+		{{! Student Info Section }}
+		<div class="edg-student-info d-flex align-items-center">
+			{{#attemptdetails.0}}
+				<input class="edg-check-user" type="checkbox" id="edg-check-{{status}}-{{userid}}" data-userid={{userid}} /><label class="m-0" for="edg-check-{{status}}-{{userid}}"></label>
+			{{/attemptdetails.0}}
+			{{#userimg}}
+			<img src="{{ userimg }}" alt="">
+			{{/userimg}}
+			{{^userimg}}
+			<img class="edg-default-img" src="{{ userimg }}" alt="">
+			{{/userimg}}
+			<div class="edg-student-details">
+				{{#username}}
+					<a href="{{userurl}}" target="_blank" title="{{ username }}"><p class="m-0 edg-student-name">{{ username }}</p></a>
+					<p title="{{useremail}}" class="m-0 edg-student-email text-muted">{{ useremail }}</p>
+				{{/username}}
+				{{^username}}
+					<a href="#"><p class="edg-default-stud">{{ username }}</p></a>
+					<p class="edg-default-stud">{{ useremail }}</p>
+				{{/username}}
+			</div>
+		</div>
+		{{! Grade Section }}
+		<div class="edg-student-grade d-flex flex-column justify-content-center">
+			<p class="m-0 text-muted edg-grade-text">{{#str}} grade {{/str}}</p>
+			<p class="m-0 edg-grade-{{userid}}"></p>
+		</div>
+	</div>
+	{{! Attempt Section }}
+	<div class="col-md-5 edg-single-attempt">
+		<nav class="edg-attempt-nav">
+			<ul class="nav nav-tabs border-0" id="edg-attempt-nav-tab" role="tablist">
+				<p class="edg-attempt-text d-flex align-items-center font-weight-bold">{{#str}} attempts, mod_quiz {{/str}}</p>
+				{{#attemptdetails}}
+					<li class="nav-item">
+						<a class="nav-link {{classname}} font-weight-bold edg-attempt-link" data-toggle="tab" href="#edg-attempt-{{attemptid}}" role="tab" aria-selected="true" aria-controls="edg-attempt-{{attemptid}}" data-attempt = "{{attemptid}}" data-user = "{{userid}}" data-grade = "{{grade}}">{{ attemptnumber }}</a>
+					</li>
+				{{/attemptdetails}}
+			</ul>
+		</nav>
+		<div class="tab-content" id="edg-attempt-nav-tabcontent">
+			{{#attemptdetails}}
+				<div class="tab-pane fade show {{classname}}" id="edg-attempt-{{attemptid}}" role="tabpanel" data-attempt = {{attemptid}}>
+					<div class="d-flex justify-content-between">
+						<div class="edg-attempt-started">
+							<p class="m-0 edg-attempt-status-text">{{#str}} started, core_question{{/str}}</p>
+							<p class="m-0 edg-attempt-status-val"><strong>{{ timestart }}</strong></p>
+						</div>
+						<div class="edg-attempt-completed">
+							<p class="m-0 edg-attempt-status-text">{{#str}} completed, core_completion {{/str}}</p>
+							<p class="m-0 edg-attempt-status-val"><strong>{{ timefinish }}</strong></p>
+						</div>
+						<div class="edg-time-taken">
+							<p class="m-0 edg-attempt-status-text">{{#str}} timetaken, block_edwiser_grader {{/str}}</p>
+							<p class="m-0 edg-attempt-status-val"><strong>{{ timetaken }}</strong></p>
+						</div>
+					</div>
+				</div>
+			{{/attemptdetails}}
+			{{^attemptdetails}}
+				<div class="alert alert-info edg-noattempt-alert d-inline-block" role="alert">
+					{{#str}} noattemptsmsg, block_edwiser_grader {{/str}}
+				</div>
+			{{/attemptdetails}}
+		</div>
+	</div>
+</div>
+{{#attemptdetails}}
+<div class="edg-student-bottom-section edg-student-{{userid}} edg-question-container-{{attemptid}}">
+	{{! Question Section }}
+	{{> block_edwiser_grader/studenttablequestions }}
+	<div class="edg-load-more edg-load-more-container-{{attemptid}}">
+	    <button type="button" class="edg-lm-pill edg-lm-btn p-0 d-flex align-items-center justify-content-center" data-attempt="{{attemptid}}">
+	        {{#str}} more , block_edwiser_grader {{/str}}
+	    </button>
+	    <button type="button" class="edg-view-less edg-lm-btn p-0 d-flex align-items-center justify-content-center" data-attempt="{{attemptid}}">
+	        {{#str}} viewless, block_edwiser_grader {{/str}}
+	    </button>
+	</div>
+	{{^timefinish}}
+		<div class="alert alert-info edg-attempt-inprogress" role="alert">
+			{{#str}} attemptinprogress, block_edwiser_grader {{/str}}
+		</div>
+	{{/timefinish}}
+</div>
+{{/attemptdetails}}
