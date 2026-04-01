@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Google for WooCommerce 3.6.0\n"
+"Project-Id-Version: Google for WooCommerce 3.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/google-listings-and-ads\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-18T17:08:16+00:00\n"
+"POT-Creation-Date: 2026-03-31T19:26:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: google-listings-and-ads\n"
@@ -415,48 +415,60 @@ msgid "Error retrieving asset groups assets by final url: %s"
 msgstr ""
 
 #. translators: %s Error message
-#: src/API/Google/AdsCampaign.php:178
+#: src/API/Google/AdsCampaign.php:179
 #, php-format
 msgid "Error retrieving campaigns: %s"
 msgstr ""
 
 #. translators: %s Error message
-#: src/API/Google/AdsCampaign.php:224
+#: src/API/Google/AdsCampaign.php:214
+#, php-format
+msgid "Error retrieving campaigns missing EU political declaration: %s"
+msgstr ""
+
+#. translators: %s Error message
+#: src/API/Google/AdsCampaign.php:260
 #, php-format
 msgid "Error retrieving campaign: %s"
 msgstr ""
 
 #. translators: %s Error message
-#: src/API/Google/AdsCampaign.php:315
+#: src/API/Google/AdsCampaign.php:353
 #, php-format
 msgid "Error creating campaign: %s"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:318
+#: src/API/Google/AdsCampaign.php:356
 msgid "A campaign with this name already exists"
 msgstr ""
 
 #. translators: %s Error message
-#: src/API/Google/AdsCampaign.php:377
+#: src/API/Google/AdsCampaign.php:417
 #, php-format
 msgid "Error editing campaign: %s"
 msgstr ""
 
 #. translators: %s Error message
-#: src/API/Google/AdsCampaign.php:413
+#: src/API/Google/AdsCampaign.php:461
+#, php-format
+msgid "Error updating EU political advertising flag: %s"
+msgstr ""
+
+#. translators: %s Error message
+#: src/API/Google/AdsCampaign.php:523
 #, php-format
 msgid "Error deleting campaign: %s"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:416
+#: src/API/Google/AdsCampaign.php:526
 msgid "This campaign has already been deleted"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:723
+#: src/API/Google/AdsCampaign.php:849
 msgid "Invalid campaign ID"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:958
+#: src/API/Google/AdsCampaign.php:1084
 msgid "Invalid geo target location ID"
 msgstr ""
 
@@ -745,7 +757,7 @@ msgid "Asset Group ID"
 msgstr ""
 
 #: src/API/Site/Controllers/Ads/AssetGroupController.php:226
-#: src/API/Site/Controllers/Ads/CampaignController.php:417
+#: src/API/Site/Controllers/Ads/CampaignController.php:472
 #: js/build/commons.js:10
 msgid "Final URL"
 msgstr ""
@@ -755,22 +767,22 @@ msgid "Text that may appear appended to the url displayed in the ad."
 msgstr ""
 
 #: src/API/Site/Controllers/Ads/AssetGroupController.php:237
-#: src/API/Site/Controllers/Ads/CampaignController.php:423
+#: src/API/Site/Controllers/Ads/CampaignController.php:478
 msgid "Asset is a part of an ad which can be shared across multiple ads. It can be an image, headlines, descriptions, etc."
 msgstr ""
 
 #: src/API/Site/Controllers/Ads/AssetGroupController.php:282
-#: src/API/Site/Controllers/Ads/CampaignController.php:469
+#: src/API/Site/Controllers/Ads/CampaignController.php:524
 msgid "Asset ID"
 msgstr ""
 
 #: src/API/Site/Controllers/Ads/AssetGroupController.php:286
-#: src/API/Site/Controllers/Ads/CampaignController.php:473
+#: src/API/Site/Controllers/Ads/CampaignController.php:528
 msgid "Asset content"
 msgstr ""
 
 #: src/API/Site/Controllers/Ads/AssetGroupController.php:290
-#: src/API/Site/Controllers/Ads/CampaignController.php:477
+#: src/API/Site/Controllers/Ads/CampaignController.php:532
 msgid "Asset field type"
 msgstr ""
 
@@ -884,73 +896,73 @@ msgid "Data source of the budget recommendations, either from Google Ads API or 
 msgstr ""
 
 #. translators: %s: current date time.
-#: src/API/Site/Controllers/Ads/CampaignController.php:133
+#: src/API/Site/Controllers/Ads/CampaignController.php:164
 #, php-format
 msgid "Campaign %s"
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:187
+#: src/API/Site/Controllers/Ads/CampaignController.php:218
 msgid "Campaign is not available."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:214
+#: src/API/Site/Controllers/Ads/CampaignController.php:245
 msgid "Invalid edit data."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:244
+#: src/API/Site/Controllers/Ads/CampaignController.php:275
 msgid "Successfully edited campaign."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:279
+#: src/API/Site/Controllers/Ads/CampaignController.php:310
 msgid "Successfully deleted campaign."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:322
+#: src/API/Site/Controllers/Ads/CampaignController.php:377
 msgid "Exclude removed campaigns."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:328
+#: src/API/Site/Controllers/Ads/CampaignController.php:383
 #: src/API/Site/Controllers/BaseReportsController.php:79
 #: src/API/Site/Controllers/MerchantCenter/IssuesController.php:208
 #: src/API/Site/Controllers/MerchantCenter/ProductFeedController.php:169
 msgid "Maximum number of rows to be returned in result data."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:347
+#: src/API/Site/Controllers/Ads/CampaignController.php:402
 #: src/API/Site/Controllers/Ads/ReportsController.php:149
 msgid "ID number."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:353
+#: src/API/Site/Controllers/Ads/CampaignController.php:408
 msgid "Descriptive campaign name."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:361
+#: src/API/Site/Controllers/Ads/CampaignController.php:416
 #: src/API/Site/Controllers/Ads/ReportsController.php:160
 msgid "Campaign status."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:368
+#: src/API/Site/Controllers/Ads/CampaignController.php:423
 msgid "Campaign type."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:374
+#: src/API/Site/Controllers/Ads/CampaignController.php:429
 msgid "Daily budget amount in the local currency."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:381
+#: src/API/Site/Controllers/Ads/CampaignController.php:436
 msgid "Country code of sale country in ISO 3166-1 alpha-2 format."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:389
+#: src/API/Site/Controllers/Ads/CampaignController.php:444
 msgid "The locations that an Ads campaign is targeting in ISO 3166-1 alpha-2 format."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:401
+#: src/API/Site/Controllers/Ads/CampaignController.php:456
 msgid "The name of the label to assign to the campaign."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:409
+#: src/API/Site/Controllers/Ads/CampaignController.php:464
 msgid "Whether the Campaign has political content as defined by Google's EU political content policy."
 msgstr ""
 
@@ -3067,6 +3079,26 @@ msgstr ""
 #: js/build/commons.js:10
 #, js-format
 msgid "Category ID %s (deleted)"
+msgstr ""
+
+#: js/build/commons.js:10
+msgid "Campaign changes are paused for this Google Ads account"
+msgstr ""
+
+#: js/build/commons.js:10
+msgid "To comply with EU political ads rules, you can’t create or edit campaigns in this account until the required declarations are added."
+msgstr ""
+
+#: js/build/commons.js:10
+msgid "Some campaigns are missing European Union (EU) ads status"
+msgstr ""
+
+#: js/build/commons.js:10
+msgid "Changes to any campaigns in this account are not allowed because EU political ads declarations are missing."
+msgstr ""
+
+#: js/build/commons.js:10
+msgid "Go to Google Ads"
 msgstr ""
 
 #: js/build/commons.js:10
@@ -5302,6 +5334,10 @@ msgstr ""
 
 #: js/build/index.js:1
 msgid "There was an error loading ads campaigns."
+msgstr ""
+
+#: js/build/index.js:1
+msgid "There was an error loading campaigns missing EU political declaration."
 msgstr ""
 
 #: js/build/index.js:1
