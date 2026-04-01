@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87
+class ComposerStaticInitb362f03b12b29b02131a59d9d1231943
 {
     public static $files = array (
         'd767e4fc2dc52fe66584ab8c6684783e' => __DIR__ . '/..' . '/adbario/php-dot-notation/src/helpers.php',
@@ -12,12 +12,12 @@ class ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87
     );
 
     public static $prefixLengthsPsr4 = array (
-        'R' => 
+        'R' =>
         array (
             'ReallySimplePlugins\\RSS\\Core\\Bootstrap\\' => 39,
             'ReallySimplePlugins\\RSS\\Core\\' => 29,
         ),
-        'A' => 
+        'A' =>
         array (
             'Automattic\\Jetpack\\Autoloader\\' => 30,
             'Adbar\\' => 6,
@@ -25,19 +25,19 @@ class ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87
     );
 
     public static $prefixDirsPsr4 = array (
-        'ReallySimplePlugins\\RSS\\Core\\Bootstrap\\' => 
+        'ReallySimplePlugins\\RSS\\Core\\Bootstrap\\' =>
         array (
             0 => __DIR__ . '/../..' . '/bootstrap',
         ),
-        'ReallySimplePlugins\\RSS\\Core\\' => 
+        'ReallySimplePlugins\\RSS\\Core\\' =>
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
-        'Automattic\\Jetpack\\Autoloader\\' => 
+        'Automattic\\Jetpack\\Autoloader\\' =>
         array (
             0 => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src',
         ),
-        'Adbar\\' => 
+        'Adbar\\' =>
         array (
             0 => __DIR__ . '/..' . '/adbario/php-dot-notation/src',
         ),
@@ -62,7 +62,56 @@ class ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87
         'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\HibpPasswordCheck\\HibpPasswordCheckController' => __DIR__ . '/../..' . '/app/Features/Pro/HibpPasswordCheck/HibpPasswordCheckController.php',
         'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\HibpPasswordCheck\\HibpPasswordCheckLoader' => __DIR__ . '/../..' . '/app/Features/Pro/HibpPasswordCheck/HibpPasswordCheckLoader.php',
         'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\HibpPasswordCheck\\HibpPasswordCheckService' => __DIR__ . '/../..' . '/app/Features/Pro/HibpPasswordCheck/HibpPasswordCheckService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Controllers\\VulnerabilityMeasuresConfigController' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Controllers/VulnerabilityMeasuresConfigController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Controllers\\VulnerabilityMeasuresController' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Controllers/VulnerabilityMeasuresController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Dtos\\VulnerabilityMeasureRowDto' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Dtos/VulnerabilityMeasureRowDto.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Repositories\\VulnerabilityMeasuresRepository' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Repositories/VulnerabilityMeasuresRepository.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\Policies\\VulnerabilityEmailNotificationPolicy' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/Policies/VulnerabilityEmailNotificationPolicy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\Policies\\VulnerabilitySeverityPolicy' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/Policies/VulnerabilitySeverityPolicy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\VulnerabilityAutoUpdateService' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/VulnerabilityAutoUpdateService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\VulnerabilityCurrentMeasureIndexBuilder' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/VulnerabilityCurrentMeasureIndexBuilder.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\VulnerabilityMeasuresConfigService' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/VulnerabilityMeasuresConfigService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\VulnerabilityMeasuresEmailService' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/VulnerabilityMeasuresEmailService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\VulnerabilityMeasuresMailQueue' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/VulnerabilityMeasuresMailQueue.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\Services\\VulnerabilityQuarantineService' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/Services/VulnerabilityQuarantineService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\VulnerabilityController' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/VulnerabilityController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Pro\\Vulnerability\\VulnerabilityLoader' => __DIR__ . '/../..' . '/app/Features/Pro/Vulnerability/VulnerabilityLoader.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Clients\\VulnerabilityClient' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Clients/VulnerabilityClient.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Controllers\\PluginController' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Controllers/PluginController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Controllers\\ThemeController' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Controllers/ThemeController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Controllers\\VulnerabilityDataController' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Controllers/VulnerabilityDataController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Controllers\\VulnerabilityNoticeController' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Controllers/VulnerabilityNoticeController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Controllers\\VulnerabilityNotificationController' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Controllers/VulnerabilityNotificationController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Dtos\\ComponentVulnerabilitiesDto' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Dtos/ComponentVulnerabilitiesDto.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Dtos\\HighestSeverityContextDto' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Dtos/HighestSeverityContextDto.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Dtos\\InstalledComponentDto' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Dtos/InstalledComponentDto.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Dtos\\VulnerabilityRangeDto' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Dtos/VulnerabilityRangeDto.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Dtos\\VulnerabilitySnapshotDto' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Dtos/VulnerabilitySnapshotDto.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Interfaces\\ComponentSyncStrategyInterface' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Interfaces/ComponentSyncStrategyInterface.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Interfaces\\InstalledComponentInterface' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Interfaces/InstalledComponentInterface.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Interfaces\\InstalledComponentRepositoryInterface' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Interfaces/InstalledComponentRepositoryInterface.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Interfaces\\VulnerabilityNotificationPolicyInterface' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Interfaces/VulnerabilityNotificationPolicyInterface.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Interfaces\\VulnerabilitySnapshotRepositoryInterface' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Interfaces/VulnerabilitySnapshotRepositoryInterface.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Repositories\\CoreRepository' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Repositories/CoreRepository.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Repositories\\PluginRepository' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Repositories/PluginRepository.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Repositories\\ThemeRepository' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Repositories/ThemeRepository.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Repositories\\VulnerabilitySnapshotRepository' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Repositories/VulnerabilitySnapshotRepository.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Repositories\\VulnerabilityStorageRepository' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Repositories/VulnerabilityStorageRepository.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\Policies\\ConfigurableSeverityPolicy' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/Policies/ConfigurableSeverityPolicy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\Strategies\\AbstractComponentSyncStrategy' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/Strategies/AbstractComponentSyncStrategy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\Strategies\\CoreSyncStrategy' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/Strategies/CoreSyncStrategy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\Strategies\\PluginSyncStrategy' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/Strategies/PluginSyncStrategy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\Strategies\\ThemeSyncStrategy' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/Strategies/ThemeSyncStrategy.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\VulnerabilityAfterSyncService' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/VulnerabilityAfterSyncService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\VulnerabilityEmailService' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/VulnerabilityEmailService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\VulnerabilityPresentationService' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/VulnerabilityPresentationService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Services\\VulnerabilitySyncService' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Services/VulnerabilitySyncService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Support\\Helpers\\VulnerabilityConfig' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Support/Helpers/VulnerabilityConfig.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\Traits\\HasFrontendUrl' => __DIR__ . '/../..' . '/app/Features/Vulnerability/Traits/HasFrontendUrl.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\VulnerabilityController' => __DIR__ . '/../..' . '/app/Features/Vulnerability/VulnerabilityController.php',
+        'ReallySimplePlugins\\RSS\\Core\\Features\\Vulnerability\\VulnerabilityLoader' => __DIR__ . '/../..' . '/app/Features/Vulnerability/VulnerabilityLoader.php',
         'ReallySimplePlugins\\RSS\\Core\\Interfaces\\ControllerInterface' => __DIR__ . '/../..' . '/app/Interfaces/ControllerInterface.php',
+        'ReallySimplePlugins\\RSS\\Core\\Interfaces\\DoActionInterface' => __DIR__ . '/../..' . '/app/Interfaces/DoActionInterface.php',
         'ReallySimplePlugins\\RSS\\Core\\Interfaces\\FeatureInterface' => __DIR__ . '/../..' . '/app/Interfaces/FeatureInterface.php',
         'ReallySimplePlugins\\RSS\\Core\\Interfaces\\MultiEndpointInterface' => __DIR__ . '/../..' . '/app/Interfaces/MultiEndpointInterface.php',
         'ReallySimplePlugins\\RSS\\Core\\Interfaces\\ProviderInterface' => __DIR__ . '/../..' . '/app/Interfaces/ProviderInterface.php',
@@ -76,28 +125,29 @@ class ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87
         'ReallySimplePlugins\\RSS\\Core\\Services\\CertificateService' => __DIR__ . '/../..' . '/app/Services/CertificateService.php',
         'ReallySimplePlugins\\RSS\\Core\\Services\\EmailService' => __DIR__ . '/../..' . '/app/Services/EmailService.php',
         'ReallySimplePlugins\\RSS\\Core\\Services\\GlobalOnboardingService' => __DIR__ . '/../..' . '/app/Services/GlobalOnboardingService.php',
+        'ReallySimplePlugins\\RSS\\Core\\Services\\LicenseService' => __DIR__ . '/../..' . '/app/Services/LicenseService.php',
         'ReallySimplePlugins\\RSS\\Core\\Services\\RelatedPluginService' => __DIR__ . '/../..' . '/app/Services/RelatedPluginService.php',
         'ReallySimplePlugins\\RSS\\Core\\Services\\SecureSocketsService' => __DIR__ . '/../..' . '/app/Services/SecureSocketsService.php',
         'ReallySimplePlugins\\RSS\\Core\\Services\\SettingsConfigService' => __DIR__ . '/../..' . '/app/Services/SettingsConfigService.php',
         'ReallySimplePlugins\\RSS\\Core\\Support\\Helpers\\Storage' => __DIR__ . '/../..' . '/app/Support/Helpers/Storage.php',
         'ReallySimplePlugins\\RSS\\Core\\Support\\Helpers\\Storages\\EnvironmentConfig' => __DIR__ . '/../..' . '/app/Support/Helpers/Storages/EnvironmentConfig.php',
         'ReallySimplePlugins\\RSS\\Core\\Support\\Helpers\\Storages\\RelatedConfig' => __DIR__ . '/../..' . '/app/Support/Helpers/Storages/RelatedConfig.php',
-        'ReallySimplePlugins\\RSS\\Core\\Support\\Helpers\\Storages\\RequestBody' => __DIR__ . '/../..' . '/app/Support/Helpers/Storages/RequestBody.php',
         'ReallySimplePlugins\\RSS\\Core\\Support\\Helpers\\Storages\\RequestStorage' => __DIR__ . '/../..' . '/app/Support/Helpers/Storages/RequestStorage.php',
         'ReallySimplePlugins\\RSS\\Core\\Support\\Helpers\\Storages\\UriConfig' => __DIR__ . '/../..' . '/app/Support/Helpers/Storages/UriConfig.php',
         'ReallySimplePlugins\\RSS\\Core\\Support\\Utility\\StringUtility' => __DIR__ . '/../..' . '/app/Support/Utility/StringUtility.php',
         'ReallySimplePlugins\\RSS\\Core\\Traits\\HasAllowlistControl' => __DIR__ . '/../..' . '/app/Traits/HasAllowlistControl.php',
         'ReallySimplePlugins\\RSS\\Core\\Traits\\HasEncryption' => __DIR__ . '/../..' . '/app/Traits/HasEncryption.php',
         'ReallySimplePlugins\\RSS\\Core\\Traits\\HasNonces' => __DIR__ . '/../..' . '/app/Traits/HasNonces.php',
+        'ReallySimplePlugins\\RSS\\Core\\Traits\\HasScheduler' => __DIR__ . '/../..' . '/app/Traits/HasScheduler.php',
         'ReallySimplePlugins\\RSS\\Core\\Traits\\HasViews' => __DIR__ . '/../..' . '/app/Traits/HasViews.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite16c8ab67bf60a9e04303a69a741ce87::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb362f03b12b29b02131a59d9d1231943::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb362f03b12b29b02131a59d9d1231943::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb362f03b12b29b02131a59d9d1231943::$classMap;
 
         }, null, ClassLoader::class);
     }
