@@ -1,0 +1,94 @@
+<div class="edg-question-details-section-content">
+    <div class="edg-question-details-header row m-0">
+        <div class="col-md-8 col-sm-8 p-0 d-flex align-items-center">
+            {{#qpaginate}}
+                <h5 class="text-white font-weight-bold">{{#str}} questions, core_question {{/str}}</h5>
+                <div class="edg-question-pagination d-flex">
+                    {{> block_edwiser_grader/questionpagination }}
+                </div>
+            {{/qpaginate}}
+            {{#upaginate}}
+                <h5 class="text-white font-weight-bold">{{#str}} students, block_edwiser_grader {{/str}}</h5>
+                <div class="edg-student-pagination d-flex">
+                    {{> block_edwiser_grader/userlist }}
+                </div>
+                <div class="edg-student-attempt d-flex">
+                    {{#str}} attempt, block_edwiser_grader {{/str}} : &nbsp;<span class="edg-sa-count"></span>
+                </div>
+            {{/upaginate}}
+        </div>
+        <div class="col-md-4 col-sm-4 p-0 d-flex align-items-center justify-content-end">
+            <button class="btn btn-small edg-view-response-history" data-target="#edg-response-history">{{#str}} viewresponsehistory, block_edwiser_grader {{/str}}</button>
+            <button class="btn action edg-fullscreen edg-expand"><span><i class="fa fa-expand" aria-hidden="true"></i></span></button>
+            <button class="btn action edg-close"><span><i class="fa fa-times" aria-hidden="true"></i></span></button>
+        </div>
+    </div>
+    <div class="edg-question-details-content row m-0">
+        <div class="col-md-8 p-0 edg-question-answer-section">
+            <div class="edg-question-stats d-flex align-items-center">
+                <div class="edg-correctness">
+                    <span class="badge badge-pill badge-warning {{ gdstateclass }}">{{ gdstate }}</span>
+                </div>
+                {{#user}}
+                    <div class="edg-user d-inline-flex align-items-center">
+                        <p class="m-0 font-weight-bold edg-titles">{{#str}} student, core_grades {{/str}}:</p>
+                        <p class="m-0 edg-question-user">{{ user }}</p>
+                    </div>
+                {{/user}}
+                <div class="edg-qnumber d-inline-flex align-items-center">
+                    <p class="m-0 font-weight-bold edg-titles">{{#str}} qnumber, block_edwiser_grader {{/str}}:</p>
+                    <p class="m-0 edg-question-number">{{ qnumber }}</p>
+                </div>
+                <div class="edg-qtype d-inline-flex align-items-center">
+                    <p class="m-0 font-weight-bold edg-titles">{{#str}} type, block_edwiser_grader {{/str}}:</p>
+                    <p class="m-0 edg-question-type">{{ qtype }}</p>
+                </div>
+                <div class="edg-qstatus d-inline-flex align-items-center">
+                    <p class="m-0 font-weight-bold edg-titles">{{#str}} status, mod_quiz {{/str}}:</p>
+                    <p class="m-0 font-weight-bold edg-question-state">{{ state }}</p>
+                </div>
+                <div class="edg-qmarks d-inline-flex align-items-center">
+                    <p class="m-0 font-weight-bold edg-titles">{{#str}} marks, block_edwiser_grader {{/str}}:</p>
+                    <p class="m-0 edg-marks-text">{{ marks }}</p>
+                </div>
+            </div>
+            <div class="edg-qdesc-answer">
+                <div class="edg-question {{queclass}}">
+                    <div class="edg-question-text">
+                        <p class="font-weight-bold">{{#str}} question, block_edwiser_grader {{/str}}</p>
+                        <div class="edg-question-content">{{{ questiontext }}}</div>
+                    </div>
+                    <div class="edg-answer" id="question-{{attemptid}}-{{slot}}">
+                        <p class="font-weight-bold">{{#str}} studentresponse, block_edwiser_grader {{/str}}</p>
+                        <div class="edg-answer-content">{{{ answer }}}</div>
+                    </div>
+                    {{#gdinfo}}
+                        <div class="edg-gdinfo">
+                            <p class="font-weight-bold">{{#str}} graderinfo, block_edwiser_grader {{/str}}</p>
+                            <div class="edg-gd-content">{{{ gdinfo }}}</div>
+                        </div>
+                    {{/gdinfo}}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 p-0 edg-comment-marks-section">
+            <p class="font-weight-bold edg-cm-title">{{#str}} commentandgrade, block_edwiser_grader {{/str}}</p>
+            <div class="edg-cm-content">
+                <div class="edg-comment-section">
+                    <div class="edg-comment-content"></div>
+                </div>
+                <div class="edg-marks-update-section">
+                    <div class="edg-marks">{{{ markshtml }}}</div>
+                    <div class="edg-marks-actions d-flex justify-content-end">
+                        <button class="btn btn-primary edg-submit-btn">{{#str}} submit {{/str}}&nbsp;&nbsp;<span class="edg-spinner"><i class="fa-li fa fa-spinner fa-spin"></i></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="edg-question-overlay align-items-center justify-content-center flex-column">
+        <span><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw text-white"></i></span>
+        <p class="edg-redirect-text text-white">{{#str}} processingmsg, block_edwiser_grader{{/str}}</p>
+    </div>
+    {{{jscode}}}
+</div>

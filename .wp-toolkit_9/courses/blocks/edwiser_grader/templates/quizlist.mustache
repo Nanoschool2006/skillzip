@@ -1,0 +1,63 @@
+<div id="edg-quizlist-content" data-cid="{{courseid}}">
+	<div class="edg-quiz-list d-flex flex-column hidden">
+		{{#quizzes}}
+		<div class="edg-quiz-item {{quizstatus}}">
+			<div class="edg-quiz-title">{{{ quiztitle }}}</div>
+			<div class="edg-quiz-stats d-flex flex-column">
+				<p class="m-0">
+					<span><i class="fa fa-user" aria-hidden="true"></i></span>
+					<span class="edg-stats-count">{{ notgradedusers}}</span>Requires Grading
+				</p>
+				<p class="m-0">
+					<span><i class="fa fa-user" aria-hidden="true"></i></span>
+					<span class="edg-stats-count">{{ gradedusers}}</span>Graded
+				</p>
+				<p class="m-0">
+					<span><i class="fa fa-user" aria-hidden="true"></i></span>
+					<span class="edg-stats-count">{{ notattemptedusers}}</span>Not Attempted
+				</p>
+			</div>
+			<a href="{{gradeurl}}" class="btn btn-primary btn-sm">
+				{{^regrade}}
+					{{#str}} grade {{/str}}
+				{{/regrade}}
+				{{#regrade}}
+					{{#str}} regrade, block_edwiser_grader {{/str}}
+				{{/regrade}}
+			</a>
+		</div>
+		{{/quizzes}}
+		{{^quizzes}}
+		<div class="alert alert-info" role="alert">
+			{{#quizpage}}
+				{{#str}} noattemptmademsg, block_edwiser_grader {{/str}}
+			{{/quizpage}}
+			{{^quizpage}}
+				{{#search}}
+					{{#str}} noquizfoundmsg, block_edwiser_grader {{/str}}
+				{{/search}}
+				{{^search}}
+					{{#str}} noquizzesmsg, block_edwiser_grader {{/str}}
+				{{/search}}
+			{{/quizpage}}
+		</div>
+		{{/quizzes}}
+	</div>
+	<div class="edg-quiz-skeleton">
+		<div class="edg-quiz-dummy">
+			<div class="edg-dquiz-title animate"></div>
+			<div class="edg-dquiz-stats animate"></div>
+			<div class="edg-dquiz-button animate"></div>
+		</div>
+		<div class="edg-quiz-dummy">
+			<div class="edg-dquiz-title animate"></div>
+			<div class="edg-dquiz-stats animate"></div>
+			<div class="edg-dquiz-button animate"></div>
+		</div>
+		<div class="edg-quiz-dummy">
+			<div class="edg-dquiz-title animate"></div>
+			<div class="edg-dquiz-stats animate"></div>
+			<div class="edg-dquiz-button animate"></div>
+		</div>
+	</div>
+</div>

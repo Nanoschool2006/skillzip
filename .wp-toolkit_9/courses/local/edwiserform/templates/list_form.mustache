@@ -1,0 +1,56 @@
+ {{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+  }}
+<div class="efb-wrap-list efb-wrap-list-forms">
+    <div class='efb-list-buttons text-right'>
+        {{#pageactions}}
+            {{< local_edwiserform/header-action-buttons}}
+                    {{$ button-class }}efb-list-button{{/ button-class }}
+                {{/ local_edwiserform/header-action-buttons}}
+        {{/pageactions}}
+    </div>
+    <hr>
+    <h2>{{heading}}</h2>
+    <table id="efb-forms" class="efb-table efb-forms-table">
+        <thead>
+            <tr>
+                {{#headings}}
+                    <th>{{{.}}}</th>
+                {{/headings}}
+            </tr>
+        </thead>
+    </table>
+    <div class="efb-modal" id="efb-modal" data-region="modal-container" aria-hidden="false" role="dialog">
+        <div class="efb-modal-dialog " role="document" data-region="efb-modal" aria-labelledby="17-modal-title">
+            <div class="efb-modal-content">
+                <div class="efb-modal-header" data-region="header">
+                    <h4 id="efb-modal-title" class="efb-modal-title text-white" data-region="title" tabindex="0"></h4>
+                    <button type="button" class="close efb-modal-close text-white" data-action="hide" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="efb-modal-body" data-region="body">
+                </div>
+                <div class="efb-modal-footer" data-region="footer">
+                    <button class="btn btn-danger efb-modal-delete-form" type="button">{{#str}} proceed, local_edwiserform {{/str}}</button>
+                    <button class="btn btn-success efb-modal-pro-activate" type="button">{{#str}} activatelicense, local_edwiserform {{/str}}</button>
+                    <button class="btn btn-success efb-modal-close efb-modal-delete-close" type="button">{{#str}} cancel, local_edwiserform {{/str}}</button>
+                    <button class="btn btn-warning efb-modal-close efb-modal-pro-activate-close" type="button">{{#str}} cancel, local_edwiserform {{/str}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

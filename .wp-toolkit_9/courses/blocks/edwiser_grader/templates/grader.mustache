@@ -1,0 +1,175 @@
+<div class="edg-question-details-section">
+	{{> block_edwiser_grader/questiondetails }}
+</div>
+<div id="edg-grader-page">
+	{{! Page Title }}
+	<div class="row mx-0 p-0 bg-primary edg-grader-page-header">
+		<div class="col-md-9 col-sm-11 edg-grader-page-title-section">
+			<h5 class="edg-grader-course-title m-0 text-white">{{{ coursetitle }}}</h5>
+			<div class="edg-grader-breadcrumbs text-white">
+				{{{ breadcrumbs }}}
+			</div>
+		</div>
+		<div class="col-md-3 col-sm-1 edg-back-section">
+			<div class="input-group mb-3 edg-grading-type">
+				<select class="custom-select" id="edg-grading-method">
+					<option value="1" {{#gduser}} selected {{/gduser}} >{{#str}} userbasedgrading, block_edwiser_grader {{/str}}</option>
+					<option value="2" {{#gdquestion}} selected {{/gdquestion}} >{{#str}} questionbasedgrading, block_edwiser_grader {{/str}}</option>
+				</select>
+			</div>
+			<a href="{{backurl}}" class="btn btn-primary">
+				<span><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
+				{{#str}} goback, block_edwiser_grader {{/str}}
+			</a>
+		</div>
+	</div>
+
+	<div class="edg-container">
+		{{! Quiz Details Section }}
+		<div class="edg-quiz-details-section">
+			<div class="row m-0 p-0">
+				<div class="col-md-12 edg-grader-quiz p-0">
+					<h5 class="edg-grader-quiz-title m-0">{{{ quiztitle }}}</h5>
+				</div>
+				<div class="col-md-9 col-sm-12 p-0 d-flex edg-grader-quiz-stats align-items-center">
+					<p>{{#str}} attempts, mod_quiz {{/str}} : <strong>{{ attempts }}</strong></p>
+					<p>{{#str}} grademethod, mod_quiz {{/str}} : <strong>{{ gradingmethod }}</strong></p>
+					<p>{{#str}} regradealldry, quiz_overview {{/str}} : &nbsp;<span class="badge badge-pill {{ dryclass }}">{{ dryrunstatus }}</span></p>
+				</div>
+				<div class="col-md-3 col-sm-12 p-0 edg-grader-actions d-flex justify-content-end">
+					<div class="edg-quiz-actions d-flex">
+						<button type="button" class="btn" title="{{#str}} gradechart , block_edwiser_grader {{/str}}">
+							<span class="d-flex justify-content-center align-items-center edg-quiz-chart" data-target="#edg-quiz-chart-modal"><i class="fa fa-bar-chart" aria-hidden="true"></i></span>
+						</button>
+						<div class="btn-group">
+							<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{#str}} downloadreport, block_edwiser_grader {{/str}}">
+								<span class="d-flex justify-content-center align-items-center"><i class="fa fa-download" aria-hidden="true"></i></span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right edg-data-download">
+							    <button class="dropdown-item" type="button" value="csv">{{#str}} text/csv, core_mimetypes {{/str}}</button>
+							    <button class="dropdown-item" type="button" value="excel">{{#str}} microsoftexcel, block_edwiser_grader {{/str}}</button>
+							    <button class="dropdown-item" type="button" value="html">{{#str}} htmltable, block_edwiser_grader {{/str}}</button>
+							    <button class="dropdown-item" type="button" value="json">{{#str}} jsonformat, block_edwiser_grader {{/str}}</button>
+							    <button class="dropdown-item" type="button" value="ods">{{#str}} opendocs, block_edwiser_grader {{/str}}</button>
+							</div>
+							{{! Hidden Form to trigger download report }}
+							<form id="edg-data-download-form" method="get" action="{{downloadurl}}" class="dataformatselector m-1">
+							   <div class="form-inline text-xs-right">
+							       <input type="hidden" name="sesskey" value="{{sessionkey}}">
+							       <label for="downloadtype_download" class="mr-1">Download table data as</label>
+							       <select name="download" id="downloadtype_download" class="form-control edg-download-select">
+							               <option value="csv">Comma separated values (.csv)</option>
+							               <option value="excel">Microsoft Excel (.xlsx)</option>
+							               <option value="html">HTML table</option>
+							               <option value="json">Javascript Object Notation (.json)</option>
+							               <option value="ods">OpenDocument (.ods)</option>
+							       </select>
+							       <button type="submit" class="btn btn-secondary">Download</button>
+							           <input type="hidden" name="id" value="{{cmid}}">
+							           <input type="hidden" name="mode" value="overview">
+							           <input type="hidden" name="attempts" value="enrolled_with">
+							           <input type="hidden" name="onlygraded" value="0">
+							           <input type="hidden" name="onlyregraded" value="0">
+							           <input type="hidden" name="slotmarks" value="1">
+							   </div>
+							</form>
+						</div>
+						<div class="btn-group">
+							<button type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="{{#str}} regrade, block_edwiser_grader {{/str}}">
+								<span class="d-flex justify-content-center align-items-center"><i class="fa fa-ellipsis-v" aria-hidden="true"></i></span>
+							</button>
+							<div class="dropdown-menu dropdown-menu-right edg-dry-regrade">
+							    <button class="dropdown-item edg-dry-regrade-btn" type="button">{{#str}} dryrunregrade, block_edwiser_grader {{/str}}</button>
+							    <button class="dropdown-item edg-regrade-btn" type="button">{{#str}} regradeall, block_edwiser_grader {{/str}}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="edg-quiz-chart-modal" role="dialog">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">{{#str}} overviewreportgraph, quiz_overview {{/str}}</h4>
+								<button type="button" class="close" data-dismiss="modal">
+								&times;</button>
+							</div>
+							<div class="modal-body" style="height: 500px;">
+								<canvas id="edg-quiz-chart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{{! For User Based Grading }}
+	<div class="edg-container edg-user-grading {{^gduser}} edg-hide {{/gduser}}">
+		{{! Action Header }}
+		{{> block_edwiser_grader/actionheader }}
+		<hr>
+		{{! Tab Section }}
+		<div class="edg-quiz-attempt-content">
+			<nav class="edg-quiz-attempt-nav">
+				<div class="edg-table-instruction d-flex align-items-center">
+					<p class="d-inline-block"><strong><span class="edg-rg">RG</span></strong>{{#str}} requiregrading, block_edwiser_grader {{/str}}</p>
+					<p class="d-inline-block"><strong><span class="edg-na">NA</span></strong>{{#str}} notanswered, block_edwiser_grader {{/str}}</p>
+				</div>
+				<ul class="nav nav-tabs border-0 bg-white" id="edg-table-nav-tab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="edg-notgraded-tab" data-toggle="tab" href="#edg-notgraded" role="tab" aria-controls="edg-notgraded" aria-selected="true">{{#str}} notyetgraded, block_edwiser_grader {{/str}}&nbsp;<span class="edg-notgraded-count"></span></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="edg-graded-tab" data-toggle="tab" href="#edg-graded" role="tab" aria-controls="edg-graded" aria-selected="false">{{#str}} graded, block_edwiser_grader {{/str}}&nbsp;<span class="edg-graded-count"></span></a>
+					</li>
+				</ul>
+			</nav>
+			<div class="tab-content" id="edg-table-nav-tabcontent">
+				<div class="tab-pane fade show active" id="edg-notgraded" role="tabpanel" aria-labelledby="edg-notgraded-tab">
+					<div class="edg-not-graded-filter d-flex">
+						<input type="checkbox" id="edg-switch-questions" checked="checked" /><label class="m-0" for="edg-switch-questions"><span class="edg-on">ON</span><span class="edg-off">OFF</span></label><span class="edg-ng-filter-text font-weight-bold">{{#str}} notgradedquestion, block_edwiser_grader {{/str}}</span>
+					</div>
+					{{> block_edwiser_grader/studenttable }}
+					{{> block_edwiser_grader/userpagination }}
+				</div>
+				<div class="tab-pane fade" id="edg-graded" role="tabpanel" aria-labelledby="edg-graded">
+					{{> block_edwiser_grader/studenttable }}
+					{{> block_edwiser_grader/userpagination }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{{! For Question Based Grading }}
+	<div class="edg-container edg-question-grading {{^gdquestion}} edg-hide {{/gdquestion}}">
+		{{! Question Table }}
+		{{> block_edwiser_grader/questiontable }}
+	</div>
+
+	<div class="modal fade" id="edg-response-history" tabindex="-1" role="dialog" aria-labelledby="responsehistory" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h4 class="modal-title font-weight-bold">{{#str}} responsehistory, block_edwiser_grader {{/str}}</h4>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body"></div>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="alert alert-success alert-dismissible fade show edg-notification-box edg-success align-items-center" role="alert">
+	  	<p class="edg-snotification-text"></p>
+	</div>
+	<div class="alert alert-danger alert-dismissible fade show edg-notification-box edg-error align-items-center" role="alert">
+	  	<p class="edg-enotification-text"></p>
+	</div>
+	<div class="edg-overlay">
+		<div class="edg-overlay-content">
+			<span><i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw text-white"></i></span>
+			<p class="text-white edg-overlay-msg"></p>
+		</div>
+	</div>
+</div>

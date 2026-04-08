@@ -1,0 +1,1 @@
+"use strict";define(["jquery","core/ajax","core/notification"],function(o,i,e){return{init:function(){o(document).ready(function(){o("body").on("formSubmitted",function(n){console.log(n),o("#cmid").val()==n.cmid&&(promise=i.call([{methodname:"mod_edwiserform_submitted",args:{cmid:n.cmid}}]),promise[0].fail(function(o){e.exception(o),console.log(o)}))})})}}});
