@@ -1,0 +1,241 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Surveys plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-surveys\n"
+"Last-Translator: \n"
+"Language-Team: Japanese\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-19T12:30:36+00:00\n"
+"PO-Revision-Date: 2024-08-20 00:25\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-surveys\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: ja\n"
+"X-Crowdin-File: /[Strategy11.formidable-surveys] master/languages/formidable-surveys.pot\n"
+"X-Crowdin-File-ID: 2448\n"
+"Language: ja_JP\n"
+
+#. Plugin Name of the plugin
+#: formidable-surveys.php
+msgid "Formidable Surveys"
+msgstr "Formidable Surveys"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-surveys.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-surveys.php
+msgid "Create survey forms."
+msgstr "アンケートフォームを作成します。"
+
+#. Author of the plugin
+#: formidable-surveys.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#. translators: %1$s: plugin name.
+#: classes/controllers/AppController.php:70
+msgid "You are running an outdated version of %1$s. The Formidable Surveys plugin will not work correctly if you do not update %1$s."
+msgstr "%1$s のバージョンが古いようです。%1$s を更新しない場合、Formidable Surveys プラグインが適切に動作しない可能性があります。"
+
+#: classes/controllers/LikertController.php:276
+msgid "Item"
+msgstr "項目"
+
+#: classes/controllers/LikertController.php:277
+msgid "Items"
+msgstr "アイテム"
+
+#: classes/controllers/LikertController.php:278
+msgid "Add Item"
+msgstr "項目を追加"
+
+#. translators: Plural name.
+#: classes/controllers/LikertController.php:300
+msgid "Bulk Edit %s"
+msgstr "%sを一括編集"
+
+#: classes/controllers/LikertController.php:1101
+msgid "None"
+msgstr "なし"
+
+#: classes/controllers/LikertController.php:1224
+msgid "Field ID is empty"
+msgstr "フィールド ID が空です"
+
+#: classes/controllers/LikertController.php:1229
+msgid "Field not exist"
+msgstr "フィールドが存在しません"
+
+#: classes/controllers/LikertController.php:1391
+#: classes/controllers/LikertController.php:1399
+msgid "Question"
+msgstr "質問"
+
+#: classes/controllers/NPSController.php:166
+msgid "Detractors (0-6)"
+msgstr "批判者 (0-6)"
+
+#: classes/controllers/NPSController.php:167
+msgid "Passives (7-8)"
+msgstr "中立者 (7-8)"
+
+#: classes/controllers/NPSController.php:168
+msgid "Promoters (9-10)"
+msgstr "推奨者 (9-10)"
+
+#: classes/controllers/NPSController.php:169
+msgid "Net Promoter Score"
+msgstr "ネットプロモータースコア"
+
+#: classes/helpers/RankingGraphData.php:46
+msgid "Rank"
+msgstr "順位"
+
+#: classes/helpers/RankingGraphData.php:47
+msgid "Option Name"
+msgstr "オプション名"
+
+#: classes/helpers/RankingGraphData.php:48
+msgid "Times at #1"
+msgstr "1位の回数"
+
+#: classes/helpers/RankingGraphData.php:49
+#: classes/helpers/RankingGraphData.php:56
+msgid "Average Position"
+msgstr "平均順位"
+
+#: classes/models/fields/Likert.php:67
+msgid "Please complete all options in [field_name]"
+msgstr ""
+
+#: classes/models/fields/NPS.php:62
+msgid "Not at all"
+msgstr "まったくない"
+
+#: classes/models/fields/NPS.php:63
+msgid "Extremely likely"
+msgstr "非常に可能性は高い"
+
+#: classes/models/fields/NPS.php:74
+msgid "How likely are you to recommend us to a friend or colleague?"
+msgstr "私たちを友人や同僚に薦める可能性はどのくらいありますか ?"
+
+#: classes/models/fields/Ranking.php:63
+msgid "Ranking Option 1"
+msgstr "ランキングオプション1"
+
+#: classes/models/fields/Ranking.php:64
+msgid "Ranking Option 2"
+msgstr "ランキングオプション2"
+
+#: classes/views/fields/backend/likert-column-options.php:19
+msgid "Collapsible Columns Settings"
+msgstr "折りたたみ可能なカラムの設定"
+
+#: classes/views/fields/backend/likert-column-options.php:20
+#: classes/views/fields/backend/likert-column-options.php:29
+msgid "Columns"
+msgstr "カラム"
+
+#: classes/views/fields/backend/likert-column-options.php:28
+msgid "Column"
+msgstr "カラム"
+
+#: classes/views/fields/backend/likert-column-options.php:30
+msgid "Add Column"
+msgstr "カラムを追加"
+
+#: classes/views/fields/backend/likert-primary.php:28
+msgid "Use checkboxes"
+msgstr "チェックボックスを使用する"
+
+#: classes/views/fields/backend/likert-primary.php:44
+msgid "Repeat column headings"
+msgstr "カラムの見出しを繰り返す"
+
+#: classes/views/fields/backend/likert-primary.php:60
+msgid "Separate column values"
+msgstr "カラムの値を分ける"
+
+#: classes/views/fields/backend/likert-row-options.php:22
+#: classes/views/fields/backend/likert-row-options.php:31
+msgid "Rows"
+msgstr "行"
+
+#: classes/views/fields/backend/likert-row-options.php:30
+msgid "Row"
+msgstr "行"
+
+#: classes/views/fields/backend/likert-row-options.php:32
+msgid "Add Row"
+msgstr "行を追加"
+
+#. translators: Likert row ID.
+#: classes/views/fields/backend/likert.php:55
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+#: classes/views/fields/backend/nps-options.php:20
+msgid "Negative Statement"
+msgstr "否定的な意見"
+
+#: classes/views/fields/backend/nps-options.php:33
+msgid "Positive Statement"
+msgstr "肯定的な意見"
+
+#: classes/views/fields/backend/radio-options.php:56
+msgid "Use images in buttons"
+msgstr "ボタンに画像を使用"
+
+#: classes/views/fields/backend/radio-options.php:76
+msgid "Hide option text"
+msgstr "オプションテキストを非表示"
+
+#: classes/views/fields/backend/radio-options.php:117
+msgid "Text alignment"
+msgstr "テキストの配置"
+
+#: classes/views/fields/backend/radio-options.php:141
+msgid "Image alignment"
+msgstr "画像の位置"
+
+#: classes/views/fields/backend/ranking-extra-options.php:16
+msgid "Limit selections"
+msgstr "選択を制限"
+
+#: classes/views/fields/backend/ranking-extra-options.php:17
+msgid "Specifies the maximum number of items you can choose"
+msgstr "選択できる最大項目数を指定します"
+
+#: classes/views/fields/backend/ranking-extra-options.php:23
+msgid "Randomize options"
+msgstr "オプションをランダム化"
+
+#: classes/views/fields/backend/ranking-extra-options.php:28
+msgid "Limit"
+msgstr "制限"
+
+#: classes/views/fields/backend/scale-display-format.php:19
+msgid "Display format"
+msgstr "表示形式"
+
+#. Translators: Negative statement.
+#: classes/views/fields/frontend/nps.php:57
+msgid "0 - %s"
+msgstr "0 - %s"
+
+#. Translators: Positive statement.
+#: classes/views/fields/frontend/nps.php:67
+msgid "10 - %s"
+msgstr "10 - %s"
+

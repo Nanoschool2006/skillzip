@@ -1,0 +1,28 @@
+.frm_on_email_confirmation_type input[type="radio"]:checked + label {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+td .frm_on_email_confirmation_type input + label {
+    display: flex;
+    border: 1px solid var(--grey-border);
+    border-radius: var(--small-radius);
+    gap: 16px;
+    padding: 16px;
+    align-items: center;
+    justify-content: center;
+    color: var(--grey-700);
+    margin: 0 0 3px;
+    font-size: var(--text-sm);
+    line-height: var(--leading);
+}
+.frm_on_email_confirmation_type input {
+    opacity: 0 !important;
+    position: absolute;
+    z-index: -1;
+}
+.frm_reg_user_moderation_section td {
+    vertical-align:middle;
+}
+.frm_single_register_settings .frm_form_field {
+    margin: 8px 0;
+}

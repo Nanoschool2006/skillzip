@@ -1,0 +1,76 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Polylang plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-polylang\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-19T13:53:11+00:00\n"
+"PO-Revision-Date: 2024-08-20 00:26\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-polylang\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: de\n"
+"X-Crowdin-File: /[Strategy11.formidable-polylang] master/languages/formidable-polylang.pot\n"
+"X-Crowdin-File-ID: 2380\n"
+"Language: de_DE\n"
+
+#. Plugin Name of the plugin
+#: frm-poly.php
+msgid "Formidable Polylang"
+msgstr "Formidable Polylang"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: frm-poly.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: frm-poly.php
+msgid "Add multilingual support for Formidable"
+msgstr "Mehrsprachige Unterstützung für Formidable hinzufügen"
+
+#. Author of the plugin
+#: frm-poly.php
+msgid "Strategy11"
+msgstr "Strategie11"
+
+#: controllers/FrmPllAppController.php:340
+msgid "Your entry was successfully deleted"
+msgstr "Ihr Eintrag wurde erfolgreich gelöscht"
+
+#: controllers/FrmPllAppController.php:388
+#: controllers/FrmPllAppController.php:729
+msgid "Save Draft"
+msgstr "Speichere Entwurf"
+
+#: controllers/FrmPllAppController.php:410
+#: controllers/FrmPllAppController.php:727
+msgid "Previous"
+msgstr "Zurück"
+
+#: controllers/FrmPllSettingsController.php:15
+#: views/settings/install_polylang.php:2
+msgid "Translate Form"
+msgstr "Formular übersetzen"
+
+#: controllers/FrmPllSettingsController.php:75
+msgid "Settings Successfully Updated"
+msgstr "Einstellungen wurden erfolgreich aktualisiert"
+
+#. translators: %1$s: Start link HTML, %2$s: end link HTML
+#: views/settings/install_polylang.php:8
+msgid "Oops! You do not have %1$sPolylang%2$s installed. Once you have installed and configured it, come back here to translate your forms."
+msgstr "Ups! Du hast %1$sPolylang%2$s nicht installiert. Sobald du es installiert und konfiguriert hast, kannst du hierher zurückkehren, um deine Formulare zu übersetzen."
+
+#: views/settings/translate.php:19
+msgid "Please add a language in Polylang for translations to appear."
+msgstr "Bitte füge eine Sprache in Polylang hinzu, damit die Übersetzungen erscheinen."
+

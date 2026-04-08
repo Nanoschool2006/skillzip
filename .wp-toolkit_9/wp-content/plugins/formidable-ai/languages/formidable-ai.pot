@@ -1,0 +1,318 @@
+# Copyright (C) 2025 Strategy11
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable AI 2.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-ai\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-09-09T13:44:07+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: formidable-ai\n"
+
+#. Plugin Name of the plugin
+#: formidable-ai.php
+msgid "Formidable AI"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-ai.php
+msgid "https://formidableforms.com/"
+msgstr ""
+
+#. Description of the plugin
+#: formidable-ai.php
+msgid "Bring the power of AI to your forms"
+msgstr ""
+
+#. Author of the plugin
+#: formidable-ai.php
+msgid "Strategy11"
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:28
+msgid "You are running an outdated version of Formidable Forms."
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:261
+msgctxt "form templates: create an AI generated form"
+msgid "Create"
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:262
+msgid "Create with AI"
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:263
+msgid "BETA"
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:419
+msgid "Request is missing token."
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:424
+msgid "Generate form data no longer exists."
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:428
+msgid "Your server is missing the simplexml_import_dom function"
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:435
+msgid "In order to install XML, your server must have DOMDocument installed."
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:442
+msgid "Failed trying to load XML data."
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:449
+msgid "There was an error when reading this XML file"
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:455
+msgid "Importing XML failed: "
+msgstr ""
+
+#: classes/controllers/FrmAIAppController.php:459
+msgid "No forms were actually generated. Please reach out to support."
+msgstr ""
+
+#: classes/models/FrmAIApi.php:200
+msgid "We apologize, but this AI feature is not available at this time."
+msgstr ""
+
+#. translators: %1$s start link, %2$s end link.
+#: classes/models/FrmAIApi.php:207
+msgid "The license is expired. Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue."
+msgstr ""
+
+#. translators: %1$s start link, %2$s end link.
+#: classes/models/FrmAIApi.php:213
+msgid "The license is disabled. Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue."
+msgstr ""
+
+#. translators: %1$s start link, %2$s end link.
+#: classes/models/FrmAIApi.php:227
+msgid "The license is invalid. Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue."
+msgstr ""
+
+#. translators: %1$s start link, %2$s end link.
+#: classes/models/FrmAIApi.php:233
+msgid "The account doesn't have enough credits. Please %1$spurchase more%2$s."
+msgstr ""
+
+#. translators: %1$s start link, %2$s end link.
+#: classes/models/FrmAIApi.php:239
+msgid "This site is not authorized to use AI Credits. Please %1$smodify your account settings%2$s or contact the account owner to enable."
+msgstr ""
+
+#. translators: %1$s start link, %2$s end link.
+#: classes/models/FrmAIApi.php:247
+msgid "An error occurred. Please %1$scontact our support%2$s and mention the following code:"
+msgstr ""
+
+#: classes/models/FrmAIField.php:58
+#: classes/views/builder-settings.php:31
+msgid "You are a helpful assistant"
+msgstr ""
+
+#: classes/views/builder-field.php:6
+msgid "The AI response will show here."
+msgstr ""
+
+#: classes/views/builder-settings.php:19
+msgid "Hide Response"
+msgstr ""
+
+#: classes/views/builder-settings.php:20
+msgid "Check this box if you do not want to see the AI response immediately in the form."
+msgstr ""
+
+#: classes/views/builder-settings.php:26
+msgid "Guide Prompt"
+msgstr ""
+
+#: classes/views/builder-settings.php:27
+msgid "Give Open AI more context for the type of response you would like to receive. You can include shortcodes."
+msgstr ""
+
+#: classes/views/builder-settings.php:38
+msgid "AI Question"
+msgstr ""
+
+#: classes/views/builder-settings.php:39
+msgid "Compose the question. This can be made up of multiple shortcodes and text."
+msgstr ""
+
+#: classes/views/builder-settings.php:51
+msgid "AI Model"
+msgstr ""
+
+#: classes/views/builder-settings.php:52
+msgid "4o mini requests are likely to be higher quality than 3.5 turbo, but are likely to take a few seconds longer to complete."
+msgstr ""
+
+#: classes/views/builder-settings.php:55
+#: resources/js/shared/ai-modal/aiModal.js:95
+#: js/create-ai-form-button.js:2615
+#: js/generate-options-with-ai.js:2677
+msgid "GPT 3.5 Turbo"
+msgstr ""
+
+#: classes/views/builder-settings.php:56
+msgid "GPT 4o mini"
+msgstr ""
+
+#: classes/views/builder-settings.php:57
+msgid "GPT 4.1 nano"
+msgstr ""
+
+#: classes/views/builder-settings.php:59
+#: resources/js/shared/ai-modal/aiModal.js:98
+#: js/create-ai-form-button.js:2618
+#: js/generate-options-with-ai.js:2680
+msgid "Gemini 2 Flash Lite"
+msgstr ""
+
+#: classes/views/builder-settings.php:64
+msgid "By using this field, you agree to the ChatGPT terms of service."
+msgstr ""
+
+#: resources/js/create-ai-form-button/events/continueButtonEvents.js:37
+#: resources/js/generate-options-with-ai/events/continueButtonEvents.js:44
+#: js/create-ai-form-button.js:2239
+#: js/generate-options-with-ai.js:2247
+msgid "Prompt cannot be empty"
+msgstr ""
+
+#: resources/js/create-ai-form-button/events/continueButtonEvents.js:48
+#: js/create-ai-form-button.js:2250
+msgid "We're generating your form."
+msgstr ""
+
+#: resources/js/create-ai-form-button/events/continueButtonEvents.js:50
+#: resources/js/generate-options-with-ai/events/continueButtonEvents.js:57
+#: js/create-ai-form-button.js:2252
+#: js/generate-options-with-ai.js:2260
+msgid "It might take a while."
+msgstr ""
+
+#: resources/js/create-ai-form-button/events/continueButtonEvents.js:67
+#: js/create-ai-form-button.js:2269
+msgid "Your AI generated form will have the following fields:"
+msgstr ""
+
+#: resources/js/create-ai-form-button/events/createAiFormButtonEvents.js:32
+#: js/create-ai-form-button.js:2323
+msgid "Importing generated form data. Please wait."
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:23
+#: js/create-ai-form-button.js:2471
+msgid "Create form with AI"
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:24
+#: js/create-ai-form-button.js:2472
+msgctxt "create form with AI modal"
+msgid "BETA"
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:28
+#: js/create-ai-form-button.js:2476
+msgid "AI generated forms are limited to basic fields. Generating conditional logic, calculations or form actions is currently not supported."
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:36
+#: js/create-ai-form-button.js:2484
+msgid "Describe your form"
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:37
+#: js/create-ai-form-button.js:2485
+msgid "e.g. Simple registration form with email, name, password fields and a submit button."
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:56
+#: js/create-ai-form-button.js:2504
+msgid "Create Form with AI"
+msgstr ""
+
+#: resources/js/create-ai-form-button/ui/createAiFormModal.js:62
+#: resources/js/generate-options-with-ai/ui/generateOptionsWithAiModal.js:61
+#: js/create-ai-form-button.js:2510
+#: js/generate-options-with-ai.js:2572
+msgid "Continue"
+msgstr ""
+
+#: resources/js/generate-options-with-ai/events/continueButtonEvents.js:55
+#: js/generate-options-with-ai.js:2258
+msgid "We're generating your options."
+msgstr ""
+
+#: resources/js/generate-options-with-ai/events/continueButtonEvents.js:78
+#: js/generate-options-with-ai.js:2281
+msgid "If you're happy with them, you can insert these options or retry by entering additional prompts."
+msgstr ""
+
+#: resources/js/generate-options-with-ai/events/insertOptionsButtonEvents.js:35
+#: js/generate-options-with-ai.js:2355
+msgid "Importing generated options. Please wait."
+msgstr ""
+
+#: resources/js/generate-options-with-ai/ui/generateOptionsWithAiModal.js:23
+#: js/generate-options-with-ai.js:2534
+msgid "Generate options with AI"
+msgstr ""
+
+#: resources/js/generate-options-with-ai/ui/generateOptionsWithAiModal.js:35
+#: js/generate-options-with-ai.js:2546
+msgid "What would you like to generate?"
+msgstr ""
+
+#: resources/js/generate-options-with-ai/ui/generateOptionsWithAiModal.js:36
+#: js/generate-options-with-ai.js:2547
+msgid "e.g. Provinces of Canada ordered by population"
+msgstr ""
+
+#: resources/js/generate-options-with-ai/ui/generateOptionsWithAiModal.js:55
+#: js/generate-options-with-ai.js:2566
+msgid "Insert Options"
+msgstr ""
+
+#: resources/js/shared/ai-modal/aiModal.js:88
+#: js/create-ai-form-button.js:2608
+#: js/generate-options-with-ai.js:2670
+msgid "AI model"
+msgstr ""
+
+#: resources/js/shared/ai-modal/aiModal.js:96
+#: js/create-ai-form-button.js:2616
+#: js/generate-options-with-ai.js:2678
+msgid "GPT 4o Mini"
+msgstr ""
+
+#: resources/js/shared/ai-modal/aiModal.js:97
+#: js/create-ai-form-button.js:2617
+#: js/generate-options-with-ai.js:2679
+msgid "GPT 4.1 Nano"
+msgstr ""
+
+#: resources/js/shared/ai-modal/aiModal.js:124
+#: js/create-ai-form-button.js:2644
+#: js/generate-options-with-ai.js:2706
+msgid "Try example"
+msgstr ""
+
+#: resources/js/shared/ai-modal/aiModal.js:160
+#: js/create-ai-form-button.js:2680
+#: js/generate-options-with-ai.js:2742
+msgid "Retry"
+msgstr ""

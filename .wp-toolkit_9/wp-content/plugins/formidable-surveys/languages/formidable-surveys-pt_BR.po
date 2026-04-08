@@ -1,0 +1,241 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Surveys plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-surveys\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese, Brazilian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-19T12:30:36+00:00\n"
+"PO-Revision-Date: 2024-08-20 00:25\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-surveys\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: pt-BR\n"
+"X-Crowdin-File: /[Strategy11.formidable-surveys] master/languages/formidable-surveys.pot\n"
+"X-Crowdin-File-ID: 2448\n"
+"Language: pt_BR\n"
+
+#. Plugin Name of the plugin
+#: formidable-surveys.php
+msgid "Formidable Surveys"
+msgstr "Formidable Surveys"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-surveys.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-surveys.php
+msgid "Create survey forms."
+msgstr "Criar formulários de pesquisa."
+
+#. Author of the plugin
+#: formidable-surveys.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#. translators: %1$s: plugin name.
+#: classes/controllers/AppController.php:70
+msgid "You are running an outdated version of %1$s. The Formidable Surveys plugin will not work correctly if you do not update %1$s."
+msgstr "Você está executando uma versão desatualizada do %1$s. O plugin Formidable Surveys não funcionará corretamente se você não atualizar o %1$s."
+
+#: classes/controllers/LikertController.php:276
+msgid "Item"
+msgstr "Item"
+
+#: classes/controllers/LikertController.php:277
+msgid "Items"
+msgstr "Itens"
+
+#: classes/controllers/LikertController.php:278
+msgid "Add Item"
+msgstr "Adicionar item"
+
+#. translators: Plural name.
+#: classes/controllers/LikertController.php:300
+msgid "Bulk Edit %s"
+msgstr "Edição em massa %s"
+
+#: classes/controllers/LikertController.php:1101
+msgid "None"
+msgstr "Nenhum"
+
+#: classes/controllers/LikertController.php:1224
+msgid "Field ID is empty"
+msgstr "A ID do campo está vazio"
+
+#: classes/controllers/LikertController.php:1229
+msgid "Field not exist"
+msgstr "O campo não existe"
+
+#: classes/controllers/LikertController.php:1391
+#: classes/controllers/LikertController.php:1399
+msgid "Question"
+msgstr "Questão"
+
+#: classes/controllers/NPSController.php:166
+msgid "Detractors (0-6)"
+msgstr "Detratores (0-6)"
+
+#: classes/controllers/NPSController.php:167
+msgid "Passives (7-8)"
+msgstr "Passivos (7-8)"
+
+#: classes/controllers/NPSController.php:168
+msgid "Promoters (9-10)"
+msgstr "Promotores (9-10)"
+
+#: classes/controllers/NPSController.php:169
+msgid "Net Promoter Score"
+msgstr "Pontuação líquida do promotor"
+
+#: classes/helpers/RankingGraphData.php:46
+msgid "Rank"
+msgstr "Classificação"
+
+#: classes/helpers/RankingGraphData.php:47
+msgid "Option Name"
+msgstr "Nome da Opção"
+
+#: classes/helpers/RankingGraphData.php:48
+msgid "Times at #1"
+msgstr "Número de vezes na 1.ª posição"
+
+#: classes/helpers/RankingGraphData.php:49
+#: classes/helpers/RankingGraphData.php:56
+msgid "Average Position"
+msgstr "Posição média"
+
+#: classes/models/fields/Likert.php:67
+msgid "Please complete all options in [field_name]"
+msgstr ""
+
+#: classes/models/fields/NPS.php:62
+msgid "Not at all"
+msgstr "De jeito nenhum"
+
+#: classes/models/fields/NPS.php:63
+msgid "Extremely likely"
+msgstr "Extremamente provável"
+
+#: classes/models/fields/NPS.php:74
+msgid "How likely are you to recommend us to a friend or colleague?"
+msgstr "Qual a probabilidade de você nos recomendar a um amigo ou colega?"
+
+#: classes/models/fields/Ranking.php:63
+msgid "Ranking Option 1"
+msgstr "Opção de classificação 1"
+
+#: classes/models/fields/Ranking.php:64
+msgid "Ranking Option 2"
+msgstr "Opção de classificação 2"
+
+#: classes/views/fields/backend/likert-column-options.php:19
+msgid "Collapsible Columns Settings"
+msgstr "Configurações de colunas recolhíveis"
+
+#: classes/views/fields/backend/likert-column-options.php:20
+#: classes/views/fields/backend/likert-column-options.php:29
+msgid "Columns"
+msgstr "Colunas"
+
+#: classes/views/fields/backend/likert-column-options.php:28
+msgid "Column"
+msgstr "Coluna"
+
+#: classes/views/fields/backend/likert-column-options.php:30
+msgid "Add Column"
+msgstr "Adicionar coluna"
+
+#: classes/views/fields/backend/likert-primary.php:28
+msgid "Use checkboxes"
+msgstr "Usar caixas de seleção"
+
+#: classes/views/fields/backend/likert-primary.php:44
+msgid "Repeat column headings"
+msgstr "Repetir títulos das colunas"
+
+#: classes/views/fields/backend/likert-primary.php:60
+msgid "Separate column values"
+msgstr "Valores de coluna separados"
+
+#: classes/views/fields/backend/likert-row-options.php:22
+#: classes/views/fields/backend/likert-row-options.php:31
+msgid "Rows"
+msgstr "Linhas"
+
+#: classes/views/fields/backend/likert-row-options.php:30
+msgid "Row"
+msgstr "Linha"
+
+#: classes/views/fields/backend/likert-row-options.php:32
+msgid "Add Row"
+msgstr "Adicionar linha"
+
+#. translators: Likert row ID.
+#: classes/views/fields/backend/likert.php:55
+msgid "(ID %d)"
+msgstr "(ID %d)"
+
+#: classes/views/fields/backend/nps-options.php:20
+msgid "Negative Statement"
+msgstr "Declaração negativa"
+
+#: classes/views/fields/backend/nps-options.php:33
+msgid "Positive Statement"
+msgstr "Declaração positiva"
+
+#: classes/views/fields/backend/radio-options.php:56
+msgid "Use images in buttons"
+msgstr "Usar imagens em botões"
+
+#: classes/views/fields/backend/radio-options.php:76
+msgid "Hide option text"
+msgstr "Ocultar texto da opção"
+
+#: classes/views/fields/backend/radio-options.php:117
+msgid "Text alignment"
+msgstr "Alinhamento de texto"
+
+#: classes/views/fields/backend/radio-options.php:141
+msgid "Image alignment"
+msgstr "Alinhamento da imagem"
+
+#: classes/views/fields/backend/ranking-extra-options.php:16
+msgid "Limit selections"
+msgstr "Limitar seleções"
+
+#: classes/views/fields/backend/ranking-extra-options.php:17
+msgid "Specifies the maximum number of items you can choose"
+msgstr "Especifica o número máximo de itens que você pode escolher"
+
+#: classes/views/fields/backend/ranking-extra-options.php:23
+msgid "Randomize options"
+msgstr "Opções aleatórias"
+
+#: classes/views/fields/backend/ranking-extra-options.php:28
+msgid "Limit"
+msgstr "Limite"
+
+#: classes/views/fields/backend/scale-display-format.php:19
+msgid "Display format"
+msgstr "Formato de exibição"
+
+#. Translators: Negative statement.
+#: classes/views/fields/frontend/nps.php:57
+msgid "0 - %s"
+msgstr "0 - %s"
+
+#. Translators: Positive statement.
+#: classes/views/fields/frontend/nps.php:67
+msgid "10 - %s"
+msgstr "10 - %s"
+

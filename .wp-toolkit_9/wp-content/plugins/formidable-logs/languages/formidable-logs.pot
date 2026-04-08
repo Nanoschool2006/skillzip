@@ -1,0 +1,135 @@
+# Copyright (C) 2025 Strategy11
+# This file is distributed under the same license as the Formidable Logs plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable Logs 1.0.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-logs\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-05-12T13:20:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: formidable-logs\n"
+
+#. Plugin Name of the plugin
+#: formidable-logs.php
+msgid "Formidable Logs"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-logs.php
+msgid "http://formidablepro.com/"
+msgstr ""
+
+#. Description of the plugin
+#: formidable-logs.php
+msgid "Log events from Formidable and other add-ons"
+msgstr ""
+
+#. Author of the plugin
+#: formidable-logs.php
+msgid "Strategy11"
+msgstr ""
+
+#: controllers/FrmLogAppController.php:54
+#: controllers/FrmLogAppController.php:76
+#: controllers/FrmLogAppController.php:78
+#: controllers/FrmLogAppController.php:95
+msgid "Logs"
+msgstr ""
+
+#: controllers/FrmLogAppController.php:77
+msgid "Log"
+msgstr ""
+
+#: controllers/FrmLogAppController.php:80
+msgid "Search Logs"
+msgstr ""
+
+#: controllers/FrmLogAppController.php:81
+msgid "No Logs Found."
+msgstr ""
+
+#: controllers/FrmLogAppController.php:82
+msgid "Add New Log"
+msgstr ""
+
+#: controllers/FrmLogAppController.php:83
+msgid "Edit Log"
+msgstr ""
+
+#: controllers/FrmLogAppController.php:142
+msgid "Log Details"
+msgstr ""
+
+#: formidable-logs.php:79
+msgid "Formidable Logs requires Formidable Forms to be installed."
+msgstr ""
+
+#: formidable-logs.php:81
+msgid "Install Formidable Forms"
+msgstr ""
+
+#: models/FrmLogCron.php:80
+msgid "Purge the logs in a monthly period"
+msgstr ""
+
+#: models/FrmLogList.php:51
+msgid "Action"
+msgstr ""
+
+#: models/FrmLogList.php:57
+msgid "Date"
+msgstr ""
+
+#: models/FrmLogList.php:169
+msgid "Filter by form"
+msgstr ""
+
+#: models/FrmLogList.php:196
+msgid "Select form"
+msgstr ""
+
+#: models/FrmLogList.php:331
+msgid "%d (Deleted)"
+msgstr ""
+
+#: models/FrmLogList.php:396
+msgid "Deleted"
+msgstr ""
+
+#: views/csv-button.php:15
+msgid "Download CSV"
+msgstr ""
+
+#: views/delete-button.php:15
+msgid "Heads up"
+msgstr ""
+
+#: views/delete-button.php:15
+msgid "ALL logs will be permanently deleted. Want to proceed?"
+msgstr ""
+
+#: views/delete-button.php:16
+msgid "Delete All Logs"
+msgstr ""
+
+#: views/settings/logs.php:17
+msgid "Next occurrence will be at"
+msgstr ""
+
+#: views/settings/logs.php:24
+msgid "Automatically delete log entries every 30 days"
+msgstr ""
+
+#: views/settings/logs.php:26
+msgid "This action will keep the small portion of the latest logs at the end of the 30 days."
+msgstr ""
+
+#: views/show.php:16
+msgid "Response"
+msgstr ""

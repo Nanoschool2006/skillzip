@@ -1,0 +1,1 @@
+[30-Mar-2026 08:28:12 UTC] PHP Warning:  JIT is incompatible with third party extensions that override zend_execute_ex(). JIT disabled. in Unknown on line 0

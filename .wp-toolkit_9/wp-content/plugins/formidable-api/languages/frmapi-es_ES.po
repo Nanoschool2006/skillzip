@@ -1,0 +1,258 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable API plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-api\n"
+"Last-Translator: \n"
+"Language-Team: Spanish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-21T15:28:46+00:00\n"
+"PO-Revision-Date: 2024-08-22 00:45\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: frmapi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: es\n"
+"X-Crowdin-File: /[Strategy11.formidable-api] master/languages/frmapi.pot\n"
+"X-Crowdin-File-ID: 2398\n"
+"Language: es_ES\n"
+
+#. Plugin Name of the plugin
+#: formidable-api.php
+msgid "Formidable API"
+msgstr "Formidable API"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-api.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-api.php
+msgid "Create entries in Formidable via a rest API, and send REST API requests when forms are submitted"
+msgstr "Crea entradas en Formidable a través de una API rest, y envía solicitudes de API REST cuando se envíen los formularios"
+
+#. Author of the plugin
+#: formidable-api.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#: controllers/FrmAPIAppController.php:933
+msgid "Your API key is incorrect"
+msgstr "Tu clave de API es incorrecta"
+
+#: controllers/FrmAPIAppController.php:939
+msgid "You do not have an administrator on this site"
+msgstr "No tienes un administrador en este sitio"
+
+#: controllers/FrmAPIAppController.php:984
+msgid "Please include id=# and url=\"yoururl.com\" in your shortcode"
+msgstr "Por favor, incluye id=# y url=\"tuurl.com\" en tu shortcode"
+
+#: controllers/FrmAPIAppController.php:1511
+msgid "You had an HTTP connection error"
+msgstr "Has tenido un error de conexión HTTP"
+
+#: controllers/FrmAPIAppController.php:1539
+msgid "API:"
+msgstr "API:"
+
+#: controllers/FrmAPIEntriesController.php:224
+msgid "Nothing was found with that id"
+msgstr "No se ha encontrado nada con ese id"
+
+#: controllers/FrmAPIEntriesController.php:280
+#: controllers/FrmAPIv1Controller.php:331
+msgid "Missing form id"
+msgstr "Falta el id del formulario"
+
+#: controllers/FrmAPIEntriesController.php:286
+msgid "Invalid form id %s"
+msgstr "Id de formulario %s no válido"
+
+#: controllers/FrmAPIEntriesController.php:619
+#: controllers/FrmAPIEntriesController.php:628
+msgid "Invalid entry ID."
+msgstr "ID de registro no válido."
+
+#: controllers/FrmAPIEntriesController.php:750
+#: controllers/FrmAPIEntriesController.php:763
+#: controllers/FrmAPIEntriesController.php:795
+msgid "Sorry, you are not allowed to edit entries"
+msgstr "Lo siento, no tienes permiso para editar registros"
+
+#: controllers/FrmAPIEntriesController.php:754
+#: controllers/FrmAPIEntriesController.php:767
+msgid "Sorry, you are not allowed to view entries"
+msgstr "Lo siento, no tienes permiso para ver los registros"
+
+#: controllers/FrmAPIEntriesController.php:780
+msgid "Sorry, you are not allowed to create entries"
+msgstr "Lo siento, no tienes permiso para crear registros"
+
+#: controllers/FrmAPIEntriesController.php:805
+msgid "Sorry, you are not allowed to delete entries"
+msgstr "Lo siento, no tienes permiso para borrar registros"
+
+#: controllers/FrmAPIFieldsController.php:137
+msgid "No \"fields\" data found in the request body"
+msgstr "No se han encontrado datos de «fields» en el cuerpo de la petición"
+
+#: controllers/FrmAPIFieldsController.php:194
+msgid "Field id not provided."
+msgstr "No se ha proporcionado el id del campo."
+
+#: controllers/FrmAPIFieldsController.php:279
+#: controllers/FrmAPIFormsController.php:180
+#: controllers/FrmAPIFormsController.php:202
+msgid "Invalid form ID."
+msgstr "ID de formulario no válido."
+
+#: controllers/FrmAPIFieldsController.php:288
+msgid "Invalid URL."
+msgstr "URL no válida."
+
+#: controllers/FrmAPIFieldsController.php:354
+msgid "Invalid field ID."
+msgstr "ID de campo no válido."
+
+#: controllers/FrmAPIFieldsController.php:475
+msgid "Sorry, you are not allowed to edit form fields"
+msgstr "Lo siento, no tienes permiso para editar campos de formulario"
+
+#: controllers/FrmAPIFieldsController.php:477
+msgid "Sorry, you are not allowed to view form fields"
+msgstr "Lo siento, no tienes permiso para ver campos de formulario"
+
+#: controllers/FrmAPIFieldsController.php:489
+#: controllers/FrmAPIFormsController.php:388
+msgid "Sorry, you are not allowed to create or edit forms"
+msgstr "Lo siento, no tienes permiso para crear ni editar formularios"
+
+#: controllers/FrmAPIFieldsController.php:498
+#: controllers/FrmAPIFormsController.php:397
+msgid "Sorry, you are not allowed delete forms"
+msgstr "Lo siento, no tienes permiso para borrar formularios"
+
+#: controllers/FrmAPIFormsController.php:131
+msgid "Form creation failed"
+msgstr "Error en la creación del formulario"
+
+#: controllers/FrmAPIFormsController.php:376
+msgid "Sorry, you are not allowed to edit forms"
+msgstr "Lo siento, no tienes permiso para editar formularios"
+
+#: controllers/FrmAPISettingsController.php:240
+msgid "You had an error communicating with that API."
+msgstr "Se produjo un error al comunicarte con esa API."
+
+#: controllers/FrmAPISettingsController.php:342
+msgid "Good to go!"
+msgstr "¡Todo listo!"
+
+#: controllers/FrmAPISettingsController.php:351
+msgid "In many cases, the test connection lets you know if the link is reachable. The receiving API may not return a successful response when the data is not included. Please submit the form to test with data."
+msgstr "En muchos casos, la conexión de prueba te permite saber si el enlace es accesible. Es posible que la API receptora no devuelva una respuesta correcta si no se incluyen los datos. Por favor, envía el formulario de prueba con datos."
+
+#: controllers/FrmAPIStatsController.php:39
+msgid "Sorry, you are not allowed to view stats"
+msgstr "Lo siento, no tienes permiso para ver las estadísticas"
+
+#: controllers/FrmAPIv1Controller.php:300
+msgid "Entries were Successfully Destroyed"
+msgstr "Los registros han destruido correctamente"
+
+#: controllers/FrmAPIv1Controller.php:337
+msgid "Invalid form id"
+msgstr "Id de formulario no válido"
+
+#: controllers/FrmAPIv1Controller.php:402
+msgid "You do not have permission to edit entries"
+msgstr "No tienes permiso para editar registros"
+
+#: models/FrmAPIAction.php:14
+#: models/FrmAPIDb.php:71
+msgid "Send API data"
+msgstr "Enviar datos de API"
+
+#: views/action-settings/options.php:4
+msgid "Notification URL"
+msgstr "URL de aviso"
+
+#: views/action-settings/options.php:8
+msgid "Notify this URL when the hook selected above is triggered."
+msgstr "Notifica a esta URL cuando se active el gancho seleccionado anteriormente."
+
+#: views/action-settings/options.php:13
+msgid "Basic Auth"
+msgstr "Autenticación básica"
+
+#: views/action-settings/options.php:14
+msgid "A colon (:) separated username, password combo for standard HTTP authentication. This key will be provided by the service you are connecting to if it is required."
+msgstr "Una combinación de nombre de usuario y contraseña separados por dos puntos (:) para la identificación HTTP estándar. Esta clave te la proporcionará el servicio al que te conectes si es necesaria."
+
+#: views/action-settings/options.php:16
+msgid "Username:Password"
+msgstr "Usuario:Contraseña"
+
+#: views/action-settings/options.php:19
+msgid "Test Connection"
+msgstr "Conexión de prueba"
+
+#: views/action-settings/options.php:27
+msgid "Data Format"
+msgstr "Formato de datos"
+
+#: views/action-settings/options.php:28
+msgid "JSON is a standard format for most REST APIs. The Form option will submit a form on another page with any name value pairs of your choosing. If you select Form, there must be a form displayed on the page you submit to."
+msgstr "JSON es un formato estándar para la mayoría de las API REST. La opción Formulario enviará un formulario a otra página con los pares nombre-valor que elijas. Si seleccionas Formulario, debe haber un formulario en la página a la que lo envíes."
+
+#: views/action-settings/options.php:41
+msgid "Method"
+msgstr "Método"
+
+#: views/action-settings/options.php:42
+msgid "The method determines how the data is handled on the receiving end. Generally, POST = create, GET = read, PUT/PATCH = update, DELETE = delete."
+msgstr "El método determina cómo se manejan los datos en el extremo receptor. Generalmente, POST = crear, GET = leer, PUT/PATCH = actualizar, DELETE = eliminar."
+
+#: views/action-settings/options.php:55
+msgid "Character Set"
+msgstr "Juego de caracteres"
+
+#: views/action-settings/options.php:56
+msgid "Character Set is a defined list of characters recognized by the computer hardware and software."
+msgstr "El juego de caracteres es una lista definida de caracteres reconocidos por el hardware y el software del ordenador."
+
+#: views/action-settings/options.php:61
+msgid "Select charset"
+msgstr ""
+
+#: views/action-settings/options.php:62
+msgid "Use blog charset"
+msgstr ""
+
+#: views/action-settings/options.php:93
+msgid "Raw Data"
+msgstr "Datos brutos"
+
+#: views/action-settings/options.php:96
+msgid "Insert Default"
+msgstr "Insertar por defecto"
+
+#: views/action-settings/options.php:104
+msgid "Map Data"
+msgstr "Relacionar datos"
+
+#: views/settings/api_key.php:4
+msgid "API Key"
+msgstr "Clave de API"
+
+#: js/embed-form.js:40
+msgid "API View shortcode"
+msgstr "Shortcode de vista de la API"
+

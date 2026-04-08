@@ -1,0 +1,143 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the same license as the Formidable Landing Pages plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Formidable Landing Pages 1.0.02\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-landing\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-18T18:42:50+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: formidable-landing\n"
+
+#. Plugin Name of the plugin
+#: formidable-landing.php
+msgid "Formidable Landing Pages"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-landing.php
+msgid "https://formidableforms.com/"
+msgstr ""
+
+#. Description of the plugin
+#: formidable-landing.php
+msgid "Create full page forms without distractions."
+msgstr ""
+
+#. Author of the plugin
+#: formidable-landing.php
+msgid "Strategy11"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:185
+#: classes/controllers/FrmLandingAppController.php:210
+msgid "Landing Pages"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:211
+#: classes/controllers/FrmLandingAppController.php:212
+msgid "Landing Page"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:213
+msgid "Edit"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:214
+msgid "Search Landing Pages"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:215
+msgid "No Landing Pages Found."
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:216
+msgid "Add New Landing Page"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:217
+#: views/settings/settings.php:73
+msgid "Edit Landing Page"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:351
+msgid "Open Landing Page"
+msgstr ""
+
+#: classes/controllers/FrmLandingSettingsController.php:111
+msgid "Classic"
+msgstr ""
+
+#: classes/controllers/FrmLandingSettingsController.php:116
+msgid "Card"
+msgstr ""
+
+#: classes/controllers/FrmLandingSettingsController.php:121
+msgid "Left"
+msgstr ""
+
+#: classes/controllers/FrmLandingSettingsController.php:126
+msgid "Right"
+msgstr ""
+
+#: classes/controllers/FrmLandingSettingsController.php:225
+msgid "This URL is taken"
+msgstr ""
+
+#: classes/controllers/FrmLandingSettingsController.php:227
+msgid "This URL is available"
+msgstr ""
+
+#: formidable-landing.php:74
+msgid "Formidable Landing Pages requires Formidable Forms to be installed."
+msgstr ""
+
+#: formidable-landing.php:76
+msgid "Install Formidable Forms"
+msgstr ""
+
+#: formidable-landing.php:91
+msgid "Formidable Landing Pages requires Formidable Forms Pro to be installed."
+msgstr ""
+
+#: views/settings/landing-page-preview-option.php:15
+msgid "On Landing Page"
+msgstr ""
+
+#: views/settings/settings.php:22
+msgid "Create form landing pages without distractions."
+msgstr ""
+
+#: views/settings/settings.php:37
+msgid "Generate form landing page"
+msgstr ""
+
+#: views/settings/settings.php:48
+msgid "Delete the landing page?"
+msgstr ""
+
+#: views/settings/settings.php:51
+msgid "Click here to delete your landing page"
+msgstr ""
+
+#: views/settings/settings.php:61
+msgid "Page URL"
+msgstr ""
+
+#: views/settings/settings.php:65
+msgid "my-form"
+msgstr ""
+
+#: views/settings/settings.php:94
+msgid "Upload Image"
+msgstr ""
+
+#: views/settings/settings.php:111
+msgid "Select Design"
+msgstr ""

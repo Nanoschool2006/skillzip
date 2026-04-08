@@ -1,0 +1,99 @@
+.with_frm_style.frm_login_form,
+.with_frm_style.frm_login_form form{
+    clear:both;
+}
+
+.frm_login_form .login_lost_pw.frm_half,
+.frm_login_form .login_lost_pw.frm_third{
+    text-align:right;
+}
+
+/***************************************
+     No labels
+ ***************************************/
+
+.frm_inline_login.frm_no_labels .frm_submit input,
+.frm_inline_login.frm_no_labels .frm_submit button{
+    margin-top:0 !important;
+}
+
+/***************************************
+     Sliding login form
+ ***************************************/
+
+.with_frm_style.frm_login_form.frm_slide.frm_inline_login form,
+.with_frm_style.frm_login_form.frm_slide.frm_inline_login form{
+    clear:none;
+}
+
+.with_frm_style.frm_slide.frm_inline_login.frm_has_message form{
+    display: block;
+}
+
+.with_frm_style.frm_slide.frm_inline_login.frm_has_message .frm-open-login{
+    float: none;
+}
+
+.with_frm_style.frm_slide.frm_inline_login .frm-open-login{
+    float:left;
+    margin-right:15px;
+}
+
+.with_frm_style.frm_slide form,
+.frm_slide form,
+.with_frm_style.frm_slide.frm_inline_login a.forgot-password,
+.with_frm_style.frm_slide.frm_inline_login .login-remember{
+    display:none;
+}
+
+.with_frm_style.frm_slide.frm_inline_login .frm-open-login + form a.forgot-password,
+.with_frm_style.frm_slide.frm_inline_login .frm-open-login + form .login-remember {
+    display:inline-block;
+}
+
+.with_frm_style.frm_slide.frm_inline_login .frm_form_field.login-username,
+.with_frm_style.frm_slide.frm_inline_login .frm_form_field.login-password,
+.with_frm_style.frm_slide.frm_inline_login .frm_submit input{
+    margin-bottom:0;
+}
+
+.with_frm_style.frm_slide.frm_inline_login fieldset{
+    padding-bottom:0;
+}
+
+.with_frm_style.frm_slide.frm_inline_login .frm_form_field.login-username,
+.with_frm_style.frm_slide.frm_inline_login .frm_form_field.login-password {
+    align-self: center;
+}
+
+/***************************************
+     Links
+ ***************************************/
+
+.with_frm_style.frm_login_form a{
+    text-decoration:none;
+    border:none;
+    outline:none;
+    box-shadow:none;
+}
+
+/************************************************
+     Responsive remember me and lost password
+ ************************************************/
+
+@media only screen and (max-width: 600px) {
+    .frm_login_form .login_lost_pw.frm_half{
+        text-align:left;
+    }
+
+    .with_frm_style .login-remember.frm_first.frm_third,
+    .with_frm_style.frm_login_form .login_lost_pw.frm_third{
+        text-align:center;
+    }
+
+    .with_frm_style.frm_slide.frm_inline_login .frm_form_field.login-username,
+    .with_frm_style.frm_slide.frm_inline_login .frm_form_field.login-password,
+    .with_frm_style.frm_slide.frm_inline_login .frm_submit input{
+        margin-bottom:20px;
+    }
+}

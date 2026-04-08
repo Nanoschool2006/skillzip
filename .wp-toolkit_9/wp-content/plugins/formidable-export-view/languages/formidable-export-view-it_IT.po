@@ -1,0 +1,219 @@
+# Copyright (C) 2024 Strategy11
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: a2d8bc55ffb2a23897925e74530a7308\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-export-view\n"
+"Last-Translator: \n"
+"Language-Team: Italian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-08-09T13:30:53+00:00\n"
+"PO-Revision-Date: 2024-08-09 16:28\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: formidable-export-view\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: a2d8bc55ffb2a23897925e74530a7308\n"
+"X-Crowdin-Project-ID: 28\n"
+"X-Crowdin-Language: it\n"
+"X-Crowdin-File: /[Strategy11.formidable-export-view] master/languages/formidable-export-view.pot\n"
+"X-Crowdin-File-ID: 2484\n"
+"Language: it_IT\n"
+
+#. Plugin Name of the plugin
+#: formidable-export-view.php
+msgid "Formidable Export View to CSV"
+msgstr "Vista dell'esportazione Formidable verso CSV"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: formidable-export-view.php
+msgid "https://formidableforms.com/"
+msgstr "https://formidableforms.com/"
+
+#. Description of the plugin
+#: formidable-export-view.php
+msgid "Export table Views to CSV files"
+msgstr "Esportazione delle viste delle tabelle in file CSV"
+
+#. Author of the plugin
+#: formidable-export-view.php
+msgid "Strategy11"
+msgstr "Strategy11"
+
+#. Translators: %s: Formidable Pro minimum version number.
+#: controllers/FrmExportViewAppController.php:26
+msgid "Formidable Export View requires Formidable Forms Pro version %s or higher to be installed."
+msgstr "Formidable Export View richiede l'installazione di Formidable Forms Pro versione %s o superiore."
+
+#: controllers/FrmExportViewAppController.php:42
+msgid "Formidable Export View requires Formidable Forms Views to be installed."
+msgstr "Formidable Export View richiede l'installazione di Formidable Forms Views."
+
+#: controllers/FrmExportViewCSVController.php:179
+msgid "This View cannot be exported.  It may not be a table View, or it may not have been saved since the FrmExportView add-on was installed."
+msgstr "Questa vista non può essere esportata.  È possibile che non sia una vista tabella o che non sia stata salvata da quando è stato installato l'add-on FrmExportView."
+
+#: controllers/FrmExportViewCSVController.php:180
+#: controllers/FrmExportViewCSVController.php:188
+msgid "You can return to the previous page using your browser's back button."
+msgstr "Puoi tornare alla pagina precedente utilizzando il pulsante indietro del tuo browser."
+
+#. translators: %d - View id.
+#: controllers/FrmExportViewCSVController.php:184
+msgid "View %d is not a table View or it has not been saved since the Formidable Export View add-on was activated.  A CSV file was not created."
+msgstr "La vista %d non è una vista tabella o non è stata salvata dall'attivazione dell'add-on Formidable Export View.  Non è stato creato un file CSV."
+
+#: controllers/FrmExportViewCSVController.php:187
+msgid "This View has no entries to download."
+msgstr "Questa Vista non ha voci da scaricare."
+
+#. translators: %d - View id.
+#: controllers/FrmExportViewCSVController.php:193
+msgid "View %d has no entries.  A CSV file was not created."
+msgstr "La vista %d non ha voci.  Non è stato creato un file CSV."
+
+#: controllers/FrmExportViewCSVController.php:492
+msgid "The CSV has been saved.  You can use your browser's back button to return to the previous page."
+msgstr "Il CSV è stato salvato.  Puoi usare il pulsante indietro del tuo browser per tornare alla pagina precedente."
+
+#: controllers/FrmExportViewCSVController.php:501
+msgid "The CSV could not be saved because a valid location wasn't available or an .htaccess file is blocking access. Please enter a valid location in Global Settings->ExportView or with the frm_export_view_file_location hook or adjust the .htaccess file to allow access. You can use your browser's back button to return to the previous page."
+msgstr "Non è stato possibile salvare il CSV perché non era disponibile una posizione valida o perché un file .htaccess blocca l'accesso. Inserisci una posizione valida in Impostazioni globali->Esportazione di visualizzazione o con l'hook frm_export_view_file_location oppure modifica il file .htaccess per consentire l'accesso. Puoi usare il pulsante indietro del tuo browser per tornare alla pagina precedente."
+
+#: controllers/FrmExportViewGlobalSettingsController.php:15
+msgid "Export Views"
+msgstr ""
+
+#: controllers/FrmExportViewGlobalSettingsController.php:73
+msgid "Settings Saved"
+msgstr "Impostazioni salvate"
+
+#: controllers/FrmExportViewSettingsController.php:15
+msgid "Export View Settings"
+msgstr "Esporta le impostazioni di visualizzazione"
+
+#. Translators: %s: path to location where CSV export will be saved.
+#: helpers/FrmExportViewCSVHelper.php:186
+msgid "Unable to write to %s to protect your exports."
+msgstr "Impossibile scrivere su %s per proteggere le esportazioni."
+
+#. translators: %1$s - frequency, %2$s - recurring period.
+#: models/FrmExportViewCron.php:61
+msgid "Every %1$s %2$s"
+msgstr "Ogni %1$s %2$s"
+
+#: models/FrmExportViewShortcode.php:69
+msgid "The [frm-export-view] shortcode needs to have a view param, which should be set to the id or key of the View you would like to export."
+msgstr "Lo shortcode [frm-export-view] deve avere un parametro view che deve essere impostato sull'id o sulla chiave della vista che si desidera esportare."
+
+#: models/FrmExportViewShortcode.php:70
+msgid "Please set the view param of the [frm-export-view] shortcode to the id or key of a View on this site."
+msgstr "Imposta il parametro view dello shortcode [frm-export-view] con l'id o la chiave di una vista del sito."
+
+#: models/FrmExportViewShortcode.php:71
+msgid "Please set the view param of the [frm-export-view] shortcode to an All Entries or Dynamic View that is set up as a table."
+msgstr "Imposta il parametro view dello shortcode [frm-export-view] su una vista Tutte le voci o Vista dinamica impostata come tabella."
+
+#: views/export-view-link.php:2
+#: views/export-view-metabox.php:37
+msgid "Export to CSV"
+msgstr "Esporta in CSV"
+
+#: views/export-view-metabox.php:3
+msgid "Export Link"
+msgstr "Link all'esportazione"
+
+#: views/export-view-metabox.php:5
+msgid "If selected, a link for the user to download the View as a CSV file will be displayed under the View."
+msgstr "Se selezionato, sotto la Vista verrà visualizzato un link che consente all'utente di scaricare la visualizzazione come file CSV."
+
+#: views/export-view-metabox.php:11
+msgid "Show Export Link with View"
+msgstr "Mostra il link di esportazione con la vista"
+
+#: views/export-view-metabox.php:16
+msgid "Filename"
+msgstr "Nome del file"
+
+#: views/export-view-metabox.php:18
+msgid "Filename of View export. Leave blank to use View title."
+msgstr "Nome del file di esportazione della vista. Lascia vuoto per utilizzare il titolo della Vista."
+
+#: views/export-view-metabox.php:24
+msgid "Leave blank to use View title"
+msgstr "Lascia vuoto per utilizzare il titolo della Vista"
+
+#: views/export-view-metabox.php:29
+msgid "Export Link Text"
+msgstr "Esportazione del testo del link"
+
+#: views/export-view-metabox.php:31
+msgid "Text of link to download CSV on front-end."
+msgstr "Testo del link per scaricare il CSV nel frontend."
+
+#: views/export-view-metabox.php:41
+msgid "Include params with your CSV export?"
+msgstr "Includi dei parametri nell'esportazione CSV?"
+
+#: views/export-view-metabox.php:43
+msgid "If selected, params will be available to your View export for filtering and display.  These params can be seen and changed easily using browser tools, so including params is not recommended for Views with sensitive data."
+msgstr "Se selezionati, i parametri saranno disponibili per l'esportazione della tua Vista per il filtraggio e la visualizzazione.  Questi parametri possono essere visti e modificati facilmente con gli strumenti del browser, quindi non è consigliabile includere i parametri per le viste con dati sensibili."
+
+#: views/export-view-metabox.php:49
+msgid "Yes (more flexible, not recommended for Views with sensitive data)"
+msgstr "Sì (più flessibile, non consigliato per le viste con dati sensibili)"
+
+#: views/export-view-metabox.php:55
+msgid "No (more secure)"
+msgstr "No (più sicuro)"
+
+#: views/settings/form.php:4
+msgid "Schedule CSV Export"
+msgstr "Programma l'esportazione CSV"
+
+#: views/settings/form.php:6
+msgid "If you don't see a table View on this list, try going to the View and updating it."
+msgstr "Se non vedi la vista di una tabella in questo elenco, prova ad andare alla vista e ad aggiornarla."
+
+#: views/settings/form.php:30
+msgid "No Views available for export."
+msgstr "Non ci sono viste disponibili per l'esportazione."
+
+#: views/settings/form.php:36
+msgid "Frequency"
+msgstr "Frequenza"
+
+#: views/settings/form.php:43
+msgid "Days"
+msgstr "Giorni"
+
+#: views/settings/form.php:46
+msgid "Months"
+msgstr "Mesi"
+
+#: views/settings/form.php:54
+msgid "Format"
+msgstr "Formato"
+
+#: views/settings/form.php:56
+msgid "If your CSV special characters are not working correctly, try a different formatting option."
+msgstr "Se i caratteri speciali nel tuo CSV non funzionano correttamente, prova con una opzione di formattazione differente."
+
+#: views/settings/form.php:71
+msgid "Column separation"
+msgstr "Separazione a colonna"
+
+#: views/settings/form.php:82
+msgid "Destination Directory Path"
+msgstr "Percorso della directory di destinazione"
+
+#: views/settings/form.php:89
+msgid "Leave blank to use wp-content/uploads/formidable/exports"
+msgstr "Lascia vuoto per utilizzare wp-content/uploads/formidable/exports"
+
+#: views/settings/form.php:92
+msgid "Root"
+msgstr "Root"
+
