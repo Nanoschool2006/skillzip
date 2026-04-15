@@ -1,0 +1,28 @@
+<div class="tve-webhook-test-details-overlay">
+    <div class="tve-webhook-test-details-backdrop"></div>
+    <div class="tve-webhook-test-details-modal tcb-card">
+        <div class="tve-webhook-test-details-header">
+            <div class="tve-webhook-test-details-title">Connection details</div>
+            <a href="#" class="tve-webhook-test-details-x" aria-label="Close">
+                <?php tcb_icon( 'times-regular' ); ?>
+            </a>
+        </div>
+        <div class="tve-webhook-test-inline-alert tcb-hide">
+            <?php tcb_icon( 'exclamation-circle-solid' ); ?>
+            <span class="tve-webhook-test-inline-text">Webhook failed to send</span>
+        </div>
+        <div class="tve-webhook-test-details-content">
+            <div class="tve-webhook-test-kv">
+                <div class="tve-webhook-test-kv-row"><span class="tve-k">Status:</span> <span class="tve-v tve-webhook-test-summary-status">—</span></div>
+                <div class="tve-webhook-test-kv-row"><span class="tve-k">Duration:</span> <span class="tve-v tve-webhook-test-summary-duration">—</span></div>
+                <div class="tve-webhook-test-kv-row"><span class="tve-k">Method:</span> <span class="tve-v tve-webhook-test-request-method">—</span></div>
+                <div class="tve-webhook-test-kv-row"><span class="tve-k">Endpoint:</span> <span class="tve-v tve-webhook-test-request-url">—</span></div>
+                <div class="tve-webhook-test-kv-row tcb-text-danger"><span class="tve-k">Error:</span> <span class="tve-v tve-webhook-test-summary-meaning">—</span></div>
+            </div>
+            <div class="tve-webhook-test-response">
+                <div class="tve-webhook-test-response-title">Server response</div>
+                <pre class="tve-webhook-test-body"></pre>
+            </div>
+        </div>
+    </div>
+</div>
