@@ -1,0 +1,171 @@
+<?php
+
+/** @var int $id */
+/** @var array $item */
+/** @var string $nonce */
+/** @var string $delete_nonce */
+/** @var array $targeting */
+/** @var array $headers */
+/** @var array $mapping */
+?>
+<?php if ($id) : ?>
+    <div class="td-webhooks-sidebar-actions" style="float:right; margin-top:10px;">
+        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('<?php echo esc_js(__('Are you sure you want to delete this webhook?', 'thrive-dash')); ?>');" style="display:inline">
+            <input type="hidden" name="action" value="td_webhooks_delete" />
+            <input type="hidden" name="_wpnonce" value="<?php echo esc_attr($delete_nonce); ?>" />
+            <input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>" />
+            <button type="submit" class="button-link delete" title="<?php echo esc_attr__('Delete webhook', 'thrive-dash'); ?>" style="color:#b32d2e; text-decoration:none;">
+                <span class="dashicons dashicons-trash"></span>
+            </button>
+        </form>
+    </div>
+<?php endif; ?>
+
+<script>
+// Enhance headers/body mapping repeaters with add/remove controls
+jQuery( function( $ ) {
+    function addRow( tableSelector, keyName, valueName ) {
+        var $tbody = $( tableSelector ).find( 'tbody' );
+        if ( ! $tbody.length ) { return; }
+
+        var $tr = $( '<tr/>' );
+        $tr.append( '<td><input type="text" name="' + keyName + '[]" value="" class="regular-text" /></td>' );
+        $tr.append( '<td><input type="text" name="' + valueName + '[]" value="" class="regular-text" /></td>' );
+        $tr.append( '<td><button type="button" class="button link-delete td-webhooks-remove-row" aria-label="Remove row">&times;</button></td>' );
+        $tbody.append( $tr );
+    }
+
+    // Add header row
+    $( document ).on( 'click', '#td-webhooks-add-header', function( e ) {
+        e.preventDefault();
+        addRow( '#td-webhooks-headers', 'headers[key]', 'headers[value]' );
+    } );
+
+    // Add body mapping row
+    $( document ).on( 'click', '#td-webhooks-add-mapping', function( e ) {
+        e.preventDefault();
+        addRow( '#td-webhooks-body-mapping', 'body_mapping[key]', 'body_mapping[value]' );
+    } );
+
+    // Remove current row
+    $( document ).on( 'click', '.td-webhooks-remove-row', function( e ) {
+        e.preventDefault();
+        $( this ).closest( 'tr' ).remove();
+    } );
+} );
+</script>
+
+<form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+    <input type="hidden" name="action" value="td_webhooks_save" />
+    <input type="hidden" name="_wpnonce" value="<?php echo esc_attr($nonce); ?>" />
+    <input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>" />
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th scope="row"><label for="name"><?php echo esc_html(__('Name', 'thrive-dash')); ?></label></th>
+                <td><input type="text" class="regular-text" name="name" id="name" value="<?php echo esc_attr((string) ($item['name'] ?? '')); ?>" /></td>
+            </tr>
+            <tr>
+                <th scope="row"><?php echo esc_html(__('Enabled', 'thrive-dash')); ?></th>
+                <td><label><input type="checkbox" name="enabled" value="1" <?php echo checked(! empty($item['enabled']), true, false); ?> /> <?php echo esc_html__('Yes', 'thrive-dash'); ?></label></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="url"><?php echo esc_html(__('Webhook URL', 'thrive-dash')); ?></label></th>
+                <td><input type="text" class="regular-text" name="url" id="url" value="<?php echo esc_attr((string) ($item['url'] ?? '')); ?>" /></td>
+            </tr>
+            <?php $method = strtolower($item['method'] ?? 'post'); ?>
+            <tr>
+                <th scope="row"><label for="method"><?php echo esc_html(__('Method', 'thrive-dash')); ?></label></th>
+                <td>
+                    <select name="method" id="method">
+                        <?php foreach (['post' => 'POST', 'get' => 'GET', 'put' => 'PUT', 'patch' => 'PATCH', 'delete' => 'DELETE'] as $val => $text) : ?>
+                            <option value="<?php echo esc_attr((string) $val); ?>" <?php echo selected((string) $method, (string) $val, false); ?>><?php echo esc_html($text); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <?php $req_format = strtolower($item['request_format'] ?? 'form'); ?>
+            <tr>
+                <th scope="row"><label for="request_format"><?php echo esc_html(__('Request Format', 'thrive-dash')); ?></label></th>
+                <td>
+                    <select name="request_format" id="request_format">
+                        <?php foreach (['form' => 'form', 'json' => 'json', 'xml' => 'xml'] as $val => $text) : ?>
+                            <option value="<?php echo esc_attr((string) $val); ?>" <?php echo selected((string) $req_format, (string) $val, false); ?>><?php echo esc_html($text); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+
+
+            <tr>
+                <th scope="row"><?php echo esc_html__('Headers', 'thrive-dash'); ?></th>
+                <td>
+                    <?php $h_count = max(1, count((array) $headers)); ?>
+                    <table class="widefat striped" id="td-webhooks-headers">
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 8px"><?php echo esc_html__('Key', 'thrive-dash'); ?></th>
+                                <th style="padding-left: 8px"><?php echo esc_html__('Value', 'thrive-dash'); ?></th>
+                                <th style="width:100px; padding-left: 8px"><?php echo esc_html__('Actions', 'thrive-dash'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php for ($i = 0; $i < $h_count; $i++) : $k = $headers[$i]['key'] ?? '';
+                                $v = $headers[$i]['value'] ?? ''; ?>
+                                <tr>
+                                    <td><input type="text" name="headers[key][]" value="<?php echo esc_attr((string) $k); ?>" class="regular-text" /></td>
+                                    <td><input type="text" name="headers[value][]" value="<?php echo esc_attr((string) $v); ?>" class="regular-text" /></td>
+                                    <td><button type="button" class="button link-delete td-webhooks-remove-row" aria-label="<?php echo esc_attr__('Remove header row', 'thrive-dash'); ?>">&times;</button></td>
+                                </tr>
+                            <?php endfor; ?>
+                        </tbody>
+                    </table>
+                    <p>
+                        <button type="button" class="button" id="td-webhooks-add-header"><?php echo esc_html__('Add header', 'thrive-dash'); ?></button>
+                    </p>
+                    <p class="description"><?php echo esc_html__('Leave empty key/value rows unused.', 'thrive-dash'); ?></p>
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row"><?php echo esc_html__('Body Mapping', 'thrive-dash'); ?></th>
+                <td>
+                    <?php $m_count = max(1, count((array) $mapping)); ?>
+                    <table class="widefat striped" id="td-webhooks-body-mapping">
+                        <thead>
+                            <tr>
+                                <th style="padding-left: 8px"><?php echo esc_html__('Key', 'thrive-dash'); ?></th>
+                                <th style="padding-left: 8px"><?php echo esc_html__('Value', 'thrive-dash'); ?></th>
+                                <th style="width:100px; padding-left: 8px"><?php echo esc_html__('Actions', 'thrive-dash'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php for ($i = 0; $i < $m_count; $i++) : $k = $mapping[$i]['key'] ?? '';
+                                $v = $mapping[$i]['value'] ?? ''; ?>
+                                <tr>
+                                    <td><input type="text" name="body_mapping[key][]" value="<?php echo esc_attr((string) $k); ?>" class="regular-text" /></td>
+                                    <td><input type="text" name="body_mapping[value][]" value="<?php echo esc_attr((string) $v); ?>" class="regular-text" /></td>
+                                    <td><button type="button" class="button link-delete td-webhooks-remove-row" aria-label="<?php echo esc_attr__('Remove mapping row', 'thrive-dash'); ?>">&times;</button></td>
+                                </tr>
+                            <?php endfor; ?>
+                        </tbody>
+                    </table>
+                    <p>
+                        <button type="button" class="button" id="td-webhooks-add-mapping"><?php echo esc_html__('Add mapping', 'thrive-dash'); ?></button>
+                    </p>
+                    <p class="description"><?php echo esc_html__('Leave empty key/value rows unused.', 'thrive-dash'); ?></p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <?php submit_button($id ? __('Update Webhook', 'thrive-dash') : __('Create Webhook', 'thrive-dash')); ?>
+</form>
+
+<?php if ($id) : ?>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" onsubmit="return confirm('<?php echo esc_js(__('Are you sure?', 'thrive-dash')); ?>');">
+        <input type="hidden" name="action" value="td_webhooks_delete" />
+        <input type="hidden" name="_wpnonce" value="<?php echo esc_attr($delete_nonce); ?>" />
+        <input type="hidden" name="id" value="<?php echo esc_attr((string) $id); ?>" />
+        <?php submit_button(__('Delete', 'thrive-dash'), 'delete'); ?>
+    </form>
+<?php endif; ?>
