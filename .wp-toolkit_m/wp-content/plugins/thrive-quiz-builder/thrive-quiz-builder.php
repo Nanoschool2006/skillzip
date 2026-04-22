@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Quiz Builder
  * Plugin URI: https://thrivethemes.com
  * Description: The plugin is built to deliver the following benefits to users: engage visitors with fun and interesting quizzes, lower bounce rate, generate more leads and gain visitor insights to find out about their interests.
- * Version: 10.8.10
+ * Version: 10.8.10.1
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-quiz-builder
@@ -21,7 +21,7 @@ if ( ! class_exists( 'Thrive_Quiz_Builder' ) ) :
 		/**
 		 * Plugin version
 		 */
-		const V = '10.8.10';
+		const V = '10.8.10.1';
 
 		/**
 		 * Quiz Builder Database Version
