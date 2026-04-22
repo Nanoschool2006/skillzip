@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'thrivethemes/thrive-apprentice',
-        'pretty_version' => '10.8.10.beta',
-        'version' => '10.8.10.0-beta',
-        'reference' => 'a453f4d285ff82248de7a6aec95a662814c5e7d3',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '12baaccb1fea1f7e65ea8a86ab5c426efa50b3ae',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -182,8 +182,8 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-mbstring' => array(
-            'pretty_version' => 'v1.34.0',
-            'version' => '1.34.0.0',
+            'pretty_version' => 'v1.36.0',
+            'version' => '1.36.0.0',
             'reference' => '6a21eb99c6973357967f6ce3708cd55a6bec6315',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
@@ -191,8 +191,8 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-php83' => array(
-            'pretty_version' => 'v1.34.0',
-            'version' => '1.34.0.0',
+            'pretty_version' => 'v1.36.0',
+            'version' => '1.36.0.0',
             'reference' => '3600c2cb22399e25bb226e4a135ce91eeb2a6149',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-php83',
@@ -200,9 +200,9 @@
             'dev_requirement' => false,
         ),
         'thrivethemes/thrive-apprentice' => array(
-            'pretty_version' => '10.8.10.beta',
-            'version' => '10.8.10.0-beta',
-            'reference' => 'a453f4d285ff82248de7a6aec95a662814c5e7d3',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '12baaccb1fea1f7e65ea8a86ab5c426efa50b3ae',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

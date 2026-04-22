@@ -221,7 +221,7 @@ class TVA_Stripe_Controller extends TVA_REST_Controller {
 		$state      = $request->get_param( 'state' );
 		$site_state = Credentials::get_state();
 		if ( ! $state || ! $site_state || $state !== $site_state ) {
-			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid state ' . $state . '  #   ' . $site_state, 'thrive-apprentice' ) ], 400 );
+			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid state', 'thrive-apprentice' ) ], 400 );
 		}
 		$secret_key           = $request->get_param( 'secret_key' );
 		$test_secret_key      = $request->get_param( 'test_secret_key' );

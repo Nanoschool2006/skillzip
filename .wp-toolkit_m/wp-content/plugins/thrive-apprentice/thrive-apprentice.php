@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Apprentice
  * Plugin URI: https://thrivethemes.com
  * Description: Create online courses you can sell with the most customizable LMS plugin for WordPress
- * Version: 10.8.10
+ * Version: 10.8.10.1
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-apprentice
@@ -18,7 +18,7 @@ function thrive_load() {
 	/**
 	 * This means TTB exists as a stand-alone theme - lower versions of the theme might cause fatal errors
 	 */
-	if ( defined( 'THEME_VERSION' ) && THEME_VERSION !== '10.8.10' && version_compare( THEME_VERSION, '2.4', '<' ) ) {
+	if ( defined( 'THEME_VERSION' ) && THEME_VERSION !== '10.8.10.1' && version_compare( THEME_VERSION, '2.4', '<' ) ) {
 
 		tve_dash_show_activation_error( __( 'The current version of Thrive Theme Builder is not compatible with Thrive Apprentice. Please update Thrive Theme Builder before activating Thrive Apprentice', 'thrive-apprentice' ) );
 	}
