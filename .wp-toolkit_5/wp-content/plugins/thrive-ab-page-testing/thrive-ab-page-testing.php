@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Optimize
  * Plugin URI: https://thrivethemes.com
  * Description: Boost Conversion Rates by testing two or more variations of a page
- * Version: 10.8.10
+ * Version: 10.8.10.1
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-ab-page-testing
