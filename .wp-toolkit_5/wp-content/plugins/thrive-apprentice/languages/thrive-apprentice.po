@@ -8250,6 +8250,10 @@ msgstr ""
 msgid "Cannot duplicate legacy design"
 msgstr ""
 
+#: ../inc/classes/endpoints/class-tva-square-controller.php:561, ../inc/classes/endpoints/class-tva-stripe-controller.php:224
+msgid "Invalid state"
+msgstr ""
+
 #: ../inc/classes/endpoints/class-tva-square-controller.php:683
 msgid "Not connected to live or test account"
 msgstr ""

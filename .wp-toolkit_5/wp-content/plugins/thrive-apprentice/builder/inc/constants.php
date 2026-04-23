@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 defined( 'THEME_URL' ) || define( 'THEME_URL', get_template_directory_uri() );
 defined( 'THEME_PATH' ) || define( 'THEME_PATH', get_template_directory() );
 
-defined( 'THEME_VERSION' ) || define( 'THEME_VERSION', '10.8.10' );
+defined( 'THEME_VERSION' ) || define( 'THEME_VERSION', '10.8.10.1' );
 defined( 'THEME_DOMAIN' ) || define( 'THEME_DOMAIN', 'thrive-theme' );
 defined( 'REQUIRED_WP_VERSION' ) || define( 'REQUIRED_WP_VERSION', '4.9' );
 /* minimum version of TAr needed for TTB launch */
