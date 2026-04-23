@@ -8,7 +8,7 @@ class TVE_Ult_Const {
 	/**
 	 * TU plugin version
 	 */
-	const PLUGIN_VERSION = '10.8.10';
+	const PLUGIN_VERSION = '10.8.10.1';
 
 	/**
 	 * Database version for current TU version

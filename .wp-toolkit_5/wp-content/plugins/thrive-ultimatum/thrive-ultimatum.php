@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Ultimatum
  * Plugin URI: https://thrivethemes.com
  * Description: The ultimate scarcity plugin for WordPress
- * Version: 10.8.10
+ * Version: 10.8.10.1
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-ult
