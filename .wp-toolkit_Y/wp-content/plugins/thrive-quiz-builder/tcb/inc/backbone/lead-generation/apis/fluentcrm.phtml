@@ -1,0 +1,73 @@
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Choose your mailing list', 'thrive-cb' ); ?>
+	</div>
+	<div class="control-grid">
+		<select class="api-list tve-active-campaign-list" data-name="list">
+			<# _.each(api.get('lists'), function(item) { #>
+			<#= TVE.tpl( 'util/option', {value:item.id, selected: (api.getConfig('list')==item.id), text: item.name}) #>
+			<# } ) #>
+		</select>
+
+		<span class="click tve-refresh-api-list" data-fn="forceGet" data-tooltip="<?php echo __( 'Refresh', 'thrive-cb' ); ?>" data-side="top"> <?php tcb_icon( 'redo-regular' ) ?></span>
+	</div>
+</div>
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Choose the type of optin you would like for the FluentCRM integration', 'thrive-cb' ) ?>
+	</div>
+
+	<select class="tve-api-extra tl-api-connection-list" name="optin">
+		<#= TVE.tpl( 'util/option', {value:'s', selected: (api.getConfig('optin') === 's'), text: '<?php echo __( 'Single optin', 'thrive-cb' ) ?>'}) #>
+		<#= TVE.tpl( 'util/option', {value:'d', selected: (api.getConfig('optin') === 'd'), text: '<?php echo __( 'Double optin', 'thrive-cb' ) ?>'}) #>
+	</select>
+
+	<div class="field-description info-text grey-text">
+		<?php echo __( '(Double optin means your subscribers will need to confirm their email address before being added to your list)', 'thrive-cb' ) ?>
+	</div>
+
+</div>
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Tags', 'thrive-cb' ); ?>
+	</div>
+	<div class="tvd-select2-dropdown-parent"></div>
+	<div class="tvd-input-field">
+		<select id="tve-lg-select-tags" multiple name="tags" tabindex="-1" class="select2-hidden-accessible tve-api-extra">
+			<#
+			// Get all available tags from API
+			var availableTags = api.get('tags') || [];
+			var tagsConfig = api.getConfig('tags');
+			var selectedTags = [];
+
+			// Parse currently selected tags
+			if ( tagsConfig ) {
+				selectedTags = typeof tagsConfig === 'string' ? tagsConfig.split(',').map(function(tag) { return tag.trim(); }) : [tagsConfig];
+			}
+
+			// Sort available tags alphabetically by tag name
+			var sortedTags = availableTags.slice().sort(function(a, b) {
+				return a.text.toLowerCase().localeCompare(b.text.toLowerCase());
+			});
+
+			// Display all available tags as options (sorted alphabetically)
+			_.each( sortedTags, function( tag ) {
+				var isSelected = selectedTags.indexOf(tag.text) !== -1;
+			#>
+			<option value="<#=tag.text#>"<# if (isSelected) { #> selected="selected"<# } #>><#=tag.text#></option>
+			<#
+			}, this );
+
+			// Also add any selected tags that might not be in the available tags list (custom tags)
+			_.each( selectedTags, function( tag ) {
+				var cleanTag = String(tag).trim();
+				if ( cleanTag && !_.findWhere(availableTags, {text: cleanTag}) ) {
+			#>
+			<option value="<#=cleanTag#>" selected="selected"><#=cleanTag#></option>
+			<#
+				}
+			}, this );
+			#>
+		</select>
+	</div>
+</div>
