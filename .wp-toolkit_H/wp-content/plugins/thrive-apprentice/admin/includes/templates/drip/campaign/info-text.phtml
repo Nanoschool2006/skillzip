@@ -1,0 +1,31 @@
+<p class="tva-bb-question-box w-svg">
+	<# if (type !== 'automator') { #>
+		<img class="" alt="<#- type #>" src="<?php echo TVA_Const::plugin_url( 'admin/includes/assets/img/drip/info-' ); ?><#= type #>@2x.png" width="60">
+	<# } else { #>
+		<# if (pluginStatus === 'thrive_autom_active_uncanny_deactivated') { #>
+			<img class="" alt="sunset" src="<?php echo TVA_Const::plugin_url( 'admin/includes/assets/sunset-plugins.svg' ); ?>" width="60">
+		<# } else if (pluginStatus !== 'automator_installed') { #>
+			<img class="" alt="uncanny" src="<?php echo TVA_Const::plugin_url( 'admin/includes/assets/uncanny.svg' ); ?>" width="60">
+		<# } else { #>
+			<img class="" alt="automator" src="<?php echo TVA_Const::plugin_url( 'admin/includes/assets/sunset-plugins.svg' ); ?>" width="60">
+		<# } #>
+	<# } #>
+	<# if (pluginStatus !== 'not_installed' && pluginStatus !== 'uncanny_active' && pluginStatus !== 'uncanny_installed_but_inactive' && pluginStatus !== 'both_active' || pluginStatus === 'thrive_autom_active_uncanny_deactivated') { #>
+	<div class="tva-drip-text-holder">
+		<span class="tva-automator-sunset-drip-heading"><#- heading #></span><div class="tva-sunset-inline-automator"><#- longdesc #><b><#- uncanny_text #></b> <a href="<#- link_autom #>" style="text-decoration: underline; color: #0F214A;"><#- link_text #></a></div>
+	</div>
+	<# } else { #>
+	<div class="tva-drip-text-holder">
+		<span class="tva-automator-sunset-drip-heading"></span><div class="tva-sunset-inline-automator"><#- longdesc #></div>
+	</div>
+	<# } #>
+	<# if (type === 'automator' && pluginStatus !== 'both_active' && pluginStatus !== 'uncanny_active') { #>
+		<button class="ta-install-uncanny-button">
+			<# if (pluginStatus === 'uncanny_installed_but_inactive' || pluginStatus === 'thrive_autom_active_uncanny_deactivated') { #>
+				Activate
+			<# } else { #>
+				Install now
+			<# } #>
+		</button>
+	<# } #>
+</p>
