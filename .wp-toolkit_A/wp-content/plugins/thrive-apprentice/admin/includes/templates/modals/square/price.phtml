@@ -1,0 +1,77 @@
+<?php
+
+use TVA\Square\Hooks;
+
+$product_id = $_COOKIE["tva_current_product_id"];
+$square_mode = get_term_meta( $product_id, 'tva_square_mode', true );
+$mode = $square_mode !== false && $square_mode !== '' ? $square_mode : 'live';
+$locations = Hooks::get_locations( $mode );
+if ( empty( $locations ) || empty( $locations['data'] ) || empty( $locations['data']['currency'] ) ) {
+    $currency = 'not-set';
+} else {
+    $currency = $locations['data']['currency'];
+}
+?>
+
+<div class="tvd-modal-content">
+	<h3 class="tvd-modal-title"><?php esc_html_e( 'Add Product Price', 'thrive-apprentice' ); ?></h3>
+
+    <div class="tva-square-price-wrapper" data-mode="<?php echo $mode; ?>">
+        <div>
+			<p class="mb-5"><?php echo __( 'Select Payment mode', 'thrive-apprentice' ); ?></p>
+            <div class="tva-square-payment-mode tva-flex tva-space-between">
+                <button class="click tva-btn tva-btn-blue" data-fn="handleBillingType" data-type="recurring">
+                    <?php echo esc_html__( 'Recurring', 'thrive-apprentice' ); ?>
+                </button>
+                <button class="click tva-btn tva-btn-transfarent" data-fn="handleBillingType" data-type="onetime">
+                    <?php echo esc_html__( 'One Time', 'thrive-apprentice' ); ?>
+                </button>
+            </div>
+        </div>
+        <div>
+			<p class="mb-5"><?php echo __( 'Amount', 'thrive-apprentice' ); ?></p>
+            <div class="tva-square-price-amount">
+                <input type="number" name="tva-price-amount" id="tva-price-amount" min="0" placeholder="<?php echo __( 'Enter amount', 'thrive-apprentice' ); ?>">
+                <span><?php echo $currency; ?></span>
+            </div>
+        </div>
+        <div class="tva-square-billing-period">
+			<p class="mb-5"><?php echo __( 'Billing Period', 'thrive-apprentice' ); ?></p>
+            <select class="change" name="tva-billing-period" id="tva-billing-period" data-fn="handleBillingPeriodChange">
+                <option value="DAILY"><?php echo __( 'Daily', 'thrive-apprentice' ); ?></option>
+                <option value="WEEKLY"><?php echo __( 'Weekly', 'thrive-apprentice' ); ?></option>
+                <option value="EVERY_TWO_WEEKS"><?php echo __( 'Every 2 weeks', 'thrive-apprentice' ); ?></option>
+                <option value="MONTHLY"><?php echo __( 'Monthly', 'thrive-apprentice' ); ?></option>
+                <option value="QUARTERLY"><?php echo __( 'Quarterly', 'thrive-apprentice' ); ?></option>
+                <option value="ANNUAL"><?php echo __( 'Yearly', 'thrive-apprentice' ); ?></option>
+            </select>
+        </div>
+        <div class="tva-square-free-trial mt-20 tva-flex tva-space-between ">
+            <div class="tvd-switch">
+                <label class="tva-slide-checkbox">
+                    <input type="checkbox" class="click" id="tva-square-free-trial" data-fn="changeTrialCheckbox">
+                    <span class="lever"></span>
+                    <span class="settings-checkbox-label"><?php echo esc_html__( 'Product includes a free trial', 'thrive-apprentice' ); ?></span>
+                </label>
+            </div>
+            <div class="tva-tooltip-parent tva-square-trial-tooltip">
+				<div class="tva-info-icon"><?php tva_get_svg_icon( 'info-solid' ); ?>
+					<div class="tva-custom-tooltip tva-tooltip-inherited square-tooltip">
+						<?php echo __( "Once enabled, the free trial option cannot be changed later.", 'thrive-apprentice' ); ?>
+					</div>
+				</div>
+			</div>
+            <input id="tva-square-trial-days" 
+                class="change tva-hide"
+                type="number" 
+                min="1" 
+                value="1"
+                placeholder="<?php echo esc_html__( 'Days', 'thrive-apprentice' ); ?>" />
+        </div>
+    </div>
+</div>
+
+<div class="tva-content-price-footer tva-flex tva-align-center tva-flex-end">
+    <button type="button" class="click tva-modal-btn tva-modal-btn-close" data-fn="close"><?php echo __( 'Cancel', 'thrive-apprentice' ); ?></button>
+    <button type="button" class="click tva-modal-btn tva-price-save-btn" data-fn="savePrice"><?php echo __( 'Save', 'thrive-apprentice' ) ?></button>
+</div>
