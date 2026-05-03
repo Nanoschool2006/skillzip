@@ -1,0 +1,100 @@
+<div class="tvd-row"><div class="tvd-col tvd-s12">
+	<div class="tve-webhook-collapsed tcb-hide">
+		<div class="tve-webhook-summary tcb-card">
+			<div class="tve-webhook-summary-header">
+				<div class="tcb-label">Webhook URL</div>
+				<div class="tve-webhook-summary-actions">
+					<a href="#" class="tve-webhook-edit" title="Edit webhook">
+						<svg class="tcb-icon tcb-icon-pen-light"><use xlink:href="#icon-pen-light"></use></svg>
+					</a>
+					<a href="#" class="tve-webhook-delete tcb-text-danger" title="Delete webhook">
+						<svg class="tcb-icon tcb-icon-trash-light"><use xlink:href="#icon-trash-light"></use></svg>
+					</a>
+				</div>
+			</div>
+			<div class="tve-webhook-summary-url"></div>
+		</div>
+		<div class="tve-webhook-delete-overlay tcb-hide">
+			<div class="tve-webhook-delete-backdrop"></div>
+			<div class="tve-webhook-delete-modal tcb-card">
+				<div class="tve-webhook-delete-content">
+					<div class="tve-webhook-delete-title tcb-label">Are you sure you want to delete this webhook?</div>
+					<div class="tve-webhook-delete-note">This will disconnect the webhook and remove its URL.</div>
+				</div>
+				<div class="tve-webhook-delete-actions">
+					<button class="tve-button grey ghost tve-webhook-cancel-delete">Keep webhook</button>
+					<button class="tve-button orange ghost tve-webhook-confirm-delete">Delete webhook</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tve-webhook-editor">
+		<div class="tcb-label mb-5 tve-webhook-header">
+			<span>Send webhook</span>
+            <span class="tcb-inline-help" data-tooltip="<?php echo esc_attr__( 'Send data to an external service via a webhook.', 'thrive-cb' ); ?>" data-side="top">
+                <?php tcb_icon( 'info-circle-solid' ); ?>
+            </span>
+		</div>
+		<div class="tcb-input-row mb-5">
+            <label for="tve-webhook-url">Webhook URL</label>
+			<input type="text" class="tve-webhook-url" placeholder="Webhook URL (requires https://)" />
+		</div>
+		<div class="tcb-input-row mb-5">
+            <label for="tve-webhook-method">Request Type</label>
+			<select class="tve-webhook-method">
+				<option value="" selected disabled>Select type</option>
+				<option value="post">POST</option>
+				<option value="get">GET</option>
+				<option value="put">PUT</option>
+				<option value="patch">PATCH</option>
+				<option value="delete">DELETE</option>
+			</select>
+		</div>
+		<div class="tcb-input-row mb-10">
+            <label for="tve-webhook-format">Request Format</label>
+			<select class="tve-webhook-format">
+				<option value="" selected disabled>Select format</option>
+				<option value="form">Form</option>
+				<option value="json">JSON</option>
+				<option value="xml">XML</option>
+			</select>
+		</div>
+        <div class="tve-webhook-fields-container">
+            <div class="tcb-label mb-5">
+                Fields
+                <span class="tcb-inline-help" data-tooltip="<?php echo esc_attr__( 'The “=” shows how a field is mapped. The key on the left is the field name, and the value on the right is its placeholder (e.g., Name = %name%).', 'thrive-cb' ); ?>" data-side="top">
+                    <?php tcb_icon( 'info-circle-solid' ); ?>
+                </span>
+            </div>
+            <div class="tve-webhook-fields"></div>
+            <div class="my-10"><a href="#" class="tve-webhook-field-add">
+                <svg class="tcb-icon tcb-icon-plus-regular"><use xlink:href="#icon-plus-regular"></use></svg>
+                Add New
+            </a></div>
+        </div>
+
+        <div class="tcb-label mb-5">Headers</div>
+		<div class="mb-5">
+			<label><input type="radio" name="tve-webhook-headers-mode" value="none" checked> None</label>
+			<label class="tve-webhook-radio-spacer"><input type="radio" name="tve-webhook-headers-mode" value="custom"> Custom</label>
+		</div>
+		<div class="tve-webhook-headers-container tcb-hide">
+			<div class="tve-webhook-headers"></div>
+			<div class="tve-webhook-headers-actions my-10"><a href="#" class="tve-webhook-header-add">
+				<svg class="tcb-icon tcb-icon-plus-regular"><use xlink:href="#icon-plus-regular"></use></svg>
+				Add New
+			</a></div>
+		</div>
+		<div class="tvd-row tve-webhook-test">
+            <span>Test Connection</span>
+			<button class="tve-button ghost grey" disabled>Send test</button>
+		</div>
+        <div class="tcb-text-gray tve-webhook-test-status tcb-hide">
+            <span class="tve-webhook-test-status-text"></span>
+            <a href="#" class="tve-webhook-test-view-details tcb-hide">Details</a>
+        </div>
+		<div class="tvd-row mb-5">
+			<button class="tve-button grey long tve-webhook-done" disabled>Done</button>
+		</div>
+	</div>
+</div></div>
