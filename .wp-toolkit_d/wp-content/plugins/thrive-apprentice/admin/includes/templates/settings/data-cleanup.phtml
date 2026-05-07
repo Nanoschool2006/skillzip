@@ -1,0 +1,53 @@
+<?php
+/**
+ * Thrive Themes - https://thrivethemes.com
+ *
+ * @package thrive-apprentice
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Silence is golden!
+}
+?>
+<div>
+	<h1 class="tva-main-heading"><?php echo __( 'Data Cleanup', 'thrive-apprentice' ); ?></h1>
+	<p class="settings-p-main mt-20 mb-10"><?php echo __( 'Use this tool to permanently delete older non-crucial data and free up space. This action cannot be undone.', 'thrive-apprentice' ); ?></p>
+</div>
+
+<div class="tva-general-settings-card mb-20">
+	<h3 class="mt-0 mb-10"><?php echo __( 'Delete Older Data', 'thrive-apprentice' ); ?></h3>
+	<p class="m-0"><?php echo __( 'This tool allows you to permanently delete non-crucial data to free up space. This action cannot be undone.', 'thrive-apprentice' ); ?></p>
+
+	<hr class="mt-20 mb-20">
+
+	<div class="mb-20">
+		<label class="mb-10 tva-data-cleanup-label" for="tva-cleanup-days"><?php echo __( 'Delete data older than (days)', 'thrive-apprentice' ); ?></label>
+		<div class="tva-data-cleanup-input-wrapper">
+			<input type="number" id="tva-cleanup-days" class="change" data-fn="validateDays" value="60" min="30">
+		</div>
+		<p class="tva-data-cleanup-helper-text mt-5 mb-0"><?php echo __( 'Minimum 30 days. Certificate and crucial records are always kept.', 'thrive-apprentice' ); ?></p>
+	</div>
+
+	<div class="tva-container-notice tva-container-notice-red tva-data-cleanup-error-notice mt-10">
+		<?php tva_get_svg_icon( 'info-circle_strong' ); ?>
+		<?php echo __( 'Data cleanup can only be performed for data older than 30 days to ensure data integrity and prevent accidental loss of recent operational logs. Please adjust the setting to 30 days or more to proceed.', 'thrive-apprentice' ); ?>
+	</div>
+
+	<div class="tva-container-notice tva-container-notice-green tva-data-cleanup-success-notice mt-10">
+		<?php tva_get_svg_icon( 'check-circle-green' ); ?>
+		<span class="tva-data-cleanup-success-message"></span>
+	</div>
+
+	<div class="tva-container-notice tva-container-notice-red tva-data-cleanup-api-error-notice mt-10">
+		<?php tva_get_svg_icon( 'info-circle_strong' ); ?>
+		<span class="tva-data-cleanup-api-error-message"></span>
+	</div>
+
+	<hr class="mt-20 mb-20">
+
+	<div class="tva-flex tva-flex-end tva-align-center">
+		<img width="20px" alt="Spinner" class="tva-data-cleanup-spinner mr-10" src="<?php echo TVA_Const::plugin_url( 'admin/img/loading-spinner.gif' ); ?>" style="display: none;"/>
+		<button type="button" id="tva-cleanup-delete-btn" class="tva-btn tva-btn-red tva-data-cleanup-delete-btn click" data-fn="deleteData"><?php echo __( 'Delete', 'thrive-apprentice' ); ?></button>
+	</div>
+</div>
+
