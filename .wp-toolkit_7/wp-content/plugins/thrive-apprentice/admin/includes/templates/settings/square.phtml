@@ -1,0 +1,116 @@
+<?php
+use TVA\Square\Hooks;
+use TVA\Square\Credentials;
+
+$square_controller = new TVA_Square_Controller();
+$status_response = Hooks::get_status_response();
+
+$connected_status = $status_response['success'] ?? false;
+$live_enabled = $status_response['live_enabled'] ?? false;
+$test_enabled = $status_response['test_enabled'] ?? false;
+?>
+
+<div class="tva-square-settings-header">
+	<h1 class="tva-main-heading">Square</h1>
+	<?php if ( ! $connected_status ): ?>
+		<p class="tva-square-tag m-0 tva-square-tag-not-connected"><?php echo __( 'Not Connected', 'thrive-apprentice' ); ?></p>
+	<?php else: ?>
+		<p class="tva-square-tag m-0 tva-square-tag-connected"><?php echo __( 'Connected', 'thrive-apprentice' ); ?></p>
+	<?php endif; ?>
+</div>
+
+<?php if ( ! $connected_status ): ?>
+	<div class="tva-square-connect-wrapper tva-flex">
+		<div class="tva-square-connect tva-flex">
+			<div class="tva-square-connect-icons">
+				<?php tva_get_svg_icon( 'circle-square' ); ?>
+				<?php tva_get_svg_icon( 'arrows-right-left' ); ?>
+				<?php tva_get_svg_icon( 'circle-apprentice' ); ?></div>
+			<h3><?php echo __( 'Square is not connected', 'thrive-apprentice' ); ?></h3>
+			<p><?php echo __( 'Connect your square account with Thrive to manage payments. You can connect to Live & Test accounts for payments.', 'thrive-apprentice' ) ?> <a href="https://support.square.com/questions/square-issuing-test-mode-configurations-and-differences-vs-live-mode" target="_blank"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+			<button class="tva-btn tva-btn-blue click mt-20" data-fn="createAccount" data-type="live"><?php echo __( 'Connect Square', 'thrive-apprentice' ); ?></button>
+		</div>
+	</div>
+<?php else: ?>
+	<p class="settings-p-main mt-15 mb-15"><?php echo __( 'Control your Square connection below', 'thrive-apprentice' ); ?></p>
+	<div class="tva-square-settings-wrapper">
+		<div class="tva-general-settings-card mb-20">
+			<h5 class="mb-20"><?php echo __( 'Default options', 'thrive-apprentice' ); ?></h5>
+			<hr>
+			<div class="tvd-switch">
+				<label class="tva-slide-checkbox tva-square-display-buy-button">
+					<span class="settings-checkbox-label"><?php echo esc_html__( 'Automatically set “display buy button” when connecting a Square product ', 'thrive-apprentice' ); ?></span>
+					<input type="checkbox" class="click" data-fn="changeSetting" data-setting="<?php echo Credentials::AUTO_DISPLAY_BUY_BUTTON_OPTIONS; ?>">
+					<span class="lever"></span>
+				</label>
+			</div>
+		</div>
+		<div id="tva-webhook-square-warning" class="tva-completion-tab-warning square-webhook-warning">
+			<?php tva_get_svg_icon( 'completion-info-icon' ); ?>
+			<p>
+				<?php esc_html_e( 'To receive real-time updates from your Square account (e.g., subscription cancellation/updates, money refunds, etc.), please add the following URL as a webhook subscription under your application in the Square Developer Console - ', 'thrive-apprentice' ) ?>
+				<a href="<?php echo esc_url( home_url( '/wp-json/tva/v1/square/webhook' )) ?>" target="_blank"><?php echo esc_url( home_url( '/wp-json/tva/v1/square/webhook' )) ?></a>
+				<br><br>
+				<?php esc_html_e( 'Guide: ', 'thrive-apprentice' ); ?>
+				<a href="https://developer.squareup.com/docs/webhooks/step2subscribe" target="_blank"><?php esc_html_e( 'How to Create a Webhook', 'thrive-apprentice' ); ?></a> 
+				<?php esc_html_e( '(please select all scopes during creation.)', 'thrive-apprentice' ); ?>
+			<br><br>
+				<?php esc_html_e( 'Once this process is complete, your account will start receiving real-time updates for events such as subscription cancellations, updates, and money refunds.', 'thrive-apprentice' ); ?>
+			<br><br>
+				<?php esc_html_e( 'For complete user guides, please visit ', 'thrive-apprentice' ); ?>
+				<a href="https://thrivethemes.com/docs/connecting-thrive-apprentice-with-square/" target="_blank"><?php esc_html_e( 'Connecting Thrive Apprentice with Square Documentation', 'thrive-apprentice' ); ?></a>
+			</p>
+		</div>
+		<p class="settings-p-main mt-15 mb-15"><?php echo __( 'Your Square connections:', 'thrive-apprentice' ); ?></p>
+		<div class="tva-general-settings-card mb-20">
+			<div class="tva-square-connection-count">
+				<div class="tva-square-connection-count-card">
+					<div class="tva-square-connection-count-info">
+						<div class="tva-square-connection-count-icon ml-25 mt-25">
+                            <i class="fa-solid fa-dollar-sign"></i>
+						</div>
+						<div class="tva-square-connection-count-number">
+							<h4><?php echo __( 'Production Mode', 'thrive-apprentice' ); ?></h4>
+							<?php if ( $live_enabled ): ?>
+							<p class="m-0"><span><?php echo Hooks::get_protected_products_count(); ?></span><?php echo __( ' Thrive Apprentice Products Connected', 'thrive-apprentice' ); ?> <?php tva_get_svg_icon( 'check-circle-green' ); ?></p>
+							<?php else: ?>
+							<p class="m-0"><span class="tva-portal-access-status mode-status"><?php echo esc_html__( 'Disconnected', 'thrive-apprentice' ); ?></span></p>
+							<button class="click tva-portal-access-activate-button portal-access-activate mode-button" type="button" data-fn="createAccount">
+								<span><?php echo esc_html__( 'Connect Production', 'thrive-apprentice' ); ?></span>
+							</button>
+							<?php endif; ?>
+						</div>
+					</div>
+					<div class="tva-square-connection-count-notice">
+						<p class="m-0"><?php echo __( 'Production Square Connections enable real money transactions to protect your Thrive Apprentice Products.' ); ?><a href="https://developer.squareup.com/docs/" target="_blank" class="ml-5"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+					</div>
+				</div>
+				<div class="tva-square-connection-count-card">
+					<div class="tva-square-connection-count-info">
+						<div class="tva-square-connection-count-icon ml-25 mt-25">
+							<?php tva_get_svg_icon( 'experiment' ); ?>
+						</div>
+						<div class="tva-square-connection-count-number">
+							<h4><?php echo __( 'Sandbox Mode', 'thrive-apprentice' ); ?></h4>
+							<?php if ( $test_enabled ): ?>
+							<p class="m-0"><span><?php echo Hooks::get_protected_products_count( false ); ?></span><?php echo __( ' Thrive Apprentice Products Connected', 'thrive-apprentice' ); ?> <?php tva_get_svg_icon( 'check-circle-green' ); ?></p>
+							<?php else: ?>
+							<p class="m-0"><span class="tva-portal-access-status mode-status"><?php echo esc_html__( 'Disconnected', 'thrive-apprentice' ); ?></span></p>
+							<button class="click tva-portal-access-activate-button portal-access-activate mode-button" type="button" data-fn="createAccountSandbox">
+								<span><?php echo esc_html__( 'Connect Sandbox', 'thrive-apprentice' ); ?></span>
+							</button>
+							<?php endif; ?>
+						</div>
+					</div>
+					<div class="tva-square-connection-count-notice">
+						<p class="m-0"><?php echo __( 'Test Square Connections enable test transactions to protect your Apprentice Products. You can use this for testing purposes.' ); ?><a href="https://developer.squareup.com/docs/devtools/sandbox/overview" target="_blank" class="ml-5"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tva-square-disconnect click" data-fn="confirmDisconnect">
+			<?php tva_get_svg_icon( 'forbidden' ); ?>
+			<p class="m-0"><?php echo __( 'Disconnect Square', 'thrive-apprentice' ); ?></p>
+		</div>
+	</div>
+<?php endif; ?>

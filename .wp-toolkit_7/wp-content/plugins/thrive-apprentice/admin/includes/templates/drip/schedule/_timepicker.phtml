@@ -1,0 +1,9 @@
+<div class="tva-opt tva-opt-time">
+	<div class="tva-label"><?php esc_html_e( 'At what time?', 'thrive-apprentice' ); ?></div>
+	<div class="tva-field">
+		<div class="tva-drip-value tva-popup-timepicker timepicker-repeating">
+			<input type="text" class="timepicker" value="<#=this.model.get('trigger_time')#>">
+		</div>
+		<?php include plugin_dir_path( __FILE__ ) . '_timezone.phtml'; ?>
+	</div>
+</div>
