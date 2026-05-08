@@ -1,0 +1,77 @@
+<?php
+/**
+ * Thrive Themes - https://thrivethemes.com
+ *
+ * API Keys tab content for the API Connections page.
+ *
+ * @package thrive-dashboard
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Silence is golden!
+}
+?>
+<div class="td-api-keys-area" id="td-api-keys-app">
+
+	<!-- Intro + Create button (hidden when empty state shown) -->
+	<div class="td-api-keys-intro" id="td-keys-intro">
+		<p><?php esc_html_e( 'Generate API keys that allow external services like Zapier, Make, or custom integrations to securely communicate with your Thrive products.', 'thrive-dash' ); ?></p>
+		<button type="button" class="td-btn-create-key" id="td-create-key-btn">
+			<span class="td-plus">+</span> <?php esc_html_e( 'Create API Key', 'thrive-dash' ); ?>
+		</button>
+	</div>
+
+	<!-- Keys list container -->
+	<div class="td-keys-list" id="td-keys-list"></div>
+
+	<!-- Empty state (shown when no keys) -->
+	<div class="td-empty-state" id="td-empty-state" style="display: none;">
+		<div class="td-empty-icon">
+			<span class="dashicons dashicons-admin-network"></span>
+		</div>
+		<h3><?php esc_html_e( 'No API keys yet', 'thrive-dash' ); ?></h3>
+		<p><?php esc_html_e( 'Create your first API key to start connecting external services like Zapier or Make with your Thrive products.', 'thrive-dash' ); ?></p>
+		<button type="button" class="td-btn-create-key" id="td-create-first-key">
+			<span class="td-plus">+</span> <?php esc_html_e( 'Create API Key', 'thrive-dash' ); ?>
+		</button>
+	</div>
+
+	<!-- Info notice -->
+	<div class="td-info-notice" id="td-info-notice">
+		<div class="td-info-i">i</div>
+		<p><?php esc_html_e( 'API keys provide full access to your Thrive products\' REST API. Keep them secure and never share them publicly. Each key can be disabled without deleting it.', 'thrive-dash' ); ?> <a href="https://thrivethemes.com/docs-categories/developer-documentation/" target="_blank" class="td-info-link"><?php esc_html_e( 'API Documentation', 'thrive-dash' ); ?></a></p>
+	</div>
+
+	<!-- Loading state -->
+	<div class="td-keys-loading" id="td-keys-loading">
+		<p><?php esc_html_e( 'Loading API keys...', 'thrive-dash' ); ?></p>
+	</div>
+
+	<div class="td-keys-footer">
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=tve_dash_section' ) ); ?>"
+		   class="tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-gray">
+			<?php esc_html_e( 'Back To Dashboard', 'thrive-dash' ); ?>
+		</a>
+	</div>
+</div>
+
+<!-- Create API Key Modal (rendered outside tab panel to avoid z-index issues) -->
+<div class="tvd-modal td-create-key-modal" id="td-create-key-modal">
+	<div class="tvd-modal-content">
+		<a href="javascript:void(0)" class="tvd-modal-close-x td-modal-close" title="<?php echo esc_attr__( 'Close', 'thrive-dash' ); ?>">
+			<i class="tvd-icon-close2"></i>
+		</a>
+		<h3 class="tvd-modal-title"><?php esc_html_e( 'Create New API Key', 'thrive-dash' ); ?></h3>
+		<div class="td-form-row">
+			<label for="td-new-key-name"><?php esc_html_e( 'Name', 'thrive-dash' ); ?></label>
+			<div class="tvd-input-field">
+				<input type="text" id="td-new-key-name" placeholder="<?php echo esc_attr__( 'e.g. Zapier - Course Enrollment', 'thrive-dash' ); ?>">
+				<label></label>
+			</div>
+		</div>
+	</div>
+	<div class="tvd-modal-footer">
+		<button type="button" class="td-btn-create-key" id="td-save-new-key"><?php esc_html_e( 'Generate & Save', 'thrive-dash' ); ?></button>
+		<button type="button" class="td-btn-cancel td-modal-close"><?php esc_html_e( 'Cancel', 'thrive-dash' ); ?></button>
+	</div>
+</div>
