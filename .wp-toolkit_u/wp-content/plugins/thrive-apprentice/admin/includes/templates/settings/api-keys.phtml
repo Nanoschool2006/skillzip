@@ -1,0 +1,78 @@
+<?php
+/**
+ * Thrive Themes - https://thrivethemes.com
+ *
+ * API Keys redirect notice - keys have moved to Thrive Dashboard.
+ *
+ * @package thrive-apprentice
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Silence is golden!
+}
+
+$api_connections_url = admin_url( 'admin.php?page=tve_dash_api_connect&tab=api-keys' );
+?>
+
+<style>
+	#wpbody .tva-api-redirect-box {
+		background: #fff;
+		border: 1px solid #ddd;
+		padding: 50px 40px;
+		text-align: center;
+		max-width: 580px;
+		margin: 60px auto;
+	}
+	#wpbody .tva-api-redirect-box .tva-sys-arrow {
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+	}
+	#wpbody .tva-api-redirect-box .tva-move-icon {
+		font-size: 36px;
+		margin-bottom: 14px;
+		color: #bbb;
+	}
+	#wpbody .tva-api-redirect-box h2 {
+		font-size: 16px;
+		font-weight: 600;
+		color: #333;
+		margin-bottom: 8px;
+	}
+	#wpbody .tva-api-redirect-box p {
+		font-size: 13px;
+		font-weight: normal;
+		color: #777;
+		line-height: 1.6;
+		max-width: 400px;
+		margin: 0 auto 22px;
+	}
+	#wpbody .tva-api-redirect-box a.tva-btn-go,
+	#wpbody .tva-api-redirect-box a.tva-btn-go:visited {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 9px 22px;
+		background: #58b958;
+		color: #fff;
+		border: none;
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		cursor: pointer;
+		text-decoration: none;
+		transition: background 0.15s;
+	}
+	#wpbody .tva-api-redirect-box a.tva-btn-go:hover {
+		background: #4aa84a;
+		color: #fff;
+	}
+</style>
+
+<div class="tva-api-redirect-box">
+	<div class="tva-move-icon tva-sys-arrow">&rarr;</div>
+	<h2><?php echo esc_html__( 'API Keys have moved', 'thrive-apprentice' ); ?></h2>
+	<p><?php echo esc_html__( 'API Keys are now managed in Thrive Dashboard under API Connections for centralized management across all Thrive products.', 'thrive-apprentice' ); ?></p>
+	<a href="<?php echo esc_url( $api_connections_url ); ?>" class="tva-btn-go">
+		<?php echo esc_html__( 'GO TO API CONNECTIONS', 'thrive-apprentice' ); ?> <span class="tva-sys-arrow">&rarr;</span>
+	</a>
+</div>

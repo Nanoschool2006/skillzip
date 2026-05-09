@@ -1,0 +1,61 @@
+<div data-settings-field="number">
+	<hr>
+	<div class="number-fields">
+		<div class="control-grid min-max-placeholder">
+			<div class="label">
+				<?php echo __( 'Min/Max', 'thrive-cb' ); ?>
+			</div>
+			<div class="input min-input">
+				<input type="number" class="change input min-field-placeholder" data-fn=""/>
+			</div>
+			<?php echo __( '/', 'thrive-cb' ); ?>
+			<div class="input max-input">
+				<input type="number" class="change input max-field-placeholder" data-fn=""/>
+			</div>
+		</div>
+		<div class="control-grid min-max-placeholder-error tcb-hidden" style="color: #fb5c55;">Check the values: Min must be ≤ Max, and Max must be ≥ Min.</div>
+		<div class="control-grid switch lg-show-instructions-switch">
+			<div class="label">
+				<span class="switch-label"><?php echo __( 'Show instructions', 'thrive-cb' ) ?></span>
+				<span class="click tve-field-name-info" data-fn="openFieldNumberTooltip" data-paneltlt-hover><?php tcb_icon( 'info-circle-solid' ); ?></span>
+			</div>
+			<div class="tcb-switch tcb-text-right">
+				<label>
+					<input type="checkbox" checked="1" class="change tve-lg-field-show-instructions" data-fn="changeShowInstructions"/>
+					<span class="tcb-lever"></span>
+				</label>
+			</div>
+		</div>
+		<div class="control-grid starting-value">
+			<div class="label">
+				<?php echo __( 'Starting value', 'thrive-cb' ); ?>
+			</div>
+			<div class="input">
+				<input type="number" class="change input starting-field" data-fn=""/>
+			</div>
+		</div>
+		<div class="control-grid starting-value-error tcb-hidden" style="color: #fb5c55;">Check the value. It must be ≤ to Max value, and ≥ to Min value.</div>
+		<div class="control-grid decimal-precision">
+			<div class="label">
+				<?php echo __( 'Decimal precision', 'thrive-cb' ); ?>
+			</div>
+			<div class="input">
+				<select class="change decimal-precision-field" data-fn="changeDecimalPrecision">
+					<option value="0"><?php echo esc_html__( '0', 'thrive-cb' ); ?></option>
+					<option value="1"><?php echo esc_html__( '1', 'thrive-cb' ); ?></option>
+					<option value="2"><?php echo esc_html__( '2', 'thrive-cb' ); ?></option>
+					<option value="3"><?php echo esc_html__( '3', 'thrive-cb' ); ?></option>
+					<option value="4"><?php echo esc_html__( '4', 'thrive-cb' ); ?></option>
+				</select>
+			</div>
+		</div>
+		<div class="control-grid step-value">
+			<div class="label">
+				<?php echo __( 'Step', 'thrive-cb' ); ?>
+			</div>
+			<div class="input">
+				<input type="number" class="change input step-field" min="0" data-fn="changeStep"/>
+			</div>
+		</div>
+	</div>
+</div>
