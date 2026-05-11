@@ -230,6 +230,54 @@ class Campaign implements \JsonSerializable {
 	}
 
 	/**
+	 * Walk the `inherit_from` chain for a given post id within this campaign's
+	 * unlock map and return the ordered list of ancestor post ids.
+	 *
+	 * Bounded at depth 3 (sufficient for chapter <- module <- lesson) to prevent
+	 * runaway loops on malformed data.
+	 *
+	 * @param int $post_id starting post id
+	 *
+	 * @return int[] ancestor post ids, immediate parent first
+	 */
+	protected function get_inherit_chain( $post_id ) {
+		$chain     = [];
+		$current   = (int) $post_id;
+		$max_depth = 3;
+
+		for ( $i = 0; $i < $max_depth; $i ++ ) {
+			if ( empty( $this->unlock[ $current ]['inherit_from'] ) ) {
+				break;
+			}
+			$parent = (int) $this->unlock[ $current ]['inherit_from'];
+			if ( $parent === 0 || $parent === (int) $post_id || in_array( $parent, $chain, true ) ) {
+				break;
+			}
+			$chain[] = $parent;
+			$current = $parent;
+		}
+
+		return $chain;
+	}
+
+	/**
+	 * Walk the inherit chain from a post and return the first chapter ancestor
+	 * as a WP_Post object, or null if there is no chapter in the chain.
+	 *
+	 * @param int $post_id starting post id
+	 *
+	 * @return \WP_Post|null
+	 */
+	protected function resolve_chapter_ancestor_post( $post_id ) {
+		foreach ( $this->get_inherit_chain( $post_id ) as $ancestor_id ) {
+			if ( get_post_type( $ancestor_id ) === \TVA_Const::CHAPTER_POST_TYPE ) {
+				return get_post( $ancestor_id );
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Check if a lesson will be unlocked after the module is unlocked
 	 *
 	 * @param int $product_id
@@ -313,7 +361,20 @@ class Campaign implements \JsonSerializable {
 
 			$module_drip_bypassed = ! empty( $module_id ) ? $this->content_type === \TVA_Const::MODULE_POST_TYPE && array_key_exists( $module_id, $bypassed_lessons[ $this->get_course_id() ] ) : false;
 
-			if ( $content_drip_bypassed || ( $module_drip_bypassed && ! $content_has_unlock_settings ) ) {
+			$ancestor_drip_bypassed = false;
+			if ( $this->content_type === \TVA_Const::CHAPTER_POST_TYPE ) {
+				foreach ( $this->get_inherit_chain( $post_id ) as $ancestor_id ) {
+					if ( array_key_exists( $ancestor_id, $bypassed_lessons[ $this->get_course_id() ] ) ) {
+						$ancestor_drip_bypassed = true;
+						break;
+					}
+				}
+			}
+
+			if ( $content_drip_bypassed
+				|| ( $module_drip_bypassed && ! $content_has_unlock_settings )
+				|| ( $ancestor_drip_bypassed && ! $content_has_unlock_settings )
+			) {
 				/**
 				 * If the post is manually unlocked but from a locked campaign, you can't access it
 				 * Else, you can
@@ -1292,11 +1353,18 @@ class Campaign implements \JsonSerializable {
 	}
 
 	/**
-	 * @param $post
+	 * @param \WP_Post $post
+	 * @param int[]    $_visited internal — post IDs already evaluated in this resolution chain; cycle / depth guard
 	 *
 	 * @return bool returns the visibility of a post
 	 */
-	public function get_visibility_for_post( $post ) {
+	public function get_visibility_for_post( $post, $_visited = [] ) {
+		/* defensive guard against malformed `inherit_from` data that could cycle ancestors */
+		if ( in_array( (int) $post->ID, $_visited, true ) || count( $_visited ) >= 4 ) {
+			return $this->display_locked;
+		}
+		$_visited[] = (int) $post->ID;
+
 		$no_unlock_settings = empty( $this->unlock[ $post->ID ] ) && ( empty( $this->unlock[ $post->ID ]['triggers'] ) || empty( $this->unlock[ $post->ID ]['inherit_from'] ) );
 		$forced_unlock      = isset( $this->unlock[ $post->ID ]['forced_unlock'] ) ? $this->unlock[ $post->ID ]['forced_unlock'] : false;
 		$is_forced_unlock   = 'yes' === $forced_unlock || ( 'inherited' === $forced_unlock && $this->force_unlock_order );
@@ -1311,10 +1379,22 @@ class Campaign implements \JsonSerializable {
 				/** A lesson should inherit the visibility settings of a module */
 				$lesson = new TVA_Lesson( $post );
 				$module = $lesson->get_module();
-				if ( ! is_null( $module ) && ! $this->get_visibility_for_post( $module ) ) {
+				if ( ! is_null( $module ) && ! $this->get_visibility_for_post( $module, $_visited ) ) {
 					$is_visible = false;
-				} elseif ( ! is_null( $module ) && $this->get_visibility_for_post( $module ) && \TVA_Const::MODULE_POST_TYPE === $this->content_type ) {
+				} elseif ( ! is_null( $module ) && $this->get_visibility_for_post( $module, $_visited ) && \TVA_Const::MODULE_POST_TYPE === $this->content_type ) {
 					$is_visible = true;
+				} elseif ( \TVA_Const::CHAPTER_POST_TYPE === $this->content_type ) {
+					/** Chapter-mode campaigns: walk the inherit chain to the chapter and resolve visibility from there */
+					$chapter_post = $this->resolve_chapter_ancestor_post( $post->ID );
+					if ( ! is_null( $chapter_post ) ) {
+						$is_visible = $this->get_visibility_for_post( $chapter_post, $_visited );
+					}
+				}
+			} elseif ( 'inherited' === $this->unlock[ $post->ID ]['visibility'] && \TVA_Const::MODULE_POST_TYPE === $post->post_type && \TVA_Const::CHAPTER_POST_TYPE === $this->content_type ) {
+				/** A module under a chapter inherits visibility from the chapter when chapter-mode is active */
+				$chapter_post = $this->resolve_chapter_ancestor_post( $post->ID );
+				if ( ! is_null( $chapter_post ) ) {
+					$is_visible = $this->get_visibility_for_post( $chapter_post, $_visited );
 				}
 			}
 		}

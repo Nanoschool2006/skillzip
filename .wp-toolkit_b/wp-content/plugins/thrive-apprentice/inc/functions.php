@@ -3477,7 +3477,8 @@ function tva_perform_auto_login( $user, $arguments = array() ) {
 
 		wp_signon( $credentials, false );
 	} else if ( isset( $_COOKIE['tva_lesson_to_redirect'] ) ) {
-		wp_redirect( $_COOKIE['tva_lesson_to_redirect'] );
+		wp_safe_redirect( $_COOKIE['tva_lesson_to_redirect'] );
+		exit;
 	}
 }
 
@@ -5022,7 +5023,7 @@ function tva_register_user() {
  */
 function tva_redirect_user() {
 	if ( isset( $_COOKIE['tva_lesson_to_redirect'] ) && ! wp_doing_ajax() ) {
-		wp_redirect( $_COOKIE['tva_lesson_to_redirect'] );
+		wp_safe_redirect( $_COOKIE['tva_lesson_to_redirect'] );
 		exit();
 	}
 }
@@ -5810,7 +5811,7 @@ function tva_ab_event_saved( $event ) {
 		if ( $test->goal_pages() === 'sendowl' ) {
 
 			$cookie_name  = 'top-ta-last-variation';
-			$cookie_value = maybe_serialize( $event->get_data() );
+			$cookie_value = wp_json_encode( $event->get_data() );
 
 			setcookie( $cookie_name, $cookie_value, time() + ( 30 * 24 * 3600 ), '/' );
 			$_COOKIE[ $cookie_name ] = $cookie_value;
@@ -5822,12 +5823,18 @@ function tva_filter_order_tag_data( $data ) {
 
 	if ( isset( $_COOKIE['top-ta-last-variation'] ) ) {
 
-		$event = maybe_unserialize( wp_unslash( $_COOKIE['top-ta-last-variation'] ) );
+		$raw   = wp_unslash( $_COOKIE['top-ta-last-variation'] );
+		$event = json_decode( $raw, true );
+
+		if ( ! is_array( $event ) && is_serialized( $raw ) ) {
+			$decoded = unserialize( $raw, array( 'allowed_classes' => false ) );
+			$event   = is_array( $decoded ) ? $decoded : null;
+		}
 	}
 
 	if ( isset( $event ) && is_array( $event ) && ! empty( $event['variation_id'] ) ) {
 
-		$data[] = $event['variation_id'];
+		$data[] = (int) $event['variation_id'];
 	}
 
 	return $data;

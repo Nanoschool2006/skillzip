@@ -82,6 +82,52 @@ class Time_After_Purchase extends Base {
 	}
 
 	/**
+	 * Returns the future moment when the trigger will unlock the content for the active customer.
+	 *
+	 * Mirrors {@see is_valid()}'s order-resolution flow (including the SendOwl-protected fallback)
+	 * so SendOwl-purchased customers see the same unlock date as direct customers.
+	 *
+	 * @return \DateTimeInterface|null
+	 */
+	public function get_unlock_timestamp(): ?\DateTimeInterface {
+		if ( empty( $this->schedule ) ) {
+			return null;
+		}
+
+		$user        = $this->get_tva_user();
+		$product_id  = $this->campaign->get_product_id();
+		$order       = $user->has_bought( $product_id );
+
+		// SendOwl fallback: walk protection IDs (if any) until one resolves to an order.
+		$sendowl_ids = ( ! $order instanceof \TVA_Order && \TVA_SendOwl::is_connected() ) ? static::get_sendowl_protection_ids( $product_id ) : [];
+		$order       = array_reduce(
+			$sendowl_ids,
+			static fn( $carry, $protection_id ) => $carry instanceof \TVA_Order ? $carry : $user->has_bought( $protection_id ),
+			$order
+		);
+
+		if ( ! $order instanceof \TVA_Order ) {
+			return null;
+		}
+
+		$ts = $this->schedule->get_next_occurrence( static::get_datetime( $order->get_created_at() ) );
+		return ( $ts && $ts > current_datetime() ) ? $ts : null;
+	}
+
+	/**
+	 * Returns the SendOwl protection IDs configured for the product term, or an empty array
+	 * when the term is not SendOwl-protected.
+	 *
+	 * @param int $product_id
+	 *
+	 * @return array
+	 */
+	protected static function get_sendowl_protection_ids( $product_id ) {
+		$tva_term = new \TVA_Term_Model( get_term( $product_id ) );
+		return $tva_term->is_protected_by_sendowl() ? $tva_term->get_all_sendowl_protection_ids() : [];
+	}
+
+	/**
 	 * Get the DateTime when user purchased the product
 	 *
 	 * @param array $args
