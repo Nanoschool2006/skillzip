@@ -14,7 +14,7 @@ class TVA_Const {
 	/**
 	 * TVP plugin version
 	 */
-	const PLUGIN_VERSION = '10.8.10.2';
+	const PLUGIN_VERSION = '10.9';
 
 	/**
 	 * Version for clearing the rewrite rules

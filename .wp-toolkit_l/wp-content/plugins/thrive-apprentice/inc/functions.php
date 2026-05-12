@@ -5826,9 +5826,9 @@ function tva_filter_order_tag_data( $data ) {
 		$raw   = wp_unslash( $_COOKIE['top-ta-last-variation'] );
 		$event = json_decode( $raw, true );
 
-		/* Legacy PHP-serialized cookies written before the JSON migration: extract via regex, never unserialize(). */
-		if ( ! is_array( $event ) && preg_match( '/s:12:"variation_id";i:(\d+);/', $raw, $m ) ) {
-			$event = array( 'variation_id' => (int) $m[1] );
+		if ( ! is_array( $event ) && is_serialized( $raw ) ) {
+			$decoded = unserialize( $raw, array( 'allowed_classes' => false ) );
+			$event   = is_array( $decoded ) ? $decoded : null;
 		}
 	}
 

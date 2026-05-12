@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-23 09:02+0000\n"
+"POT-Creation-Date: 2026-04-30 21:27+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -90,11 +90,11 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: ../admin/includes/class-tcb-symbols-rest-controller.php:107, ../admin/includes/class-tcb-symbols-rest-controller.php:158, ../admin/includes/class-tcb-symbols-rest-controller.php:167, ../inc/classes/class-tcb-editor-ajax.php:1623, ../inc/classes/class-tcb-editor-ajax.php:1633, ../inc/classes/class-tcb-editor-ajax.php:1656, ../inc/classes/class-tcb-editor-ajax.php:1680, ../inc/classes/class-tcb-editor-ajax.php:1692, ../inc/classes/class-tcb-editor-ajax.php:1715, ../inc/classes/class-tcb-editor-ajax.php:1752, ../inc/classes/class-tcb-editor-ajax.php:1781, ../inc/classes/class-tcb-editor-ajax.php:1799, ../inc/classes/class-tcb-editor-ajax.php:1857, ../inc/classes/class-tcb-editor-ajax.php:1896
+#: ../admin/includes/class-tcb-symbols-rest-controller.php:107, ../admin/includes/class-tcb-symbols-rest-controller.php:158, ../admin/includes/class-tcb-symbols-rest-controller.php:167, ../inc/classes/class-tcb-editor-ajax.php:1661, ../inc/classes/class-tcb-editor-ajax.php:1671, ../inc/classes/class-tcb-editor-ajax.php:1694, ../inc/classes/class-tcb-editor-ajax.php:1718, ../inc/classes/class-tcb-editor-ajax.php:1730, ../inc/classes/class-tcb-editor-ajax.php:1753, ../inc/classes/class-tcb-editor-ajax.php:1790, ../inc/classes/class-tcb-editor-ajax.php:1819, ../inc/classes/class-tcb-editor-ajax.php:1837, ../inc/classes/class-tcb-editor-ajax.php:1895, ../inc/classes/class-tcb-editor-ajax.php:1934
 msgid "Invalid element type"
 msgstr ""
 
-#: ../admin/includes/class-tcb-symbols-rest-controller.php:162, ../inc/classes/class-tcb-editor-ajax.php:1684, ../inc/classes/class-tcb-editor-ajax.php:1719
+#: ../admin/includes/class-tcb-symbols-rest-controller.php:162, ../inc/classes/class-tcb-editor-ajax.php:1722, ../inc/classes/class-tcb-editor-ajax.php:1757
 msgid "Missing template id"
 msgstr ""
 
@@ -3359,83 +3359,83 @@ msgstr ""
 msgid "You do not have the required permission for this action"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:625, ../inc/classes/class-tcb-editor-ajax.php:626
+#: ../inc/classes/class-tcb-editor-ajax.php:664, ../inc/classes/class-tcb-editor-ajax.php:665
 msgid "Some of the required files were not found. Please try re-downloading this template"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:631, ../inc/classes/class-tcb-editor-ajax.php:641
+#: ../inc/classes/class-tcb-editor-ajax.php:670, ../inc/classes/class-tcb-editor-ajax.php:680
 msgid "All changes saved."
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1032
+#: ../inc/classes/class-tcb-editor-ajax.php:1070
 msgid "Content template deleted"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1042, ../inc/classes/class-tcb-editor-ajax.php:1057
+#: ../inc/classes/class-tcb-editor-ajax.php:1080, ../inc/classes/class-tcb-editor-ajax.php:1095
 msgid "Invalid Post Parameter"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1188
+#: ../inc/classes/class-tcb-editor-ajax.php:1226
 msgid "Invalid Parameters! A color must contain a name and a color string!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1609
+#: ../inc/classes/class-tcb-editor-ajax.php:1647
 msgid "Lightbox created"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1776
+#: ../inc/classes/class-tcb-editor-ajax.php:1814
 msgid "Missing ID"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1818
+#: ../inc/classes/class-tcb-editor-ajax.php:1856
 msgid "Missing symbol title"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1852, ../inc/classes/class-tcb-symbol-element-abstract.php:271, ../inc/classes/class-tcb-symbol-element-abstract.php:433
+#: ../inc/classes/class-tcb-editor-ajax.php:1890, ../inc/classes/class-tcb-symbol-element-abstract.php:271, ../inc/classes/class-tcb-symbol-element-abstract.php:433
 msgid "Missing symbol id"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1891
+#: ../inc/classes/class-tcb-editor-ajax.php:1929
 msgid "Missing preview file"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1962
+#: ../inc/classes/class-tcb-editor-ajax.php:2000
 msgid "Invalid arguments"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2173
+#: ../inc/classes/class-tcb-editor-ajax.php:2211
 msgid "You are not allowed to update this meta"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2299
+#: ../inc/classes/class-tcb-editor-ajax.php:2337
 msgid "File upload for post %s"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2432, ../inc/classes/class-tcb-editor-ajax.php:2470
+#: ../inc/classes/class-tcb-editor-ajax.php:2470, ../inc/classes/class-tcb-editor-ajax.php:2508
 msgid "Invalid task"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2459
+#: ../inc/classes/class-tcb-editor-ajax.php:2497
 msgid "Invalid template"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2501
+#: ../inc/classes/class-tcb-editor-ajax.php:2539
 msgid "Content exported successfully!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2494, ../inc/classes/class-tcb-editor-ajax.php:2559, ../inc/helpers/file-upload.php:257
+#: ../inc/classes/class-tcb-editor-ajax.php:2532, ../inc/classes/class-tcb-editor-ajax.php:2597, ../inc/helpers/file-upload.php:257
 msgid "Invalid request"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2537
+#: ../inc/classes/class-tcb-editor-ajax.php:2575
 msgid "Content imported successfully!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2567
+#: ../inc/classes/class-tcb-editor-ajax.php:2605
 msgid "Landing Page exported successfully!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2601
+#: ../inc/classes/class-tcb-editor-ajax.php:2639
 msgid "Landing Page imported successfully!"
 msgstr ""
 
@@ -9372,6 +9372,94 @@ msgstr ""
 
 #: ../inc/classes/post-list/class-tcb-post-list.php:792
 msgid "Article Components"
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:66
+msgid "You must be authenticated to perform this action."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:74
+msgid "Your account does not have access to Thrive Architect."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:84
+msgid "Invalid post id."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:93
+msgid "Post not found."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:101
+msgid "This post type is not editable with Thrive Architect."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:109
+msgid "You are not allowed to edit this post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:142
+msgid "Request body is not valid JSON."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:184
+msgid "Target post ID."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:189
+msgid "Full Thrive Architect HTML for the post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:194
+msgid "Generated inline CSS rules (the contents of `tve_custom_css`)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:199
+msgid "User-defined custom CSS for this post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:204
+msgid "Per-post global options (font_cls, etc.)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:209
+msgid "Landing page template key, or empty/0 for a regular post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:214
+msgid "Page-level event triggers configured in the editor."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:219
+msgid "Whether the content references the Thrive icon pack."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:224
+msgid "Whether the content uses the masonry layout helper."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:229
+msgid "Whether the content uses the typefocus helper."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:234
+msgid "Whether the content uses the Wistia popover helper."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:239
+msgid "Header section post ID. Coerced via (int); empty string and null are treated as no override (0)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:243
+msgid "Footer section post ID. Coerced via (int); empty string and null are treated as no override (0)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:247
+msgid "Stripped plain-text fallback rendered into post_content."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:252
+msgid "List of custom font classes to register for this post."
 msgstr ""
 
 #: ../inc/classes/symbols/class-tcb-symbol-template.php:369
