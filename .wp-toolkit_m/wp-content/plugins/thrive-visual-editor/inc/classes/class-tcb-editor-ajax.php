@@ -566,18 +566,57 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 					'message' => __( 'You do not have the required permission for this action', 'thrive-cb' ),
 				);
 			}
+
+			/* Pre-refactor `param()` read `$_POST[$key] ?? $_REQUEST[$key]`. `$_POST + $_REQUEST` reproduces that precedence (left operand wins on duplicate keys) so the wrapper stays byte-equivalent to the original body even when an editor caller puts a save field in the URL query string. */
+			return self::save_post_content( (int) $post_id, $_POST + $_REQUEST ); //phpcs:ignore -- shape preserved verbatim for parity; sanitization happens inside save_post_content().
+		}
+
+		/**
+		 * Read a single field from a save-post payload, mirroring the sanitization behaviour of {@see param()}.
+		 *
+		 * @param array  $payload
+		 * @param string $key
+		 * @param mixed  $default
+		 * @param bool   $sanitize
+		 *
+		 * @return mixed
+		 */
+		protected static function pluck( $payload, $key, $default = null, $sanitize = true ) {
+			$value = isset( $payload[ $key ] ) ? $payload[ $key ] : $default;
+
+			return $sanitize ? map_deep( $value, 'sanitize_text_field' ) : $value;
+		}
+
+		/**
+		 * Persist Thrive Architect content for a post. Canonical save pipeline shared by the
+		 * editor's admin-ajax entry ({@see action_save_post()}) and the REST controller
+		 * ({@see TCB_Content_REST}, namespace tcb/v1).
+		 *
+		 * Caller is responsible for verifying current_user_can( 'edit_post', $post_id ) and
+		 * tcb_has_external_cap() before invoking this method.
+		 *
+		 * The $payload array shape mirrors $_POST (slashed strings) — REST callers must
+		 * wp_slash() their JSON-decoded body before calling this method to keep parity with
+		 * the AJAX entry point.
+		 *
+		 * @param int   $post_id
+		 * @param array $payload
+		 *
+		 * @return array
+		 */
+		public static function save_post_content( $post_id, $payload ) {
 			$post_id  = (int) $post_id;
 			$tcb_post = tcb_post( $post_id );
 
-			do_action( 'tcb_ajax_save_post', $post_id, $_POST );
+			do_action( 'tcb_ajax_save_post', $post_id, $payload );
 
-			$landing_page_template = $this->param( 'tve_landing_page', 0 );
+			$landing_page_template = self::pluck( $payload, 'tve_landing_page', 0 );
 
-			$inline_rules     = $this->param( 'inline_rules', null, false );
+			$inline_rules     = self::pluck( $payload, 'inline_rules', null, false );
 			$clippath_pattern = '/clip-path:(.+?);/';
 
 			$inline_rules = preg_replace_callback( $clippath_pattern, [
-				$this,
+				self::class,
 				'replace_clip_path',
 			], $inline_rules );
 
@@ -590,14 +629,14 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			 *
 			 * Usually stores flags for a particular post
 			 */
-			if ( ! empty( $_POST['tve_post_constants'] ) && is_array( $_POST['tve_post_constants'] ) ) {
-				update_post_meta( $post_id, '_tve_post_constants', map_deep( $_POST['tve_post_constants'], 'sanitize_text_field' ) );
+			if ( ! empty( $payload['tve_post_constants'] ) && is_array( $payload['tve_post_constants'] ) ) {
+				update_post_meta( $post_id, '_tve_post_constants', map_deep( $payload['tve_post_constants'], 'sanitize_text_field' ) );
 			}
 
-			if ( ( $custom_action = $this->param( 'custom_action' ) ) ) {
+			if ( ( $custom_action = self::pluck( $payload, 'custom_action' ) ) ) {
 				switch ( $custom_action ) {
 					case 'landing_page': //change or remove the landing page template for this post
-						$lp_id = $this->param( 'id' );
+						$lp_id = self::pluck( $payload, 'id' );
 
 						tcb_landing_page( $post_id )->change_template( $landing_page_template, $lp_id );
 						break;
@@ -642,7 +681,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 						break;
 					case 'landing_page_delete':
 						/* @var \TCB\SavedLandingPages\Saved_Lp $saved_lp_instance */
-						$saved_lp_instance = TCB\SavedLandingPages\Saved_Lp::get_instance_with_id( $this->param( 'id' ) );
+						$saved_lp_instance = TCB\SavedLandingPages\Saved_Lp::get_instance_with_id( self::pluck( $payload, 'id' ) );
 						$saved_lp_instance->delete();
 						$response['saved_lp_templates'] = TCB\SavedLandingPages\Saved_Lp::localize();
 
@@ -651,18 +690,18 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 
 				$response['revisions'] = tve_get_post_revisions( $post_id );
 
-				if ( isset( $_POST['header'] ) ) {
-					update_post_meta( $post_id, '_tve_header', (int) $_POST['header'] );
+				if ( isset( $payload['header'] ) ) {
+					update_post_meta( $post_id, '_tve_header', (int) $payload['header'] );
 				}
-				if ( isset( $_POST['footer'] ) ) {
-					update_post_meta( $post_id, '_tve_footer', (int) $_POST['footer'] );
+				if ( isset( $payload['footer'] ) ) {
+					update_post_meta( $post_id, '_tve_footer', (int) $payload['footer'] );
 				}
 
 				return $response;
 			}
 
 			$key     = $landing_page_template ? ( '_' . $landing_page_template ) : '';
-			$content = $this->param( 'tve_content', null, false );
+			$content = self::pluck( $payload, 'tve_content', null, false );
 
 			/**
 			 * Just in case someone whats to do stuff on content before we save it into db
@@ -680,8 +719,8 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			 */
 
 			// add lead gen forms data
-			if ( ! empty( $_POST['lead_gen_forms'] ) && is_array( $_POST['lead_gen_forms'] ) ) {
-				foreach ( $_POST['lead_gen_forms'] as $lead_gen_form ) {
+			if ( ! empty( $payload['lead_gen_forms'] ) && is_array( $payload['lead_gen_forms'] ) ) {
+				foreach ( $payload['lead_gen_forms'] as $lead_gen_form ) {
 					$form_identifier = isset( $lead_gen_form['form_identifier'] ) ? $lead_gen_form['form_identifier'] : '';
 					$inputs          = isset( $lead_gen_form['inputs'] ) ? $lead_gen_form['inputs'] : array();
 					$apis            = isset( $lead_gen_form['apis'] ) ? $lead_gen_form['apis'] : array();
@@ -693,10 +732,10 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			}
 
 			/* user defined Custom CSS rules here, had to use different key because tve_custom_css was already used */
-			update_post_meta( $post_id, "tve_user_custom_css{$key}", $this->param( 'tve_custom_css', null, false ) );
-			tve_update_post_meta( $post_id, 'tve_page_events', $this->param( 'page_events', [], false ) );
+			update_post_meta( $post_id, "tve_user_custom_css{$key}", self::pluck( $payload, 'tve_custom_css', null, false ) );
+			tve_update_post_meta( $post_id, 'tve_page_events', self::pluck( $payload, 'page_events', [], false ) );
 
-			if ( $this->param( 'update' ) === 'true' ) {
+			if ( self::pluck( $payload, 'update' ) === 'true' ) {
 				update_post_meta( $post_id, "tve_updated_post{$key}", $content );
 				/**
 				 * If there is not WP content in the post, migrate it to TCB2-editor only mode
@@ -704,7 +743,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 				$tcb_post->maybe_auto_migrate( false );
 				$tcb_post->enable_editor();
 
-				$tve_stripped_content = $this->param( 'tve_stripped_content', null, false );
+				$tve_stripped_content = self::pluck( $payload, 'tve_stripped_content', null, false );
 				$tve_stripped_content = str_replace( [
 					'<!--tvemorestart-->',
 					'<!--tvemoreend-->',
@@ -713,28 +752,28 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			}
 
 			/* global options for a post that are not included in the editor */
-			$tve_globals             = empty( $_POST['tve_globals'] ) ? [] : map_deep( array_filter( $_POST['tve_globals'] ), 'sanitize_text_field' ); // phpcs:ignore
-			$tve_globals['font_cls'] = $this->param( 'custom_font_classes', [] );
+			$tve_globals             = ( empty( $payload['tve_globals'] ) || ! is_array( $payload['tve_globals'] ) ) ? [] : map_deep( array_filter( $payload['tve_globals'] ), 'sanitize_text_field' );
+			$tve_globals['font_cls'] = self::pluck( $payload, 'custom_font_classes', [] );
 			update_post_meta( $post_id, "tve_globals{$key}", $tve_globals );
 			/* custom fonts used for this post */
 			tve_update_post_custom_fonts( $post_id, $tve_globals['font_cls'] );
 
 			if ( $landing_page_template ) {
-				update_post_meta( $post_id, 'tve_landing_page', $this->param( 'tve_landing_page' ) );
+				update_post_meta( $post_id, 'tve_landing_page', self::pluck( $payload, 'tve_landing_page' ) );
 				/* global Scripts for landing pages */
-				update_post_meta( $post_id, 'tve_global_scripts', $this->param( 'tve_global_scripts', [], false ) );
-				if ( ! empty( $_POST['tve_landing_page_save'] ) ) {
+				update_post_meta( $post_id, 'tve_global_scripts', self::pluck( $payload, 'tve_global_scripts', [], false ) );
+				if ( ! empty( $payload['tve_landing_page_save'] ) ) {
 					/* In the new version we add all data in post meta */
 					$template_data = [
 						'before_more'            => $content_split['main'],
 						'more_found'             => $content_split['more_found'],
 						'content'                => $content,
-						'inline_css'             => $this->param( 'inline_rules', null, false ),
-						'custom_css'             => $this->param( 'tve_custom_css', null, false ),
-						'tve_globals'            => $this->param( 'tve_globals', [], false ),
-						'tve_global_scripts'     => $this->param( 'tve_global_scripts', [], false ),
-						'name'                   => $this->param( 'tve_landing_page_save' ),
-						'tags'                   => $this->param( 'template_tags' ),
+						'inline_css'             => self::pluck( $payload, 'inline_rules', null, false ),
+						'custom_css'             => self::pluck( $payload, 'tve_custom_css', null, false ),
+						'tve_globals'            => self::pluck( $payload, 'tve_globals', [], false ),
+						'tve_global_scripts'     => self::pluck( $payload, 'tve_global_scripts', [], false ),
+						'name'                   => self::pluck( $payload, 'tve_landing_page_save' ),
+						'tags'                   => self::pluck( $payload, 'template_tags' ),
 						'template'               => $landing_page_template,
 						'theme_dependency'       => get_post_meta( $post_id, 'tve_disable_theme_dependency', true ),
 						'tpl_colours'            => get_post_meta( $post_id, 'thrv_lp_template_colours', true ),
@@ -777,20 +816,20 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			} else {
 				delete_post_meta( $post_id, 'tve_landing_page' );
 			}
-			tve_update_post_meta( $post_id, 'thrive_icon_pack', empty( $_POST['has_icons'] ) ? 0 : $_POST['has_icons'] );
-			tve_update_post_meta( $post_id, 'tve_has_masonry', empty( $_POST['tve_has_masonry'] ) ? 0 : 1 );
-			tve_update_post_meta( $post_id, 'tve_has_typefocus', empty( $_POST['tve_has_typefocus'] ) ? 0 : 1 );
-			tve_update_post_meta( $post_id, 'tve_has_wistia_popover', empty( $_POST['tve_has_wistia_popover'] ) ? 0 : 1 );
+			tve_update_post_meta( $post_id, 'thrive_icon_pack', empty( $payload['has_icons'] ) ? 0 : $payload['has_icons'] );
+			tve_update_post_meta( $post_id, 'tve_has_masonry', empty( $payload['tve_has_masonry'] ) ? 0 : 1 );
+			tve_update_post_meta( $post_id, 'tve_has_typefocus', empty( $payload['tve_has_typefocus'] ) ? 0 : 1 );
+			tve_update_post_meta( $post_id, 'tve_has_wistia_popover', empty( $payload['tve_has_wistia_popover'] ) ? 0 : 1 );
 
-			if ( isset( $_POST['header'] ) ) {
-				update_post_meta( $post_id, '_tve_header', (int) $_POST['header'] );
+			if ( isset( $payload['header'] ) ) {
+				update_post_meta( $post_id, '_tve_header', (int) $payload['header'] );
 			}
-			if ( isset( $_POST['footer'] ) ) {
-				update_post_meta( $post_id, '_tve_footer', (int) $_POST['footer'] );
+			if ( isset( $payload['footer'] ) ) {
+				update_post_meta( $post_id, '_tve_footer', (int) $payload['footer'] );
 			}
 
 			/* Handle the css, js and additional saves */
-			\TCB\Lightspeed\Main::handle_optimize_saves( $post_id, $_POST );
+			\TCB\Lightspeed\Main::handle_optimize_saves( $post_id, $payload );
 			/**
 			 * Remove old unused meta
 			 */
@@ -817,7 +856,6 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 			$response['revisions'] = tve_get_post_revisions( $post_id );
 
 			return $response;
-
 		}
 
 		/**
@@ -1736,7 +1774,7 @@ if ( ! class_exists( 'TCB_Editor_Ajax' ) ) {
 		 * Callback for preg_replace
 		 * Adds vendor prefix for clip-path for safari
 		 */
-		public function replace_clip_path( $matches ) {
+		public static function replace_clip_path( $matches ) {
 			return $matches[0] . ' -webkit-clip-path:' . $matches[1] . '; ';
 		}
 

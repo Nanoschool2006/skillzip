@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Architect
  * Plugin URI: https://thrivethemes.com
  * Description: Live front end editor for your WordPress content
- * Version: 10.8.10.1
+ * Version: 10.9.1
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-cb
@@ -32,6 +32,8 @@ if ( ! class_exists( 'TCB_Post' ) ) {
 	 */
 	require_once plugin_dir_path( __FILE__ ) . 'inc/classes/class-tcb-post.php';
 }
+
+require_once plugin_dir_path( __FILE__ ) . 'inc/rest-meta.php';
 
 /**
  * Init the UpdateCheck at init action because
