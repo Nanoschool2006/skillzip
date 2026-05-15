@@ -460,6 +460,7 @@ return array(
 	'trigger_datetime_label'            => esc_html__( 'Date/time is %1$s %2$s', 'thrive-apprentice' ),
 	'drip_choose_tva_lesson'            => esc_html__( 'Choose lesson', 'thrive-apprentice' ),
 	'drip_choose_tva_module'            => esc_html__( 'Choose module', 'thrive-apprentice' ),
+	'drip_choose_tva_chapter'           => esc_html__( 'Choose chapter', 'thrive-apprentice' ),
 	'drip_campaign_settings'            => [
 		'content_unlocked'                 => esc_html__( 'Content unlocked', 'thrive-apprentice' ),
 		'content_unlocked_on'              => esc_html__( 'Content unlocked on', 'thrive-apprentice' ),

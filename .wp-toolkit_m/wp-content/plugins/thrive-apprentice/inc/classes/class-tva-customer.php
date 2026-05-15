@@ -2017,6 +2017,13 @@ class TVA_Customer implements JsonSerializable {
 
 		if ( $course instanceof TVA_Course_V2 ) {
 
+			$chapters = $course->get_published_chapters();
+			if ( ! empty( $chapters ) ) {
+				foreach ( $chapters as $chapter ) {
+					$locked_lessons[ $chapter->ID ]['chapter_locked'] = ! $campaign->should_unlock( $product->get_id(), $chapter->ID );
+				}
+			}
+
 			$modules = $course->get_published_modules();
 
 			if ( ! empty( $modules ) ) {
@@ -2026,6 +2033,22 @@ class TVA_Customer implements JsonSerializable {
 					foreach ( $module->get_published_lessons() as $lesson ) {
 						$locked_lessons[ $module->ID ]['locked_lessons'][ $lesson->ID ] = ! $campaign->should_unlock_after_module( $product->get_id(), $lesson->ID );
 					}
+				}
+
+				/* Lessons that are direct children of chapters (not nested inside any module) need a lock entry too —
+				 * the per-module loop above only covers module-nested lessons. We emit them at the top-level
+				 * `locked_lessons` map, which is what the JS LessonView falls back to when no module-scoped entry exists. */
+				$module_lesson_ids = [];
+				foreach ( $modules as $module ) {
+					foreach ( $module->get_published_lessons() as $lesson ) {
+						$module_lesson_ids[ $lesson->ID ] = true;
+					}
+				}
+				foreach ( $course->get_published_lessons() as $lesson ) {
+					if ( isset( $module_lesson_ids[ $lesson->ID ] ) ) {
+						continue;
+					}
+					$locked_lessons['locked_lessons'][ $lesson->ID ] = ! $campaign->should_unlock( $product->get_id(), $lesson->ID );
 				}
 			} else {
 				foreach ( $course->get_published_lessons() as $lesson ) {
