@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Thrive_AB {
 
-	const V  = '10.8.10.1';
+	const V  = '10.9.1';
 	const DB = '1.2';
 
 	private static $_instance;
@@ -457,7 +457,13 @@ class Thrive_AB {
 					)
 				);
 
-				return $page->get_meta()->copy_non_thrive_meta( $post_ID )->copy_thrive_theme_meta( $post_ID );
+				$page_meta = $page->get_meta()
+					->init( array( 'page', 'template' ) );
+				$page_meta->copy_to( $post_ID );
+
+				return $page_meta
+					->copy_non_thrive_meta( $post_ID )
+					->copy_thrive_theme_meta( $post_ID );
 			}
 
 			/**
