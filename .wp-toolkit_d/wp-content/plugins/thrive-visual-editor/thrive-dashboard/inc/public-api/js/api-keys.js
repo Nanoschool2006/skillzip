@@ -158,6 +158,7 @@
 	function openModal() {
 		/* Reset form state */
 		$( '#td-new-key-name' ).val( '' );
+		$( '#td-key-name-error' ).removeClass( 'active' ).text( '' );
 		$( '#td-save-new-key' ).prop( 'disabled', false ).text( i18n.generate );
 
 		/* Create overlay if not exists */
@@ -205,11 +206,25 @@
 
 	/* ========== Create Key ========== */
 
+	/* Clear name error when user types */
+	$( document ).on( 'input', '#td-new-key-name', function() {
+		$( '#td-key-name-error' ).removeClass( 'active' ).text( '' );
+	} );
+
 	$( document ).on( 'click', '#td-save-new-key', function() {
-		var name = $.trim( $( '#td-new-key-name' ).val() );
+		var name = $.trim( $( '#td-new-key-name' ).val() ),
+			namePattern = /^[a-zA-Z0-9 \-_.,&()]+$/,
+			$error = $( '#td-key-name-error' );
+
+		$error.removeClass( 'active' ).text( '' );
 
 		if ( ! name ) {
-			alert( i18n.name_required );
+			$error.text( i18n.name_required ).addClass( 'active' );
+			return;
+		}
+
+		if ( ! namePattern.test( name ) ) {
+			$error.text( i18n.name_invalid ).addClass( 'active' );
 			return;
 		}
 
