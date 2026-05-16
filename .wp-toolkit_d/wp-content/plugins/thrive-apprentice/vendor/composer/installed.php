@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'thrivethemes/thrive-apprentice',
-        'pretty_version' => '10.9.0.1.beta',
-        'version' => '10.9.0.1-beta',
-        'reference' => '7e798b8a405135942f081482d20f3c3ed68d2612',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '0d37073014761b7c39d667f9b7ff330b4d6947f8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -164,9 +164,9 @@
             'dev_requirement' => false,
         ),
         'symfony/deprecation-contracts' => array(
-            'pretty_version' => 'v3.6.0',
-            'version' => '3.6.0.0',
-            'reference' => '63afe740e99a13ba87ec199bb07bbdee937a5b62',
+            'pretty_version' => 'v3.7.0',
+            'version' => '3.7.0.0',
+            'reference' => '50f59d1f3ca46d41ac911f97a78626b6756af35b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/deprecation-contracts',
             'aliases' => array(),
@@ -200,9 +200,9 @@
             'dev_requirement' => false,
         ),
         'thrivethemes/thrive-apprentice' => array(
-            'pretty_version' => '10.9.0.1.beta',
-            'version' => '10.9.0.1-beta',
-            'reference' => '7e798b8a405135942f081482d20f3c3ed68d2612',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '0d37073014761b7c39d667f9b7ff330b4d6947f8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

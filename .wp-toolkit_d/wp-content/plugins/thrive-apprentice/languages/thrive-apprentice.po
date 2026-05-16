@@ -5446,7 +5446,7 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: ../admin/includes/templates/settings/sendowl/links.phtml:23, ../admin/includes/templates/settings/sendowl/links.phtml:23, ../inc/classes/class-tva-email-templates.php:794, ../inc/classes/reporting/event-fields/class-product-id.php:24, ../inc/classes/reporting/event-fields/class-product-id.php:32
+#: ../admin/includes/templates/settings/sendowl/links.phtml:23, ../admin/includes/templates/settings/sendowl/links.phtml:23, ../inc/classes/class-tva-email-templates.php:806, ../inc/classes/reporting/event-fields/class-product-id.php:24, ../inc/classes/reporting/event-fields/class-product-id.php:32
 msgid "Product"
 msgstr ""
 
@@ -7808,79 +7808,79 @@ msgstr ""
 msgid "You must complete all requirements for this lesson in order to mark it as complete"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:497, ../inc/classes/class-tva-email-templates.php:516
+#: ../inc/classes/class-tva-email-templates.php:514, ../inc/classes/class-tva-email-templates.php:528
 msgid "Reset your password: "
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:520, ../inc/classes/class-tva-email-templates.php:752
+#: ../inc/classes/class-tva-email-templates.php:532, ../inc/classes/class-tva-email-templates.php:764
 msgid "Set your password"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:669
+#: ../inc/classes/class-tva-email-templates.php:681
 msgid "Stripe - new account created after purchase"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:674
+#: ../inc/classes/class-tva-email-templates.php:686
 msgid "Square - new account created after purchase"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:679
+#: ../inc/classes/class-tva-email-templates.php:691
 msgid "SendOwl - new account created on registration page (during purchase flow)"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:684
+#: ../inc/classes/class-tva-email-templates.php:696
 msgid "ThriveCart - new account created after purchase"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:689
+#: ../inc/classes/class-tva-email-templates.php:701
 msgid "When a user registers to create a new free account"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:698
+#: ../inc/classes/class-tva-email-templates.php:710
 msgid "Assessment Passed"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:703
+#: ../inc/classes/class-tva-email-templates.php:715
 msgid "Assessment Failed"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:708
+#: ../inc/classes/class-tva-email-templates.php:720
 msgid "Course Welcome - when a user gains access to a course"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:746, ../inc/classes/class-tva-email-templates.php:758
+#: ../inc/classes/class-tva-email-templates.php:758, ../inc/classes/class-tva-email-templates.php:770
 msgid "Log into your account"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:770
+#: ../inc/classes/class-tva-email-templates.php:782
 msgid "Access your assessment"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:800, ../tcb-bridge/classes/course-list/class-hooks.php:278, ../tcb-bridge/classes/course-list/class-hooks.php:279
+#: ../inc/classes/class-tva-email-templates.php:812, ../tcb-bridge/classes/course-list/class-hooks.php:278, ../tcb-bridge/classes/course-list/class-hooks.php:279
 msgid "Course URL"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:857
+#: ../inc/classes/class-tva-email-templates.php:869
 msgid "Welcome to [course_name]! Get Started Now"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1021
+#: ../inc/classes/class-tva-email-templates.php:1033
 msgid "New Account Created"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1029
+#: ../inc/classes/class-tva-email-templates.php:1041
 msgid "Certificate manually issued"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1037
+#: ../inc/classes/class-tva-email-templates.php:1049
 msgid "Assessment Marked"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1045
+#: ../inc/classes/class-tva-email-templates.php:1057
 msgid "Product access is expiring"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1053
+#: ../inc/classes/class-tva-email-templates.php:1065
 msgid "New Course Welcome"
 msgstr ""
 

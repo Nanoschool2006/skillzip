@@ -62,6 +62,14 @@ class TVA_Email_Templates {
 	protected $_user_assessment;
 
 	/**
+	 * Tracks which users have already been sent a welcome email in this request.
+	 * Prevents duplicate emails when multiple products are granted in a single automation run.
+	 *
+	 * @var array
+	 */
+	protected static $_automator_welcome_sent_this_request = array();
+
+	/**
 	 * Tracks whether a course welcome email was sent during the current request.
 	 * Used to prevent sending duplicate emails (new account + course welcome) for the same user.
 	 *
@@ -106,9 +114,13 @@ class TVA_Email_Templates {
 		add_filter( 'tva_admin_localize', array( $this, 'get_connected_email_apis' ) );
 		add_filter( 'tva_admin_localize', array( $this, 'get_admin_data_localization' ) );
 		
-		// Automator email coordination
-		add_action( 'user_register', array( $this, 'track_automator_user_creation' ), 10, 1 );
+		// Automator email coordination - prevent duplicate emails
+		// When automation creates a user, we block WordPress's automatic email and send our own when product access is granted
+		// Priority 5 ensures this runs before other user_register hooks (like TVA_Customer::on_user_register) that may grant product access
+		add_action( 'user_register', array( $this, 'track_automator_user_creation' ), 5, 1 );
+		add_filter( 'wp_send_new_user_notification_to_user', array( $this, 'prevent_automator_user_notification' ), 10, 2 );
 		add_action( 'tva_user_receives_product_access', array( $this, 'send_automator_welcome_email' ), 10, 2 );
+
 		add_filter( 'tva_admin_localize', array( $this, 'get_shortcodes' ) );
 		add_filter( 'tva_admin_localize', array( $this, 'get_triggers' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
@@ -491,15 +503,15 @@ class TVA_Email_Templates {
 		$GLOBALS['tva_user_pass_generated'] = true;
 	}
 
-	public function generate_password_set_link_for_user( $user ) {	
+	public function generate_password_set_link_for_user( $user ) {
+		if ( ! $user || ! isset( $user->ID ) ) {
+			error_log( 'generate_password_set_link_for_user: User not found.' );
+			return new WP_Error( 'user_not_found', 'User not found.' );
+		}
+
 		if ( ! empty( get_transient( 'generate_password_set_link_for_user_transition' . $user->ID ) ) ) {
 			$reset_link = get_transient( 'generate_password_set_link_for_user_transition' . $user->ID );
 			return esc_html__( 'Reset your password: ', 'thrive-apprentice' ) . '<a href="' . $reset_link . '" target="_blank">' . $reset_link . '</a>';
-		}
-
-		if ( ! $user ) {
-			error_log( 'generate_password_set_link_for_user: User not found with ID ' . $user->ID );
-			return new WP_Error( 'user_not_found', 'User not found.' );
 		}		
 	
 		// Generate the reset key. This also stores it in user meta with an expiration.
@@ -516,16 +528,16 @@ class TVA_Email_Templates {
 		return esc_html__( 'Reset your password: ', 'thrive-apprentice' ) . '<a href="' . $reset_link . '" target="_blank">' . $reset_link . '</a>';
 	}
 
-	public function generate_password_set_link_for_user_v2( $user, $content ) {	
+	public function generate_password_set_link_for_user_v2( $user, $content ) {
 		$sc_text = ! empty( $content ) ? $content : esc_html__( 'Set your password', 'thrive-apprentice' );
-		if ( ! empty( get_transient( 'generate_password_set_link_for_user_transition' . $user->ID ) ) ) {
-			$reset_link = get_transient( 'generate_password_set_link_for_user_transition' . $user->ID );
-			return  '<a href="' . $reset_link . '" target="_blank">' . $sc_text . '</a>';
+		if ( ! $user || ! isset( $user->ID ) ) {
+			error_log( 'generate_password_set_link_for_user_v2: User not found.' );
+			return new WP_Error( 'user_not_found', 'User not found.' );
 		}
 
-		if ( ! $user ) {
-			error_log( 'generate_password_set_link_for_user: User not found with ID ' . $user->ID );
-			return new WP_Error( 'user_not_found', 'User not found.' );
+		if ( ! empty( get_transient( 'generate_password_set_link_for_user_transition' . $user->ID ) ) ) {
+			$reset_link = get_transient( 'generate_password_set_link_for_user_transition' . $user->ID );
+			return '<a href="' . $reset_link . '" target="_blank">' . $sc_text . '</a>';
 		}		
 	
 		// Generate the reset key. This also stores it in user meta with an expiration.
@@ -1157,72 +1169,102 @@ class TVA_Email_Templates {
 	}
 
 	/**
-	 * Track user creation from automation tools
+	 * Track user creation from automation tools.
+	 * Sets a transient to indicate this user was created via automation webhook.
+	 * Only sets transient if a custom email template is configured - otherwise lets WordPress send the default email.
 	 *
 	 * @param int $user_id The user ID.
 	 */
 	public function track_automator_user_creation( $user_id ) {
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( $_SERVER['REQUEST_URI'] ) : '';
-		
-		// Check if this is coming from automation based on REQUEST_URI
-		$is_automation = false;
-		
-		// Uncanny Automator webhook pattern (from logs: /wp-json/uap/v2/uap-1584-1587)
-		if ( strpos( $request_uri, '/wp-json/uap/v2/' ) !== false ) {
-			$is_automation = true;
-		}
-		
-		// Thrive Automator webhook pattern (may need adjustment)
-		if ( strpos( $request_uri, '/wp-json/tap/' ) !== false ) {
-			$is_automation = true;
-		}
-		
-		if ( $is_automation ) {
-			set_transient( 'automator_pending_course_' . $user_id, true, 10 * MINUTE_IN_SECONDS );
+
+		// Check for automation webhook patterns in the request URI
+		$is_automation = strpos( $request_uri, '/wp-json/tap/' ) !== false  // Thrive Automator
+		              || strpos( $request_uri, '/wp-json/uap/v2/' ) !== false; // Uncanny Automator
+
+		// Only block the default email if we have a custom template configured
+		// If no template, let WordPress send its default email immediately
+		if ( $is_automation && $this->check_templates_for_trigger( 'wordpress' ) ) {
+			set_transient( 'tva_automator_user_' . $user_id, true, HOUR_IN_SECONDS );
 		}
 	}
 
 	/**
-	 * Send welcome email when course is assigned to automator-created user
+	 * Send welcome email when product access is granted to an automator-created user.
+	 * This is the ONLY place the welcome email should be sent for these users.
 	 *
-	 * @param WP_User $user       The user object.
-	 * @param int     $product_id The product ID.
+	 * @param WP_User     $user       The user object.
+	 * @param int|Product $product_id The product ID or Product object.
 	 */
 	public function send_automator_welcome_email( $user, $product_id ) {
-		$user_id = $user->ID;
-		$transient_key = 'automator_pending_course_' . $user_id;
-		
-		// Check if transient exists (user created by automation)
+		if ( ! $user instanceof \WP_User ) {
+			return;
+		}
+
+		// Per-request guard: prevent duplicate sends when multiple products are granted in one request
+		if ( isset( self::$_automator_welcome_sent_this_request[ $user->ID ] ) ) {
+			return;
+		}
+
+		$transient_key = 'tva_automator_user_' . $user->ID;
+
+		// Only proceed if this user was created via automation
 		if ( ! get_transient( $transient_key ) ) {
 			return;
 		}
-		
-		// Clean up transient
-		delete_transient( $transient_key );
-		
-		// Check if email template exists
+
+		// Check if email template is configured
 		$email_template = $this->check_templates_for_trigger( 'wordpress' );
 		if ( ! $email_template ) {
 			return;
 		}
-		
-		// Check if Product class exists to prevent fatal errors
-		if ( ! class_exists( 'TVA\Product' ) ) {
-			return;
+
+		// Set up product context for shortcodes
+		$resolved_product_id = is_object( $product_id ) && method_exists( $product_id, 'get_id' )
+			? $product_id->get_id()
+			: (int) $product_id;
+
+		if ( class_exists( 'TVA\Product' ) ) {
+			$product      = new \TVA\Product( $resolved_product_id );
+			$product_name = $product->get_name();
+			if ( ! empty( $product_name ) ) {
+				$this->_course  = $product_name;
+				$this->_product = $product;
+			}
 		}
-		
-		// Create product instance and validate
-		$product = new \TVA\Product( $product_id );
-		if ( ! $product || ! method_exists( $product, 'get_name' ) ) {
-			return;
-		}
-		
-		// Set product name for email template
-		$GLOBALS['tva_current_course_name'] = $product->get_name();
-		
-		// Send the welcome email
+
+		$this->_user = $user;
+
+		// Temporarily remove our blocking filter to allow this email through
+		remove_filter( 'wp_send_new_user_notification_to_user', array( $this, 'prevent_automator_user_notification' ), 10 );
+
+		// Mark as sent for this request
+		self::$_automator_welcome_sent_this_request[ $user->ID ] = true;
+
+		// Prepare and send the email
 		$this->trigger_process( $email_template );
-		wp_send_new_user_notifications( $user_id, 'user' );
+		wp_send_new_user_notifications( $user->ID, 'user' );
+
+		// Re-add the filter to continue blocking any other automatic emails
+		add_filter( 'wp_send_new_user_notification_to_user', array( $this, 'prevent_automator_user_notification' ), 10, 2 );
+	}
+
+	/**
+	 * Prevent WordPress from sending automatic user notification for automator-created users.
+	 * The email will be sent later via send_automator_welcome_email() when product access is granted.
+	 *
+	 * @param bool    $send Whether to send the notification email.
+	 * @param WP_User $user User object.
+	 *
+	 * @return bool
+	 */
+	public function prevent_automator_user_notification( $send, $user ) {
+		// Block email if this user was created via automation (transient exists)
+		if ( $user && get_transient( 'tva_automator_user_' . $user->ID ) ) {
+			return false;
+		}
+
+		return $send;
 	}
 
 	/**
