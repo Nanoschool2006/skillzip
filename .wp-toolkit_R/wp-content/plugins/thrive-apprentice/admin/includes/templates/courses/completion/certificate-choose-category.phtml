@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Thrive Themes - https://thrivethemes.com
+ *
+ * @package thrive-apprentice
+ */
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Silence is golden!
+}
+?>
+<div class="l-side font-rubik">
+	<?php echo esc_html__( 'Only issue certificate when member achieves a course score equal to or greater than', 'thrive-apprentice' ); ?>
+</div>
+<div class="r-side">
+	<input type="text" name="tva_certificate_score" id="tva-certificate-score" value="" class="change" data-fn="certificateScoreChange" value="" style="display: <# if ( this.$display_as == 'score' || this.$display_as == 'percentage' ) { #>block<# } else { #>none<# } #>" />
+	<select name="tva_certificate_category" id="tva-certificate-category" class="change" data-fn="certificateCategoryChange" style="display: <# if ( this.$display_as == 'category' ) { #>block<# } else { #>none<# } #>">
+		<option value="all" selected="selected"><?php echo esc_html__( 'Please select', 'thrive-apprentice' ); ?></option>
+		<option value="Failed">Failed</option>
+		<option value="Passed">Passed</option>
+	</select>
+</div>
+<div class="clearfix"></div>

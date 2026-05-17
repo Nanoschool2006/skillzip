@@ -1,0 +1,202 @@
+<?php
+use TVA\Square\Hooks;
+
+$status_response = Hooks::get_status_response();
+$connected_status = $status_response['success'] ?? false;
+$live_enabled = $status_response['live_enabled'] ?? false;
+$test_enabled = $status_response['test_enabled'] ?? false;
+$product_id = $_COOKIE["tva_current_product_id"];
+$product_data = Hooks::get_product_data( (int) $product_id );
+
+$selected_mode = $product_data['selected_mode'];
+$price_class = $product_data['price_class'];
+$price_text = $product_data['price_text'];
+$prepopulate_email = $product_data['prepopulate_email'] && $product_data['prepopulate_email'] === '1' ? true : false;
+$success_url = $product_data['success_url'] ?? '';
+$cancel_url = $product_data['cancel_url'] ?? '';
+$pricing = $product_data['pricing'] ?? [];
+$pricing_set = $product_data['pricing_set'];
+$price_set = $pricing_set === true ? true : false;
+$selected_price_id = $product_data['selected_price_id'] ?? '0';
+$settings = $product_data['settings'] ?? [];
+$merchant_id = $product_data['merchant_id'] ?? '';
+
+$hide_class = '';
+if (
+	isset($settings)
+	&& is_array($settings)
+    && is_array($settings['action_button_display'])
+    && isset($settings['action_button_display']['buy_action'])
+    && is_array($settings['action_button_display']['buy_action'])
+    && $settings['action_button_display']['buy_action']['provider'] === 'square'
+) {
+    $hide_class = 'tva-hide';
+}
+
+?>
+<div class="tva-rule-header pt-15 pb-15 click" data-fn="toggleItemsList" data-selectedmode="<?php echo $selected_mode; ?>" >
+	<div class="tva-rule-img <#= model.get('slug') #> ml-15"><?php tva_get_svg_icon( 'square' ); ?></div>
+
+	<?php if ( $connected_status === false ): ?>
+	<button class="click tva-square-connect mr-20" data-fn="createAccountSquare"><?php echo __( 'Connect Square', 'thrive-apprentice' ); ?></button>
+	<?php else: ?>
+	<div class="tva-course-integration-label"></div>
+	<div class="tva-square-mode" data-mode="<?php echo $selected_mode; ?>">
+		<div class="tva-square-connection-state mr-15">
+			<?php tva_get_svg_icon( 'check-circle-green' ); ?>
+			<p class="m-0"><?php echo __( 'Connected', 'thrive-apprentice' ); ?></p>
+		</div>
+		<span class="tva-square-selected-label <?php echo $price_class; ?> ">
+			<?php echo __( $price_text, 'thrive-apprentice' ); ?>
+		</span>
+		<span class="current-state">
+			<?php
+				if ( $selected_mode === 'live' ) {
+					echo __( 'PRODUCTION', 'thrive-apprentice' ); 
+				} else {
+					echo __( 'SANDBOX', 'thrive-apprentice' );
+				}
+			?>
+		</span>
+	</div>
+	<div class="tva-rule-status tva-integration-status"></div>
+	<div class="tva-rule-toggle">
+		<span class="tva-arrow-icon">&nbsp;</span>
+	</div>
+	<?php endif; ?>
+</div>
+<div class="tva-rule-items tva-course-integration-items-wrapper" style="display: none">
+	<div class="tva-flex tva-square-product-header mb-20">
+
+		<div class="tva-square-env-labels tva-flex tva-space-between">
+			<span><?php echo __( 'Environment', 'thrive-apprentice' ); ?></span>
+			<div class="tva-tooltip-parent tva-square-test-tooltip">
+				<div class="tva-info-icon"><?php tva_get_svg_icon( 'info-solid' ); ?>
+					<div class="tva-custom-tooltip tva-tooltip-inherited square-tooltip">
+						<?php echo __( "The <b>SANDBOX environment</b> allows you to simulate transactions. Learn more about the <a href='https://developer.squareup.com/docs/devtools/sandbox/overview' target='_blank' rel='noopener'>sandbox environment</a>. Switch to the PRODUCTION environment and create real products when you are ready to sell them.", 'thrive-apprentice' ); ?>
+					</div>
+				</div>
+			</div>
+			<select id="tva-square-mode-select" class="change" data-fn="changeTestMode">
+				<option value="test" <?php echo $selected_mode === 'test' ? 'selected' : '' ?> ><?php echo __( 'Sandbox', 'thrive-apprentice' ); ?></option>
+				<option value="live" <?php echo $selected_mode === 'live' ? 'selected' : '' ?> ><?php echo __( 'Production', 'thrive-apprentice' ); ?></option>
+			</select>
+		</div>
+		<a class="tva-square-manage-link" href="<?php echo admin_url( 'admin.php?page=thrive_apprentice#settings/payments/square' ) ?>" rel="noopener" target="_blank"><?php tva_get_svg_icon( 'cog' ); ?><?php echo __( 'Manage Square' ); ?></a>
+	</div>
+	<div id="square-buy-now-notice" class="tva-container-notice tva-container-notice-orange tva-buy-button-notice <?php echo $hide_class; ?> mb-20">
+		<?php tva_get_svg_icon( 'info-circle_light' ); ?>
+		<?php echo __( 'To display the buy now button for this product you must change the action button display settings to “Buy now” > “Square” ', 'thrive-apprentice' ); ?> <a href="javascript:void(0)" class="click" data-fn="goToAccessRules">&nbsp;<?php echo __( 'here', 'thrive-apprentice' ); ?> </a>
+	</div>
+	<div id="tva-square-pricing-list" class="tva-square-product-pricing tva-square-product-price-wrapper tva-flex-column tva-flex" data-price-set="<?php echo $price_set ? 'true' : 'false'; ?>">
+		<div class="tva-flex tva-square-price mt-20 tvd-input-field">
+			<p class="m-0"><?php echo __( 'Product Pricing', 'thrive-apprentice' ); ?></p>
+			<div class="tva-square-price-select" data-mode="<?php echo $selected_mode; ?>">
+				<select id="tva-square-manageable-prices" class="change" data-fn="selectPrice">
+					<?php
+						foreach ( $pricing as $price ) {
+							$price_val = number_format( $price['price'], 2, '.', '' ) ?? '0.00';
+							$price_currency = $price['currency'] ?? 'no currency';
+							$price_mode = $price['mode'] ?? 'live';
+							$price_id = $price['square_id'] ?? 0;
+							$price_merchant_id = $price['merchant_id'] ?? '';
+							$cadence = $price['cadence'] ?? '';
+							$cadence = str_replace('_', ' ', strtolower( $cadence ));
+							$recurring = $cadence !== '' ? 'recurring' : 'onetime';
+							if ( $price_merchant_id === $merchant_id ) {
+								echo '<option data-product-id="' . $product_id . '" data-merchant-id="' . $price_merchant_id . '" data-recurring="' . $recurring . '" data-mode="' . $price_mode . '" value="' . $price_id . '"' . ( $selected_price_id === $price_id ? 'selected' : '' ) . '>' . $price_currency . ' ' . (string) $price_val . ' ' . $cadence . '</option>';
+							}
+						}
+					?>
+				</select>
+			</div>
+		</div>
+		<div class="tva-rule-items-clear click" data-fn="clearSelectedItems">
+			<?php tva_get_svg_icon( 'times-circle_light' ); ?>
+			<a href="javascript:void(0)"><?php echo esc_html__( 'Clear selection', 'thrive-apprentice' ); ?></a>
+		</div>
+	</div>
+	<div id="tva-square-add-pricing" class="tva-square-product-pricing tva-square-add-price-wrapper tva-flex" data-price-set="<?php echo $price_set ? 'false' : 'true' ; ?>">
+		<div class="tva-square-add-price">
+			<p class="m-0"><?php echo __( 'Product pricing', 'thrive-apprentice' ); ?></p>
+			<a href="javascript:void(0);" class="click tva-btn tva-btn-blue float-right mb-0 tva-add-rule-btn" data-fn="openPriceModal">
+				<?php tva_get_svg_icon( 'add-btn' ); ?>
+				<?php echo __( 'Add Price', 'thrive-apprentice' ); ?>
+			</a>
+		</div>
+	</div>
+	<div class="tva-sub-advanced-settings-wrapper tva-collapsed mb-10">
+		<div class="tva-sub-advanced-settings-header click" data-fn="toggleSettingsExpanded">
+			<p class="m-0"><?php echo __( 'Advanced settings', 'thrive-apprentice' ); ?></p>
+			<?php tva_get_svg_icon( 'caret-down' ); ?>
+		</div>
+		<div class="tva-sub-advanced-settings">
+			<div class="tvd-switch mb-20 tva-square-prepopulate-email">
+				<label class="tva-slide-checkbox">
+					<input type="checkbox" class="click" data-fn="changePrepopulateEmail" id="tva-square-prepopulate-email" <?php echo $prepopulate_email ? 'checked="checked"' : '' ?> />
+					<span class="lever"></span>
+					<span class="settings-checkbox-label"><?php echo esc_html__( 'Pre-populate email at checkout when user is logged in', 'thrive-apprentice' ); ?></span>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="tva-square-urls tva-flex tva-flex-column">
+		<div class="tva-flex tva-square-url mt-20 tvd-input-field">
+			<p class="m-0"><?php echo __( 'Success', 'thrive-apprentice' ); ?></p>
+			<input id="tva-square-success-url" 
+				class="change ml-15" 
+				data-fn="changeSuccessUrl" 
+				type="text" 
+				placeholder="<?php echo esc_html__( 'https://', 'thrive-apprentice' ); ?>"
+				value="<?php echo $success_url; ?>" />
+			<label id="tva-square-success-label" class="tvd-active" data-error="<?php echo esc_attr__( 'You need to add a valid URL link', 'thrive-apprentice' ) ?>">&nbsp;</label>
+		</div>
+		<div class="tva-add-square-page">
+			<a href="javascript:void(0)" class="tva-create-new-page click" data-fn="toggleSuccessPage">
+				<?php tva_get_svg_icon( 'plus-circle' ); ?><?php echo __( 'Create new page', 'thrive-apprentice' ) ?>
+			</a>
+			<div class="tva-login-box tva-hide tva-square-success-create">
+				<input placeholder="<?php echo __( 'Page title', 'thrive-apprentice' ) ?>">
+
+				<div class="tva-login-box-footer mt-0">
+					<button class="tva-empty-btn mr-10 click" data-fn="toggleSuccessPage">
+						<?php echo __( 'Cancel', 'thrive-apprentice' ) ?>
+					</button>
+					<button class="tva-save-btn click" data-fn="saveSuccessPage">
+						<?php tva_get_svg_icon( 'plus' ); ?>
+						<?php echo __( 'Add page', 'thrive-apprentice' ) ?>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="tva-flex tva-square-url mt-20 tvd-input-field">
+			<p class="m-0"><?php echo __( 'Cancel/failure', 'thrive-apprentice' ); ?></p>
+			<input id="tva-square-cancel-url" 
+				class="change ml-15" 
+				data-fn="changeCancelUrl" 
+				type="text" 
+				placeholder="<?php echo esc_html__( 'https://', 'thrive-apprentice' ); ?>"
+				value="<?php echo $cancel_url; ?>" />
+			<label id="tva-square-cancel-label" class="tvd-active" data-error="<?php echo esc_attr__( 'You need to add a valid URL link', 'thrive-apprentice' ) ?>">&nbsp;</label>
+		</div>
+		<div class="tva-add-square-page">
+			<a href="javascript:void(0)" class="tva-create-new-page click" data-fn="toggleCancelPage">
+				<?php tva_get_svg_icon( 'plus-circle' ); ?><?php echo __( 'Create new page', 'thrive-apprentice' ) ?>
+			</a>
+			<div class="tva-login-box tva-hide tva-square-cancel-create">
+				<input placeholder="<?php echo __( 'Page title', 'thrive-apprentice' ) ?>" class="tvd-save input" type="text" data-fn="onInput" data-field="title">
+
+				<div class="tva-login-box-footer mt-0">
+					<button class="tva-empty-btn mr-10 click" data-fn="toggleCancelPage">
+						<?php echo __( 'Cancel', 'thrive-apprentice' ) ?>
+					</button>
+					<button class="tva-save-btn click" data-fn="saveCancelPage">
+						<?php tva_get_svg_icon( 'plus' ); ?>
+						<?php echo __( 'Add page', 'thrive-apprentice' ) ?>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
