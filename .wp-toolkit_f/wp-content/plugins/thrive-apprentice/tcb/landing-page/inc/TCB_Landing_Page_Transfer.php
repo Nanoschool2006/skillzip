@@ -19,9 +19,8 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 
 	const DEBUG_LOCAL = false;
 
-	const API_URL         = 'http://landingpages.thrivethemes.com/cloud-api/index-api.php';
-	const API_SERVICE     = 'http://service-api.thrivethemes.com/cloud-templates-api';
-	const API_SERVICE_DEV = 'http://thrive.service/cloud-api/index-api.php';
+	const API_URL     = 'https://landingpages.thrivethemes.com/cloud-api/index-api.php';
+	const API_SERVICE = 'https://service-api.thrivethemes.com/cloud-templates-api';
 
 	/**
 	 * @var TCB_Landing_Page_Cloud_Templates_Api

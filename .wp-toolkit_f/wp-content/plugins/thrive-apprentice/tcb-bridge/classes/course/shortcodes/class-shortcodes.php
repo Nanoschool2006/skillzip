@@ -502,7 +502,10 @@ class Shortcodes {
 				 * we need to call do_shortcode in order to execute the logic for the current item's structure as well
 				 * to have the static $child_count_per_element have the needed value
 				 **/
-				$rendered_children              = do_shortcode( $prepared_content );
+				$rendered_children = do_shortcode( $prepared_content );
+				if ( ! Course\Main::$is_editor_page && $this->active_item && $this->get_active_state() === $this->states['locked'] ) {
+					$rendered_children = apply_filters( 'tva_drip_locked_tile_html', $rendered_children, (int) $this->active_item->ID );
+				}
 				$attributes['data-child-count'] = isset( static::$child_count_per_element[ $this->active_item->ID ] ) ? static::$child_count_per_element[ $this->active_item->ID ] : 0;
 				$return                         .= TCB_Utils::wrap_content( $rendered_children, 'div', '', $classes, $attributes );
 			}

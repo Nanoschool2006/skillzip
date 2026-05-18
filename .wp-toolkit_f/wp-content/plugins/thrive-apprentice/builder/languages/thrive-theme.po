@@ -309,11 +309,11 @@ msgstr ""
 msgid "Open/close sidebar"
 msgstr ""
 
-#: ../inc/classes/class-thrive-theme-update.php:140
+#: ../inc/classes/class-thrive-theme-update.php:136
 msgid "An Unexpected HTTP Error occurred during the API request"
 msgstr ""
 
-#: ../inc/classes/class-thrive-theme-update.php:140
+#: ../inc/classes/class-thrive-theme-update.php:136
 msgid "Try again"
 msgstr ""
 
