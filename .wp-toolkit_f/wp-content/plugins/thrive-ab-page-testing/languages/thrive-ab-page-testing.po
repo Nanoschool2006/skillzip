@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-23 09:12+0000\n"
+"POT-Creation-Date: 2026-05-12 14:57+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Conversions Rate"
 msgstr ""
 
-#: ../includes/class-thrive-ab-meta-box-variations-table.php:84, ../includes/ajax/class-thrive-ab-ajax-controller.php:292, ../includes/test/class-thrive-ab-test-manager.php:234, ../includes/views/backbone/test/monetary-table.php:19, ../includes/views/backbone/test/table.php:19, ../includes/views/backbone/modals/winner/test/monetary.php:17
+#: ../includes/class-thrive-ab-meta-box-variations-table.php:84, ../includes/ajax/class-thrive-ab-ajax-controller.php:293, ../includes/test/class-thrive-ab-test-manager.php:234, ../includes/views/backbone/test/monetary-table.php:19, ../includes/views/backbone/test/table.php:19, ../includes/views/backbone/modals/winner/test/monetary.php:17
 msgid "Revenue"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Chance to Beat Original"
 msgstr ""
 
-#: ../includes/class-thrive-ab-meta-box-variations-table.php:91, ../includes/ajax/class-thrive-ab-ajax-controller.php:294, ../includes/test/class-thrive-ab-test-manager.php:244, ../includes/views/backbone/test/optins-table.php:18, ../includes/views/backbone/modals/winner/test/optins.php:17
+#: ../includes/class-thrive-ab-meta-box-variations-table.php:91, ../includes/ajax/class-thrive-ab-ajax-controller.php:295, ../includes/test/class-thrive-ab-test-manager.php:244, ../includes/views/backbone/test/optins-table.php:18, ../includes/views/backbone/modals/winner/test/optins.php:17
 msgid "Subscriptions"
 msgstr ""
 
@@ -352,15 +352,15 @@ msgstr ""
 msgid "Method %s not implemented"
 msgstr ""
 
-#: ../includes/ajax/class-thrive-ab-ajax-controller.php:293
+#: ../includes/ajax/class-thrive-ab-ajax-controller.php:294
 msgid "Goal Page Visit"
 msgstr ""
 
-#: ../includes/ajax/class-thrive-ab-ajax-controller.php:360
+#: ../includes/ajax/class-thrive-ab-ajax-controller.php:361
 msgid "There was an error in the process."
 msgstr ""
 
-#: ../includes/ajax/class-thrive-ab-ajax-controller.php:373
+#: ../includes/ajax/class-thrive-ab-ajax-controller.php:374
 msgid "The test was deleted successfully!"
 msgstr ""
 
@@ -508,7 +508,7 @@ msgstr ""
 msgid "You have no running test with that name"
 msgstr ""
 
-#: ../includes/views/admin/edit-post/variations-table.php:35, ../includes/views/backbone/dashboard/dashboard.php:27, ../includes/views/backbone/dashboard/dashboard.php:27
+#: ../includes/views/admin/edit-post/variations-table.php:35, ../includes/views/backbone/dashboard/dashboard.php:27
 msgid "Set Up & Start A/B Test"
 msgstr ""
 
