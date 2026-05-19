@@ -1,0 +1,61 @@
+<?php
+
+use TVA\Stripe\Hooks;
+
+$currencies = Hooks::currencies();
+
+?>
+
+<div class="tvd-modal-content">
+	<h3 class="tvd-modal-title"><?php esc_html_e( 'Add Product Price', 'thrive-apprentice' ); ?></h3>
+
+    <div class="tva-stripe-price-wrapper">
+        <div>
+			<p class="mb-5"><?php echo __( 'Select Payment mode', 'thrive-apprentice' ); ?></p>
+            <div class="tva-stripe-payment-mode tva-flex tva-space-between">
+                <button class="click tva-btn tva-btn-blue" data-fn="handleBillingType" data-type="recurring">
+                    <?php echo esc_html__( 'Recurring', 'thrive-apprentice' ); ?>
+                </button>
+                <button class="click tva-btn tva-btn-transfarent" data-fn="handleBillingType" data-type="onetime">
+                    <?php echo esc_html__( 'One Time', 'thrive-apprentice' ); ?>
+                </button>
+            </div>
+        </div>
+        <div>
+			<p class="mb-5"><?php echo __( 'Amount', 'thrive-apprentice' ); ?></p>
+            <div class="tva-stripe-price-amount">
+                <input type="number" name="tva-price-amount" id="tva-price-amount" min="0" placeholder="<?php echo __( 'Enter amount', 'thrive-apprentice' ); ?>">
+                <select name="tva-price-currency" id="tva-price-currency">
+                    <?php foreach( $currencies as $currency ): ?>
+                    <option value="<?php echo $currency[ 'code' ]; ?>"><?php echo $currency[ 'code' ] ?></option>
+                    <?php endforeach ?>
+                </select>
+            </div>
+        </div>
+        <div class="tva-stripe-billing-period">
+			<p class="mb-5"><?php echo __( 'Billing Period', 'thrive-apprentice' ); ?></p>
+            <select class="change" name="tva-billing-period" id="tva-billing-period" data-fn="handleBillingPeriodChange">
+                <option value="day"><?php echo __( 'Daily', 'thrive-apprentice' ); ?></option>
+                <option value="week"><?php echo __( 'Weekly', 'thrive-apprentice' ); ?></option>
+                <option value="month"><?php echo __( 'Monthly', 'thrive-apprentice' ); ?></option>
+                <option value="year"><?php echo __( 'Yearly', 'thrive-apprentice' ); ?></option>
+                <option value="custom"><?php echo __( 'Custom', 'thrive-apprentice' ); ?></option>
+            </select>
+        </div>
+        <div class="tva-stripe-recurring-interval tva-hide">
+            <label for=""><?php echo __( 'Every', 'thrive-apprentice' ); ?></label>
+            <input type="number" id="tva-recurring-interval-count" name="tva-recurring-interval-count" placeholder="<?php echo __( 'Interval count', 'thrive-apprentice' ); ?>">
+            <select class="change" name="tva-recurring-interval" id="tva-recurring-interval">
+                <option value="day"><?php echo __( 'days', 'thrive-apprentice' ); ?></option>
+                <option value="week"><?php echo __( 'weeks', 'thrive-apprentice' ); ?></option>
+                <option value="month"><?php echo __( 'months', 'thrive-apprentice' ); ?></option>
+                <option value="year"><?php echo __( 'years', 'thrive-apprentice' ); ?></option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="tva-content-price-footer tva-flex tva-align-center tva-flex-end">
+    <button type="button" class="click tva-modal-btn tva-modal-btn-close" data-fn="close"><?php echo __( 'Cancel', 'thrive-apprentice' ); ?></button>
+    <button type="button" class="click tva-modal-btn tva-price-save-btn" data-fn="savePrice"><?php echo __( 'Save', 'thrive-apprentice' ) ?></button>
+</div>

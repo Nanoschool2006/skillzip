@@ -1,0 +1,136 @@
+<?php
+
+use TVA\Stripe\Connection_V2;
+use TVA\Stripe\Credentials;
+use TVA\Stripe\Hooks;
+use TVA\Stripe\Settings;
+
+$connection = Connection_V2::get_instance();
+$is_legacy  = Hooks::is_legacy();
+$account_id = Credentials::get_account_id();
+$has_key    = (bool) ( $connection->get_api_key() || $connection->get_test_key() );
+?>
+
+<div class="tva-stripe-settings-header">
+	<h1 class="tva-main-heading">Stripe</h1>
+	<?php if ( $is_legacy ): ?>
+        <p class="tva-stripe-tag m-0 tva-stripe-tag-reconnect"><?php echo __( 'Reconnection Needed', 'thrive-apprentice' ); ?></p>
+	<?php elseif ( ! $account_id ): ?>
+        <p class="tva-stripe-tag m-0 tva-stripe-tag-not-connected"><?php echo __( 'Not Connected', 'thrive-apprentice' ); ?></p>
+	<?php else: ?>
+		<p class="tva-stripe-tag m-0 tva-stripe-tag-connected"><?php echo __( 'Connected', 'thrive-apprentice' ); ?></p>
+	<?php endif; ?>
+</div>
+
+<?php if( $is_legacy ): ?>
+    <?php include __DIR__ . '/../stripe/v1-notice.php'; ?>
+<?php endif; ?>
+<?php if ( ! $account_id ): ?>
+	<div class="tva-stripe-connect-wrapper tva-flex">
+		<div class="tva-stripe-connect tva-flex">
+			<div class="tva-stripe-connect-icons">
+				<?php tva_get_svg_icon( 'circle-stripe' ); ?>
+				<?php tva_get_svg_icon( 'arrows-right-left' ); ?>
+				<?php tva_get_svg_icon( 'circle-apprentice' ); ?></div>
+			<h3><?php echo __( 'Stripe is not connected', 'thrive-apprentice' ); ?></h3>
+			<p><?php echo __( 'Connect your stripe account with Thrive to manage payments. You can connect to Live & Test accounts for payments.', 'thrive-apprentice' ) ?> <a href="https://support.stripe.com/questions/stripe-issuing-test-mode-configurations-and-differences-vs-live-mode" target="_blank"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+			<button class="tva-btn tva-btn-blue click mt-20" data-fn="createAccount" data-type="live"><?php echo __( 'Connect Stripe', 'thrive-apprentice' ); ?></button>
+		</div>
+	</div>
+<?php else: ?>
+	<p class="settings-p-main mt-15 mb-15"><?php echo __( 'Control your Stripe connection below', 'thrive-apprentice' ); ?></p>
+	<div class="tva-stripe-settings-wrapper">
+		<div class="tva-general-settings-card mb-20">
+			<h5 class="mb-20"><?php echo __( 'Default options', 'thrive-apprentice' ); ?></h5>
+			<div class="tvd-switch">
+				<label class="tva-slide-checkbox tva-stipe-checkout-coupon">
+					<span class="settings-checkbox-label"><?php echo esc_html__( 'Allow coupons at checkout', 'thrive-apprentice' ); ?></span>
+					<input type="checkbox" class="click" data-fn="changeSetting" data-setting="<?php echo Settings::ALLOW_CHECKOUT_COUPONS_OPTIONS; ?>">
+					<span class="lever"></span>
+				</label>
+			</div>
+			<hr>
+			<div class="tvd-switch">
+				<label class="tva-slide-checkbox tva-stipe-display-buy-button">
+					<span class="settings-checkbox-label"><?php echo esc_html__( 'Automatically set “display buy button” when connecting a Stripe product ', 'thrive-apprentice' ); ?></span>
+					<input type="checkbox" class="click" data-fn="changeSetting" data-setting="<?php echo Settings::AUTO_DISPLAY_BUY_BUTTON_OPTIONS; ?>">
+					<span class="lever"></span>
+				</label>
+			</div>
+            <hr>
+            <div class="tvd-switch tva-stripe-portal-access-block">
+
+                <?php if ( $is_legacy ) { ?>
+                <label class="tva-slide-checkbox tva-stripe-portal-access">
+                    <div class="settings-checkbox-label">
+                        <span><?php echo esc_html__( 'Stripe Portal access for your members ', 'thrive-apprentice' ); ?></span>
+                        <span class="tva-portal-access-status"><?php echo esc_html__( 'Inactive', 'thrive-apprentice' ); ?></span>
+                    </div>
+                    <button class="tva-portal-access-activate-button portal-access-disabled tvd-tooltipped" type="button" data-position="top"
+                            data-tooltip="<?php echo esc_html__( 'You need to reconnect Thrive Apprentice with Stripe to enable this feature.', 'thrive-apprentice' )?>">
+                        <?php tva_get_svg_icon( 'left-right-gray' ); ?>
+                        <span><?php echo esc_html__( 'Activate Customer Portal', 'thrive-apprentice' ); ?></span>
+                    </button>
+                </label>
+                <?php } else { ?>
+
+                <!-- Inactive OR Active State               -->
+                <label class="tva-slide-checkbox tva-stripe-portal-access">
+                    <div class="settings-checkbox-label">
+                        <span><?php echo esc_html__( 'Stripe Portal access for your members ', 'thrive-apprentice' ); ?></span>
+                        <span class="tva-portal-access-status"><?php echo esc_html__( 'Inactive', 'thrive-apprentice' ); ?></span>
+                    </div>
+                    <button class="click tva-portal-access-activate-button portal-access-activate" type="button" data-fn="activateCustomerPortal">
+                        <?php tva_get_svg_icon( 'left-right-white' ); ?>
+                        <span><?php echo esc_html__( 'Activate Customer Portal', 'thrive-apprentice' ); ?></span>
+                    </button>
+                </label>
+
+                <?php } ?>
+
+                <div class="tva-stripe-portal-access-notice">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <p class="m-0"><?php echo __( 'Stripe Customer Portal allows your Thrive Apprentice members to manage their subscription(s), payment methods and view invoices.' ); ?><a href="https://thrivethemes.com/docs/enabling-the-stripe-customer-portal-for-your-thrive-apprentice-members/" target="_blank" class="ml-5"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+                </div>
+            </div>
+
+		</div>
+		<p class="settings-p-main mt-15 mb-15"><?php echo __( 'Your Stripe connections:', 'thrive-apprentice' ); ?></p>
+		<div class="tva-general-settings-card mb-20">
+			<div class="tva-stripe-connection-count">
+				<div class="tva-stripe-connection-count-card">
+					<div class="tva-stripe-connection-count-info">
+						<div class="tva-stripe-connection-count-icon ml-25 mt-25">
+                            <i class="fa-solid fa-dollar-sign"></i>
+						</div>
+						<div class="tva-stripe-connection-count-number">
+							<h4><?php echo __( 'Live Mode', 'thrive-apprentice' ); ?></h4>
+							<p class="m-0"><span><?php echo Hooks::get_protected_products_count(); ?></span><?php echo __( ' Thrive Apprentice Products Connected', 'thrive-apprentice' ); ?> <?php tva_get_svg_icon( 'check-circle-green' ); ?></p>
+						</div>
+					</div>
+					<div class="tva-stripe-connection-count-notice">
+						<p class="m-0"><?php echo __( 'Live Stripe Connections enable real money transactions to protect your Thrive Apprentice Products.' ); ?><a href="https://support.stripe.com/questions/stripe-issuing-test-mode-configurations-and-differences-vs-live-mode" target="_blank" class="ml-5"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+					</div>
+				</div>
+				<div class="tva-stripe-connection-count-card">
+					<div class="tva-stripe-connection-count-info">
+						<div class="tva-stripe-connection-count-icon ml-25 mt-25">
+							<?php tva_get_svg_icon( 'experiment' ); ?>
+						</div>
+						<div class="tva-stripe-connection-count-number">
+							<h4><?php echo __( 'Test Mode', 'thrive-apprentice' ); ?></h4>
+							<p class="m-0"><span><?php echo Hooks::get_protected_products_count( false ); ?></span><?php echo __( ' Thrive Apprentice Products Connected', 'thrive-apprentice' ); ?> <?php tva_get_svg_icon( 'check-circle-green' ); ?></p>
+						</div>
+					</div>
+					<div class="tva-stripe-connection-count-notice">
+						<p class="m-0"><?php echo __( 'Test Stripe Connections enable test transactions to protect your Thrive Apprentice Products. You can use this for testing purposes.' ); ?><a href="https://support.stripe.com/questions/stripe-issuing-test-mode-configurations-and-differences-vs-live-mode" target="_blank" class="ml-5"><?php echo __( 'Learn more', 'thrive-apprentice' ); ?></a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="tva-stripe-disconnect click" data-fn="confirmDisconnect">
+			<?php tva_get_svg_icon( 'forbidden' ); ?>
+			<p class="m-0"><?php echo __( 'Disconnect Stripe', 'thrive-apprentice' ); ?></p>
+		</div>
+	</div>
+<?php endif; ?>
