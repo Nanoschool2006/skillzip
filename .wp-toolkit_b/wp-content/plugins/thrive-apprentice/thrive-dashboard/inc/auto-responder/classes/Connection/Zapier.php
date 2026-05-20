@@ -159,7 +159,7 @@ class Thrive_Dash_List_Connection_Zapier extends Thrive_Dash_List_Connection_Abs
 
 		// for Contact Form
 		if ( ! empty( $arguments['optin_hook'] ) && in_array( 'optin_hook', $this->_accepted_params, true ) ) {
-			$hook_name = filter_var( $arguments['optin_hook'], FILTER_SANITIZE_STRING );
+			$hook_name = sanitize_text_field( $arguments['optin_hook'] );
 		}
 
 		// Get subscribed hook option
@@ -191,17 +191,17 @@ class Thrive_Dash_List_Connection_Zapier extends Thrive_Dash_List_Connection_Abs
 					}
 					break;
 				case 'zapier_tags':
-					$params['tags'] = ! empty( $value ) ? filter_var_array( explode( ',', $value ), FILTER_SANITIZE_STRING ) : array();
+					$params['tags'] = ! empty( $value ) ? array_map( 'sanitize_text_field', explode( ',', $value ) ) : array();
 					break;
 				case 'zapier_thriveleads_group':
 					// Get title by Group ID
 					$params['thriveleads_group'] = (int) $value > 0 ? get_the_title( (int) $value ) : '';
 					break;
 				case 'zapier_thriveleads_type':
-					$params['thriveleads_type'] = filter_var( $value, FILTER_SANITIZE_STRING );
+					$params['thriveleads_type'] = sanitize_text_field( $value );
 					break;
 				case 'zapier_thriveleads_name':
-					$params['thriveleads_name'] = filter_var( $value, FILTER_SANITIZE_STRING );
+					$params['thriveleads_name'] = sanitize_text_field( $value );
 					break;
 				case 'url':
 					$params['website'] = filter_var( $value, FILTER_SANITIZE_URL );
@@ -210,17 +210,20 @@ class Thrive_Dash_List_Connection_Zapier extends Thrive_Dash_List_Connection_Abs
 					$params['number'] = filter_var( $value, FILTER_SANITIZE_NUMBER_INT );
 					break;
 				case 'date':
-					$params['date'] = filter_var( $value, FILTER_SANITIZE_STRING );
+					$params['date'] = sanitize_text_field( $value );
+					break;
+				case 'message':
+					$params['message'] = sanitize_textarea_field( $value );
 					break;
 				default:
 					if ( ! empty( $value ) ) {
-						$params[ $param ] = filter_var( $value, FILTER_SANITIZE_STRING );
+						$params[ $param ] = map_deep( $value, 'sanitize_text_field' );
 					}
 					break;
 			}
 		}
 
-		$params['source_url'] = filter_var( $_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL ); // phpcs:ignore
+		$params['source_url'] = isset( $_SERVER['HTTP_REFERER'] ) ? filter_var( filter_var( $_SERVER['HTTP_REFERER'], FILTER_SANITIZE_URL ), FILTER_VALIDATE_URL ) ?: '' : ''; // phpcs:ignore
 
 		// Format/Rename all the fields.
 		$messages = array();
