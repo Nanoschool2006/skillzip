@@ -1,0 +1,43 @@
+<div data-settings-field="country">
+	<div class="country-fields">
+		<div class="control-grid tve-lg-country--display-type">
+			<div class="label">
+				<?php echo __( 'Display', 'thrive-cb' ); ?>
+			</div>
+
+			<div class="input">
+				<select class="tve-select change" data-fn="changeCountryDisplay">
+					<option value="all"><?php echo esc_html__( 'All Countries', 'thrive-cb' ); ?></option>
+					<option value="include"><?php echo esc_html__( 'Only Countries', 'thrive-cb' ); ?></option>
+					<option value="exclude"><?php echo esc_html__( 'Without Countries', 'thrive-cb' ); ?></option>
+				</select>
+			</div>
+		</div>
+
+		<div class="tve-lg-control--group tve-lg-country--display-box tcb-hidden">
+			<div class="control-grid tve-lg-control--multiselect tve-lg-country--display-list">
+				<div class="screen-reader-text"></div>
+
+				<div class="input">
+					<select class="tve-select change" multiple="multiple" data-fn="changeCountryList"></select>
+				</div>
+			</div>
+
+			<div class="control-grid switch tve-lg-country--display-hide tcb-hidden">
+				<div class="fill">
+					<span class="switch-label">
+						<?php echo __( 'Hide from the form', 'thrive-cb' ) ?>
+						<span class="click tve-lg-country--display-hide-tooltip" data-fn="" data-paneltlt-hover><?php tcb_icon( 'info-circle-solid' ); ?></span>
+					</span>
+				</div>
+
+				<div class="tcb-switch tcb-text-right">
+					<label>
+						<input type="checkbox" class="change" data-fn="" />
+						<span class="tcb-lever"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
