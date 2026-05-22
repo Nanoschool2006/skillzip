@@ -65,9 +65,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="td-form-row">
 			<label for="td-new-key-name"><?php esc_html_e( 'Name', 'thrive-dash' ); ?></label>
 			<div class="tvd-input-field">
-				<input type="text" id="td-new-key-name" placeholder="<?php echo esc_attr__( 'e.g. Zapier - Course Enrollment', 'thrive-dash' ); ?>">
+				<input type="text" id="td-new-key-name" maxlength="255" placeholder="<?php echo esc_attr__( 'e.g. Zapier - Course Enrollment', 'thrive-dash' ); ?>">
 				<label></label>
 			</div>
+			<span class="td-key-name-error" id="td-key-name-error"></span>
 		</div>
 	</div>
 	<div class="tvd-modal-footer">
