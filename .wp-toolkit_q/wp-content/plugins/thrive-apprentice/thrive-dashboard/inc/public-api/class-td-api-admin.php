@@ -52,6 +52,7 @@ class TD_API_Admin {
 			'i18n'     => [
 				'confirm_delete'    => esc_html__( 'Are you sure you want to delete this API key?', 'thrive-dash' ),
 				'name_required'     => esc_html__( 'Please enter a name for the API key.', 'thrive-dash' ),
+				'name_invalid'      => esc_html__( 'Token name can only contain letters, numbers, spaces, hyphens, underscores, dots, commas, ampersands, and parentheses.', 'thrive-dash' ),
 				'copied'            => esc_html__( 'Copied!', 'thrive-dash' ),
 				'copy'              => esc_html__( 'Copy', 'thrive-dash' ),
 				'save_key_notice'   => esc_html__( 'Save this key now. It will be partially hidden once you leave this page.', 'thrive-dash' ),
@@ -63,7 +64,7 @@ class TD_API_Admin {
 				'enable'            => esc_html__( 'Enable', 'thrive-dash' ),
 				'disable'           => esc_html__( 'Disable', 'thrive-dash' ),
 				'delete'            => esc_html__( 'Delete', 'thrive-dash' ),
-				'generate'          => esc_html__( 'Generate & Save', 'thrive-dash' ),
+				'generate'          => __( 'Generate & Save', 'thrive-dash' ),
 				'api_key_copied'    => esc_html__( 'API Key Copied', 'thrive-dash' ),
 				'fail_create'       => esc_html__( 'Failed to create API key.', 'thrive-dash' ),
 				'fail_update'       => esc_html__( 'Failed to update API key.', 'thrive-dash' ),

@@ -341,6 +341,9 @@ function tcb_rest_api_init() {
 	TCB_Logo::rest_api_init();
 	TCB_Post_List_Filter::rest_api_init();
 
+	require_once TVE_TCB_ROOT_PATH . 'inc/classes/rest/class-tcb-content-rest.php';
+	TCB_Content_REST::rest_api_init();
+
 	if ( ! empty( $_POST['tar_editor_page'] ) && TCB_Product::has_external_access() ) {
 		TCB_Utils::restore_post_waf_content();
 	}
