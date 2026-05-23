@@ -108,7 +108,17 @@ class TD_API_Tokens_Controller extends \WP_REST_Controller {
 	 */
 	public function create_item( $request ) {
 
-		$token = new TD_API_Token( array( 'name' => $request->get_param( 'name' ) ) );
+		$name = trim( (string) $request->get_param( 'name' ) );
+
+		if ( '' === $name || ! $this->is_valid_token_name( $name ) ) {
+			return new WP_Error(
+				'invalid_token_name',
+				esc_html__( 'Token name can only contain letters, numbers, spaces, hyphens, underscores, dots, commas, ampersands, and parentheses.', 'thrive-dash' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		$token = new TD_API_Token( array( 'name' => $name ) );
 
 		if ( ! is_wp_error( $token->save() ) ) {
 			return rest_ensure_response( $token->get_data() );
@@ -159,7 +169,17 @@ class TD_API_Tokens_Controller extends \WP_REST_Controller {
 		}
 
 		if ( $request->has_param( 'name' ) ) {
-			$token->name = $request->get_param( 'name' );
+			$name = trim( (string) $request->get_param( 'name' ) );
+
+			if ( '' === $name || ! $this->is_valid_token_name( $name ) ) {
+				return new WP_Error(
+					'invalid_token_name',
+					esc_html__( 'Token name can only contain letters, numbers, spaces, hyphens, underscores, dots, commas, ampersands, and parentheses.', 'thrive-dash' ),
+					array( 'status' => 400 )
+				);
+			}
+
+			$token->name = $name;
 		}
 
 		if ( $request->has_param( 'status' ) ) {
@@ -224,5 +244,26 @@ class TD_API_Tokens_Controller extends \WP_REST_Controller {
 	public function authorization_status_code() {
 
 		return is_user_logged_in() ? 403 : 401;
+	}
+
+	/**
+	 * Validate a token name. Allows letters, numbers, spaces, hyphens,
+	 * underscores, dots, commas, ampersands, and parentheses.
+	 *
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	protected function is_valid_token_name( $name ) {
+
+		if ( ! is_string( $name ) ) {
+			return false;
+		}
+
+		if ( strlen( $name ) > 255 ) {
+			return false;
+		}
+
+		return 1 === preg_match( '/^[a-zA-Z0-9 \-_.,&()]+$/', $name );
 	}
 }
