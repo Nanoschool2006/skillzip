@@ -14,8 +14,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Thrive_Theme_Update {
 
-	const ARCHITECT_PLUGIN = 'thrive-visual-editor/thrive-visual-editor.php';
-
 	const THRIVE_KEY = '@#$()%*%$^&*(#@$%@#$%93827456MASDFJIK3245';
 
 	const API_URL = 'https://service-api.thrivethemes.com/theme/update';
@@ -24,8 +22,6 @@ class Thrive_Theme_Update {
 		add_filter( 'pre_set_site_transient_update_themes', [ __CLASS__, 'check_for_update' ] );
 
 		add_filter( 'themes_api', [ __CLASS__, 'api_call' ], 10, 3 );
-
-		add_filter( 'site_transient_update_themes', [ __CLASS__, 'hide_theme_updates' ] );
 	}
 
 	/**
@@ -152,34 +148,4 @@ class Thrive_Theme_Update {
 
 		return $response;
 	}
-
-	/**
-	 * Don't allow the theme to update if Architect has updates available
-	 *
-	 * @param $transient
-	 *
-	 * @return mixed
-	 */
-	public static function hide_theme_updates( $transient ) {
-		if ( isset( $transient->response[ THEME_DOMAIN ] ) && static::architect_has_updates() ) {
-			unset( $transient->response[ THEME_DOMAIN ] );
-		}
-
-		return $transient;
-	}
-
-	/**
-	 * Check if architect has updates available
-	 * @return bool
-	 */
-	public static function architect_has_updates() {
-		if ( ! function_exists( 'get_plugin_updates' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/update.php';
-		}
-
-		$plugins_with_updates = get_plugin_updates();
-
-		return isset( $plugins_with_updates[ static::ARCHITECT_PLUGIN ] );
-	}
 }
-

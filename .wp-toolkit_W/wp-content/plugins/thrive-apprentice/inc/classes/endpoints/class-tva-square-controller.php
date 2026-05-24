@@ -558,7 +558,7 @@ class TVA_Square_Controller extends TVA_REST_Controller {
 
 		$site_state = $mode === 'test' ? Credentials::get_state() : Credentials::get_state_live();
 		if ( ! $state || ! $site_state || $state !== $site_state ) {
-			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid state ' . $state . '  #   ' . $site_state, 'thrive-apprentice' ) ], 400 );
+			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid state', 'thrive-apprentice' ) ], 400 );
 		}
 
 		// Save credentials
