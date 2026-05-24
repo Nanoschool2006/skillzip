@@ -18,13 +18,13 @@ global $post;
 		</a>
 	</div>
 	<div class="tvd-col tvd-s10 thrive-ab-settings">
-		<a href="<?php echo get_edit_post_link( $post->ID, '' ) ?>">
+		<a href="<?php echo $post ? get_edit_post_link( $post->ID, '' ) : '#' ?>">
 			<div class="tvd-icon-cog"></div>
 			<span><?php echo __( 'Page Settings', 'thrive-ab-page-testing' ) ?></span>
 		</a>
 		<a href="javascript:void(0)" id="thrive-ab-start-test" class="click" data-fn="start_test">
 			<div class="tvd-icon-eye"></div>
-			<span><?php echo $post->post_status === 'publish' ? __( 'Set Up & Start A/B Test', 'thrive-ab-page-testing' ) : __( 'Set Up & Start A/B Test', 'thrive-ab-page-testing' ) ?></span>
+			<span><?php echo __( 'Set Up & Start A/B Test', 'thrive-ab-page-testing' ) ?></span>
 		</a>
 	</div>
 </div>
