@@ -268,11 +268,18 @@ class TCB_Post_List_Shortcodes {
 			}
 		}
 
-		/* during ajax we can't render shortcodes, so we add the shortcode tag and class so we can fix them in JS */
-		if ( wp_doing_ajax() ) {
+		/**
+		 * During ajax we can't render shortcodes, so we add the shortcode tag and class so we can fix them in JS.
+		 * Also add data-shortcode in editor render so parseArticleElementsShortcodes can convert the element
+		 * back to a shortcode during save (important for conditional displays).
+		 * Include REST check because posts can be fetched via REST API.
+		 */
+		if ( wp_doing_ajax() || TCB_Utils::in_editor_render( true ) || TCB_Utils::is_rest() ) {
 			$last_shortcode = end( TCB_Post_List_Shortcodes()->execution_stack );
 
-			$wrap_args['attr']['data-shortcode'] = $last_shortcode['shortcode'];
+			if ( ! empty( $last_shortcode['shortcode'] ) ) {
+				$wrap_args['attr']['data-shortcode'] = $last_shortcode['shortcode'];
+			}
 
 			$wrap_args['class'] .= ' ' . TCB_SHORTCODE_CLASS;
 		}
@@ -673,11 +680,20 @@ class TCB_Post_List_Shortcodes {
 				'title' => get_the_title(),
 			);
 		}
+
+		/* Include tcb-post-list-shortcode class so parseArticleElementsShortcodes can find this element
+		 * and convert it back to a shortcode during save. This is especially important for conditional displays. */
 		$classes = [ TCB_POST_THUMBNAIL_IDENTIFIER, TCB_SHORTCODE_CLASS ];
+
+		if ( TCB_Utils::in_editor_render() || wp_doing_ajax() ) {
+			$classes[] = 'tcb-post-list-shortcode';
+		}
+
 		/* add the responsive classes, if they are present */
 		if ( ! empty( $attr['class'] ) ) {
 			$classes[] = $attr['class'];
 		}
+
 		$classes = implode( ' ', $classes );
 
 		return static::before_wrap( array(
