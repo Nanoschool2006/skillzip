@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-04-14 07:20+0000\n"
+"POT-Creation-Date: 2026-05-23 08:56+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -948,71 +948,75 @@ msgstr ""
 msgid "Please enter a name for the API key."
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:55
+#: ../inc/public-api/class-td-api-admin.php:55, ../inc/public-api/class-td-api-tokens-controller.php:116, ../inc/public-api/class-td-api-tokens-controller.php:177
+msgid "Token name can only contain letters, numbers, spaces, hyphens, underscores, dots, commas, ampersands, and parentheses."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:56
 msgid "Copied!"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:56, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:15, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:34, ../inc/notification-manager/includes/admin/views/backbone/messages/shortcodes/item.phtml:10, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/custom-script.phtml:21, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/wordpress-notification.phtml:21
+#: ../inc/public-api/class-td-api-admin.php:57, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:15, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:34, ../inc/notification-manager/includes/admin/views/backbone/messages/shortcodes/item.phtml:10, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/custom-script.phtml:21, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/wordpress-notification.phtml:21
 msgid "Copy"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:57
+#: ../inc/public-api/class-td-api-admin.php:58
 msgid "Save this key now. It will be partially hidden once you leave this page."
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:58
+#: ../inc/public-api/class-td-api-admin.php:59
 msgid "Active"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:59
+#: ../inc/public-api/class-td-api-admin.php:60
 msgid "Inactive"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:60
+#: ../inc/public-api/class-td-api-admin.php:61
 msgid "Unnamed Key"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:61
+#: ../inc/public-api/class-td-api-admin.php:62
 msgid "Created"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:62
+#: ../inc/public-api/class-td-api-admin.php:63
 msgid "Copy key"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:63
+#: ../inc/public-api/class-td-api-admin.php:64
 msgid "Enable"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:64
+#: ../inc/public-api/class-td-api-admin.php:65
 msgid "Disable"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:65, ../inc/auto-responder/views/admin-list.php:98, ../inc/auto-responder/views/error-log-entry.php:33, ../inc/webhooks/views/edit.phtml:169, ../inc/webhooks/views/list.phtml:32, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:14
+#: ../inc/public-api/class-td-api-admin.php:66, ../inc/auto-responder/views/admin-list.php:98, ../inc/auto-responder/views/error-log-entry.php:33, ../inc/webhooks/views/edit.phtml:169, ../inc/webhooks/views/list.phtml:32, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:14
 msgid "Delete"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:66, ../inc/public-api/views/api-keys.phtml:74
+#: ../inc/public-api/class-td-api-admin.php:67, ../inc/public-api/views/api-keys.phtml:75
 msgid "Generate & Save"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:67
+#: ../inc/public-api/class-td-api-admin.php:68
 msgid "API Key Copied"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:68
+#: ../inc/public-api/class-td-api-admin.php:69
 msgid "Failed to create API key."
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:69
+#: ../inc/public-api/class-td-api-admin.php:70
 msgid "Failed to update API key."
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:70
+#: ../inc/public-api/class-td-api-admin.php:71
 msgid "Failed to delete API key."
 msgstr ""
 
-#: ../inc/public-api/class-td-api-admin.php:71
+#: ../inc/public-api/class-td-api-admin.php:72
 msgid "Failed to load API keys."
 msgstr ""
 
@@ -1028,23 +1032,23 @@ msgstr ""
 msgid "Token could not be deleted"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-tokens-controller.php:117
+#: ../inc/public-api/class-td-api-tokens-controller.php:127
 msgid "Token could not be created"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-tokens-controller.php:133, ../inc/public-api/class-td-api-tokens-controller.php:158
+#: ../inc/public-api/class-td-api-tokens-controller.php:143, ../inc/public-api/class-td-api-tokens-controller.php:168
 msgid "Token not found"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-tokens-controller.php:142
+#: ../inc/public-api/class-td-api-tokens-controller.php:152
 msgid "Token item could not be deleted"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-tokens-controller.php:181
+#: ../inc/public-api/class-td-api-tokens-controller.php:201
 msgid "Token could not be updated"
 msgstr ""
 
-#: ../inc/public-api/class-td-api-tokens-controller.php:211
+#: ../inc/public-api/class-td-api-tokens-controller.php:231
 msgid "You cannot view the resource."
 msgstr ""
 
@@ -1276,7 +1280,7 @@ msgstr ""
 msgid "Error message:"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:158, ../inc/coming-soon/views/create.php:13, ../inc/login-editor/views/reset-login-design-modal.php:22, ../inc/public-api/views/api-keys.phtml:75, ../inc/auto-responder/views/editor/add-api.php:14, ../inc/auto-responder/views/editor/autoresponder-code-fields.php:16, ../inc/auto-responder/views/editor/dashboard-api.php:194, ../inc/auto-responder/views/setup/activecampaign.php:21, ../inc/auto-responder/views/setup/aweber.php:272, ../inc/auto-responder/views/setup/awsses.php:81, ../inc/auto-responder/views/setup/campaignmonitor.php:60, ../inc/auto-responder/views/setup/campaignmonitoremail.php:36, ../inc/auto-responder/views/setup/constant-contact-v3.php:27, ../inc/auto-responder/views/setup/constant-contact.php:57, ../inc/auto-responder/views/setup/convertkit.php:22, ../inc/auto-responder/views/setup/drip.php:21, ../inc/auto-responder/views/setup/dropbox.php:21, ../inc/auto-responder/views/setup/everwebinar.php:19, ../inc/auto-responder/views/setup/facebook.php:23, ../inc/auto-responder/views/setup/facebookpixel.php:25, ../inc/auto-responder/views/setup/fluentcrm.php:32, ../inc/auto-responder/views/setup/fluentcrm.php:18, ../inc/auto-responder/views/setup/get-response.php:44, ../inc/auto-responder/views/setup/google-drive.php:21, ../inc/auto-responder/views/setup/google.php:28, ../inc/auto-responder/views/setup/gotowebinar.php:58, ../inc/auto-responder/views/setup/hubspot.php:44, ../inc/auto-responder/views/setup/iContact.php:26, ../inc/auto-responder/views/setup/infusionsoft.php:22, ../inc/auto-responder/views/setup/klicktipp.php:21, ../inc/auto-responder/views/setup/madmimi.php:21, ../inc/auto-responder/views/setup/mailchimp.php:58, ../inc/auto-responder/views/setup/mailerlite.php:35, ../inc/auto-responder/views/setup/mailgun.php:48, ../inc/auto-responder/views/setup/mailpoet.php:64, ../inc/auto-responder/views/setup/mailrelay.php:39, ../inc/auto-responder/views/setup/mailrelayemail.php:30, ../inc/auto-responder/views/setup/mailster.php:35, ../inc/auto-responder/views/setup/mailster.php:17, ../inc/auto-responder/views/setup/mandrill.php:53, ../inc/auto-responder/views/setup/ontraport.php:21, ../inc/auto-responder/views/setup/ovation.php:29, ../inc/auto-responder/views/setup/ovation.php:15, ../inc/auto-responder/views/setup/postmark.php:43, ../inc/auto-responder/views/setup/recaptcha.php:63, ../inc/auto-responder/views/setup/sendfox.php:16, ../inc/auto-responder/views/setup/sendgrid.php:52, ../inc/auto-responder/views/setup/sendgridemail.php:21, ../inc/auto-responder/views/setup/sendinblue-v3.php:45, ../inc/auto-responder/views/setup/sendinblue.php:45, ../inc/auto-responder/views/setup/sendinblueemail.php:38, ../inc/auto-responder/views/setup/sendlane.php:26, ../inc/auto-responder/views/setup/sendlayer.php:34, ../inc/auto-responder/views/setup/sendowl.php:26, ../inc/auto-responder/views/setup/sendy.php:75, ../inc/auto-responder/views/setup/sg-autorepondeur.php:24, ../inc/auto-responder/views/setup/slack.php:24, ../inc/auto-responder/views/setup/sparkpost.php:43, ../inc/auto-responder/views/setup/turnstile.php:80, ../inc/auto-responder/views/setup/twitter.php:33, ../inc/auto-responder/views/setup/webinarjamstudio.php:51, ../inc/auto-responder/views/setup/zapier.php:79, ../inc/auto-responder/views/setup/zoho.php:41, ../inc/notification-manager/includes/admin/views/backbone/modals/add-action.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/create-notification.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-action.phtml:12, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-trigger.phtml:11, ../inc/notification-manager/includes/admin/views/backbone/modals/email-services.phtml:47, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:25, ../inc/smart-site/views/admin/templates/global-fields/modals/edit-group.phtml:34, ../inc/smart-site/views/admin/templates/global-fields/modals/field.phtml:83, ../templates/product/inactive.phtml:51, ../templates/product/inactive.phtml:87
+#: ../inc/auto-responder/views/admin-list.php:158, ../inc/coming-soon/views/create.php:13, ../inc/login-editor/views/reset-login-design-modal.php:22, ../inc/public-api/views/api-keys.phtml:76, ../inc/auto-responder/views/editor/add-api.php:14, ../inc/auto-responder/views/editor/autoresponder-code-fields.php:16, ../inc/auto-responder/views/editor/dashboard-api.php:194, ../inc/auto-responder/views/setup/activecampaign.php:21, ../inc/auto-responder/views/setup/aweber.php:272, ../inc/auto-responder/views/setup/awsses.php:81, ../inc/auto-responder/views/setup/campaignmonitor.php:60, ../inc/auto-responder/views/setup/campaignmonitoremail.php:36, ../inc/auto-responder/views/setup/constant-contact-v3.php:27, ../inc/auto-responder/views/setup/constant-contact.php:57, ../inc/auto-responder/views/setup/convertkit.php:22, ../inc/auto-responder/views/setup/drip.php:21, ../inc/auto-responder/views/setup/dropbox.php:21, ../inc/auto-responder/views/setup/everwebinar.php:19, ../inc/auto-responder/views/setup/facebook.php:23, ../inc/auto-responder/views/setup/facebookpixel.php:25, ../inc/auto-responder/views/setup/fluentcrm.php:32, ../inc/auto-responder/views/setup/fluentcrm.php:18, ../inc/auto-responder/views/setup/get-response.php:44, ../inc/auto-responder/views/setup/google-drive.php:21, ../inc/auto-responder/views/setup/google.php:28, ../inc/auto-responder/views/setup/gotowebinar.php:58, ../inc/auto-responder/views/setup/hubspot.php:44, ../inc/auto-responder/views/setup/iContact.php:26, ../inc/auto-responder/views/setup/infusionsoft.php:22, ../inc/auto-responder/views/setup/klicktipp.php:21, ../inc/auto-responder/views/setup/madmimi.php:21, ../inc/auto-responder/views/setup/mailchimp.php:58, ../inc/auto-responder/views/setup/mailerlite.php:35, ../inc/auto-responder/views/setup/mailgun.php:48, ../inc/auto-responder/views/setup/mailpoet.php:64, ../inc/auto-responder/views/setup/mailrelay.php:39, ../inc/auto-responder/views/setup/mailrelayemail.php:30, ../inc/auto-responder/views/setup/mailster.php:35, ../inc/auto-responder/views/setup/mailster.php:17, ../inc/auto-responder/views/setup/mandrill.php:53, ../inc/auto-responder/views/setup/ontraport.php:21, ../inc/auto-responder/views/setup/ovation.php:29, ../inc/auto-responder/views/setup/ovation.php:15, ../inc/auto-responder/views/setup/postmark.php:43, ../inc/auto-responder/views/setup/recaptcha.php:63, ../inc/auto-responder/views/setup/sendfox.php:16, ../inc/auto-responder/views/setup/sendgrid.php:52, ../inc/auto-responder/views/setup/sendgridemail.php:21, ../inc/auto-responder/views/setup/sendinblue-v3.php:45, ../inc/auto-responder/views/setup/sendinblue.php:45, ../inc/auto-responder/views/setup/sendinblueemail.php:38, ../inc/auto-responder/views/setup/sendlane.php:26, ../inc/auto-responder/views/setup/sendlayer.php:34, ../inc/auto-responder/views/setup/sendowl.php:26, ../inc/auto-responder/views/setup/sendy.php:75, ../inc/auto-responder/views/setup/sg-autorepondeur.php:24, ../inc/auto-responder/views/setup/slack.php:24, ../inc/auto-responder/views/setup/sparkpost.php:43, ../inc/auto-responder/views/setup/turnstile.php:80, ../inc/auto-responder/views/setup/twitter.php:33, ../inc/auto-responder/views/setup/webinarjamstudio.php:51, ../inc/auto-responder/views/setup/zapier.php:79, ../inc/auto-responder/views/setup/zoho.php:41, ../inc/notification-manager/includes/admin/views/backbone/modals/add-action.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/create-notification.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-action.phtml:12, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-trigger.phtml:11, ../inc/notification-manager/includes/admin/views/backbone/modals/email-services.phtml:47, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:25, ../inc/smart-site/views/admin/templates/global-fields/modals/edit-group.phtml:34, ../inc/smart-site/views/admin/templates/global-fields/modals/field.phtml:83, ../templates/product/inactive.phtml:51, ../templates/product/inactive.phtml:87
 msgid "Cancel"
 msgstr ""
 

@@ -78,6 +78,7 @@ class TCB_Post_List_Filter_Rest {
 					$options[] = [
 						'value' => (string) $category->term_id,
 						'label' => $category->name,
+						'slug'  => $category->slug,
 					];
 				}
 				break;
@@ -86,6 +87,7 @@ class TCB_Post_List_Filter_Rest {
 					$options[] = [
 						'value' => (string) $tag->term_id,
 						'label' => $tag->name,
+						'slug'  => $tag->slug,
 					];
 				}
 				break;
@@ -94,6 +96,7 @@ class TCB_Post_List_Filter_Rest {
 					$options[] = [
 						'value' => (string) $user->ID,
 						'label' => $user->display_name,
+						'slug'  => $user->user_nicename,
 					];
 				}
 				break;
@@ -104,6 +107,7 @@ class TCB_Post_List_Filter_Rest {
 					$options[] = [
 						'value' => (string) $term->term_id,
 						'label' => $term->name,
+						'slug'  => $term->slug,
 					];
 				}
 		}
