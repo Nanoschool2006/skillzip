@@ -1,0 +1,216 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
+
+	/**
+	 * @param object $subscription
+	 *
+	 * @return void
+	 */
+	public static function load_sidebar_actions( $subscription ) {
+		$date_format = __( 'M j, Y @ G:i', 'formidable' );
+
+		FrmTransLiteActionsController::actions_js();
+
+		$frm_payment = new FrmTransLitePayment();
+		$payments    = $frm_payment->get_all_by( $subscription->id, 'sub_id' );
+
+		include FrmTransLiteAppHelper::plugin_path() . '/views/subscriptions/sidebar_actions.php';
+	}
+
+	/**
+	 * @since 6.5
+	 *
+	 * @param object $subscription
+	 *
+	 * @return void
+	 */
+	public static function show_receipt_link( $subscription ) {
+		$link = esc_html( $subscription->sub_id );
+
+		if ( $subscription->sub_id !== 'None' ) {
+			/**
+			 * Filter a receipt link for a specific gateway.
+			 * For example, Stripe uses frm_sub_stripe_receipt.
+			 *
+			 * @since 6.5
+			 *
+			 * @param string $link
+			 */
+			$link = apply_filters( 'frm_sub_' . $subscription->paysys . '_receipt', $link );
+		}
+
+		FrmAppHelper::kses_echo( $link, array( 'a' ) );
+	}
+
+	/**
+	 * @param object $sub
+	 * @param array  $atts
+	 *
+	 * @return void
+	 */
+	public static function show_cancel_link( $sub, $atts = array() ) {
+		if ( ! isset( $sub->user_id ) ) {
+			global $wpdb;
+			$sub->user_id = $wpdb->get_var( $wpdb->prepare( 'SELECT user_id FROM ' . $wpdb->prefix . 'frm_items WHERE id=%d', $sub->item_id ) );
+		}
+
+		$link = self::cancel_link( $sub, $atts );
+		FrmTransLiteAppHelper::echo_confirmation_link( $link );
+	}
+
+	/**
+	 * @param object $sub
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
+	public static function cancel_link( $sub, $atts = array() ) {
+		$defaults = array(
+			'cancel'   => __( 'Cancel', 'formidable' ),
+			'canceled' => __( 'Canceled', 'formidable' ),
+			'confirm'  => __( 'Are you sure you want to cancel that subscription?', 'formidable' ),
+		);
+		$atts     = array_merge( $defaults, $atts );
+
+		if ( $sub->status === 'active' ) {
+			$link  = admin_url( 'admin-ajax.php?action=frm_trans_cancel&sub=' . $sub->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
+			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr( $atts['confirm'] ) . '" data-frmverify-btn="frm-button-red">';
+			$link .= esc_html( $atts['cancel'] );
+			$link .= '</a>';
+		} else {
+			$link = esc_html( $atts['canceled'] );
+		}
+
+		return $link;
+	}
+
+	/**
+	 * Handle routing to cancel a subscription.
+	 *
+	 * @return void
+	 */
+	public static function cancel_subscription() { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
+		FrmAppHelper::permission_check( 'frm_edit_entries' );
+
+		$canceled = false;
+		$sub_id   = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
+
+		if ( $sub_id ) {
+			$frm_sub = new FrmTransLiteSubscription();
+			$sub     = $frm_sub->get_one( $sub_id );
+
+			if ( $sub ) {
+				$reason   = '';
+				$debug_id = '';
+
+				switch ( $sub->paysys ) {
+					case 'stripe':
+						$canceled = FrmStrpLiteAppHelper::call_stripe_helper_class( 'cancel_subscription', $sub->sub_id );
+						break;
+					case 'square':
+						$canceled = FrmSquareLiteConnectHelper::cancel_subscription( $sub->sub_id );
+						break;
+					case 'paypal':
+						$response = FrmPayPalLiteConnectHelper::cancel_subscription( $sub->sub_id );
+
+						// Check for structured error response with message and debug_id (array or object)
+						$reason   = '';
+						$debug_id = '';
+						$canceled = false !== $response;
+
+						if ( is_array( $response ) || is_object( $response ) ) {
+							// Extract error details without type checks to avoid Mago type narrowing
+							$response_array = is_array( $response ) ? $response : (array) $response;
+							$reason         = $response_array['message'] ?? '';
+							// PayPal API returns debug_id (snake_case) in some cases and debugId (camelCase) in others
+							$debug_id = $response_array['debug_id'] ?? $response_array['debugId'] ?? '';
+
+							// If there's an error message or debug_id, the cancellation failed
+							if ( $reason || $debug_id ) {
+								$canceled = false;
+							}
+						} elseif ( false === $response ) {
+							// Response is false, get error from static properties
+							$reason   = FrmPayPalLiteConnectHelper::get_latest_error_from_paypal_api();
+							$debug_id = FrmPayPalLiteConnectHelper::get_latest_debug_id_from_paypal_api();
+							$canceled = false;
+						}
+						break;
+					default:
+						$canceled = false;
+						break;
+				}//end switch
+
+				if ( $canceled ) {
+					self::change_subscription_status(
+						array(
+							'status' => 'future_cancel',
+							'sub'    => $sub,
+						)
+					);
+
+					$message = __( 'Canceled', 'formidable' );
+					// phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
+				} else {
+					// If the reason is already a complete error message, use it directly
+					// instead of wrapping it redundantly in "Failed (...)"
+					if ( $reason && ! preg_match( '/^[A-Z_]+$/', $reason ) ) {
+						$message = $reason;
+					} else {
+						$message = __( 'Failed', 'formidable' );
+
+						if ( ! empty( $reason ) ) {
+							$message .= ' (' . $reason . ')';
+						}
+					}
+				}//end if
+
+				if ( $debug_id ) {
+					$message .= '<br><br>Debug ID: ' . esc_html( $debug_id );
+				}
+			} else {
+				$message = __( 'That subscription was not found', 'formidable' );
+			}//end if
+		} else {
+			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
+		}//end if
+
+		wp_die(
+			sprintf(
+				'<div class="%1$s">%2$s</div>',
+				$canceled ? 'frm_updated_message' : 'frm_error_style',
+				wp_kses_post( $message )
+			)
+		);
+	}
+
+	/**
+	 * @since 6.5, introduced in v1.12 of the Payments submodule.
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
+	public static function change_subscription_status( $atts ) {
+		$frm_sub = new FrmTransLiteSubscription();
+		$frm_sub->update( $atts['sub']->id, array( 'status' => $atts['status'] ) );
+		$atts['sub']->status = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_subscription_status_change( $atts['sub'] );
+	}
+
+	/**
+	 * @deprecated 6.27
+	 *
+	 * @return string|null
+	 */
+	public static function list_subscriptions_shortcode() {
+		_deprecated_function( __METHOD__, '6.27' );
+		return null;
+	}
+}
