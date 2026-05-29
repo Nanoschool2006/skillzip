@@ -1,0 +1,138 @@
+<div data-settings-field="date">
+	<hr>
+	<div id="date-container" class="date-fields">
+		<div class="control-grid lg-picker-date-time">
+			<div class="label">
+				<?php echo __( 'Picker Type', 'thrive-cb' ); ?>
+			</div>
+			<div class="input">
+				<select class="change lg-picker-field-date-time" data-fn="changePickerDateTime">
+					<option value="date"><?php echo esc_html__( 'Date', 'thrive-cb' ); ?></option>
+					<option value="dateTime"><?php echo esc_html__( 'Date and time', 'thrive-cb' ); ?></option>
+					<option value="dateRangeTime"><?php echo esc_html__( 'Date range and time', 'thrive-cb' ); ?></option>
+					<option value="dateRange"><?php echo esc_html__( 'Date range', 'thrive-cb' ); ?></option>
+					<option value="time"><?php echo esc_html__( 'Time', 'thrive-cb' ); ?></option>
+				</select>
+			</div>
+		</div>
+		<div class="control-grid lg-format-date-time">
+			<div class="label">
+				<?php echo __( 'Format', 'thrive-cb' ); ?>
+			</div>
+			<div class="input">
+				<select class="change lg-format-field-date-time" data-fn="changeFormatDateTime">
+					<option class="tve-lg-date" value="d/m/Y"><?php echo esc_html__( 'Date ('. date('d/m/Y') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date" value="m/d/Y"><?php echo esc_html__( 'Date ('. date('m/d/Y') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date" value="d-m-Y"><?php echo esc_html__( 'Date ('. date('d-m-Y') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date" value="d M Y"><?php echo esc_html__( 'Date ('. date('d M Y') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date" value="d-M-Y"><?php echo esc_html__( 'Date ('. date('d-M-Y') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date" value="M, d, Y"><?php echo esc_html__( 'Date ('. date('M, d, Y') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date-time" value="d/m/Y h:i K"><?php echo esc_html__( 'Date ('. date('d/m/Y') .' '. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date-time" value="m/d/Y h:i K"><?php echo esc_html__( 'Date ('. date('m/d/Y') .' '. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date-time" value="d-m-Y h:i K"><?php echo esc_html__( 'Date ('. date('d-m-Y') .' '. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date-time" value="d M Y h:i K"><?php echo esc_html__( 'Date ('. date('d M Y') .' '. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date-time" value="d-M-Y h:i K"><?php echo esc_html__( 'Date ('. date('d-M-Y') .' '. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-date-time" value="M, d, Y h:i K"><?php echo esc_html__( 'Date ('. date('M, d, Y') .' '. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-time" value="h:i K"><?php echo esc_html__( 'Time ('. date('h:i A') .')', 'thrive-cb' ); ?></option>
+					<option class="tve-lg-time" value="H:i"><?php echo esc_html__( 'Time ('. date('H:i') .')', 'thrive-cb' ); ?></option>
+				</select>
+			</div>
+		</div>
+		<div class="control-grid lg-time-interval">
+			<div class="label">
+				<?php echo __( 'Time interval', 'thrive-cb' ); ?>
+			</div>
+			<div class="input">
+				<select class="change lg-time-interval-field" data-fn="changeTimeInterval">
+					<option value="first-interval"><?php echo esc_html__( '5 minutes', 'thrive-cb' ); ?></option>
+					<option value="second-interval"><?php echo esc_html__( '15 minutes', 'thrive-cb' ); ?></option>
+					<option value="third-interval"><?php echo esc_html__( '30 minutes', 'thrive-cb' ); ?></option>
+					<option value="fourth-interval"><?php echo esc_html__( '1 hour', 'thrive-cb' ); ?></option>
+				</select>
+			</div>
+		</div>
+		<div class="control-grid switch lg-limit-days-switch">
+			<div class="fill">
+				<span class="switch-label"><?php echo __( 'Limit days', 'thrive-cb' ) ?></span>
+			</div>
+			<div class="tcb-switch tcb-text-right">
+				<label>
+					<input type="checkbox" class="change tve-lg-field-limit-days" data-fn="changeLimitDays"/>
+					<span class="tcb-lever"></span>
+				</label>
+			</div>
+		</div>
+		<div class="days-of-the-week" style="display: none">
+			<label class="label-days"><input type="checkbox" id="1" checked="1"> M <span class="checkmark"></span></label>
+			<label class="label-days"><input type="checkbox" id="2" checked="1"> T <span class="checkmark"></span></label>
+			<label class="label-days"><input type="checkbox" id="3" checked="1"> W <span class="checkmark"></span></label>
+			<label class="label-days"><input type="checkbox" id="4" checked="1"> T <span class="checkmark"></span></label>
+			<label class="label-days"><input type="checkbox" id="5" checked="1"> F <span class="checkmark"></span></label>
+			<label class="label-days"><input type="checkbox" id="6"> S <span class="checkmark"></span></label>
+			<label class="label-days"><input type="checkbox" id="0"> S <span class="checkmark"></span></label>
+		</div>
+		<div class="control-grid switch lg-disabled-date-switch">
+			<div class="fill">
+				<span class="switch-label"><?php echo __( 'Disabled dates', 'thrive-cb' ) ?></span>
+			</div>
+			<div class="tcb-switch tcb-text-right">
+				<label>
+					<input type="checkbox" class="change tve-lg-field-disabled-date" data-fn="changeDisabledDates"/>
+					<span class="tcb-lever"></span>
+				</label>
+			</div>
+		</div>
+		<div class="control-grid lg-format-disabled-date" style="display:none;">
+			<div class="lg-full-width-select">
+				<select class="change lg-field-disabled-date-types" data-fn="changeDisabledDateTypes">
+					<option value="past-dates" selected="selected"><?php echo esc_html__( 'Past Dates', 'thrive-cb' ); ?></option>
+					<option value="future-dates"><?php echo esc_html__( 'Future Dates', 'thrive-cb' ); ?></option>
+				</select>
+			</div>
+		</div>
+		<div class="control-grid switch lg-limit-hours-switch">
+			<div class="fill">
+				<span class="switch-label"><?php echo __( 'Limit hours', 'thrive-cb' ) ?></span>
+			</div>
+			<div class="tcb-switch tcb-text-right">
+				<label>
+					<input type="checkbox" class="change tve-lg-field-limit-hours" data-fn="changeLimitHours"/>
+					<span class="tcb-lever"></span>
+				</label>
+			</div>
+		</div>
+		<div class="limit-hours" style="display:none;">
+			<div class="time-row start-time-row">
+				<label for="startTime"><?php echo __( 'Start Time', 'thrive-cb' ) ?></label>
+				<select class="hour" data-fn="populateHoursDropdown"></select>
+				<select class="minutes" data-fn="populateMinutesDropdown"></select>
+				<select class="ampm" data-fn="">
+					<option value="AM">AM</option>
+					<option value="PM">PM</option>
+				</select>
+			</div>
+			<div class="end-time-row">
+				<label for="time-row end-time-row"><?php echo __( 'End Time', 'thrive-cb' ) ?></label>
+				<select class="hour" data-fn="populateHoursDropdown"></select>
+				<select class="minutes" data-fn="populateMinutesDropdown"></select>
+				<select class="ampm" data-fn="">
+					<option value="AM">AM</option>
+					<option value="PM">PM</option>
+				</select>
+			</div>
+		</div>
+		<div class="control-grid switch lg-time-instructions-switch" style="display:none;">
+			<div class="label">
+				<span class="switch-label"><?php echo __( 'Show instructions', 'thrive-cb' ) ?></span>
+				<span class="click tve-field-name-info" data-fn="openTimeInstructionsTooltip" data-paneltlt-hover><?php tcb_icon( 'info-circle-solid' ); ?></span>
+			</div>
+			<div class="tcb-switch tcb-text-right">
+				<label>
+					<input type="checkbox" checked="1" class="change tve-lg-date-field-show-instructions" data-fn="changeShowInstructions"/>
+					<span class="tcb-lever"></span>
+				</label>
+			</div>
+		</div>
+	</div>
+	<hr>
+</div>
