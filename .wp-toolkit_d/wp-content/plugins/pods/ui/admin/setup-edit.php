@@ -1,0 +1,39 @@
+<?php
+
+// Don't load directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+
+// phpcs:ignoreFile WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+
+// Prevent non-admins.
+if ( ! pods_is_admin( 'pods' ) ) {
+	die( '-1' );
+}
+
+wp_enqueue_media();
+wp_enqueue_editor();
+
+if (
+	(
+		function_exists( 'did_filter' )
+		&& ! did_filter( 'tiny_mce_before_init' )
+	)
+	|| ! did_action( 'enqueue_block_editor_assets' )
+) {
+	wp_tinymce_inline_scripts();
+}
+
+wp_enqueue_style( 'wp-edit-post' );
+
+// Formatted data
+$data = [
+	'fieldType'  => 'edit-pod',
+	'fieldEmbed' => false,
+];
+?>
+<div class="wrap pods-admin">
+	<div id="icon-pods" class="icon32"><br /></div>
+	<script type="application/json" class="pods-dfv-field-data"><?php echo wp_json_encode( $data, JSON_HEX_TAG ); ?></script>
+</div>
