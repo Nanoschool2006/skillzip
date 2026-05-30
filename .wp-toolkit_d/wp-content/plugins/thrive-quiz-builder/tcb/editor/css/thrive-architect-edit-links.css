@@ -37,6 +37,14 @@
     white-space: nowrap;
 }
 
+/* Spacing when the launcher sits next to the block editor toolbar so it
+   doesn't butt up against the block inserter and undo/redo buttons. The
+   launcher is placed as an adjacent sibling after `.edit-post-header-toolbar`
+   by the gutenberg admin script. */
+#wpbody .edit-post-header-toolbar + .thrive-architect-edit-link {
+    margin: 0 12px;
+}
+
 .inside.thrive-architect .tcb-disable {
     color: #666;
     font-size: 16px;
