@@ -3,7 +3,7 @@
         'name' => 'thrive-themes/thrive-dashboard',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '0d37073014761b7c39d667f9b7ff330b4d6947f8',
+        'reference' => 'e22f0b0bd79ff864a68b378d379bf01ade2ec388',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'thrive-themes/thrive-dashboard' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '0d37073014761b7c39d667f9b7ff330b4d6947f8',
+            'reference' => 'e22f0b0bd79ff864a68b378d379bf01ade2ec388',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Architect
  * Plugin URI: https://thrivethemes.com
  * Description: Live front end editor for your WordPress content
- * Version: 10.9.1
+ * Version: 10.9.1.3
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-cb
