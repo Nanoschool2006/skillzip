@@ -883,6 +883,8 @@ function frmFrontFormJS() {
 				}
 			}
 
+			let willRedirect = false;
+
 			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
@@ -896,6 +898,8 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
+
+				willRedirect = true;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
@@ -940,7 +944,7 @@ function frmFrontFormJS() {
 					},
 					delay
 				);
-			} else if ( Object.keys( response.errors ).length ) {
+			} else if ( response.errors !== undefined && Object.keys( response.errors ).length ) {
 				// errors were returned
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
@@ -1007,8 +1011,8 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else {
-				// there may have been a plugin conflict, or the form is not set to submit with ajax
+			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.
+				// There may have been a plugin conflict, or the form is not set to submit with ajax.
 
 				showFileLoading( object );
 
@@ -1855,7 +1859,7 @@ function frmFrontFormJS() {
 				currency.decimal_separator = '.';
 			}
 
-			totalField.value = total;
+			totalField.value = roundTotal( total, currency );
 			total = normalizeTotal( total, currency );
 
 			// because of e.g. fields that might be using this field for calculations
@@ -1887,12 +1891,20 @@ function frmFrontFormJS() {
 	function normalizeTotal( total, currency ) {
 		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
 
+		total = roundTotal( total, currency );
+
+		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+	}
+
+	function roundTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
 		if ( ! isLargeTotal ) {
 			const { decimals } = currency;
 			total = decimals > 0 ? round10( total, decimals ) : Math.ceil( total );
 		}
 
-		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+		return total;
 	}
 
 	function round10( value, decimals ) {
