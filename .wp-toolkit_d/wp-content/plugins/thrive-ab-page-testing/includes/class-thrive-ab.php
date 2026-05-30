@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Thrive_AB {
 
-	const V  = '10.9.1';
+	const V  = '10.9.1.3';
 	const DB = '1.2';
 
 	private static $_instance;
