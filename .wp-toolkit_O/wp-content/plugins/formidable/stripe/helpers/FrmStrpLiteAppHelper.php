@@ -1,0 +1,174 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+class FrmStrpLiteAppHelper {
+
+	/**
+	 * @var FrmStrpLiteSettings|null
+	 */
+	private static $settings;
+
+	/**
+	 * @return string
+	 */
+	public static function plugin_path() {
+		return FrmAppHelper::plugin_path() . '/stripe/';
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function plugin_folder() {
+		return basename( self::plugin_path() );
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function plugin_url() {
+		return FrmAppHelper::plugin_url() . '/stripe/';
+	}
+
+	/**
+	 * @param string $function
+	 * @param array  ...$params
+	 *
+	 * @return mixed
+	 */
+	public static function call_stripe_helper_class( $function, ...$params ) {
+		if ( self::should_use_stripe_connect() && is_callable( "FrmStrpLiteConnectApiAdapter::$function" ) ) {
+			return FrmStrpLiteConnectApiAdapter::$function( ...$params );
+		}
+		return false;
+	}
+
+	/**
+	 * @return bool true if we're using connect (versus the legacy integration).
+	 */
+	public static function should_use_stripe_connect() {
+		if ( ! class_exists( 'FrmStrpLiteConnectApiAdapter' ) ) {
+			require __DIR__ . '/FrmStrpLiteConnectApiAdapter.php';
+		}
+		return FrmStrpLiteConnectApiAdapter::initialize_api();
+	}
+
+	/**
+	 * @return bool true if either connect or the legacy integration is set up.
+	 */
+	public static function stripe_is_configured() {
+		return self::call_stripe_helper_class( 'initialize_api' );
+	}
+
+	/**
+	 * If test mode is running, save the id somewhere else
+	 *
+	 * @return string
+	 */
+	public static function get_customer_id_meta_name() {
+		$meta_name = '_frmstrp_customer_id';
+
+		if ( 'test' === self::active_mode() ) {
+			$meta_name .= '_test';
+		}
+
+		return $meta_name;
+	}
+
+	/**
+	 * @return FrmStrpLiteSettings
+	 */
+	public static function get_settings() {
+		if ( ! isset( self::$settings ) ) {
+			self::$settings = new FrmStrpLiteSettings();
+		}
+		return self::$settings;
+	}
+
+	/**
+	 * @return string
+	 *
+	 * @psalm-return 'live'|'test'
+	 */
+	public static function active_mode() {
+		return self::get_settings()->settings->test_mode ? 'test' : 'live';
+	}
+
+	/**
+	 * Add education about Stripe fees.
+	 *
+	 * @param string             $content UTM Content for the admin upgrade link.
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
+	 *
+	 * @return void
+	 */
+	public static function fee_education( $content = 'tip', $gateway = false ) {
+		if ( 'active' === FrmAddonsController::get_payment_license_status() ) {
+			return;
+		}
+
+		$classes = 'frm-light-tip show_stripe';
+
+		if ( $gateway && ! array_intersect( (array) $gateway, array( 'stripe' ) ) ) {
+			$classes .= ' frm_hidden';
+		}
+
+		FrmTipsHelper::show_tip(
+			array(
+				'link'  => array(
+					'campaign' => 'stripe-fee',
+					'content'  => $content,
+				),
+				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Stripe fees.',
+				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
+				'class' => $classes,
+			),
+			'p'
+		);
+	}
+
+	/**
+	 * Show a message to connect Stripe with link to settings.
+	 *
+	 * @return void
+	 */
+	public static function not_connected_warning() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
+		?>
+		<div class="frm_warning_style">
+			<span>
+				<?php
+				printf(
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					esc_html__( 'Credit Cards will not work without connecting %1$sStripe%2$s, %3$sSquare%4$s, or %5$sPayPal%6$s first.', 'formidable' ),
+					// %1$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=stripe_settings' ) ) . '" target="_blank">',
+					// %2$s
+					'</a>',
+					// %3$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=square_settings' ) ) . '" target="_blank">',
+					// %4$s
+					'</a>',
+					// %5$s
+					'<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings&t=paypal_settings' ) ) . '" target="_blank">',
+					// %6$s
+					'</a>'
+				);
+				?>
+			</span>
+		</div>
+		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+	}
+
+	/**
+	 * @deprecated 6.22
+	 *
+	 * @return bool
+	 */
+	public static function is_debug() {
+		_deprecated_function( __METHOD__, '6.22' );
+		return defined( 'WP_DEBUG' ) && WP_DEBUG;
+	}
+}
