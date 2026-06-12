@@ -30,6 +30,102 @@ class Meow_MWAI_Labs_MCP_Core {
   private function empty_schema(): array {
     return [ 'type' => 'object', 'properties' => (object) [] ];
   }
+
+  /**
+   * Compile a wp_alter_post regex search into a delimited PCRE pattern.
+   *
+   * The documented contract is a BARE pattern plus an optional flags string; we wrap it
+   * with a safe delimiter internally. This is what makes Gutenberg block markers work:
+   * they contain "/" (e.g. <!-- /wp:paragraph -->), which collides with the "/" delimiter,
+   * so "/" is tried last when picking a delimiter. For backward compatibility a pattern
+   * that already compiles as a fully delimited PCRE (and no separate flags were given) is
+   * honored as-is. Returns [ compiled, error ]; exactly one is non-null.
+   */
+  private function compile_alter_regex( string $pattern, string $flags = '' ): array {
+    $flags = trim( $flags );
+    if ( $flags !== '' && !preg_match( '/^[imsxuADSUXJ]+$/', $flags ) ) {
+      return [ null, 'Invalid regex flags "' . $flags . '". Allowed: i, m, s, x, u, A, D, S, U, X, J.' ];
+    }
+
+    // Backward compat: an already-delimited pattern that compiles is used verbatim.
+    if ( $flags === '' && $pattern !== '' && $this->preg_compile_error( $pattern ) === null ) {
+      return [ $pattern, null ];
+    }
+
+    // Bare pattern: wrap with the first delimiter not present in the pattern ("/" last).
+    $delimiter = '';
+    foreach ( [ '~', '#', '%', '!', '@', '/' ] as $candidate ) {
+      if ( strpos( $pattern, $candidate ) === false ) {
+        $delimiter = $candidate;
+        break;
+      }
+    }
+    if ( $delimiter === '' ) {
+      // Pattern uses every candidate; fall back to "~" and escape its occurrences.
+      $delimiter = '~';
+      $pattern = str_replace( '~', '\~', $pattern );
+    }
+    $compiled = $delimiter . $pattern . $delimiter . $flags;
+
+    $err = $this->preg_compile_error( $compiled );
+    if ( $err !== null ) {
+      return [ null, 'Invalid regex pattern: ' . $err . ' (compiled to ' . $compiled . ')' ];
+    }
+    return [ $compiled, null ];
+  }
+
+  /**
+   * Test-compile a PCRE pattern without emitting warnings. Returns null on success, or a
+   * human-readable PCRE error message (echoing the real engine message when available).
+   */
+  private function preg_compile_error( string $pattern ): ?string {
+    set_error_handler( fn () => true );
+    $result = preg_match( $pattern, '' );
+    restore_error_handler();
+    if ( $result !== false ) {
+      return null;
+    }
+    return function_exists( 'preg_last_error_msg' )
+      ? preg_last_error_msg()
+      : 'PCRE error code ' . preg_last_error();
+  }
+
+  /**
+   * Bust post caches after a write so a follow-up wp_get_post in the next request
+   * returns fresh data on sites with persistent object caches (Redis, Memcached) or
+   * page caches (LiteSpeed, WP Rocket, Cloudflare, etc.). wp_insert_post / wp_update_post
+   * call clean_post_cache themselves; this is idempotent and also fans out third-party
+   * purge hooks plus a generic mwai_mcp_post_changed action so sites can wire their own.
+   *
+   * Per-request dedupe: agentic clients often hit the same post several times in quick
+   * succession (e.g. wp_alter_post twice on the same page within the same JSON-RPC call),
+   * which would multiply expensive third-party purges (Cloudflare global, Algolia reindex).
+   * We keep a static set of post IDs already busted in this PHP request and short-circuit
+   * repeats. The $context array is forwarded to mwai_mcp_post_changed so handlers can
+   * coalesce or defer purges across requests on their own (e.g. flush at end of batch).
+   */
+  private function bust_post_cache( int $post_id, array $context = [] ): void {
+    if ( $post_id <= 0 ) {
+      return;
+    }
+    static $already_busted = [];
+    if ( isset( $already_busted[ $post_id ] ) ) {
+      return;
+    }
+    $already_busted[ $post_id ] = true;
+
+    clean_post_cache( $post_id );
+    $context = wp_parse_args( $context, [
+      'source' => 'mcp',
+      'tool' => null,
+      'batch' => false,
+    ] );
+    do_action( 'mwai_mcp_post_changed', $post_id, $context );
+    do_action( 'litespeed_purge_post', $post_id );
+    if ( function_exists( 'rocket_clean_post' ) ) {
+      rocket_clean_post( $post_id );
+    }
+  }
   #endregion
 
   #region Tools Definitions
@@ -188,7 +284,12 @@ class Meow_MWAI_Labs_MCP_Core {
           'type' => 'object',
           'properties' => [
             'key' => [ 'type' => 'string' ],
-            'value' => [ 'type' => [ 'string', 'number', 'boolean', 'object', 'array' ] ],
+            // No type constraint here on purpose: WordPress options accept any
+            // value (string, number, boolean, array, object). Declaring a union
+            // that includes "object"/"array" makes ChatGPT reject the schema,
+            // and the runtime normalizer would strip the type anyway and log a
+            // warning every list_tools call. Keep it permissive from the start.
+            'value' => [ 'description' => 'Option value. Accepts strings, numbers, booleans, arrays, or objects (non-scalars are JSON-serialised).' ],
           ],
           'required' => [ 'key', 'value' ],
         ],
@@ -257,7 +358,7 @@ class Meow_MWAI_Labs_MCP_Core {
       ],
       'wp_get_post' => [
         'name' => 'wp_get_post',
-        'description' => 'Get basic post data by ID (title, content, status, dates). For complete data including all meta and terms, use wp_get_post_snapshot instead.',
+        'description' => 'Get basic post data by ID: title, content, status, dates, permalink. Reads through the WordPress object cache; if you just wrote with wp_create_post / wp_update_post / wp_alter_post, the write tools bust caches automatically so a follow-up read returns fresh data. For complete data including all meta and terms, use wp_get_post_snapshot instead.',
         'inputSchema' => [
           'type' => 'object',
           'properties' => [ 'ID' => [ 'type' => 'integer' ] ],
@@ -289,7 +390,7 @@ class Meow_MWAI_Labs_MCP_Core {
       ],
       'wp_create_post' => [
         'name' => 'wp_create_post',
-        'description' => 'Create a post or page – post_title required; Markdown accepted in post_content; defaults to draft post_status and post post_type; set categories later with wp_add_post_terms; meta_input is an associative array of custom-field key/value pairs.',
+        'description' => 'Create a new post, page, or any custom post type. post_title is required. Markdown is accepted in post_content. post_status defaults to "draft" and post_type defaults to "post" – pass post_type: "page" for a page, or any registered CPT slug (product, event, etc.). Set categories later with wp_add_post_terms; meta_input is an associative array of custom-field key/value pairs.',
         'inputSchema' => [
           'type' => 'object',
           'properties' => [
@@ -339,7 +440,7 @@ class Meow_MWAI_Labs_MCP_Core {
       ],
       'wp_delete_post' => [
         'name' => 'wp_delete_post',
-        'description' => 'Delete/trash a post.',
+        'description' => 'Delete, trash, or remove a post, page, or any custom post type by ID. Without force, the post is moved to trash (can be restored). With force: true, the post is permanently destroyed (bypasses trash, irreversible). Works for posts, pages, products, events, attachments, or any registered CPT.',
         'inputSchema' => [
           'type' => 'object',
           'properties' => [
@@ -352,15 +453,16 @@ class Meow_MWAI_Labs_MCP_Core {
       ],
       'wp_alter_post' => [
         'name' => 'wp_alter_post',
-        'description' => 'Search-and-replace inside a post field without re-uploading the entire content. Efficient for making small edits to long content. Supports regex patterns (PHP-PCRE with delimiters like /pattern/i).',
+        'description' => 'Search-and-replace inside a post field without re-uploading the entire content. Efficient for making small edits to long content. With regex=true, pass a BARE PHP-PCRE pattern (no delimiters) in "search" and put any modifiers in "flags" (e.g. flags="i"); the pattern is wrapped with a safe delimiter internally, so patterns containing "/" (like Gutenberg block markers <!-- /wp:paragraph -->) work without escaping. Example: search="(<!-- /wp:paragraph -->)\\s*$" with flags="" appends to the last paragraph block. Backslashes must be JSON-escaped (\\s, \\d). A fully delimited pattern (/.../i) is also accepted for backward compatibility.',
         'inputSchema' => [
           'type' => 'object',
           'properties' => [
             'ID' => [ 'type' => 'integer', 'description' => 'Post ID.' ],
             'field' => [ 'type' => 'string', 'description' => 'Field to modify: post_content, post_excerpt, or post_title.' ],
-            'search' => [ 'type' => 'string', 'description' => 'Text or regex pattern to search for.' ],
-            'replace' => [ 'type' => 'string', 'description' => 'Replacement text.' ],
-            'regex' => [ 'type' => 'boolean', 'description' => 'Treat search as regex pattern (default: false).' ],
+            'search' => [ 'type' => 'string', 'description' => 'Text to search for, or (with regex=true) a bare PCRE pattern without delimiters, e.g. <!-- /wp:paragraph -->\\s*$' ],
+            'replace' => [ 'type' => 'string', 'description' => 'Replacement text. In regex mode, backreferences like $1 / \\1 are supported.' ],
+            'regex' => [ 'type' => 'boolean', 'description' => 'Treat search as a regex pattern (default: false).' ],
+            'flags' => [ 'type' => 'string', 'description' => 'Optional PCRE modifier letters applied in regex mode, e.g. "i" (case-insensitive), "s" (dotall), "m" (multiline). Allowed: i, m, s, x, u, A, D, S, U, X, J.' ],
           ],
           'required' => [ 'ID', 'field', 'search', 'replace' ],
         ],
@@ -1128,7 +1230,7 @@ class Meow_MWAI_Labs_MCP_Core {
           $ins['meta_input'] = $meta_input;
         }
 
-        $new = wp_insert_post( $ins, true );
+        $new = wp_insert_post( wp_slash( $ins ), true );
         if ( is_wp_error( $new ) ) {
           $r['error'] = [ 'code' => $new->get_error_code(), 'message' => $new->get_error_message() ];
         }
@@ -1138,6 +1240,7 @@ class Meow_MWAI_Labs_MCP_Core {
               update_post_meta( $new, sanitize_key( $k ), maybe_serialize( $v ) );
             }
           }
+          $this->bust_post_cache( (int) $new, [ 'tool' => 'wp_create_post' ] );
           $this->add_result_text( $r, 'Post created ID ' . $new );
         }
         break;
@@ -1208,10 +1311,39 @@ class Meow_MWAI_Labs_MCP_Core {
           break;
         }
 
-        // Update post fields if any
+        // Detect trash / untrash transitions and route through wp_trash_post() /
+        // wp_untrash_post() so the proper hooks fire (ACF cleanup, search-index purges,
+        // SEO plugins, etc.). A bare wp_update_post( ['post_status' => 'trash'] ) just
+        // flips the status field and skips all of that.
         $u = $post_id;
+        if ( isset( $c['post_status'] ) ) {
+          $current = get_post( $post_id );
+          $current_status = $current ? $current->post_status : null;
+          $target_status = $c['post_status'];
+
+          if ( $target_status === 'trash' && $current_status !== 'trash' ) {
+            $trashed = wp_trash_post( $post_id );
+            if ( !$trashed ) {
+              $r['error'] = [ 'code' => -32603, 'message' => 'wp_trash_post failed' ];
+              break;
+            }
+            unset( $c['post_status'] );
+            $has_fields = count( $c ) > 1;
+          }
+          elseif ( $current_status === 'trash' && $target_status !== 'trash' ) {
+            $untrashed = wp_untrash_post( $post_id );
+            if ( !$untrashed ) {
+              $r['error'] = [ 'code' => -32603, 'message' => 'wp_untrash_post failed' ];
+              break;
+            }
+            // Leave post_status in $c: wp_untrash_post restores to a previous status, and
+            // a subsequent wp_update_post() will set the explicit one the caller asked for.
+          }
+        }
+
+        // Update post fields if any
         if ( $has_fields ) {
-          $u = wp_update_post( $c, true );
+          $u = wp_update_post( wp_slash( $c ), true );
           if ( is_wp_error( $u ) ) {
             $r['error'] = [ 'code' => $u->get_error_code(), 'message' => $u->get_error_message() ];
             break;
@@ -1224,6 +1356,8 @@ class Meow_MWAI_Labs_MCP_Core {
             update_post_meta( $u, sanitize_key( $k ), maybe_serialize( $v ) );
           }
         }
+
+        $this->bust_post_cache( (int) $u, [ 'tool' => 'wp_update_post' ] );
 
         // Verify the update actually took effect
         $updated_post = get_post( $u );
@@ -1255,8 +1389,10 @@ class Meow_MWAI_Labs_MCP_Core {
           $r['error'] = [ 'code' => -32602, 'message' => 'ID required' ];
           break;
         }
-        $del = wp_delete_post( intval( $a['ID'] ), !empty( $a['force'] ) );
+        $delete_id = intval( $a['ID'] );
+        $del = wp_delete_post( $delete_id, !empty( $a['force'] ) );
         if ( $del ) {
+          $this->bust_post_cache( $delete_id, [ 'tool' => 'wp_delete_post' ] );
           $this->add_result_text( $r, 'Post #' . $a['ID'] . ' deleted' );
         }
         else {
@@ -1275,6 +1411,7 @@ class Meow_MWAI_Labs_MCP_Core {
         $search = $a['search'];
         $replace = $a['replace'];
         $is_regex = !empty( $a['regex'] );
+        $flags = isset( $a['flags'] ) && is_string( $a['flags'] ) ? $a['flags'] : '';
 
         // Validate field
         $allowed_fields = [ 'post_content', 'post_excerpt', 'post_title' ];
@@ -1293,17 +1430,15 @@ class Meow_MWAI_Labs_MCP_Core {
         $count = 0;
 
         if ( $is_regex ) {
-          // Validate regex pattern
-          set_error_handler( fn () => false );
-          $test = preg_match( $search, '' );
-          restore_error_handler();
-          if ( $test === false ) {
-            $r['error'] = [ 'code' => -32602, 'message' => 'Invalid regex pattern' ];
+          list( $compiled, $regex_err ) = $this->compile_alter_regex( $search, $flags );
+          if ( $regex_err !== null ) {
+            $r['error'] = [ 'code' => -32602, 'message' => $regex_err ];
             break;
           }
-          $new_content = preg_replace( $search, $replace, $content, -1, $count );
+          $new_content = preg_replace( $compiled, $replace, $content, -1, $count );
           if ( $new_content === null ) {
-            $r['error'] = [ 'code' => -32603, 'message' => 'Regex error' ];
+            $msg = function_exists( 'preg_last_error_msg' ) ? preg_last_error_msg() : 'PCRE error code ' . preg_last_error();
+            $r['error'] = [ 'code' => -32603, 'message' => 'Regex replacement failed: ' . $msg ];
             break;
           }
         }
@@ -1316,12 +1451,16 @@ class Meow_MWAI_Labs_MCP_Core {
           break;
         }
 
-        $update = wp_update_post( [ 'ID' => $post_id, $field => $new_content ], true );
+        // wp_update_post() runs wp_unslash() internally, which would strip the
+        // backslash from Unicode escapes like \u003c in block JSON (Rank Math
+        // FAQ, etc.) and silently corrupt the post. Pre-slash to compensate.
+        $update = wp_update_post( wp_slash( [ 'ID' => $post_id, $field => $new_content ] ), true );
         if ( is_wp_error( $update ) ) {
           $r['error'] = [ 'code' => $update->get_error_code(), 'message' => $update->get_error_message() ];
           break;
         }
 
+        $this->bust_post_cache( $post_id, [ 'tool' => 'wp_alter_post' ] );
         $this->add_result_text( $r, $count . ' replacement' . ( $count === 1 ? '' : 's' ) . ' applied to ' . $field . ' of post #' . $post_id );
         break;
 
@@ -1589,7 +1728,7 @@ class Meow_MWAI_Labs_MCP_Core {
             throw new Exception( $id->get_error_message(), $id->get_error_code() );
           }
           if ( $a['title'] ?? '' ) {
-            wp_update_post( [ 'ID' => $id, 'post_title' => sanitize_text_field( $a['title'] ) ] );
+            wp_update_post( wp_slash( [ 'ID' => $id, 'post_title' => sanitize_text_field( $a['title'] ) ] ) );
           }
           if ( $a['alt'] ?? '' ) {
             update_post_meta( $id, '_wp_attachment_image_alt', sanitize_text_field( $a['alt'] ) );
@@ -1645,7 +1784,7 @@ class Meow_MWAI_Labs_MCP_Core {
         if ( $a['description'] ?? '' ) {
           $upd['post_content'] = $this->clean_html( $a['description'] );
         }
-        $u = wp_update_post( $upd, true );
+        $u = wp_update_post( wp_slash( $upd ), true );
         if ( is_wp_error( $u ) ) {
           $r['error'] = [ 'code' => $u->get_error_code(), 'message' => $u->get_error_message() ];
         }
@@ -1723,7 +1862,7 @@ class Meow_MWAI_Labs_MCP_Core {
           $upd['post_content'] = $this->clean_html( $a['description'] );
         }
         if ( count( $upd ) > 1 ) {
-          wp_update_post( $upd, true );
+          wp_update_post( wp_slash( $upd ), true );
         }
         if ( array_key_exists( 'alt', $a ) ) {
           update_post_meta( $mid, '_wp_attachment_image_alt', sanitize_text_field( (string) $a['alt'] ) );

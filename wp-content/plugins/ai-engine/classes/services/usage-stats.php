@@ -1,5 +1,29 @@
 <?php
 
+/**
+ * Usage tracking lives in two WP options:
+ *   - ai_usage:       monthly totals,  keyed by 'YYYY-MM' then by model id
+ *   - ai_usage_daily: daily totals,    keyed by 'YYYY-MM-DD' then by model id
+ *
+ * Each per-model entry uses one of three shapes, depending on the billing
+ * unit returned by the provider:
+ *
+ *   token-billed (default, most providers including OpenAI/Anthropic/Gemini
+ *   text and image-gen): { prompt_tokens, completion_tokens, total_tokens,
+ *                          returned_price, queries }
+ *
+ *   per-image (legacy Imagen, Replicate per-image models, OAI-compatible
+ *   custom servers without `usage`): { resolution: {…}, images, queries }
+ *
+ *   per-second (Whisper, Sora, Realtime audio fallback): { seconds, queries }
+ *   per-second + resolution (Sora video): { resolution: {…}, seconds, queries }
+ *
+ * Token-billed is the canonical shape and what we encourage going forward.
+ * The user-facing label across the admin UI is "Tokens" (see Migration plan
+ * in this repo). The `unit`/`units` terminology is legacy and retained only
+ * for back-compat (DB column on wp_mwai_logs, the Reply::get_units() public
+ * helper, and dual-emit fields in the stats REST output).
+ */
 class Meow_MWAI_Services_UsageStats {
   private $core;
   private $tiktoken_encoders = [];
@@ -30,12 +54,18 @@ class Meow_MWAI_Services_UsageStats {
       // Initialize encoder provider if needed
       if ( $this->encoder_provider === null ) {
         $this->encoder_provider = new \Yethee\Tiktoken\EncoderProvider();
+        // The library defaults its vocab cache to {sys_temp}/tiktoken — a fixed shared
+        // path. On multi-tenant hosts where each site runs as a different uid, the first
+        // site to create the directory owns it and other sites get EACCES on write. Scope
+        // the cache by ABSPATH so every install gets its own writable directory.
+        $cacheDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tiktoken-' . substr( md5( ABSPATH ), 0, 12 );
+        $this->encoder_provider->setVocabCache( $cacheDir );
       }
 
       // Get the cl100k_base encoder (standard for modern OpenAI models)
       $encoder = $this->encoder_provider->get( 'cl100k_base' );
       $this->tiktoken_encoders['cl100k_base'] = $encoder;
-      
+
       // Removed success log to reduce noise
       return $encoder;
     }
@@ -45,40 +75,9 @@ class Meow_MWAI_Services_UsageStats {
     }
   }
 
-  // TODO: Remove after April 2026 - Simplify to single argument format
-  public function estimate_tokens( ...$args ) {
-    // Handle multiple argument formats for backward compatibility
-    $text = '';
-    $model = null;
-
-    // If first argument is an array, process messages
-    if ( !empty( $args[0] ) && is_array( $args[0] ) ) {
-      foreach ( $args[0] as $message ) {
-        $text .= isset( $message['content']['text'] ) ? $message['content']['text'] : '';
-        $text .= isset( $message['content'] ) && is_string( $message['content'] ) ? $message['content'] : '';
-      }
-      $model = $args[1] ?? null;
-    }
-    // Otherwise treat first argument as text
-    else {
-      $text = $args[0] ?? '';
-      $model = $args[1] ?? null;
-    }
-
-    // Convert to string if needed
+  public function estimate_tokens( $text = '', $model = null ) {
     if ( !is_string( $text ) ) {
-      // Handle arrays that weren't caught by the first condition
-      if ( is_array( $text ) ) {
-        $text = json_encode( $text );
-      }
-      // Handle objects
-      elseif ( is_object( $text ) ) {
-        $text = method_exists( $text, '__toString' ) ? (string) $text : json_encode( $text );
-      }
-      // Handle other types (int, float, bool, null)
-      else {
-        $text = (string) $text;
-      }
+      $text = is_array( $text ) || is_object( $text ) ? json_encode( $text ) : (string) $text;
     }
 
     // Apply filters for customization
@@ -94,9 +93,9 @@ class Meow_MWAI_Services_UsageStats {
       try {
         $encoded = $encoder->encode( $text );
         $token_count = count( $encoded );
-        
+
         // Comparison logging removed - tiktoken is working correctly
-        
+
         return $token_count;
       }
       catch ( Exception $e ) {
@@ -141,10 +140,11 @@ class Meow_MWAI_Services_UsageStats {
         ( isset( $returned_price['price'] ) ? $returned_price['price'] : null ) :
         ( is_numeric( $returned_price ) ? $returned_price : null );
       $price_for_tracking = $returned_price ?? 0;
-    } else {
+    }
+    else {
       $returned_price = null;
     }
-    
+
     // Record monthly usage
     $usage = $this->core->get_option( 'ai_usage' );
     $month = date( 'Y-m' );
@@ -181,11 +181,11 @@ class Meow_MWAI_Services_UsageStats {
     $usage[$month][$model]['total_tokens'] += $in_tokens + $out_tokens;
     $usage[$month][$model]['queries'] += 1;
     $usage[$month][$model]['returned_price'] += $price_for_tracking;
-    
+
     // Clean up old monthly data (keep only last 2 years)
     $this->cleanup_old_monthly_data( $usage );
     $this->core->update_option( 'ai_usage', $usage );
-    
+
     // Record daily usage
     $daily_usage = $this->core->get_option( 'ai_usage_daily', [] );
     $day = date( 'Y-m-d' );
@@ -222,11 +222,11 @@ class Meow_MWAI_Services_UsageStats {
     $daily_usage[$day][$model]['total_tokens'] += $in_tokens + $out_tokens;
     $daily_usage[$day][$model]['queries'] += 1;
     $daily_usage[$day][$model]['returned_price'] += $price_for_tracking;
-    
+
     // Clean up old daily data (keep only last 30 days)
     $this->cleanup_old_daily_data( $daily_usage );
     $this->core->update_option( 'ai_usage_daily', $daily_usage );
-    
+
     // Return the usage data for this specific request
     return [
       'prompt_tokens' => $in_tokens,
@@ -257,7 +257,7 @@ class Meow_MWAI_Services_UsageStats {
     $usage[$month][$model]['queries'] += 1;
     $this->cleanup_old_monthly_data( $usage );
     $this->core->update_option( 'ai_usage', $usage );
-    
+
     // Record daily usage
     $daily_usage = $this->core->get_option( 'ai_usage_daily', [] );
     $day = date( 'Y-m-d' );
@@ -277,7 +277,7 @@ class Meow_MWAI_Services_UsageStats {
     $daily_usage[$day][$model]['queries'] += 1;
     $this->cleanup_old_daily_data( $daily_usage );
     $this->core->update_option( 'ai_usage_daily', $daily_usage );
-    
+
     // Return the usage data for this specific request
     return [
       'seconds' => $seconds,
@@ -312,7 +312,7 @@ class Meow_MWAI_Services_UsageStats {
     $usage[$month][$model]['queries'] += 1;
     $this->cleanup_old_monthly_data( $usage );
     $this->core->update_option( 'ai_usage', $usage );
-    
+
     // Record daily usage
     $daily_usage = $this->core->get_option( 'ai_usage_daily', [] );
     $day = date( 'Y-m-d' );
@@ -339,7 +339,7 @@ class Meow_MWAI_Services_UsageStats {
     $daily_usage[$day][$model]['queries'] += 1;
     $this->cleanup_old_daily_data( $daily_usage );
     $this->core->update_option( 'ai_usage_daily', $daily_usage );
-    
+
     // Calculate price based on model and resolution
     $price = 0;
     $modelInfo = $this->get_model_info( $model );

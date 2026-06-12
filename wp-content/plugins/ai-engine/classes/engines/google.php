@@ -217,12 +217,17 @@ class Meow_MWAI_Engines_Google extends Meow_MWAI_Engines_Core {
       // Get first attachment (Gemini free version supports single file)
       $file = $attachments[0];
       $data = $file->get_base64();
+      $parts = [
+        [ 'inlineData' => [ 'mimeType' => 'image/jpeg', 'data' => $data ] ]
+      ];
+      // Gemini rejects empty text parts, so only add one when there is a message.
+      $message = $query->get_message();
+      if ( $message !== null && $message !== '' ) {
+        $parts[] = [ 'text' => $message ];
+      }
       $messages[] = [
         'role' => 'user',
-        'parts' => [
-          [ 'inlineData' => [ 'mimeType' => 'image/jpeg', 'data' => $data ] ],
-          [ 'text' => $query->get_message() ]
-        ]
+        'parts' => $parts
       ];
       // Gemini doesn't support multi-turn chat with Vision.
       $messages = array_slice( $messages, -1 );

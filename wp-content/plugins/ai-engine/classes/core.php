@@ -177,6 +177,17 @@ class Meow_MWAI_Core {
       }
     }
 
+    // WP 7 Connectors integration (self-gates on WP 7+).
+    if ( class_exists( 'WP_Connector_Registry' ) ) {
+      new Meow_MWAI_Labs_WPAI_Connectors( $this );
+    }
+
+    // WP 7 AiClient gateway: register AI Engine as a provider in the
+    // AiClient registry so the WP AI framework can dispatch through us.
+    if ( class_exists( '\\WordPress\\AiClient\\AiClient' ) ) {
+      new Meow_MWAI_Labs_WPAI_Gateway( $this );
+    }
+
   }
 
   public function register_scripts() {
@@ -815,23 +826,14 @@ class Meow_MWAI_Core {
 
   // Quick and dirty token estimation
   // Let's keep this synchronized with Helpers in JS
-  public static function estimate_tokens( ...$args ): int {
+  public static function estimate_tokens( $text = '', $model = null ): int {
     global $mwai_core;
     if ( $mwai_core && $mwai_core->usageStatsService ) {
-      return $mwai_core->usageStatsService->estimate_tokens( ...$args );
+      return $mwai_core->usageStatsService->estimate_tokens( $text, $model );
     }
     // Fallback to original implementation if service not available
-    $text = '';
-    foreach ( $args as $arg ) {
-      if ( is_array( $arg ) ) {
-        foreach ( $arg as $message ) {
-          $text .= isset( $message['content']['text'] ) ? $message['content']['text'] : '';
-          $text .= isset( $message['content'] ) && is_string( $message['content'] ) ? $message['content'] : '';
-        }
-      }
-      else if ( is_string( $arg ) ) {
-        $text .= $arg;
-      }
+    if ( !is_string( $text ) ) {
+      $text = is_array( $text ) || is_object( $text ) ? json_encode( $text ) : (string) $text;
     }
     $averageTokenLength = 4;
     $words = preg_split( '/\s+/', trim( $text ) );
@@ -987,6 +989,14 @@ class Meow_MWAI_Core {
         $chatbot['imageUpload'] = $chatbot['fileUpload']; // Keep imageUpload in sync
       }
 
+      // Migration: DALL-E was removed (deprecated by OpenAI). Move chatbots to gpt-image-1.5.
+      // TODO: Remove after 2027-04 (1 year after the shutdown on 2026-05-12).
+      if ( isset( $chatbot['model'] )
+        && in_array( $chatbot['model'], [ 'dall-e', 'dall-e-2', 'dall-e-3', 'dall-e-3-hd' ], true ) ) {
+        $chatbot['model'] = MWAI_FALLBACK_MODEL_IMAGES;
+        $hasChanges = true;
+      }
+
       // if ( isset( $chatbot['context'] ) ) {
       //   $chatbot['instructions'] = $chatbot['context'];
       //   unset( $chatbot['context'] );
@@ -1112,7 +1122,7 @@ class Meow_MWAI_Core {
     $keepLineReturnsFields = [ 'instructions' ];
     $whiteSpacedFields = [ 'context' ];
     // Boolean fields that need proper conversion
-    $booleanFields = [ 'window', 'copyButton', 'fullscreen', 'localMemory', 'iconBubble', 'centerOpen',
+    $booleanFields = [ 'window', 'copyButton', 'pdfButton', 'fullscreen', 'localMemory', 'iconBubble', 'centerOpen',
       'imageUpload', 'fileUpload', 'multiUpload', 'fileSearch', 'contentAware', 'aiAvatar', 'userAvatar', 'guestAvatar' ];
     foreach ( $chatbots as &$chatbot ) {
       foreach ( $chatbot as $key => &$value ) {
@@ -1290,6 +1300,14 @@ class Meow_MWAI_Core {
         $engine['models'] = apply_filters(
           'mwai_mistral_models',
           Meow_MWAI_Engines_Mistral::get_models_static()
+        );
+      }
+      else if ( $engine['type'] === 'xai' ) {
+        // Static fallback covers the case where dynamic model fetch failed (e.g. no credits
+        // on the xAI account). Dynamically fetched models override this list when available.
+        $engine['models'] = apply_filters(
+          'mwai_xai_models',
+          Meow_MWAI_Engines_XAI::get_models_static()
         );
       }
       else {
@@ -1511,6 +1529,14 @@ class Meow_MWAI_Core {
       }
     }
 
+    // Migration: DALL-E was removed (deprecated by OpenAI). Move users to gpt-image-1.5.
+    // TODO: Remove after 2027-04 (1 year after the shutdown on 2026-05-12).
+    if ( isset( $options['ai_images_default_model'] )
+      && in_array( $options['ai_images_default_model'], [ 'dall-e', 'dall-e-2', 'dall-e-3', 'dall-e-3-hd' ], true ) ) {
+      $options['ai_images_default_model'] = MWAI_FALLBACK_MODEL_IMAGES;
+      $needs_update = true;
+    }
+
     // All the models with an envId that does not exist anymore are removed.
     if ( isset( $options['ai_models'] ) ) {
       $options['ai_models'] = array_values( array_filter(
@@ -1523,6 +1549,20 @@ class Meow_MWAI_Core {
           return true;
         }
       ) );
+    }
+
+    // Migration: limits.creditType 'units' → 'tokens'. The read path in
+    // premium/statistics.php still accepts both, so this is purely cosmetic
+    // alignment with the new "Tokens" labels. One-shot per install.
+    // TODO: Remove after 2026-11.
+    if ( isset( $options['limits'] ) && is_array( $options['limits'] ) ) {
+      foreach ( [ 'system', 'users', 'guests' ] as $bucket ) {
+        if ( isset( $options['limits'][$bucket]['creditType'] )
+          && $options['limits'][$bucket]['creditType'] === 'units' ) {
+          $options['limits'][$bucket]['creditType'] = 'tokens';
+          $needs_update = true;
+        }
+      }
     }
 
     // Migration: Populate custom_languages if empty for existing installations

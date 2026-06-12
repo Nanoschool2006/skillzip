@@ -219,6 +219,48 @@ class Meow_MWAI_Engines_Core {
         // Note: $reply->query contains the original query that produced this reply
         $query = new $queryClass( $reply, $reply->query );
       }
+      else {
+        // Already inside a feedback chain (recursion depth >= 2). Each new reply produces a
+        // fresh response_id; the next request must reference THAT, not the original turn's id.
+        // Otherwise OpenAI's Responses API rejects with "No tool output found" because, from
+        // the original response's perspective, the new function_call_output answers a call
+        // that doesn't exist in its chain. Refresh previousResponseId from the latest reply
+        // so each recursion targets the immediately preceding turn.
+        if ( !empty( $reply->id ) ) {
+          $query->previousResponseId = $reply->id;
+        }
+        // Reset the per-turn feedback blocks; they'll be repopulated below from the new reply.
+        if ( method_exists( $query, 'clear_feedback_blocks' ) ) {
+          $query->clear_feedback_blocks();
+        }
+      }
+
+      // Determine whether every function call in this turn is "static" (no AI
+      // feedback wanted). If so, we still execute the functions below but
+      // skip the recursive AI round-trip — the AI's reply stands as-is.
+      // Mixed turns degrade to dynamic for all calls, since OpenAI/Anthropic
+      // tool-call protocols require a result for every requested call in the
+      // same message.
+      $all_static = true;
+      foreach ( $reply->needFeedbacks as $needFeedback ) {
+        $fn = $needFeedback['function'] ?? null;
+        if ( !$fn || !isset( $fn->behavior ) || $fn->behavior !== 'static' ) {
+          $all_static = false;
+          break;
+        }
+      }
+
+      // OpenAI's Responses API is stateful: when the next turn references previous_response_id,
+      // every function_call from the prior response must have a matching function_call_output,
+      // or the API rejects with "No tool output found for function call call_xxx". Skipping the
+      // round-trip on all-static turns satisfies the local user-facing reply but leaves the
+      // server-side conversation in a half-answered state, breaking any follow-up. So we
+      // disable the static-skip optimization for Responses API replies — the round-trip stays
+      // mandatory there. Chat Completions and Anthropic are stateless on tool calls and remain
+      // safe to skip.
+      if ( $all_static && ! empty( $reply->id ) && $this->core->responseIdManager->is_responses_api_id( $reply->id ) ) {
+        $all_static = false;
+      }
 
       // Validate that all function calls have proper function definitions
       foreach ( $reply->needFeedbacks as $needFeedback ) {
@@ -353,8 +395,8 @@ class Meow_MWAI_Engines_Core {
 
         // Add the feedback information to the appropriate feedback block
         $feedback_blocks[$rawMessageKey]['feedbacks'][] = [
-          'request' => $needFeedback, // TODO: Meow_MWAI_Feedback_Request
-          'reply' => [ 'value' => $value ] // TODO: Meow_MWAI_Feedback_Reply
+          'request' => $needFeedback,
+          'reply' => [ 'value' => $value ]
         ];
       }
 
@@ -369,6 +411,15 @@ class Meow_MWAI_Engines_Core {
         foreach ( $feedback_blocks as $key => $block ) {
           error_log( '[AI Engine Queries] Block ' . substr( $key, 0, 8 ) . ' has ' . count( $block['feedbacks'] ) . ' feedbacks' );
         }
+      }
+
+      // Static-only turn: functions executed above for their side effects;
+      // skip the recursive AI feedback so the original reply stands.
+      if ( $all_static ) {
+        if ( $queries_debug ) {
+          error_log( '[AI Engine Queries] All function calls are static. Skipping AI feedback round-trip.' );
+        }
+        return $reply;
       }
 
       // Run the feedback query
@@ -394,7 +445,7 @@ class Meow_MWAI_Engines_Core {
 
     // Check if the model is available, except if it's an assistant
     if ( !( $query instanceof Meow_MWAI_Query_Assistant ) ) {
-      // TODO: Avoid checking on the finetuned models for now.
+      // TODO: Remove the ft: bypass after 2027-02 (OpenAI ends fine-tune job creation on 2027-01-06). Until then we skip model validation for fine-tunes so user-created models still resolve.
       if ( substr( $query->model, 0, 3 ) === 'ft:' ) {
         return;
       }
@@ -555,14 +606,6 @@ class Meow_MWAI_Engines_Core {
   public function stream_handler( $handle, $args, $url ) {
     curl_setopt( $handle, CURLOPT_SSL_VERIFYPEER, false );
     curl_setopt( $handle, CURLOPT_SSL_VERIFYHOST, false );
-
-    // TODO: This is breaking the response. We need to find a way to handle the headers.
-    // curl_setopt( $handle, CURLOPT_HEADERFUNCTION, function ( $curl, $header ) {
-    //   $length = strlen( $header );
-    //   $this->streamHeaders[] = $header;
-    //   $this->stream_header_handler( $header );
-    //   return $length;
-    // });
 
     curl_setopt( $handle, CURLOPT_WRITEFUNCTION, function ( $curl, $data ) use ( $url ) {
       $length = strlen( $data );

@@ -293,8 +293,6 @@
   flex: 1 1 auto;
   max-height: var(--mwai-maxHeight);
   min-height: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.05);
 }
 .mwai-foundation-theme .mwai-conversation::-webkit-scrollbar {
   width: 8px;
@@ -314,6 +312,10 @@
 }
 .mwai-foundation-theme .mwai-conversation::-webkit-scrollbar-thumb:active {
   background: rgba(255, 255, 255, 0.3);
+}
+.mwai-foundation-theme .mwai-conversation {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.05);
 }
 .mwai-foundation-theme .mwai-conversation.mwai-terminal .mwai-terminal-line {
   line-height: 1.5;
@@ -555,12 +557,14 @@
   margin: 0;
   overflow: hidden;
   min-height: inherit;
-  padding-left: calc(var(--mwai-spacing) / 2);
-  line-height: var(--mwai-lineHeight);
 }
 .mwai-foundation-theme .mwai-input .mwai-input-text textarea:focus {
   outline: none;
   box-shadow: none;
+}
+.mwai-foundation-theme .mwai-input .mwai-input-text textarea {
+  padding-left: calc(var(--mwai-spacing) / 2);
+  line-height: var(--mwai-lineHeight);
 }
 .mwai-foundation-theme .mwai-input .mwai-input-text textarea:focus {
   outline: none;
@@ -1463,6 +1467,17 @@
 .mwai-foundation-theme .mwai-file-upload-icon {
   margin-bottom: -3px;
 }
+.mwai-foundation-theme .mwai-spin {
+  animation: mwai-spin 1s linear infinite;
+}
+@keyframes mwai-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .mwai-foundation-theme .mwai-terminal {
   --mwai-terminal-active-color: var(--mwai-fontColor);
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -1478,8 +1493,6 @@
   flex: 1 1 auto;
   min-height: 0;
   padding-bottom: calc(var(--mwai-spacing) * 1.25);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
 }
 .mwai-foundation-theme .mwai-terminal:focus {
   outline: none;
@@ -1563,6 +1576,10 @@
 }
 .mwai-foundation-theme .mwai-terminal .mwai-terminal-cursor.mwai-terminal-cursor-inactive {
   opacity: 0.35;
+}
+.mwai-foundation-theme .mwai-terminal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
 }
 .mwai-foundation-theme .mwai-terminal::-webkit-scrollbar {
   width: 8px;
@@ -1868,9 +1885,6 @@
   margin: 0;
   z-index: 999999;
   background-color: var(--mwai-backgroundSecondaryColor);
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
 }
 .mwai-foundation-theme.mwai-fullscreen:not(.mwai-window) .mwai-header {
   border-radius: 0;
@@ -1901,6 +1915,11 @@
 }
 .mwai-foundation-theme.mwai-fullscreen:not(.mwai-window) .mwai-body .mwai-files {
   flex: 0 0 auto;
+}
+.mwai-foundation-theme.mwai-fullscreen:not(.mwai-window) {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 .mwai-foundation-theme.mwai-fullscreen:not(.mwai-window) .mwai-window-box {
   width: 100%;
@@ -1940,7 +1959,6 @@
   margin: 0;
   z-index: 999999;
   background-color: var(--mwai-backgroundSecondaryColor);
-  transform: none !important;
 }
 .mwai-foundation-theme.mwai-fullscreen.mwai-window.mwai-open .mwai-header {
   border-radius: 0;
@@ -1971,6 +1989,9 @@
 }
 .mwai-foundation-theme.mwai-fullscreen.mwai-window.mwai-open .mwai-body .mwai-files {
   flex: 0 0 auto;
+}
+.mwai-foundation-theme.mwai-fullscreen.mwai-window.mwai-open {
+  transform: none !important;
 }
 .mwai-foundation-theme.mwai-fullscreen.mwai-window.mwai-open .mwai-window-box {
   width: 100%;
@@ -2064,16 +2085,16 @@
 @media (max-width: 760px) {
   .mwai-foundation-theme.mwai-window.mwai-open {
     position: fixed;
-    top: 0 !important;
+    top: var(--mwai-vv-offset-top, 0) !important;
     left: 0 !important;
     right: 0 !important;
-    bottom: 0 !important;
+    bottom: var(--mwai-vv-offset-bottom, 0) !important;
     width: 100%;
     min-height: 100%;
     min-height: 100vh;
-    min-height: 100dvh;
-    height: 100dvh;
-    max-height: 100dvh;
+    min-height: var(--mwai-vv-height, 100dvh);
+    height: var(--mwai-vv-height, 100dvh);
+    max-height: var(--mwai-vv-height, 100dvh);
     max-width: 100%;
     margin: 0;
     z-index: 999999;
@@ -2178,19 +2199,19 @@
     stroke: var(--mwai-headerColor);
   }
   .mwai-foundation-theme.mwai-window.mwai-open.mwai-center-open {
-    top: 0 !important;
+    top: var(--mwai-vv-offset-top, 0) !important;
     left: 0 !important;
     transform: none !important;
     right: 0 !important;
-    bottom: 0 !important;
+    bottom: var(--mwai-vv-offset-bottom, 0) !important;
     width: 100% !important;
     max-width: 100% !important;
-    height: 100dvh !important;
+    height: var(--mwai-vv-height, 100dvh) !important;
   }
   .mwai-foundation-theme.mwai-window.mwai-open .mwai-input {
     flex-direction: column;
   }
-  .mwai-foundation-theme.mwai-window.mwai-open .mwai-input button {
+  .mwai-foundation-theme.mwai-window.mwai-open .mwai-input button:not(.mwai-input-submit) {
     font-size: 16px;
     margin-left: 0;
     width: 100%;
@@ -2363,7 +2384,8 @@
   z-index: 100;
 }
 .mwai-foundation-theme .mwai-reply-actions .mwai-copy-button,
-.mwai-foundation-theme .mwai-reply-actions .mwai-download-button {
+.mwai-foundation-theme .mwai-reply-actions .mwai-download-button,
+.mwai-foundation-theme .mwai-reply-actions .mwai-pdf-button {
   fill: var(--mwai-fontColor);
   padding: 3px 5px;
   width: 24px;
@@ -2373,7 +2395,8 @@
   border-radius: 5px;
 }
 .mwai-foundation-theme .mwai-reply-actions .mwai-copy-button:hover,
-.mwai-foundation-theme .mwai-reply-actions .mwai-download-button:hover {
+.mwai-foundation-theme .mwai-reply-actions .mwai-download-button:hover,
+.mwai-foundation-theme .mwai-reply-actions .mwai-pdf-button:hover {
   filter: brightness(1.2);
 }
 .mwai-foundation-theme .mwai-reply-actions.mwai-hidden {
@@ -2457,6 +2480,10 @@
   line-height: 1.2;
   font-weight: 500;
   height: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
 }
 .mwai-foundation-theme .mwai-realtime .mwai-controls.mwai-hold-to-talk-mode .mwai-push-to-talk:hover:not(:disabled) {
   background: var(--mwai-backgroundPrimaryColor);
@@ -2495,8 +2522,6 @@
   overflow-x: hidden;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  scrollbar-width: thin;
-  scrollbar-color: var(--mwai-backgroundHeaderColor) transparent;
 }
 .mwai-foundation-theme .mwai-realtime .mwai-last-transcript::-webkit-scrollbar {
   width: 6px;
@@ -2511,6 +2536,10 @@
 }
 .mwai-foundation-theme .mwai-realtime .mwai-last-transcript::-webkit-scrollbar-thumb:hover {
   background: var(--mwai-primaryColor);
+}
+.mwai-foundation-theme .mwai-realtime .mwai-last-transcript {
+  scrollbar-width: thin;
+  scrollbar-color: var(--mwai-backgroundHeaderColor) transparent;
 }
 .mwai-foundation-theme .mwai-realtime .mwai-statistics {
   display: grid;

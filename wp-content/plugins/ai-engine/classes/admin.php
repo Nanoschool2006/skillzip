@@ -212,7 +212,7 @@ class Meow_MWAI_Admin extends MeowKit_MWAI_Admin {
       return;
     }
     echo '<div id="mwai-admin-postsList"></div>';
-    
+
     // Add CSS for Magic Wand dropdown
     ?>
     <style>
@@ -272,20 +272,22 @@ class Meow_MWAI_Admin extends MeowKit_MWAI_Admin {
   }
 
   public function admin_enqueue_scripts() {
-    // Don't load our scripts on the Site Editor to avoid conflicts
+    // Previously bailed entirely on the Site Editor to avoid conflicts, but that left
+    // our block types unregistered there - patterns created via Appearance > Editor saved
+    // broken "Unsupported" placeholders for every AI Form/Chatbot block. The conditional
+    // dependency logic below already keeps wp-edit-post out of the Site Editor dep list,
+    // so the bundle can safely load here for block registration while the admin UI
+    // render targets (mwai-admin-settings, etc.) simply don't exist.
     $current_screen = get_current_screen();
-    if ( $current_screen && $current_screen->base === 'site-editor' ) {
-      return;
-    }
 
     $physical_file = MWAI_PATH . '/app/index.js';
     $cache_buster = file_exists( $physical_file ) ? filemtime( $physical_file ) : MWAI_VERSION;
-    
+
     // Cache override: Force cache refresh when ?mwai_cache=1 is in URL
     if ( isset( $_GET['mwai_cache'] ) ) {
       $cache_buster = time(); // Use current timestamp for guaranteed cache bust
     }
-    
+
     wp_register_script( 'mwai-vendor', MWAI_URL . 'app/vendor.js', null, $cache_buster );
 
     // Base dependencies
@@ -409,17 +411,24 @@ class Meow_MWAI_Admin extends MeowKit_MWAI_Admin {
   }
 
   public function app_menu() {
+    // The menu is only registered when can_access_settings() passed (see __construct).
+    // Pass a low cap here so WordPress doesn't hide the submenu from filter-approved
+    // users who don't have manage_options. The page callback re-checks access for
+    // defense in depth.
     add_submenu_page(
       'meowapps-main-menu',
       'AI Engine',
       'AI Engine',
-      'manage_options',
+      'read',
       'mwai_settings',
       [ $this, 'admin_settings' ]
     );
   }
 
   public function admin_settings() {
+    if ( !$this->core->can_access_settings() ) {
+      wp_die( __( 'Sorry, you are not allowed to access this page.', 'ai-engine' ), 403 );
+    }
     echo '<div id="mwai-admin-settings"></div>';
   }
 }

@@ -37,6 +37,12 @@ class Meow_MWAI_Labs_MCP {
   // Placeholder for OAuth integration. Currently unused and kept for
   // future implementation once the security model is revised.
   private $oauth = null;
+  // Resolved during auth so the MCP Logs feature can attribute tool calls
+  // to a specific connector (Claude, ChatGPT, Claude Code, …) or 'bearer'.
+  // Lives on the instance for the duration of one HTTP request.
+  private $auth_client_id = null;
+  private $auth_client_name = null;
+  private $auth_method = null; // 'oauth' | 'bearer' | null
 
   #region Initialize
   public function __construct( $core ) {
@@ -45,13 +51,12 @@ class Meow_MWAI_Labs_MCP {
     // Set logging based on option
     $this->logging = $this->core->get_option( 'mcp_debug_mode', false );
 
-    // OAuth support is temporarily disabled due to security concerns.
-    // The previous implementation allowed unvalidated redirect URIs which
-    // introduced an open redirect vulnerability and the possibility to
-    // steal authorization codes. Until proper client registration with
-    // strict redirect URI validation is implemented, the OAuth feature is
-    // not loaded. See labs/oauth.php for the previous code and take care
-    // when re‑enabling it in the future.
+    // OAuth 2.1 with Dynamic Client Registration. Lives alongside the bearer
+    // token: bearer is for dev tools (Claude Code, scripts), OAuth is for
+    // browser-driven clients like Claude Desktop. The new module enforces
+    // strict redirect_uri matching, PKCE S256, and refresh-token rotation.
+    require_once __DIR__ . '/mcp-oauth.php';
+    $this->oauth = new Meow_MWAI_Labs_MCP_OAuth( $core, $this );
 
     add_action( 'rest_api_init', [ $this, 'rest_api_init' ] );
   }
@@ -67,12 +72,31 @@ class Meow_MWAI_Labs_MCP {
     }
     $this->mcp_role = $this->core->get_option( 'mcp_role', 'admin' );
 
-    // Only add filter once
+    // Auth filter runs for both bearer token and OAuth token paths; register
+    // unconditionally so that OAuth-only deployments (no static bearer set) work.
     static $filter_added = false;
-    if ( !empty( $this->bearer_token ) && !$filter_added ) {
+    if ( !$filter_added ) {
       add_filter( 'mwai_allow_mcp', [ $this, 'auth_via_bearer_token' ], 10, 2 );
       $filter_added = true;
     }
+
+    // Extend the CORS allow-headers list for our MCP routes. The Streamable HTTP
+    // transport sends Mcp-Protocol-Version and Mcp-Session-Id on every request;
+    // WP core's default allow-list does not include them, so the browser-side
+    // preflight from claude.ai (and similar web connectors) was rejecting the
+    // actual POST and the client reported "Couldn't reach the MCP server".
+    add_filter( 'rest_allowed_cors_headers', function ( $headers ) {
+      $uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
+      if ( strpos( $uri, '/' . $this->namespace . '/' ) === false ) {
+        return $headers;
+      }
+      foreach ( [ 'Mcp-Protocol-Version', 'Mcp-Session-Id', 'Accept', 'Last-Event-ID' ] as $h ) {
+        if ( !in_array( $h, $headers, true ) ) {
+          $headers[] = $h;
+        }
+      }
+      return $headers;
+    } );
     register_rest_route( $this->namespace, '/sse', [
       'methods' => [ 'GET', 'POST', 'HEAD' ],  // Support HEAD for client endpoint checks
       'callback' => [ $this, 'handle_sse' ],
@@ -90,6 +114,11 @@ class Meow_MWAI_Labs_MCP {
     ] );
 
     // No-Auth URL endpoints (with token in path) - Legacy SSE
+    // TODO: Remove after 2026-07-01. The UI no longer exposes this to new users (only
+    // accounts that already opted in still see the toggle). Removing it lets us also
+    // delete handle_sse, handle_message, the transient message queue, and the
+    // handle_noauth_access/_streamable helpers, which together account for several
+    // hundred lines of SSE-only plumbing in this file.
     $noauth_enabled = $this->core->get_option( 'mcp_noauth_url' );
     if ( $noauth_enabled && !empty( $this->bearer_token ) ) {
       register_rest_route( $this->namespace, '/' . $this->bearer_token . '/sse', [
@@ -120,21 +149,22 @@ class Meow_MWAI_Labs_MCP {
       ] );
     }
 
-    // Streamable HTTP endpoint (Modern transport for Claude Code)
-    // Uses Authorization: Bearer header for authentication
-    // Automatically enabled when MCP module is active and bearer token is set
-    if ( !empty( $this->bearer_token ) ) {
-      // Main endpoint with Authorization header (at /http path)
-      register_rest_route( $this->namespace, '/http', [
-        'methods' => [ 'GET', 'POST', 'DELETE' ],
-        'callback' => [ $this, 'handle_streamable_http' ],
-        'permission_callback' => function ( $request ) {
-          return $this->can_access_mcp( $request );
-        },
-        'show_in_index' => false,
-      ] );
+    // Streamable HTTP endpoint (modern MCP transport). Always registered when
+    // the MCP module is enabled — auth is enforced by can_access_mcp(), which
+    // accepts either a bearer token or an OAuth access token.
+    register_rest_route( $this->namespace, '/http', [
+      'methods' => [ 'GET', 'POST', 'DELETE' ],
+      'callback' => [ $this, 'handle_streamable_http' ],
+      'permission_callback' => function ( $request ) {
+        return $this->can_access_mcp( $request );
+      },
+      'show_in_index' => false,
+    ] );
 
-      // Alternative endpoint with token in URL (for clients that don't support headers)
+    // Alternative endpoint with bearer token embedded in URL path, for clients
+    // that cannot send Authorization headers. Only registered when a bearer
+    // token is configured.
+    if ( !empty( $this->bearer_token ) ) {
       register_rest_route( $this->namespace, '/' . $this->bearer_token, [
         'methods' => [ 'GET', 'POST', 'DELETE' ],
         'callback' => [ $this, 'handle_streamable_http' ],
@@ -198,9 +228,22 @@ class Meow_MWAI_Labs_MCP {
       if ( $this->oauth ) {
         $token_data = $this->oauth->validate_token( $token );
         if ( $token_data ) {
+          // Defense in depth: even if a token was issued (or stored from before
+          // the authorize-time admin gate landed), only accept it if the linked
+          // user still holds administrator capability. Otherwise a Subscriber's
+          // OAuth token would inherit the global mcp_role and reach admin tools.
+          if ( !$this->oauth->user_can_authorize( $token_data['user_id'] ) ) {
+            if ( $this->logging ) {
+              error_log( '[AI Engine MCP] ❌ OAuth token rejected: user ' . $token_data['user_id'] . ' is not an administrator.' );
+            }
+            return false;
+          }
           // Set current user based on OAuth token
           wp_set_current_user( $token_data['user_id'] );
           $auth_result = 'oauth';
+          $this->auth_method = 'oauth';
+          $this->auth_client_id = $token_data['client_id'] ?? null;
+          $this->auth_client_name = $token_data['client_name'] ?? null;
           // Only log auth for SSE endpoint
           if ( $this->logging && strpos( $request->get_route(), '/sse' ) !== false ) {
             error_log( '[AI Engine MCP] 🔐 OAuth OK (user: ' . $token_data['user_id'] . ')' );
@@ -215,6 +258,9 @@ class Meow_MWAI_Labs_MCP {
           wp_set_current_user( $admin->ID, $admin->user_login );
         }
         $auth_result = 'static';
+        $this->auth_method = 'bearer';
+        $this->auth_client_id = 'bearer';
+        $this->auth_client_name = null;
         if ( $this->logging ) {
           error_log( '[AI Engine MCP] 🔐 Bearer token auth OK' );
         }
@@ -235,6 +281,8 @@ class Meow_MWAI_Labs_MCP {
         if ( $admin = $this->core->get_admin_user() ) {
           wp_set_current_user( $admin->ID, $admin->user_login );
         }
+        $this->auth_method = 'bearer';
+        $this->auth_client_id = 'bearer';
         return true;
       }
     }
@@ -262,6 +310,8 @@ class Meow_MWAI_Labs_MCP {
     if ( $admin = $this->core->get_admin_user() ) {
       wp_set_current_user( $admin->ID, $admin->user_login );
     }
+    $this->auth_method = 'bearer';
+    $this->auth_client_id = 'bearer';
     return true;
   }
 
@@ -280,12 +330,28 @@ class Meow_MWAI_Labs_MCP {
     if ( $admin = $this->core->get_admin_user() ) {
       wp_set_current_user( $admin->ID, $admin->user_login );
     }
+    $this->auth_method = 'bearer';
+    $this->auth_client_id = 'bearer';
     return true;
   }
 
   #endregion
 
   #region Helpers (log / JSON-RPC utils)
+  /**
+   * Release the PHP session lock as early as possible. Long MCP calls (e.g. content
+   * mutations on large posts) can otherwise serialize behind any other request from the
+   * same client that opened a session, since PHP holds an exclusive write lock on the
+   * session file for the lifetime of the request. The result is the ~max_execution_time
+   * hangs operators see on busy sites. Closing the session is idempotent and safe — if
+   * no session is active the call is a no-op.
+   */
+  private function release_session_lock(): void {
+    if ( function_exists( 'session_status' ) && session_status() === PHP_SESSION_ACTIVE ) {
+      session_write_close();
+    }
+  }
+
   private function log( $msg ) {
     // This method is for internal UI logs - keep it minimal
     if ( $this->logging ) {
@@ -364,6 +430,7 @@ class Meow_MWAI_Labs_MCP {
   * This method handles the direct JSON-RPC requests to maintain compatibility with Claude.
   */
   private function handle_direct_jsonrpc( WP_REST_Request $request, $data ) {
+    $this->release_session_lock();
     $id = $data['id'] ?? null;
     $method = $data['method'] ?? null;
 
@@ -734,6 +801,7 @@ class Meow_MWAI_Labs_MCP {
    * This processes JSON-RPC requests and returns JSON responses.
    */
   private function handle_streamable_http_post( WP_REST_Request $request ) {
+    $this->release_session_lock();
     $raw_body = $request->get_body();
 
     if ( empty( $raw_body ) ) {
@@ -892,6 +960,7 @@ class Meow_MWAI_Labs_MCP {
 
   #region Handle /messages (JSON-RPC ingress)
   public function handle_message( WP_REST_Request $request ) {
+    $this->release_session_lock();
     $sess = sanitize_text_field( $request->get_param( 'session_id' ) );
     $raw = $request->get_body();
     $dat = json_decode( $raw, true );
@@ -1173,26 +1242,24 @@ class Meow_MWAI_Labs_MCP {
 
   #region Tool Normalization Helpers
   private function normalize_tool_definition( $tool, $index ) {
+    // NOTE: tool-registration warnings below are always emitted (no $this->logging
+    // gate). Each fires only when a tool is silently auto-fixed or auto-skipped at
+    // registration — exactly the case where the author needs to know. They're rare
+    // in normal operation and the only reliable diagnostic when something is off.
     if ( !is_array( $tool ) ) {
-      if ( $this->logging ) {
-        error_log( '[AI Engine MCP] ⚠️ Tool definition at index ' . $index . ' skipped (expected array).' );
-      }
+      error_log( '[AI Engine MCP] ⚠️ Tool definition at index ' . $index . ' skipped (expected array).' );
       return null;
     }
 
     $name = isset( $tool['name'] ) ? trim( (string) $tool['name'] ) : '';
     if ( $name === '' ) {
-      if ( $this->logging ) {
-        error_log( '[AI Engine MCP] ⚠️ Tool skipped due to missing name at index ' . $index );
-      }
+      error_log( '[AI Engine MCP] ⚠️ Tool skipped due to missing name at index ' . $index );
       return null;
     }
 
     $normalized_schema = $this->normalize_input_schema( $tool['inputSchema'] ?? null, $name );
     if ( !$normalized_schema ) {
-      if ( $this->logging ) {
-        error_log( '[AI Engine MCP] ⚠️ Tool "' . $name . '" skipped due to invalid input schema.' );
-      }
+      error_log( '[AI Engine MCP] ⚠️ Tool "' . $name . '" skipped due to invalid input schema.' );
       return null;
     }
 
@@ -1222,9 +1289,7 @@ class Meow_MWAI_Labs_MCP {
 
     $type = isset( $schema['type'] ) ? (string) $schema['type'] : 'object';
     if ( $type !== 'object' ) {
-      if ( $this->logging ) {
-        error_log( '[AI Engine MCP] ⚠️ Tool "' . $tool_name . '" has unsupported schema type: ' . $type );
-      }
+      error_log( '[AI Engine MCP] ⚠️ Tool "' . $tool_name . '" has unsupported schema type: ' . $type );
       return null;
     }
 
@@ -1244,13 +1309,11 @@ class Meow_MWAI_Labs_MCP {
             // Check for complex types that need additional schema details
             $complex_types = array_intersect( $type_array, [ 'object', 'array' ] );
             if ( !empty( $complex_types ) ) {
-              if ( $this->logging ) {
-                error_log(
-                  '[AI Engine MCP] ⚠️ Tool "' . $tool_name . '" property "' . $prop_name .
-                  '" has problematic union type with complex types: [' . implode( ', ', $type_array ) .
-                  ']. This breaks ChatGPT. Auto-fixing by removing type constraint.'
-                );
-              }
+              error_log(
+                '[AI Engine MCP] ⚠️ Tool "' . $tool_name . '" property "' . $prop_name .
+                '" has problematic union type with complex types: [' . implode( ', ', $type_array ) .
+                ']. This breaks ChatGPT. Auto-fixing by removing type constraint.'
+              );
               // Auto-fix: Remove the type constraint to accept any value
               unset( $definition['type'] );
               // Keep description if present, or add one
@@ -1325,6 +1388,10 @@ class Meow_MWAI_Labs_MCP {
 
   #region Tools Call (execute_tool)
   private function execute_tool( $tool, $args, $id ) {
+    $start = microtime( true );
+    $response = null;
+    $status = 'error';
+    $error_msg = null;
     try {
       // Ensure tool access levels are populated (each HTTP request starts fresh)
       if ( empty( $this->tool_access_levels ) ) {
@@ -1334,7 +1401,9 @@ class Meow_MWAI_Labs_MCP {
       // Defense in depth: verify tool access even if it wasn't filtered from the listing
       $tool_level = $this->tool_access_levels[ $tool ] ?? 'admin';
       if ( !$this->role_has_access( $tool_level ) ) {
-        return $this->rpc_error( $id, -32600, "Access denied: tool '{$tool}' requires '{$tool_level}' access." );
+        $error_msg = "Access denied: tool '{$tool}' requires '{$tool_level}' access.";
+        $response = $this->rpc_error( $id, -32600, $error_msg );
+        return $response;
       }
 
       // Handle built-in tools first
@@ -1346,7 +1415,7 @@ class Meow_MWAI_Labs_MCP {
           'time' => gmdate( 'Y-m-d H:i:s' ),
           'name' => get_bloginfo( 'name' ),
         ];
-        return [
+        $response = [
           'jsonrpc' => '2.0',
           'id' => $id,
           'result' => [
@@ -1359,6 +1428,8 @@ class Meow_MWAI_Labs_MCP {
             'data' => $ping_data,
           ],
         ];
+        $status = 'success';
+        return $response;
       }
 
       // Let other modules handle their tools
@@ -1386,21 +1457,48 @@ class Meow_MWAI_Labs_MCP {
       if ( $filtered !== null ) {
         // Check if it's already a full JSON-RPC response (backward compatibility)
         if ( is_array( $filtered ) && isset( $filtered['jsonrpc'] ) && isset( $filtered['id'] ) ) {
-          return $filtered;
+          $response = $filtered;
+          $status = isset( $filtered['error'] ) ? 'error' : 'success';
+          if ( $status === 'error' ) {
+            $error_msg = $filtered['error']['message'] ?? null;
+          }
+          return $response;
         }
 
         // Otherwise, wrap the result in proper JSON-RPC format
-        return [
+        $response = [
           'jsonrpc' => '2.0',
           'id' => $id,
           'result' => $this->format_tool_result( $filtered ),
         ];
+        $status = 'success';
+        return $response;
       }
 
       throw new Exception( "Unknown tool: {$tool}" );
     }
     catch ( Exception $e ) {
-      return $this->rpc_error( $id, -32603, $e->getMessage() );
+      $error_msg = $e->getMessage();
+      $response = $this->rpc_error( $id, -32603, $error_msg );
+      return $response;
+    }
+    finally {
+      $duration_ms = (int) round( ( microtime( true ) - $start ) * 1000 );
+      // Fire the action even on access denials and errors so admins can see
+      // attempted-but-blocked tool calls in MCP Logs.
+      do_action( 'mwai_mcp_tool_called', [
+        'tool'         => $tool,
+        'args'         => $args,
+        'result'       => $response,
+        'status'       => $status,
+        'error_msg'    => $error_msg,
+        'duration_ms'  => $duration_ms,
+        'client_id'    => $this->auth_client_id,
+        'client_name'  => $this->auth_client_name,
+        'auth_method'  => $this->auth_method,
+        'request_id'   => $id,
+        'user_id'      => get_current_user_id(),
+      ] );
     }
   }
   #endregion

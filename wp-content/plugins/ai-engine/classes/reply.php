@@ -18,6 +18,11 @@ class Meow_MWAI_Reply implements JsonSerializable {
   // Code interpreter code (separate from main content)
   public $contentCode = '';
 
+  // Engine-specific extras kept on the reply during a single request (e.g. Google
+  // stores generated images, thoughts and grounding metadata here). Declared so PHP
+  // 8.2+ does not warn about dynamic property creation.
+  public $extraData = [];
+
   // This is when models return a message that needs to be executed (functions, tools, etc)
   public $needFeedbacks = [];
   public $needClientActions = [];
@@ -93,6 +98,14 @@ class Meow_MWAI_Reply implements JsonSerializable {
   public function get_out_tokens() {
     $out_tokens = isset( $this->usage['completion_tokens'] ) ? $this->usage['completion_tokens'] : 0;
     if ( empty( $out_tokens ) ) {
+      // NOTE: Only estimate when result is actually text. Embedding replies hold a
+      // float vector, image replies hold URLs/arrays, etc. — running estimate_tokens()
+      // on those JSON-encodes the structure and produces huge bogus counts (a 3072-d
+      // Gemini embedding estimated as ~13k tokens for a 50-char input). Anything that
+      // isn't a string has no meaningful "output token" count, so return 0.
+      if ( !is_string( $this->result ) ) {
+        return 0;
+      }
       $out_tokens = Meow_MWAI_Core::estimate_tokens( $this->result );
     }
     return $out_tokens;
@@ -110,7 +123,12 @@ class Meow_MWAI_Reply implements JsonSerializable {
     return $this->usage['accuracy'] ?? 'none';
   }
 
-  public function get_units() {
+  /**
+   * Returns the metric count for this reply, preferring tokens. Falls back to
+   * images or seconds for non-token-billed providers (legacy Imagen/Replicate
+   * per-image, Whisper, Sora). Equivalent to (and aliased by) get_units().
+   */
+  public function get_tokens() {
     if ( isset( $this->usage['total_tokens'] ) ) {
       return $this->usage['total_tokens'];
     }
@@ -121,6 +139,14 @@ class Meow_MWAI_Reply implements JsonSerializable {
       return $this->usage['seconds'];
     }
     return null;
+  }
+
+  /**
+   * Legacy alias for get_tokens(). Kept indefinitely — third-party code
+   * reachable via the mwai_ai_reply filter may call it.
+   */
+  public function get_units() {
+    return $this->get_tokens();
   }
 
   public function get_type() {
@@ -273,7 +299,6 @@ class Meow_MWAI_Reply implements JsonSerializable {
 
         // It's url/image
         else if ( isset( $choice['url'] ) ) {
-          // TODO: DALL-E 2 and 3 were using URLs, but now they are using b64_json (gpt-image-1 kind of enforced it)
           $url = trim( $choice['url'] );
           $this->results[] = $url;
           $this->result = $url;
@@ -289,7 +314,7 @@ class Meow_MWAI_Reply implements JsonSerializable {
             $expiry = 1 * HOUR_IN_SECONDS; // 1 hour for temporary images
           }
           else {
-            // Use the user's AI-generated image settings (same as DALL-E uses)
+            // Use the user's AI-generated image settings
             $localDownload = $mwai_core->get_option( 'image_local_download' );
             $expiry = (int) $mwai_core->get_option( 'image_expires_download' );
           }

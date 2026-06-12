@@ -35,6 +35,13 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
   protected $lastRequestBody = null; // For debugging
   protected $contentStarted = false; // Track if content streaming has started
   protected $codeInterpreterCompleted = false; // Track if code interpreter has completed
+  // NOTE: When the Responses API runs file_search against an OpenAI Vector Store,
+  // citation markers are embedded inline in output_text using Unicode Private-Use
+  // characters (U+E200 ... U+E202 ... U+E201). They wrap fragments like "cite
+  // turn0file0 turn0file2". Some renderers display those PUA chars as "O", so
+  // users see gibberish like "OfileciteOturnOfile0OturnOfile2". The marker can
+  // span multiple stream deltas, so we track open-state across chunks.
+  protected $inCitationMarker = false;
   // IMPORTANT: OpenAI Responses API sends the same function call in both:
   // 1. response.output_item.done - when individual function call completes
   // 2. response.completed - with all function calls in the final response
@@ -211,16 +218,17 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
           }
         }
         else {
-          // Regular user message
-          $content = [
-            [
-              'type' => 'input_text',
-              'text' => $query->get_message()
-            ]
-          ];
-
-          // Check for attached files (unified approach)
+          // Regular user message. The text part is skipped when the message is
+          // empty and files are attached (an image can be sent without text).
+          $content = [];
+          $message = $query->get_message();
           $attachments = method_exists( $query, 'getAttachments' ) ? $query->getAttachments() : [];
+          if ( ( $message !== null && $message !== '' ) || empty( $attachments ) ) {
+            $content[] = [
+              'type' => 'input_text',
+              'text' => $message
+            ];
+          }
           foreach ( $attachments as $file ) {
             // Check if it's an image or a file (PDF, etc.) BEFORE trying to get data
             $mimeType = $file->get_mimeType() ?? '';
@@ -250,6 +258,12 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
                 Meow_MWAI_Logging::warn( 'Responses API: File not uploaded to OpenAI yet (type: ' . $file->get_type() . ')' );
               }
             }
+          }
+
+          // If every attachment was skipped and there was no message, fall back to
+          // an empty text part rather than sending an invalid empty content array.
+          if ( empty( $content ) ) {
+            $content[] = [ 'type' => 'input_text', 'text' => '' ];
           }
 
           $body['input'] = [
@@ -530,17 +544,11 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
       // Usage tracking is handled differently in the streaming response
     }
     else if ( $query instanceof Meow_MWAI_Query_Image ) {
-      // For image generation, we can use the integrated approach
-      if ( strpos( $query->model, 'gpt-image' ) === 0 ) {
-        $body['tools'] = [[
-          'type' => 'image_generation'
-        ]];
-        $body['input'] = $query->get_message();
-      }
-      else {
-        // Fallback to old API for DALL-E models
-        return $this->build_body( $query, $streamCallback );
-      }
+      // gpt-image models use the integrated image_generation tool
+      $body['tools'] = [[
+        'type' => 'image_generation'
+      ]];
+      $body['input'] = $query->get_message();
     }
 
     // Debug logging for feedback queries
@@ -1288,7 +1296,11 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
             $statusEvent = Meow_MWAI_Event::generating_response();
             call_user_func( $this->streamCallback, $statusEvent );
           }
-          $content = $json['delta'];
+          $content = $this->strip_citation_markers( $json['delta'] );
+          // After stripping, this delta may be empty — let caller skip it.
+          if ( $content === '' ) {
+            $content = null;
+          }
         }
         break;
 
@@ -1605,6 +1617,16 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
       case 'response.output_text_annotation.added':
       case 'response.output_text.annotation.added':
         // Text annotation added - check for container file citations
+        //
+        // NOTE: file_search against an OpenAI Vector Store also emits annotations
+        // here with type === 'file_citation' (fields: file_id, filename, index,
+        // and sometimes quote). We intentionally drop them — chatbot replies
+        // should not surface "Sources: my-pdf.pdf" by default. If we ever want
+        // to log which files an answer was grounded on (query logs, debug
+        // panels), capture $annotation here when type === 'file_citation' and
+        // plumb it onto the reply, then write via $stats->add_metadata() at the
+        // log insertion site. Related: strip_citation_markers() removes the
+        // inline U+E200…U+E201 markers that accompany these annotations.
         if ( isset( $json['annotation'] ) ) {
           $annotation = $json['annotation'];
 
@@ -1708,6 +1730,52 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
     $this->streamContainerId = null;
     $this->streamCodeInterpreterFiles = [];
     $this->codeInterpreterCompleted = false;
+    $this->inCitationMarker = false;
+  }
+
+  /**
+   * Strip file_search citation markers (U+E200 ... U+E201, with U+E202 separators)
+   * from a piece of text. Works across stream deltas because $inCitationMarker
+   * persists between calls. Annotation metadata still arrives via
+   * response.output_text.annotation.added events, so citation info isn't lost —
+   * only the inline garbage is removed from displayed text.
+   *
+   * TODO: If we ever want to render proper inline citations ("[1]", "[2]"...), this
+   * is the seam to do it — replace the marker block with a footnote reference
+   * instead of dropping it, and emit a citations list alongside the reply.
+   */
+  protected function strip_citation_markers( $content ) {
+    if ( !is_string( $content ) || $content === '' ) {
+      return $content;
+    }
+    // Fast path: no opening marker in this chunk and we aren't mid-marker.
+    if ( !$this->inCitationMarker && strpos( $content, "\xee\x88\x80" ) === false ) {
+      return $content;
+    }
+    $output = '';
+    $chars = preg_split( '//u', $content, -1, PREG_SPLIT_NO_EMPTY );
+    foreach ( $chars as $ch ) {
+      $code = mb_ord( $ch, 'UTF-8' );
+      if ( $code === 0xE200 ) {
+        $this->inCitationMarker = true;
+        continue;
+      }
+      if ( $this->inCitationMarker ) {
+        if ( $code === 0xE201 ) {
+          $this->inCitationMarker = false;
+        }
+        // Drop everything inside the marker — including U+E202 separators and
+        // the "cite"/"turn0fileN" payload tokens.
+        continue;
+      }
+      // Defensive: strip stray U+E2xx markers that appear without a U+E200 opener
+      // (malformed or partial across deltas after a previous broken chunk).
+      if ( $code >= 0xE200 && $code <= 0xE2FF ) {
+        continue;
+      }
+      $output .= $ch;
+    }
+    return $output;
   }
 
   /**
@@ -1983,14 +2051,14 @@ class Meow_MWAI_Engines_OpenAI extends Meow_MWAI_Engines_ChatML {
                 foreach ( $output_item['content'] as $content_item ) {
                   // The actual text is in content_item['text'] for type 'output_text'
                   if ( isset( $content_item['type'] ) && $content_item['type'] === 'output_text' && isset( $content_item['text'] ) ) {
-                    $content .= $content_item['text'];
+                    $content .= $this->strip_citation_markers( $content_item['text'] );
                   }
                   // Fallback checks for other possible structures
                   elseif ( isset( $content_item['content'] ) && is_string( $content_item['content'] ) ) {
-                    $content .= $content_item['content'];
+                    $content .= $this->strip_citation_markers( $content_item['content'] );
                   }
                   elseif ( is_string( $content_item ) ) {
-                    $content .= $content_item;
+                    $content .= $this->strip_citation_markers( $content_item );
                   }
                 }
               }

@@ -2,7 +2,36 @@
 
 // Price as of June 2024: https://openai.com/api/pricing/
 
+// TODO: After 2027-02 (OpenAI ends fine-tune job creation on 2027-01-06), drop the `finetune` key from every model entry below and remove 'finetune' from every model's `tags` array.
+
 define( 'MWAI_OPENAI_MODELS', [
+  /*
+    GPT-5.5
+    Latest flagship: tool-heavy agents, grounded assistants, long-context retrieval
+    https://developers.openai.com/api/docs/models/gpt-5.5
+    */
+  [
+    'model' => 'gpt-5.5',
+    'name' => 'GPT-5.5',
+    'family' => 'gpt-5',
+    'features' => ['completion'],
+    'price' => [
+      'in' => 5.00,
+      'out' => 30.00,
+      'cached' => 0.50,
+    ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 128000,
+    'maxContextualTokens' => 1050000,
+    'finetune' => false,
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'json', 'responses', 'mcp', 'reasoning', 'verbosity', 'latest'],
+    'tools' => ['web_search', 'image_generation', 'file_search', 'code_interpreter'],
+    'params' => [
+      'reasoning' => ['none', 'low', 'medium', 'high', 'xhigh'],
+      'verbosity' => ['low', 'medium', 'high']
+    ]
+  ],
   /*
     GPT-5.4
     Our most capable model for professional work
@@ -110,6 +139,7 @@ define( 'MWAI_OPENAI_MODELS', [
     GPT-5.3 Chat
     GPT-5.3 model used in ChatGPT
     https://developers.openai.com/api/docs/models/gpt-5.3-chat-latest
+    Shutdown: August 10, 2026.
     */
   [
     'model' => 'gpt-5.3-chat-latest',
@@ -125,7 +155,7 @@ define( 'MWAI_OPENAI_MODELS', [
     'maxCompletionTokens' => 16384,
     'maxContextualTokens' => 128000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'json', 'responses', 'mcp'],
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'json', 'responses', 'mcp', 'deprecated'],
     'tools' => ['image_generation', 'code_interpreter']
   ],
   /*
@@ -158,6 +188,7 @@ define( 'MWAI_OPENAI_MODELS', [
     GPT-5.2 Chat
     GPT-5.2 model used in ChatGPT
     https://platform.openai.com/docs/models/gpt-5.2
+    Shutdown: August 10, 2026.
     */
   [
     'model' => 'gpt-5.2-chat-latest',
@@ -173,7 +204,7 @@ define( 'MWAI_OPENAI_MODELS', [
     'maxCompletionTokens' => 128000,
     'maxContextualTokens' => 400000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'responses', 'mcp'],
+    'tags' => ['core', 'chat', 'vision', 'files', 'responses', 'mcp', 'deprecated'],
     'tools' => ['web_search', 'file_search', 'code_interpreter']
   ],
   /*
@@ -325,7 +356,8 @@ define( 'MWAI_OPENAI_MODELS', [
     'maxCompletionTokens' => 16384,
     'maxContextualTokens' => 128000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'responses', 'mcp'],
+    // Shutdown: July 23, 2026.
+    'tags' => ['core', 'chat', 'vision', 'files', 'responses', 'mcp', 'deprecated'],
     'tools' => ['web_search', 'file_search', 'code_interpreter'],
     'params' => [
       'verbosity' => ['low', 'medium', 'high']
@@ -420,7 +452,8 @@ define( 'MWAI_OPENAI_MODELS', [
     'maxCompletionTokens' => 32768,
     'maxContextualTokens' => 1047576,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'functions', 'json', 'finetune', 'responses', 'mcp'],
+    // Shutdown: October 23, 2026.
+    'tags' => ['core', 'chat', 'vision', 'functions', 'json', 'finetune', 'responses', 'mcp', 'deprecated'],
     'tools' => ['image_generation']
   ],
   /*
@@ -510,8 +543,42 @@ define( 'MWAI_OPENAI_MODELS', [
     'unit' => 1 / 1000000,
     'maxCompletionTokens' => 100000,
     'maxContextualTokens' => 200000,
-    'tags' => ['core', 'chat', 'o1-model', 'reasoning', 'responses', 'mcp'],
+    // Shutdown: October 23, 2026.
+    'tags' => ['core', 'chat', 'o1-model', 'reasoning', 'responses', 'mcp', 'deprecated'],
     'tools' => ['web_search', 'image_generation', 'code_interpreter']
+  ],
+  /*
+                GPT Realtime 2
+                Voice model with GPT-5-class reasoning, stronger instruction following, and multilingual support.
+                https://platform.openai.com/docs/models/gpt-realtime-2
+                */
+  [
+    'model' => 'gpt-realtime-2',
+    'name' => 'GPT Realtime 2',
+    'family' => 'realtime',
+    'features' => ['core', 'realtime', 'functions'],
+    'price' => [
+      'text' => [
+        'in' => 4.00,
+        'cache' => 0.40,
+        'out' => 16.00,
+      ],
+      'audio' => [
+        'in' => 32.00,
+        'cache' => 0.40,
+        'out' => 64.00,
+      ],
+      'image' => [
+        'in' => 5.00,
+        'cache' => 0.50,
+      ]
+    ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 4096,
+    'maxContextualTokens' => 128000,
+    'finetune' => false,
+    'tags' => ['core', 'realtime', 'functions', 'vision', 'mcp']
   ],
   /*
                 GPT Realtime
@@ -573,71 +640,56 @@ define( 'MWAI_OPENAI_MODELS', [
     'maxCompletionTokens' => 4096,
     'maxContextualTokens' => 32000,
     'finetune' => false,
-    'tags' => ['core', 'realtime', 'functions', 'vision']
-  ],
-  /*
-                GPT-4o Realtime
-                Model capable of realtime text and audio inputs and outputs
-                https://platform.openai.com/docs/models/gpt-4o-realtime-preview
-                */
-  [
-    'model' => 'gpt-4o-realtime-preview',
-    'name' => 'GPT-4o Realtime (Preview)',
-    'family' => 'realtime',
-    'features' => ['core', 'realtime', 'functions'],
-    'price' => [
-      'text' => [
-        'in' => 5.00,
-        'cache' => 2.50,
-        'out' => 20.00,
-      ],
-      'audio' => [
-        'in' => 40.00,
-        'cache' => 2.50,
-        'out' => 80.00,
-      ]
-    ],
-    'type' => 'token',
-    'unit' => 1 / 1000000,
-    'maxCompletionTokens' => 4096,
-    'maxContextualTokens' => 128000,
-    'finetune' => false,
     'tags' => ['core', 'realtime', 'functions', 'vision', 'deprecated']
   ],
+  // TODO: gpt-realtime-translate and gpt-realtime-whisper are intentionally
+  // not exposed yet. Both run on their own OpenAI endpoints
+  // (/v1/realtime/translations/client_secrets and the realtime transcription
+  // session) with a one-way streaming contract, no tools, no conversation,
+  // and a different event prefix. They do not fit the chatbot session shape
+  // in premium/realtime.php and would warrant their own "Live Translation"
+  // and "Live Transcription" modes if a clear WordPress use case shows up.
   /*
-            GPT-4o mini Realtime
-            Smaller realtime model for text and audio inputs and outputs
-            https://platform.openai.com/docs/models/gpt-4o-mini-realtime-preview
-            */
-  [
-    'model' => 'gpt-4o-mini-realtime-preview',
-    'name' => 'GPT-4o Mini Realtime (Preview)',
-    'family' => 'realtime',
-    'features' => ['core', 'realtime', 'functions'],
-    'price' => [
-      'text' => [
-        'in' => 0.60,
-        'cache' => 0.30,
-        'out' => 2.40,
-      ],
-      'audio' => [
-        'in' => 10.00,
-        'cache' => 0.30,
-        'out' => 20.00,
-      ]
-    ],
-    'type' => 'token',
-    'unit' => 1 / 1000000,
-    'maxCompletionTokens' => 4096,
-    'maxContextualTokens' => 128000,
-    'finetune' => false,
-    'tags' => ['core', 'realtime', 'functions', 'vision', 'deprecated']
-  ],
-  /*
-      DALL·E 3
-      Our latest image generation model
-      https://platform.openai.com/docs/models/dall-e-3
+      GPT Image
+      OpenAI's image generation models (token-based pricing)
+      https://platform.openai.com/docs/models/gpt-image-1
       */
+  [
+    'model' => 'gpt-image-2',
+    'name' => 'GPT Image 2',
+    'family' => 'gpt-image',
+    'features' => ['text-to-image'],
+    'resolutions' => [
+      [
+        'name' => '1024x1024',
+        'label' => '1024x1024'
+      ],
+      [
+        'name' => '1024x1536',
+        'label' => '1024x1536'
+      ],
+      [
+        'name' => '1536x1024',
+        'label' => '1536x1024'
+      ]
+    ],
+    'qualities' => [
+      [ 'name' => 'auto',   'label' => 'Auto' ],
+      [ 'name' => 'low',    'label' => 'Low' ],
+      [ 'name' => 'medium', 'label' => 'Medium' ],
+      [ 'name' => 'high',   'label' => 'High' ]
+    ],
+    'type' => 'token',
+    'mode' => 'image',
+    'price' => [
+      'in' => 8.00,
+      'out' => 30.00,
+      'cached' => 2.00
+    ],
+    'unit' => 1 / 1000000,
+    'finetune' => false,
+    'tags' => ['core', 'image', 'image-edit', 'responses']
+  ],
   [
     'model' => 'gpt-image-1.5',
     'name' => 'GPT Image 1.5',
@@ -657,6 +709,12 @@ define( 'MWAI_OPENAI_MODELS', [
         'label' => '1536x1024'
       ]
     ],
+    'qualities' => [
+      [ 'name' => 'auto',   'label' => 'Auto' ],
+      [ 'name' => 'low',    'label' => 'Low' ],
+      [ 'name' => 'medium', 'label' => 'Medium' ],
+      [ 'name' => 'high',   'label' => 'High' ]
+    ],
     'type' => 'token',
     'mode' => 'image',
     'price' => [
@@ -666,7 +724,8 @@ define( 'MWAI_OPENAI_MODELS', [
     ],
     'unit' => 1 / 1000000,
     'finetune' => false,
-    'tags' => ['core', 'image', 'image-edit', 'responses']
+    // Shutdown: December 1, 2026.
+    'tags' => ['core', 'image', 'image-edit', 'responses', 'deprecated']
   ],
   [
     'model' => 'gpt-image-1',
@@ -687,6 +746,12 @@ define( 'MWAI_OPENAI_MODELS', [
         'label' => '1536x1024'
       ]
     ],
+    'qualities' => [
+      [ 'name' => 'auto',   'label' => 'Auto' ],
+      [ 'name' => 'low',    'label' => 'Low' ],
+      [ 'name' => 'medium', 'label' => 'Medium' ],
+      [ 'name' => 'high',   'label' => 'High' ]
+    ],
     'type' => 'token',
     'mode' => 'image',
     'price' => [
@@ -696,7 +761,8 @@ define( 'MWAI_OPENAI_MODELS', [
     ],
     'unit' => 1 / 1000000,
     'finetune' => false,
-    'tags' => ['core', 'image', 'image-edit', 'responses']
+    // Shutdown: October 23, 2026.
+    'tags' => ['core', 'image', 'image-edit', 'responses', 'deprecated']
   ],
   [
     'model' => 'gpt-image-1-mini',
@@ -717,6 +783,12 @@ define( 'MWAI_OPENAI_MODELS', [
         'label' => '1536x1024'
       ]
     ],
+    'qualities' => [
+      [ 'name' => 'auto',   'label' => 'Auto' ],
+      [ 'name' => 'low',    'label' => 'Low' ],
+      [ 'name' => 'medium', 'label' => 'Medium' ],
+      [ 'name' => 'high',   'label' => 'High' ]
+    ],
     'type' => 'token',
     'mode' => 'image',
     'price' => [
@@ -726,61 +798,8 @@ define( 'MWAI_OPENAI_MODELS', [
     ],
     'unit' => 1 / 1000000,
     'finetune' => false,
-    'tags' => ['core', 'image', 'image-edit', 'responses']
-  ],
-  [
-    'model' => 'dall-e-3',
-    'name' => 'DALL-E 3',
-    'family' => 'dall-e',
-    'features' => ['text-to-image'],
-    'resolutions' => [
-      [
-        'name' => '1024x1024',
-        'label' => '1024x1024',
-        'price' => 0.040
-      ],
-      [
-        'name' => '1024x1792',
-        'label' => '1024x1792',
-        'price' => 0.080
-      ],
-      [
-        'name' => '1792x1024',
-        'label' => '1792x1024',
-        'price' => 0.080
-      ]
-    ],
-    'type' => 'image',
-    'unit' => 1,
-    'finetune' => false,
-    'tags' => ['core', 'image']
-  ],
-  [
-    'model' => 'dall-e-3-hd',
-    'name' => 'DALL-E 3 (HD)',
-    'family' => 'dall-e',
-    'features' => ['text-to-image'],
-    'resolutions' => [
-      [
-        'name' => '1024x1024',
-        'label' => '1024x1024',
-        'price' => 0.080
-      ],
-      [
-        'name' => '1024x1792',
-        'label' => '1024x1792',
-        'price' => 0.120
-      ],
-      [
-        'name' => '1792x1024',
-        'label' => '1792x1024',
-        'price' => 0.120
-      ]
-    ],
-    'type' => 'image',
-    'unit' => 1,
-    'finetune' => false,
-    'tags' => ['core', 'image']
+    // Shutdown: December 1, 2026.
+    'tags' => ['core', 'image', 'image-edit', 'responses', 'deprecated']
   ],
   /*
     Sora 2
@@ -808,7 +827,8 @@ define( 'MWAI_OPENAI_MODELS', [
     'type' => 'video',
     'unit' => 'second',
     'finetune' => false,
-    'tags' => ['core', 'video']
+    // Shutdown: September 24, 2026.
+    'tags' => ['core', 'video', 'deprecated']
   ],
   [
     'model' => 'sora-2-pro',
@@ -841,7 +861,8 @@ define( 'MWAI_OPENAI_MODELS', [
     'type' => 'video',
     'unit' => 'second',
     'finetune' => false,
-    'tags' => ['core', 'video']
+    // Shutdown: September 24, 2026.
+    'tags' => ['core', 'video', 'deprecated']
   ],
   // Embedding models:
   // OpenAI v3 models support Matryoshka embeddings (MRL) allowing dimension truncation
@@ -918,39 +939,62 @@ define( 'MWAI_OPENAI_MODELS', [
     'finetune' => false,
     'tags' => ['core', 'audio'],
   ],
-  /*
-                  Deprecated Models
-                  */
-  [
-    'model' => 'dall-e',
-    'name' => 'DALL-E 2',
-    'family' => 'dall-e',
-    'features' => ['text-to-image'],
-    'resolutions' => [
-      [
-        'name' => '256x256',
-        'label' => '256x256',
-        'price' => 0.016
-      ],
-      [
-        'name' => '512x512',
-        'label' => '512x512',
-        'price' => 0.018
-      ],
-      [
-        'name' => '1024x1024',
-        'label' => '1024x1024',
-        'price' => 0.020
-      ]
-    ],
-    'type' => 'image',
-    'unit' => 1,
-    'finetune' => false,
-    'tags' => ['core', 'image', 'deprecated']
-  ],
 ] );
 
 define( 'MWAI_ANTHROPIC_MODELS', [
+  [
+    'model' => 'claude-fable-5',
+    'name' => 'Claude Fable 5',
+    'family' => 'claude-5',
+    'features' => ['completion'],
+    'price' => [
+      'in' => 10.00,
+      'out' => 50.00,
+    ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 128000,
+    'maxContextualTokens' => 1000000,
+    'finetune' => false,
+    // Adaptive thinking is always on (no disabled mode, no manual budget, no
+    // assistant prefill). Our engine never sends those, so no special handling.
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'no-temperature', 'latest'],
+    'tools' => ['code_interpreter', 'thinking']
+  ],
+  [
+    'model' => 'claude-opus-4-8',
+    'name' => 'Claude Opus 4.8',
+    'family' => 'claude-4',
+    'features' => ['completion'],
+    'price' => [
+      'in' => 5.00,
+      'out' => 25.00,
+    ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 128000,
+    'maxContextualTokens' => 1000000,
+    'finetune' => false,
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'no-temperature', 'latest'],
+    'tools' => ['code_interpreter', 'thinking']
+  ],
+  [
+    'model' => 'claude-opus-4-7',
+    'name' => 'Claude Opus 4.7',
+    'family' => 'claude-4',
+    'features' => ['completion'],
+    'price' => [
+      'in' => 5.00,
+      'out' => 25.00,
+    ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 128000,
+    'maxContextualTokens' => 1000000,
+    'finetune' => false,
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'no-temperature'],
+    'tools' => ['code_interpreter', 'thinking']
+  ],
   [
     'model' => 'claude-opus-4-6',
     'name' => 'Claude Opus 4.6',
@@ -963,9 +1007,9 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'type' => 'token',
     'unit' => 1 / 1000000,
     'maxCompletionTokens' => 128000,
-    'maxContextualTokens' => 200000,
+    'maxContextualTokens' => 1000000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'latest'],
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -997,7 +1041,7 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'type' => 'token',
     'unit' => 1 / 1000000,
     'maxCompletionTokens' => 64000,
-    'maxContextualTokens' => 200000,
+    'maxContextualTokens' => 1000000,
     'finetune' => false,
     'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'latest'],
     'tools' => ['code_interpreter', 'thinking']
@@ -1050,7 +1094,8 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'maxCompletionTokens' => 32000,
     'maxContextualTokens' => 200000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp'],
+    // Deprecated by Anthropic: retires on the Claude API on August 5, 2026.
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'deprecated'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -1067,7 +1112,8 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'maxCompletionTokens' => 32000,
     'maxContextualTokens' => 200000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp'],
+    // Deprecated by Anthropic: retires on the Claude API on August 5, 2026.
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'deprecated'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -1084,7 +1130,7 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'maxCompletionTokens' => 32000,
     'maxContextualTokens' => 200000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp'],
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'deprecated'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -1101,7 +1147,8 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'maxCompletionTokens' => 32000,
     'maxContextualTokens' => 200000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'latest'],
+    // Deprecated by Anthropic: retires on the Claude API on June 15, 2026.
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'deprecated'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -1118,7 +1165,7 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'maxCompletionTokens' => 64000,
     'maxContextualTokens' => 200000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp'],
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'deprecated'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -1135,7 +1182,8 @@ define( 'MWAI_ANTHROPIC_MODELS', [
     'maxCompletionTokens' => 64000,
     'maxContextualTokens' => 200000,
     'finetune' => false,
-    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'latest'],
+    // Deprecated by Anthropic: retires on the Claude API on June 15, 2026.
+    'tags' => ['core', 'chat', 'vision', 'files', 'functions', 'reasoning', 'mcp', 'deprecated'],
     'tools' => ['code_interpreter', 'thinking']
   ],
   [
@@ -1381,3 +1429,58 @@ define( 'MWAI_PERPLEXITY_MODELS', [
 // Mistral AI Models
 // Models are fetched dynamically from the Mistral API
 define( 'MWAI_MISTRAL_MODELS', [] );
+
+// xAI (Grok) Models
+// Models are fetched dynamically from the xAI API. The fallback list below mirrors the
+// chat-capable models that xAI publishes on https://docs.x.ai/docs/models, used only when
+// the dynamic fetch fails (e.g. invalid key during preflight).
+define( 'MWAI_XAI_MODELS', [
+  [
+    'model' => 'grok-4',
+    'name' => 'Grok 4',
+    'family' => 'grok',
+    'features' => [ 'completion', 'functions' ],
+    'price' => [ 'in' => 3.00, 'out' => 15.00 ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 16384,
+    'maxContextualTokens' => 256000,
+    'tags' => [ 'core', 'chat', 'functions', 'vision', 'reasoning' ],
+  ],
+  [
+    'model' => 'grok-4-fast',
+    'name' => 'Grok 4 Fast',
+    'family' => 'grok',
+    'features' => [ 'completion', 'functions' ],
+    'price' => [ 'in' => 0.20, 'out' => 0.50 ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 16384,
+    'maxContextualTokens' => 256000,
+    'tags' => [ 'core', 'chat', 'functions', 'vision', 'reasoning' ],
+  ],
+  [
+    'model' => 'grok-code-fast-1',
+    'name' => 'Grok Code Fast',
+    'family' => 'grok',
+    'features' => [ 'completion', 'functions' ],
+    'price' => [ 'in' => 0.20, 'out' => 1.50 ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 16384,
+    'maxContextualTokens' => 256000,
+    'tags' => [ 'core', 'chat', 'functions' ],
+  ],
+  [
+    'model' => 'grok-3-mini',
+    'name' => 'Grok 3 Mini',
+    'family' => 'grok',
+    'features' => [ 'completion', 'functions' ],
+    'price' => [ 'in' => 0.30, 'out' => 0.50 ],
+    'type' => 'token',
+    'unit' => 1 / 1000000,
+    'maxCompletionTokens' => 16384,
+    'maxContextualTokens' => 131072,
+    'tags' => [ 'core', 'chat', 'functions', 'reasoning' ],
+  ],
+] );
