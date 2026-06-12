@@ -12,6 +12,11 @@ use Exception;
 
 class Request
 {
+    public static function addHeader($header, $value)
+    {
+        // no-op in test environment
+    }
+
     public function request($method, $url, $data = array())
     {
         $key_id = MockApi::getKey();
@@ -252,6 +257,12 @@ class Request
                                 ]
                             ]
                         ],
+                    'app/merchant/api/verify/2/1' =>
+                        ['enabled' => true],
+                    'app/merchant/api/verify/3/1' =>
+                        ['enabled' => true],
+                    'app/merchant/api/verify/4/1' =>
+                        ['enabled' => true],
                     'webhooks' =>
                         [
                             "entity" => "collection",
