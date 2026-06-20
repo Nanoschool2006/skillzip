@@ -177,6 +177,23 @@ class FrmProField {
 	}
 
 	/**
+	 * Return true if the conditional logic settings should be reset.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $field_options
+	 *
+	 * @return bool
+	 */
+	private static function should_reset_conditional_logic_settings( $field_options ) {
+		if ( empty( $field_options['hide_field'] ) ) {
+			return true;
+		}
+
+		return isset( $field_options['enable_conditional_logic'] ) && '0' === $field_options['enable_conditional_logic'];
+	}
+
+	/**
 	 * If the conditional logic is disabled, reset its settings.
 	 *
 	 * @since 6.24
@@ -187,7 +204,7 @@ class FrmProField {
 	 * @return array
 	 */
 	private static function reset_conditional_logic_settings( $field_id, $field_options ) {
-		if ( ! isset( $field_options['enable_conditional_logic'] ) || '0' !== $field_options['enable_conditional_logic'] ) {
+		if ( ! self::should_reset_conditional_logic_settings( $field_options ) ) {
 			return $field_options;
 		}
 
@@ -662,15 +679,11 @@ class FrmProField {
 	 * @return bool
 	 */
 	public static function is_format_option_true_with_no_regex( $field ) {
-		$has_non_regex_format = false;
-
 		if ( is_array( $field ) ) {
-			$has_non_regex_format = FrmField::is_option_true_in_array( $field, 'format' ) && strpos( $field['format'], '^' ) !== 0;
-		} else {
-			FrmField::is_option_true_in_object( $field, 'format' ) && strpos( $field->field_options['format'], '^' ) !== 0;
+			return FrmField::is_option_true_in_array( $field, 'format' ) && ! str_starts_with( $field['format'], '^' );
 		}
 
-		return $has_non_regex_format;
+		return FrmField::is_option_true_in_object( $field, 'format' ) && ! str_starts_with( $field->field_options['format'], '^' );
 	}
 
 	/**

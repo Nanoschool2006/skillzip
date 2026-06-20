@@ -144,9 +144,7 @@ class FrmProAddressesController extends FrmProComboFieldsController {
 			return $headings;
 		}
 
-		$values = self::empty_value_array();
-
-		foreach ( $values as $heading => $value ) {
+		foreach ( self::empty_value_array() as $heading => $value ) {
 			$label = self::get_field_label( $atts['field'], $heading );
 			$headings[ $atts['field']->id . '_' . $heading ] = strip_tags( $label );
 		}

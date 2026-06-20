@@ -588,8 +588,6 @@ class FrmProGraphsController {
 		$type          = self::get_graph_type( $atts );
 		$data          = self::get_graph_data( $atts );
 		$options       = self::get_graph_options( $type, $atts );
-		$graph_package = self::get_graph_package( $type );
-
 		$graph_auto_id = count( $frm_vars['google_graphs']['graphs'] ) + 1;
 		$graph_id      = '_frm_' . strtolower( $type ) . $graph_auto_id;
 
@@ -610,7 +608,7 @@ class FrmProGraphsController {
 			'type'     => $type,
 			'data'     => $data,
 			'options'  => $options,
-			'package'  => $graph_package,
+			'package'  => self::get_graph_package( $type ),
 			'graph_id' => $graph_id,
 		);
 
@@ -761,7 +759,7 @@ class FrmProGraphsController {
 	 * @param array $atts The shortcode attributes.
 	 */
 	private static function filter_graph_data_to_match_graph( &$data, $atts ) {
-		if ( $atts['type'] === 'histogram' || $atts['type'] === 'pie' || $atts['type'] === 'geo' ) {
+		if ( in_array( $atts['type'], array( 'histogram', 'pie', 'geo' ), true ) ) {
 			return;
 		}
 
@@ -1560,8 +1558,7 @@ class FrmProGraphsController {
 	 * @return array
 	 */
 	private static function get_data_for_multi_field_graph( $atts ) {
-		$tooltip_text = self::get_tooltip_text( $atts );
-		$graph_data   = array( array( __( 'Fields', 'formidable' ), $tooltip_text ) );
+		$graph_data = array( array( __( 'Fields', 'formidable' ), self::get_tooltip_text( $atts ) ) );
 
 		foreach ( $atts['fields'] as $field ) {
 			$meta_values = self::get_meta_values_for_single_field( $field, $atts );

@@ -81,9 +81,6 @@ class FrmProGlobalVarsHelper {
 		return self::$helper;
 	}
 
-	/**
-	 * @return void
-	 */
 	private function __construct() {
 		$this->initialize_arrays();
 	}

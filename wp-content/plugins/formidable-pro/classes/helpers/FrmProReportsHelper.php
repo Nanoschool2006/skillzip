@@ -27,6 +27,11 @@ class FrmProReportsHelper {
 		add_filter( 'frm_form_stop_action_reports', '__return_true' );
 		FrmAppHelper::permission_check( 'frm_view_reports' );
 
+		if ( FrmProAddonsController::is_expired_outside_grace_period() ) {
+			self::show_expired_reports_error();
+			return;
+		}
+
 		$form = self::get_form_for_reports();
 
 		if ( ! $form ) {
@@ -67,6 +72,26 @@ class FrmProReportsHelper {
 		}
 
 		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-statistics/show.php';
+	}
+
+	/**
+	 * Show an error modal prompting to renew when the license is expired outside the grace period.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	private static function show_expired_reports_error() {
+		FrmAppController::show_error_modal(
+			array(
+				'title'         => __( 'You can\'t view reports', 'formidable-pro' ),
+				'body'          => __( 'Your license has expired. Renew your license to continue viewing reports.', 'formidable-pro' ),
+				'cancel_url'    => admin_url( 'admin.php?page=formidable' ),
+				'cancel_text'   => __( 'Go Back', 'formidable' ),
+				'continue_url'  => FrmAppHelper::admin_upgrade_link( 'expired-reports', 'account/downloads/' ),
+				'continue_text' => __( 'Renew Now', 'formidable' ),
+			)
+		);
 	}
 
 	/**
@@ -452,7 +477,7 @@ class FrmProReportsHelper {
 			return array();
 		}
 
-		$entry_statuses = array( 'all' => __( 'All', 'formidable-pro' ) ) + FrmEntriesHelper::get_entry_statuses();
+		$entry_statuses = array( 'all' => __( 'All', 'formidable' ) ) + FrmEntriesHelper::get_entry_statuses();
 		self::maybe_remove_extra_statuses( $form_id, $entry_statuses );
 
 		return $entry_statuses;

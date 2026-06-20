@@ -2,7 +2,7 @@
 	wp.hooks.addAction(
 		'frm_after_authorize',
 		'formidable',
-		function( msg ) {
+		( msg ) => {
 			if ( msg.success ) {
 				handleAfterLicenseAuthorizeSuccess();
 			}

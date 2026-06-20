@@ -125,9 +125,7 @@ class FrmProEddController extends FrmAddon {
 	}
 
 	public function pro_is_authorized() {
-		$license = $this->get_license();
-
-		if ( ! $license ) {
+		if ( ! $this->get_license() ) {
 			return false;
 		}
 

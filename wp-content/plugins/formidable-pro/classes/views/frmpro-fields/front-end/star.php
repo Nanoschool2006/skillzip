@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php
 $max = FrmField::get_option( $field, 'maxnum' );
 
-if ( ! empty( $max ) ) {
+if ( $max ) {
 	$field['options'] = range( 1, $max );
 }
 

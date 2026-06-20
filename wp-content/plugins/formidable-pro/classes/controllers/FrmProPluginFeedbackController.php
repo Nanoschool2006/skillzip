@@ -17,7 +17,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmProPluginFeedbackController {
 
 	/**
-	 * The meta key for storing the feedback.
+	 * The option key for storing the feedback.
+	 *
+	 * @var string
+	 */
+	const PLUGIN_FEEDBACK_OPTION_KEY = 'frm-plugin-feedback';
+
+	/**
+	 * The meta key previously used for storing the feedback.
+	 *
+	 * Kept for backward compatibility while migrating to an option.
 	 *
 	 * @var string
 	 */
@@ -397,14 +406,47 @@ class FrmProPluginFeedbackController {
 			return self::$plugin_feedback;
 		}
 
-		self::$plugin_feedback = get_user_meta( self::$user_id, self::PLUGIN_FEEDBACK_META_KEY, true );
+		$plugin_feedback = get_option( self::PLUGIN_FEEDBACK_OPTION_KEY );
 
-		// No feedback history exists yet, initialize empty structure.
-		if ( ! is_array( self::$plugin_feedback ) ) {
-			self::$plugin_feedback = array( self::get_current_year() => array( 'submitted' => false ) );
+		// Fall back to the legacy user meta if the option does not exist yet.
+		if ( ! is_array( $plugin_feedback ) ) {
+			$plugin_feedback = self::get_user_meta_feedback_fallback();
 		}
 
+		// No feedback history exists yet, initialize empty structure.
+		if ( ! is_array( $plugin_feedback ) ) {
+			$plugin_feedback = array();
+		}
+
+		if ( ! isset( $plugin_feedback[ self::get_current_year() ] ) ) {
+			$plugin_feedback[ self::get_current_year() ] = array( 'submitted' => false );
+		}
+
+		self::$plugin_feedback = $plugin_feedback;
+
 		return self::$plugin_feedback;
+	}
+
+	/**
+	 * Retrieves the legacy user meta feedback and migrates it to the option when already submitted.
+	 *
+	 * @return array|false The feedback data array, or false if no legacy meta exists.
+	 */
+	private static function get_user_meta_feedback_fallback() {
+		$feedback = get_user_meta( self::$user_id, self::PLUGIN_FEEDBACK_META_KEY, true );
+
+		if ( ! is_array( $feedback ) ) {
+			return false;
+		}
+
+		// Migrate to the option if feedback was already submitted for the current year.
+		if ( ! empty( $feedback[ self::get_current_year() ]['submitted'] ) ) {
+			update_option( self::PLUGIN_FEEDBACK_OPTION_KEY, $feedback, false );
+		}
+
+		delete_user_meta( self::$user_id, self::PLUGIN_FEEDBACK_META_KEY );
+
+		return $feedback;
 	}
 
 	/**
@@ -417,7 +459,7 @@ class FrmProPluginFeedbackController {
 	}
 
 	/**
-	 * Sets a key-value pair in the current year's feedback data and updates user meta.
+	 * Sets a key-value pair in the current year's feedback data and updates the option.
 	 *
 	 * @param string $key   The feedback data key.
 	 * @param mixed  $value The value to set.
@@ -427,7 +469,7 @@ class FrmProPluginFeedbackController {
 	private static function set_current_year_feedback( $key, $value ) {
 		self::get_plugin_feedback(); // Ensure initialized.
 		self::$plugin_feedback[ self::get_current_year() ][ $key ] = $value;
-		update_user_meta( self::$user_id, self::PLUGIN_FEEDBACK_META_KEY, self::$plugin_feedback );
+		update_option( self::PLUGIN_FEEDBACK_OPTION_KEY, self::$plugin_feedback, false );
 	}
 
 	/**

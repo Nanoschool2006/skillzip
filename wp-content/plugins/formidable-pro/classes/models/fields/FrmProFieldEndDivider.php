@@ -52,7 +52,7 @@ class FrmProFieldEndDivider extends FrmFieldType {
 
 	protected function extra_field_opts() {
 		return array(
-			'add_label'    => __( 'Add', 'formidable-pro' ),
+			'add_label'    => __( 'Add', 'formidable' ),
 			'remove_label' => __( 'Remove', 'formidable' ),
 			'format'       => 'both', // Set icon format
 		);

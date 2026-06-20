@@ -271,7 +271,7 @@
 .frm_compact_text button {
 	background: none !important;
 	color: inherit !important;
-	border: none !important;
+	border: none;
 	padding: 0 !important;
 	font: inherit !important;
 	font-weight: 500 !important;

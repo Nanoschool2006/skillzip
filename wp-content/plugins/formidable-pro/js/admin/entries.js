@@ -42,7 +42,7 @@
 			}
 
 			self.modalOptions.entriesCount = 0;
-			document.querySelectorAll( 'input[name="item-action[]"]' ).forEach( function ( checkbox ) {
+			document.querySelectorAll( 'input[name="item-action[]"]' ).forEach( ( checkbox ) => {
 				if ( checkbox.checked ) {
 					self.modalOptions.entriesCount++;
 				}
@@ -92,7 +92,7 @@
 			const checkbox = window.frmDom.tag( 'input' );
 			checkbox.type = 'checkbox';
 			checkbox.id = 'frm_trigger_on_delete_entry_actions';
-			checkbox.addEventListener( 'click', function ( e ) {
+			checkbox.addEventListener( 'click', ( e ) => {
 				self.updateOnDeleteURL( e.target.checked );
 			} );
 
@@ -133,14 +133,14 @@
 			self.confirmButton.setAttribute( 'href', '#' );
 			self.confirmButton.classList.add( 'frm-btn-inactive' );
 			self.confirmButton.classList.remove( 'dismiss' );
-			self.modal.one( 'dialogclose', function () {
+			self.modal.one( 'dialogclose', () => {
 				self.confirmButton.classList.remove( 'frm-btn-inactive' );
 			} );
 		};
 
 		this.initConfirmationInput = function () {
 			self.confirmationInput.placeholder = self.modalOptions.inputPlaceholder;
-			self.confirmationInput.addEventListener( 'keydown', function () {
+			self.confirmationInput.addEventListener( 'keydown', () => {
 				clearTimeout( self.timeoutInterval );
 				self.timeoutInterval = setTimeout( self.confirmationCheck, 100 );
 			} );

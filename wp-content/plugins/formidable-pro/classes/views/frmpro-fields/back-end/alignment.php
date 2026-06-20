@@ -23,8 +23,15 @@ if ( 1 === intval( $image_options ) ) {
 		<?php esc_html_e( 'Option Layout', 'formidable-pro' ); ?>
 	</label>
 	<select name="field_options[align_<?php echo absint( $field['id'] ); ?>]" id="field_options_align_<?php echo absint( $field['id'] ); ?>" class="field_options_align" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class">
-		<?php foreach ( $columns as $col => $col_label ) { ?>
-			<option value="<?php echo esc_attr( $col ); ?>" <?php selected( $field['align'], $col ); ?>>
+		<?php
+		foreach ( $columns as $col => $col_label ) {
+			$option_params = array( 'value' => $col );
+
+			if ( '' === $col && ! empty( $active_style_align_setting ) ) {
+				$option_params['data-align'] = $active_style_align_setting;
+			}
+			?>
+			<option<?php FrmAppHelper::array_to_html_params( $option_params, true ); ?> <?php selected( $field['align'], $col ); ?>>
 				<?php echo esc_html( $col_label ); ?>
 			</option>
 		<?php } ?>

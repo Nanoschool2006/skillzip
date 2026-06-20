@@ -31,9 +31,7 @@ class FrmProCronController {
 	 * Runs cron events.
 	 */
 	public static function init_cron() {
-		$events = self::get_events();
-
-		foreach ( $events as $event => $recurrence ) {
+		foreach ( self::get_events() as $event => $recurrence ) {
 			if ( ! wp_next_scheduled( $event ) ) {
 				wp_schedule_event( time(), $recurrence, $event );
 			}
@@ -44,9 +42,7 @@ class FrmProCronController {
 	 * Removes all cron events.
 	 */
 	public static function remove_cron() {
-		$events = self::get_events();
-
-		foreach ( $events as $event => $recurrence ) {
+		foreach ( self::get_events() as $event => $recurrence ) {
 			$timestamp = wp_next_scheduled( $event );
 
 			if ( false !== $timestamp ) {

@@ -12,6 +12,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_form_field frm_multiple_cont_<?php echo absint( $field['id'] ); ?> <?php echo esc_attr( FrmField::is_field_type( $field, 'select' ) ? '' : 'frm_hidden' ); ?>">
 	<label for="autocom_<?php echo absint( $field['id'] ); ?>">
 		<input type="checkbox" name="field_options[autocom_<?php echo absint( $field['id'] ); ?>]" id="autocom_<?php echo absint( $field['id'] ); ?>" value="1" <?php checked( $field['autocom'], 1 ); ?> />
-		<?php esc_html_e( 'Autocomplete', 'formidable-pro' ); ?>
+		<?php esc_html_e( 'Autocomplete', 'formidable' ); ?>
 	</label>
 </p>

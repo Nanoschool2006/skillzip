@@ -731,7 +731,7 @@ class FrmProXMLHelper {
 			}
 
 			// Adjust the date format if it starts with the day
-			if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}/', trim( $values[ $stamp ] ) ) && substr( $frmpro_settings->date_format, 0, 1 ) === 'd' ) {
+			if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}/', trim( $values[ $stamp ] ) ) && str_starts_with( $frmpro_settings->date_format, 'd' ) ) {
 				$reg_ex = str_replace(
 					array( '/', '.', '-', 'd', 'j', 'm', 'y', 'Y' ),
 					array( '\/', '\.', '\-', '\d{2}', '\d', '\d{2}', '\d{2}', '\d{4}' ),

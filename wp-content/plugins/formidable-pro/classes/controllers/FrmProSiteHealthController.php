@@ -115,7 +115,16 @@ class FrmProSiteHealthController {
 		}
 
 		$result['description'] = sprintf( '<p>%s</p>', FrmProAddonsController::message_text_for_license_status() );
-		$result['actions']     = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( $utc_medium, 'account/downloads/' ) ) . '">' . esc_html__( 'Renew Now', 'formidable' ) . '</a>';
+
+		$upgrade_link      = FrmAppHelper::admin_upgrade_link(
+			array(
+				'campaign' => $utc_medium,
+				'content'  => 'site-health',
+			),
+			'account/downloads/'
+		);
+		$result['actions'] = '<a href="' . esc_url( $upgrade_link ) . '">' . esc_html__( 'Renew Now', 'formidable' ) . '</a>';
+
 		return $result;
 	}
 

@@ -40,7 +40,7 @@ class FrmProFieldsController {
 	 *
 	 * @return string
 	 */
-	public static function &change_type( $type, $field ) {
+	public static function change_type( $type, $field ) {
 		remove_filter( 'frm_field_type', 'FrmFieldsController::change_type' );
 
 		// Don't change user ID fields or repeating sections to hidden
@@ -153,8 +153,7 @@ class FrmProFieldsController {
 	 * @return bool
 	 */
 	public static function should_disable_choice( $default, $choice_key, $is_selected_choice, $field ) {
-		$choices_limit_reached_statuses = self::choices_limit_reached_statuses( $field );
-		$choice_limit_reached           = $choices_limit_reached_statuses[ $choice_key ] ?? false;
+		$choice_limit_reached = self::choices_limit_reached_statuses( $field )[ $choice_key ] ?? false;
 
 		if ( ! $choice_limit_reached ) {
 			return false;
@@ -179,8 +178,7 @@ class FrmProFieldsController {
 	 * @return bool
 	 */
 	public static function should_hide_field_choice( $default, $choice_key, $field ) {
-		$choices_limit_reached_statuses = self::choices_limit_reached_statuses( $field );
-		$choice_limit_reached           = $choices_limit_reached_statuses[ $choice_key ] ?? false;
+		$choice_limit_reached = self::choices_limit_reached_statuses( $field )[ $choice_key ] ?? false;
 
 		if ( ! $choice_limit_reached ) {
 			return false;
@@ -198,9 +196,7 @@ class FrmProFieldsController {
 	 * @return bool
 	 */
 	public static function should_skip_rendering_choices_for_field( $default, $field ) {
-		$choices_limit_reached_statuses = self::choices_limit_reached_statuses( $field );
-
-		if ( ! FrmProFieldsHelper::should_show_choices_limit_message( $choices_limit_reached_statuses, $field ) ) {
+		if ( ! FrmProFieldsHelper::should_show_choices_limit_message( self::choices_limit_reached_statuses( $field ), $field ) ) {
 			return false;
 		}
 
@@ -301,14 +297,10 @@ class FrmProFieldsController {
 		$columns = '';
 
 		if ( FrmField::is_field_type( $field, 'checkbox' ) || FrmField::is_field_type( $field, 'radio' ) ) {
-			if ( isset( $field['align'] ) ) {
-				$columns = $field['align'];
-			}
+			$columns   = $field['align'] ?? '';
+			$field_obj = FrmFieldFactory::get_field_type( $field['type'], $field );
 
-			if ( $columns ) {
-				$field_obj = FrmFieldFactory::get_field_type( $field['type'] );
-				$field_obj->prepare_align_class( $columns );
-			}
+			$field_obj->prepare_align_class( $columns );
 		}
 
 		$classes = str_replace( ' frmstart ', ' frmstart ' . $columns . ' ', $classes );
@@ -324,6 +316,10 @@ class FrmProFieldsController {
 	 * @return void
 	 */
 	public static function include_remaining_qty_modal() {
+		if ( ! FrmAppHelper::is_form_builder_page( false ) ) {
+			return;
+		}
+
 		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/choices-remaining-qty-modal.php';
 	}
 
@@ -523,10 +519,32 @@ class FrmProFieldsController {
 			return '';
 		}
 
-		global $frm_input_masks;
-		$frm_input_masks[] = true;
+		self::setup_input_mask_global_for_currency_field();
 
 		return ' data-frmmask="' . esc_attr( self::convert_format_for_imask( $format ) ) . '"';
+	}
+
+	/**
+	 * Setup the input mask global variable for a currency field.
+	 * This just makes sure that the global is not empty.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	private static function setup_input_mask_global_for_currency_field() {
+		global $frm_input_masks;
+
+		if ( $frm_input_masks ) {
+			// No need to set up the global variable if it's already set.
+			return;
+		}
+
+		if ( ! is_array( $frm_input_masks ) ) {
+			$frm_input_masks = array();
+		}
+
+		$frm_input_masks[] = true;
 	}
 
 	/**
@@ -915,13 +933,11 @@ class FrmProFieldsController {
 		/* translators: %1$s: Field type. %2$s: Field type. %3$s: Field type */
 		$range_option_tooltip = sprintf( __( '%1$s Range: Enables the %2$s range option for %3$s fields', 'formidable-pro' ), ucfirst( $field['type'] ), $field['type'], $field['type'] );
 
-		if ( $display['conf_field'] && ! in_array( $field['type'], array( 'email', 'password', 'phone' ), true ) ) {
-			_deprecated_function( __FUNCTION__, '4.0', 'FrmFieldType->show_primary_options' );
-			include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/confirmation.php';
-		}
-
 		if ( ! empty( $display['range_field'] ) ) {
 			include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/range-option.php';
+		} elseif ( 'date' === $field['type'] && ! function_exists( 'frm_dates_autoloader' ) ) {
+			// In-product education for the Date Range option when the Dates add-on is not active.
+			include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/range-option-education.php';
 		}
 	}
 
@@ -972,18 +988,50 @@ class FrmProFieldsController {
 	 * @since 4.0
 	 *
 	 * @param array $args - includes 'field'
+	 *
+	 * @return void
 	 */
 	public static function alignment_setting( $args ) {
-		$field   = $args['field'];
-		$columns = array(
+		$field                      = $args['field'];
+		$active_style_align_setting = '';
+
+		// The alignment helpers live in Lite. Guard against an older Lite version that predates them.
+		if ( is_callable( 'FrmStylesController::get_active_style' ) && is_callable( 'FrmStylesController::get_align_key_for_style_settings' ) ) {
+			$active_style               = FrmStylesController::get_active_style( $field );
+			$field_type                 = FrmField::is_checkbox( $field ) ? 'checkbox' : 'radio';
+			$key                        = FrmStylesController::get_align_key_for_style_settings( $field_type );
+			$active_style_align_setting = $active_style->post_content[ $key ] ?? '';
+		}
+
+		$align_options = self::get_align_setting_options();
+
+		if ( $active_style_align_setting && ! empty( $align_options[ $active_style_align_setting ] ) ) {
+			$columns = array(
+				/* translators: %s: Alignment option label */
+				'' => sprintf( __( 'Use Style (%s)', 'formidable-pro' ), $align_options[ $active_style_align_setting ] ),
+			);
+		} else {
+			$columns = array();
+		}
+
+		$columns += $align_options;
+
+		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/alignment.php';
+	}
+
+	/**
+	 * @since 6.32
+	 *
+	 * @return array
+	 */
+	private static function get_align_setting_options() {
+		return array(
 			'block'         => __( 'One Column', 'formidable-pro' ),
 			'frm_two_col'   => __( 'Two Columns', 'formidable-pro' ),
 			'frm_three_col' => __( 'Three Columns', 'formidable-pro' ),
 			'frm_four_col'  => __( 'Four Columns', 'formidable-pro' ),
 			'inline'        => __( 'Inline Options', 'formidable-pro' ),
 		);
-
-		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/alignment.php';
 	}
 
 	/**
@@ -1271,7 +1319,7 @@ class FrmProFieldsController {
 			$selector_args['source'] = 'form_actions';
 		} else {
 			$field_type              = FrmAppHelper::get_post_param( 't', '', 'sanitize_text_field' );
-			$selector_args['source'] = ! empty( $field_type ) ? $field_type : 'unknown';
+			$selector_args['source'] = $field_type ? $field_type : 'unknown';
 		}
 
 		FrmFieldsHelper::display_field_value_selector( FrmAppHelper::get_post_param( 'field_id', 0, 'absint' ), $selector_args );
@@ -1883,8 +1931,7 @@ class FrmProFieldsController {
 		}
 
 		if ( class_exists( 'Collator' ) ) {
-			$locale   = get_locale();
-			$collator = new Collator( $locale );
+			$collator = new Collator( get_locale() );
 			$collator->asort( $options );
 		} else {
 			natcasesort( $options );
@@ -2608,10 +2655,30 @@ class FrmProFieldsController {
 	 * @return string
 	 */
 	public static function add_show_password_html_to_backend_conf_input( $input_html, $args ) {
-		if ( 'password' === $args['field']['type'] ) {
+		if ( 'password' === FrmField::get_field_type( $args['field'] ) ) {
 			return FrmProFieldsHelper::add_show_password_html( $input_html );
 		}
 		return $input_html;
+	}
+
+	/**
+	 * Renders the confirmation field preview in the form builder.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $args Contains `field` and `display` arrays.
+	 *
+	 * @return void
+	 */
+	public static function add_confirmation_field_preview( $args ) {
+		if ( empty( $args['display']['conf_field'] ) ) {
+			return;
+		}
+
+		$field   = $args['field'];
+		$display = $args['display'];
+
+		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/confirmation-preview.php';
 	}
 
 	/**
@@ -2707,6 +2774,32 @@ class FrmProFieldsController {
 
 		$field = $args['field'];
 		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/confirmation-placeholder.php';
+	}
+
+	/**
+	 * Adds additional alignment options for fields when Pro is active.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $align_options The alignment options.
+	 *
+	 * @return array
+	 */
+	public static function add_additional_pro_align_options( $align_options ) {
+		return array_merge( $align_options, self::get_additional_pro_align_options() );
+	}
+
+	/**
+	 * Returns additional alignment options for fields when Pro is active.
+	 *
+	 * @since 6.32
+	 *
+	 * @return array
+	 */
+	private static function get_additional_pro_align_options() {
+		$align_options = self::get_align_setting_options();
+		unset( $align_options['inline'], $align_options['block'] );
+		return $align_options;
 	}
 
 	/**

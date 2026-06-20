@@ -29,8 +29,6 @@ class FrmProApplication {
 	/**
 	 * @param WP_Term $term
 	 * @param string  $updated_at
-	 *
-	 * @return void
 	 */
 	public function __construct( $term, $updated_at ) {
 		$this->term       = $term;

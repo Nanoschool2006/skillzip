@@ -573,11 +573,10 @@ class FrmProCurrencyHelper {
 		$i      = 0;
 
 		while ( $i < $count ) {
-			$has_next          = $i + 1 < $count;
-			$is_left_symbol    = $has_symbol_left && $has_next && $words[ $i ] === $config['symbol_left'];
-			$next_is_number    = $has_next && $is_valid_number( $words[ $i + 1 ] );
-			$current_is_number = $is_valid_number( $words[ $i ] );
-			$is_right_symbol   = $has_symbol_right && $has_next && $words[ $i + 1 ] === $config['symbol_right'];
+			$has_next        = $i + 1 < $count;
+			$is_left_symbol  = $has_symbol_left && $has_next && $words[ $i ] === $config['symbol_left'];
+			$next_is_number  = $has_next && $is_valid_number( $words[ $i + 1 ] );
+			$is_right_symbol = $has_symbol_right && $has_next && $words[ $i + 1 ] === $config['symbol_right'];
 
 			// Process left symbol + number pattern with optional right symbol.
 			if ( $is_left_symbol && $next_is_number ) {
@@ -596,7 +595,7 @@ class FrmProCurrencyHelper {
 				$result[] = $text;
 
 				// Process number + right symbol pattern.
-			} elseif ( $current_is_number && $is_right_symbol ) {
+			} elseif ( $is_valid_number( $words[ $i ] ) && $is_right_symbol ) {
 				// Merge numeric value with symbol.
 				$result[] = $words[ $i ] . ' ' . $config['symbol_right'];
 				$i       += 2;

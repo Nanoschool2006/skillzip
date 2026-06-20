@@ -28,33 +28,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="columns-2">
 
 		<div id="post-body-content">
-			<div class="frm-entry-container frm-fields <?php echo FrmFormsHelper::get_form_style_class( $values ); ?>">
-			<h2 class="frm_wrap frm-entry-title">
-				<span><?php esc_html_e( 'Edit Entry', 'formidable' ); ?></span>
-				<span class="frm-sub-label">
+			<div class="frm-entry-container">
+				<h2 class="frm_wrap frm-entry-title">
+					<span><?php esc_html_e( 'Edit Entry', 'formidable' ); ?></span>
+					<span class="frm-sub-label">
+						<?php
+						printf(
+							/* translators: %d: Entry ID */
+							esc_html__( '(ID %d)', 'formidable' ),
+							$entry->id
+						);
+						?>
+					</span>
+					<?php FrmProEntriesHelper::get_entry_navigation( $id, $form->id, 'edit' ); ?>
+				</h2>
+				<div class="frm-fields <?php echo FrmFormsHelper::get_form_style_class( $values ); ?>">
 					<?php
-					printf(
-						/* translators: %d: Entry ID */
-						esc_html__( '(ID %d)', 'formidable' ),
-						$entry->id
-					);
+					require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
+
+					$form_action = 'update';
+					require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php';
 					?>
-				</span>
-				<?php FrmProEntriesHelper::get_entry_navigation( $id, $form->id, 'edit' ); ?>
-			</h2>
 
-			<?php
-			require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
-
-			$form_action = 'update';
-			require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php';
-			?>
-
-			<p>
-				<?php echo FrmProFormsHelper::get_prev_button( $form, 'button-secondary' ); ?>
-				<input class="button-primary" type="submit" value="<?php echo esc_attr( $submit ); ?>" <?php do_action( 'frm_submit_button_action', $form, $form_action ); ?> />
-			</p>
-			<div class="clear"></div>
+					<p>
+						<?php echo FrmProFormsHelper::get_prev_button( $form, 'button-secondary' ); ?>
+						<input class="button-primary" type="submit" value="<?php echo esc_attr( $submit ); ?>" <?php do_action( 'frm_submit_button_action', $form, $form_action ); ?> />
+					</p>
+					<div class="clear"></div>
+				</div>
 			</div>
 		</div>
 

@@ -90,12 +90,11 @@ class FrmProSummaryFormatter {
 		$page_data  = $this->form_pages['page_array'][ $page_num ];
 		$data_page  = $page_data['data-page'];
 		$data_field = $page_data['data-field'];
-		$link_text  = __( 'Edit', 'formidable' );
 		$class      = $page_data['class'] . ' frm_page_' . $page_num;
 
 		return sprintf(
 			'<button type="button" data-page="%2$s" class="frm-edit-page-btn %3$s" data-field="%4$s">%5$s <span>%1$s</span></button>',
-			esc_html( $link_text ),
+			esc_html__( 'Edit', 'formidable' ),
 			esc_attr( $data_page ),
 			esc_attr( $class ),
 			esc_attr( $data_field ),

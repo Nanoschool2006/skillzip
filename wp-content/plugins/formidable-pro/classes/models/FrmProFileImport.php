@@ -204,7 +204,7 @@ class FrmProFileImport {
 	 */
 	private static function get_upload_dir() {
 		add_filter( 'upload_dir', array( 'FrmProFileField', 'upload_dir' ) );
-		$uploads = wp_upload_dir();
+		$uploads = wp_upload_dir(); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 		remove_filter( 'upload_dir', array( 'FrmProFileField', 'upload_dir' ) );
 		return $uploads;
 	}

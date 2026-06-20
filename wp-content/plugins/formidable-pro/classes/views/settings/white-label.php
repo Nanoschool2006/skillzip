@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm_insert_form frm_form_field">
 	<?php
-	FrmProHtmlHelper::admin_toggle(
+	FrmHtmlHelper::toggle(
 		'frm_menu_icon',
 		'frm_menu_icon',
 		array(

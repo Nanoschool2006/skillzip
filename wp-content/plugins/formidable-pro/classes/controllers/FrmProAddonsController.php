@@ -276,7 +276,14 @@ class FrmProAddonsController extends FrmAddonsController {
 
 		$wrapper_class .= ' frm_previous_install'; // Errors with frm_previous_install do not get hidden on the Form builder page. See issue #3803.
 
-		$utc_medium = self::get_utc_medium_for_license_status( $status );
+		$utc_medium   = self::get_utc_medium_for_license_status( $status );
+		$upgrade_link = FrmAppHelper::admin_upgrade_link(
+			array(
+				'campaign' => $utc_medium,
+				'content'  => 'renewal-banner',
+			),
+			'account/downloads/'
+		);
 		?>
 		<div class="<?php echo esc_attr( $wrapper_class ); ?>">
 			<?php
@@ -285,7 +292,7 @@ class FrmProAddonsController extends FrmAddonsController {
 			?>
 			<span><?php self::message_text_for_license_status( true, $status ); ?></span>
 
-			<a target="_blank" href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $utc_medium, 'account/downloads/' ) ); ?>">
+			<a target="_blank" href="<?php echo esc_url( $upgrade_link ); ?>">
 				<?php esc_html_e( 'Renew Now', 'formidable' ); ?>
 			</a>
 
@@ -604,10 +611,9 @@ class FrmProAddonsController extends FrmAddonsController {
 	 * @return void
 	 */
 	private static function add_filters_to_disable_registered_actions( $actions ) {
-		$keys         = array_keys( $actions );
 		$lite_actions = self::get_lite_actions();
 
-		foreach ( $keys as $key ) {
+		foreach ( array_keys( $actions ) as $key ) {
 			if ( in_array( $key, $lite_actions, true ) ) {
 				continue;
 			}
@@ -640,7 +646,7 @@ class FrmProAddonsController extends FrmAddonsController {
 	 * @return string[]
 	 */
 	private static function get_lite_actions() {
-		return array( 'email', 'on_submit', 'payment' );
+		return array( 'email', 'on_submit', 'payment', 'stripe', 'square', 'paypal' );
 	}
 
 	/**
@@ -680,12 +686,24 @@ class FrmProAddonsController extends FrmAddonsController {
 				'copy'       => esc_html__( 'An active license is needed to access new features, add-ons, plugin updates, and our world class support!', 'formidable-pro' ),
 				'buttons'    => array(
 					array(
-						'url'    => FrmAppHelper::admin_upgrade_link( 'expired-full', 'knowledgebase/manage-licenses-and-sites/renewing-an-expired-license/' ),
+						'url'    => FrmAppHelper::admin_upgrade_link(
+							array(
+								'campaign' => 'expired-full',
+								'content'  => 'overlay-learn-more',
+							),
+							'knowledgebase/manage-licenses-and-sites/renewing-an-expired-license/'
+						),
 						'target' => '_blank',
 						'label'  => esc_html__( 'Learn More', 'formidable' ),
 					),
 					array(
-						'url'   => FrmAppHelper::admin_upgrade_link( 'expired-full', 'account/downloads/' ),
+						'url'   => FrmAppHelper::admin_upgrade_link(
+							array(
+								'campaign' => 'expired-full',
+								'content'  => 'overlay-renew',
+							),
+							'account/downloads/'
+						),
 						'label' => esc_html__( 'Renew License Now', 'formidable-pro' ),
 					),
 				),
@@ -767,6 +785,441 @@ class FrmProAddonsController extends FrmAddonsController {
 		}
 
 		self::show_warning_overlay_expired_license();
+	}
+
+	/**
+	 * Block Formidable add-on plugin functionality when Pro is not authorized.
+	 *
+	 * Scans add-on directories to discover class names, then removes
+	 * all matching hooks from $wp_filter. Add-ons remain active in
+	 * WordPress but do not execute any functionality.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	public static function block_addon_loading() {
+		$addon_dirs = self::get_formidable_addon_dirs();
+
+		if ( ! $addon_dirs ) {
+			return;
+		}
+
+		$addon_classes = self::build_addon_class_set( $addon_dirs );
+
+		if ( ! $addon_classes ) {
+			return;
+		}
+
+		self::remove_addon_hooks( $addon_classes );
+
+		add_filter(
+			'frm_message_list',
+			function ( $messages ) use ( $addon_dirs ) {
+				return self::add_blocked_addon_messages( $messages, $addon_dirs );
+			}
+		);
+	}
+
+	/**
+	 * Get directory names for active Formidable add-on plugins.
+	 *
+	 * Uses the cached FrmFormApi data to identify official Formidable
+	 * add-ons, then cross-references with active WordPress plugins.
+	 * Returns an empty array if no API cache is available.
+	 *
+	 * @since 6.32
+	 *
+	 * @return string[]
+	 */
+	private static function get_formidable_addon_dirs() {
+		$api_dirs = self::get_api_addon_dirs();
+
+		if ( ! $api_dirs ) {
+			return array();
+		}
+
+		$active_plugins = get_option( 'active_plugins', array() );
+
+		if ( is_multisite() ) {
+			$network_plugins = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
+			$active_plugins  = array_merge( $active_plugins, $network_plugins );
+		}
+
+		$dirs = array();
+
+		foreach ( $active_plugins as $plugin ) {
+			$dir = dirname( $plugin );
+
+			if ( '.' !== $dir && 'formidable-pro' !== $dir && in_array( $dir, $api_dirs, true ) ) {
+				$dirs[] = $dir;
+			}
+		}
+
+		return $dirs;
+	}
+
+	/**
+	 * Get add-on directory names from the cached FrmFormApi data.
+	 *
+	 * Reads the API cache option directly to avoid triggering
+	 * an HTTP request. Each add-on entry contains a 'plugin' field
+	 * with the plugin basename (e.g. 'formidable-quizzes/formidable-quizzes.php').
+	 *
+	 * @since 6.32
+	 *
+	 * @return string[]
+	 */
+	private static function get_api_addon_dirs() {
+		$updater   = FrmProAppHelper::get_updater();
+		$api       = new FrmFormApi( $updater->license );
+		$cache_key = $api->get_cache_key();
+		$cache     = is_multisite() ? get_site_option( $cache_key ) : false;
+
+		if ( ! $cache ) {
+			$cache = get_option( $cache_key );
+		}
+
+		if ( empty( $cache['value'] ) ) {
+			return array();
+		}
+
+		$addons = json_decode( $cache['value'], true );
+
+		if ( ! is_array( $addons ) ) {
+			return array();
+		}
+
+		$dirs = array();
+
+		foreach ( $addons as $addon ) {
+			if ( ! is_array( $addon ) || empty( $addon['plugin'] ) ) {
+				continue;
+			}
+
+			$dir = dirname( $addon['plugin'] );
+
+			if ( '.' !== $dir ) {
+				$dirs[] = $dir;
+			}
+		}
+
+		return array_unique( $dirs );
+	}
+
+	/**
+	 * Build a set of class names from Formidable add-on plugin directories.
+	 *
+	 * Recursively scans each add-on directory for Frm*.php files and
+	 * extracts class names from the filenames.
+	 *
+	 * @since 6.32
+	 *
+	 * @param string[] $addon_dirs Add-on directory names.
+	 *
+	 * @return array<string,bool> Map of class names to true.
+	 */
+	private static function build_addon_class_set( $addon_dirs ) {
+		$classes = array();
+
+		foreach ( $addon_dirs as $dir ) {
+			self::scan_dir_for_classes( WP_PLUGIN_DIR . '/' . $dir, $classes );
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Recursively scan a directory for Frm*.php class files.
+	 *
+	 * @since 6.32
+	 *
+	 * @param string             $dir     Absolute directory path to scan.
+	 * @param array<string,bool> $classes Map of class names (populated by reference).
+	 *
+	 * @return void
+	 */
+	private static function scan_dir_for_classes( $dir, &$classes ) {
+		$items = @scandir( $dir );
+
+		if ( ! $items ) {
+			return;
+		}
+
+		foreach ( $items as $item ) {
+			if ( '.' === $item[0] ) {
+				continue;
+			}
+
+			$path = $dir . '/' . $item;
+
+			if ( is_dir( $path ) ) {
+				if ( 'vendor' !== $item && 'node_modules' !== $item ) {
+					self::scan_dir_for_classes( $path, $classes );
+				}
+				continue;
+			}
+
+			if ( ! str_ends_with( $item, '.php' ) ) {
+				continue;
+			}
+
+			$class = basename( $item, '.php' );
+
+			if ( str_starts_with( $class, 'Frm' ) ) {
+				$classes[ $class ] = true;
+			}
+		}
+	}
+
+	/**
+	 * Remove all hooks registered by Formidable add-on plugins.
+	 *
+	 * Iterates through $wp_filter, identifies callbacks whose class
+	 * name is in the add-on class set, and removes them.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array<string,bool> $addon_classes Known add-on class names.
+	 *
+	 * @return void
+	 */
+	private static function remove_addon_hooks( $addon_classes ) {
+		global $wp_filter;
+
+		$to_remove = array();
+
+		foreach ( $wp_filter as $tag => $hook_obj ) {
+			foreach ( $hook_obj->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $callback_data ) {
+					$class = self::get_callback_class( $callback_data['function'] );
+
+					if ( $class && isset( $addon_classes[ $class ] ) ) {
+						$to_remove[] = array( $tag, $callback_data['function'], $priority );
+					}
+				}
+			}
+		}
+
+		foreach ( $to_remove as $item ) {
+			remove_filter( $item[0], $item[1], $item[2] );
+		}
+	}
+
+	/**
+	 * Extract the class name from a callback.
+	 *
+	 * Handles string callbacks ('Class::method'), array callbacks
+	 * (['Class', 'method'], [$object, 'method']).
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|string $callback The callback to inspect.
+	 *
+	 * @return string|null The class name, or null if not a class callback.
+	 */
+	private static function get_callback_class( $callback ) {
+		if ( is_string( $callback ) && str_contains( $callback, '::' ) ) {
+			return explode( '::', $callback )[0];
+		}
+
+		if ( is_array( $callback ) && count( $callback ) === 2 ) {
+			$target = $callback[0];
+
+			if ( is_object( $target ) ) {
+				return get_class( $target );
+			}
+
+			if ( is_string( $target ) ) {
+				return $target;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Add blocked add-on messages to the shared errors view.
+	 *
+	 * Hooks into frm_message_list to display warnings inside
+	 * Formidable admin pages via the shared errors.php view.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array    $messages   Existing messages.
+	 * @param string[] $addon_dirs Blocked add-on directory names.
+	 *
+	 * @return array
+	 */
+	public static function add_blocked_addon_messages( $messages, $addon_dirs ) {
+		$names = self::get_blocked_addon_names( $addon_dirs );
+
+		if ( ! $names ) {
+			return $messages;
+		}
+
+		$short_names = array_map(
+			function ( $name ) {
+				return esc_html( preg_replace( '/^Formidable\s+/i', '', $name ) );
+			},
+			$names
+		);
+
+		$name_list    = '<strong>' . implode( '</strong>, <strong>', $short_names ) . '</strong>';
+		$settings_url = admin_url( 'admin.php?page=formidable-settings' );
+
+		$messages[] = sprintf(
+			/* translators: %1$s: Comma-separated short add-on names, %2$s: Start link HTML, %3$s: End link HTML */
+			esc_html__( 'The following Formidable add-ons require an active Pro license: %1$s. %2$sActivate your license%3$s to use them.', 'formidable-pro' ),
+			$name_list,
+			'<a href="' . esc_url( $settings_url ) . '">',
+			'</a>'
+		);
+
+		return $messages;
+	}
+
+	/**
+	 * Get human-readable plugin names for blocked add-on directories.
+	 *
+	 * @since 6.32
+	 *
+	 * @param string[] $addon_dirs Add-on directory names.
+	 *
+	 * @return string[]
+	 */
+	private static function get_blocked_addon_names( $addon_dirs ) {
+		if ( ! function_exists( 'get_plugins' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$all_plugins = get_plugins();
+		$names       = array();
+
+		foreach ( $all_plugins as $file => $data ) {
+			if ( in_array( dirname( $file ), $addon_dirs, true ) ) {
+				$names[] = $data['Name'];
+			}
+		}
+
+		return $names;
+	}
+
+	/**
+	 * Block Formidable Chat add-on when Pro license is expired.
+	 *
+	 * Removes all FrmChat hooks to prevent the add-on from functioning,
+	 * then overrides the chat settings section to show the expired
+	 * license popup instead of the normal settings content.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	public static function block_chat_addon() {
+		$chat_dir = WP_PLUGIN_DIR . '/formidable-chat';
+
+		if ( ! is_dir( $chat_dir ) ) {
+			return;
+		}
+
+		$classes = array();
+		self::scan_dir_for_classes( $chat_dir, $classes );
+
+		if ( $classes ) {
+			self::remove_addon_hooks( $classes );
+		}
+
+		add_filter(
+			'frm_add_form_settings_section',
+			array( self::class, 'override_chat_settings_section' ),
+			30
+		);
+	}
+
+	/**
+	 * Override the chat settings section to show the expired license popup.
+	 *
+	 * Replaces the chat add-on's settings section with a locked tab
+	 * that triggers the expired license modal when clicked.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $sections Form settings sections.
+	 *
+	 * @return array
+	 */
+	public static function override_chat_settings_section( $sections ) {
+		$sections['chat'] = array(
+			'name'       => __( 'Conversational Forms', 'formidable' ),
+			'icon'       => 'frmfont frm_chat_bubbles_icon',
+			'html_class' => 'frm_show_upgrade_tab frm_noallow frm_show_expired_modal',
+			'data'       => array(
+				'upgrade' => __( 'Conversational Forms', 'formidable' ),
+			),
+			'anchor'     => 'chat',
+		);
+
+		return $sections;
+	}
+
+	/**
+	 * Block Formidable Form Abandonment add-on when Pro license is expired.
+	 *
+	 * Removes all FrmAbandonment hooks to prevent the add-on from
+	 * functioning, then overrides the abandonment settings section to
+	 * show the expired license popup instead of the normal settings
+	 * content.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	public static function block_abandonment_addon() {
+		$abandonment_dir = WP_PLUGIN_DIR . '/formidable-abandonment';
+
+		if ( ! is_dir( $abandonment_dir ) ) {
+			return;
+		}
+
+		$classes = array();
+		self::scan_dir_for_classes( $abandonment_dir, $classes );
+
+		if ( $classes ) {
+			self::remove_addon_hooks( $classes );
+		}
+
+		add_filter(
+			'frm_add_form_settings_section',
+			array( self::class, 'override_abandonment_settings_section' ),
+			30
+		);
+	}
+
+	/**
+	 * Override the abandonment settings section to show the expired license popup.
+	 *
+	 * Replaces the abandonment add-on's settings section with a locked
+	 * tab that triggers the expired license modal when clicked.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $sections Form settings sections.
+	 *
+	 * @return array
+	 */
+	public static function override_abandonment_settings_section( $sections ) {
+		$sections['abandonment'] = array(
+			'name'       => __( 'Form Abandonment', 'formidable' ),
+			'icon'       => 'frmfont frm_abandoned_icon',
+			'html_class' => 'frm_show_upgrade_tab frm_noallow frm_show_expired_modal',
+			'data'       => array(
+				'upgrade' => __( 'Form Abandonment', 'formidable' ),
+			),
+			'anchor'     => 'abandonment',
+		);
+
+		return $sections;
 	}
 
 	/**

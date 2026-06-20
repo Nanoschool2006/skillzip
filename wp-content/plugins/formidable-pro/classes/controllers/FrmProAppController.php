@@ -79,9 +79,7 @@ class FrmProAppController {
 	 * @return void
 	 */
 	public static function register_scripts() {
-		$suffix = FrmAppHelper::js_suffix();
-
-		if ( ! $suffix || ! self::has_combo_js_file() ) {
+		if ( ! FrmAppHelper::js_suffix() || ! self::has_combo_js_file() ) {
 			$pro_js = self::get_pro_js_files( '', true );
 
 			foreach ( $pro_js as $js_key => $js ) {
@@ -110,6 +108,7 @@ class FrmProAppController {
 		self::set_datepicker_library_type_js();
 		self::add_password_checks_data_to_js();
 		FrmProStrpLiteController::maybe_register_stripe_scripts();
+		FrmProPayPalLiteController::maybe_register_paypal_scripts();
 
 		wp_localize_script(
 			'formidable',
@@ -802,6 +801,7 @@ class FrmProAppController {
 
 		if ( in_array( $action, array( 'edit', 'duplicate' ), true ) ) {
 			self::register_admin_script( 'builder', array( 'formidable_admin' ) );
+			wp_set_script_translations( 'formidable_pro_builder', 'formidable-pro', FrmProAppHelper::plugin_path() . '/languages' );
 
 			$form_id = FrmAppHelper::simple_get( 'id', 'absint' );
 			$form    = FrmForm::getOne( $form_id );
@@ -812,9 +812,8 @@ class FrmProAppController {
 
 			$vars = array(
 				'currency' => $currency,
-				'i18n'     => array(
-					'and' => __( 'And', 'formidable-pro' ),
-					'or'  => __( 'Or', 'formidable-pro' ),
+				'i18n'     => array_merge(
+					FrmProFieldProduct::get_product_label_strings()
 				),
 			);
 			wp_localize_script( 'formidable_pro_builder', 'frmProBuilderVars', $vars );
@@ -824,7 +823,12 @@ class FrmProAppController {
 			self::register_and_enqueue_style( 'builder' );
 			self::maybe_register_and_enqueue_expired_script();
 		} elseif ( in_array( $action, array( 'settings', 'update_settings', 'reports' ), true ) ) {
-			self::register_and_enqueue_admin_script( 'update_settings' === $action ? 'settings' : $action );
+			$script = 'update_settings' === $action ? 'settings' : $action;
+			self::register_and_enqueue_admin_script( $script );
+
+			if ( 'settings' === $script ) {
+				wp_set_script_translations( 'formidable_pro_settings', 'formidable-pro', FrmProAppHelper::plugin_path() . '/languages' );
+			}
 			self::maybe_register_and_enqueue_expired_script();
 		} elseif ( self::on_form_listing_page() ) {
 			self::enqueue_list_script();
@@ -837,6 +841,9 @@ class FrmProAppController {
 	 * @return void Exits early if the user lacks editing permissions.
 	 */
 	private static function enqueue_list_script() {
+		self::register_and_enqueue_admin_script( 'forms-list', array( 'formidable_dom' ) );
+		self::register_and_enqueue_style( 'admin/forms-list' );
+
 		// Exit if the user can't edit applications.
 		if ( ! FrmProApplicationsHelper::current_user_can_edit_applications() ) {
 			return;
@@ -885,9 +892,8 @@ class FrmProAppController {
 			$frm_action = '-' . $frm_action;
 		}
 
-		$plugin_url = FrmProAppHelper::plugin_url();
-		$version    = FrmProDb::$plug_version;
-		wp_enqueue_style( 'formidable-pro-admin', $plugin_url . '/css/admin/' . $page . $frm_action . '.css', array(), $version );
+		$version = FrmProDb::$plug_version;
+		wp_enqueue_style( 'formidable-pro-admin', FrmProAppHelper::plugin_url() . '/css/admin/' . $page . $frm_action . '.css', array(), $version );
 	}
 
 	/**
@@ -950,8 +956,7 @@ class FrmProAppController {
 	 * @return void
 	 */
 	private static function register_admin_script( $script, $dependencies = array( 'formidable_admin' ) ) {
-		$version = FrmProDb::$plug_version;
-		wp_register_script( 'formidable_pro_' . $script, FrmProAppHelper::plugin_url() . '/js/admin/' . $script . '.js', $dependencies, $version, true );
+		wp_register_script( 'formidable_pro_' . $script, FrmProAppHelper::plugin_url() . '/js/admin/' . $script . '.js', $dependencies, FrmProDb::$plug_version, true );
 	}
 
 	/**
@@ -1040,7 +1045,7 @@ class FrmProAppController {
 			'key'     => 'try-flatpickr-date-ranges',
 			'subject' => 'New! - Date Ranges!',
 			'message' => __( 'New! Date fields now support a new Date Range option. This requires that Flatpickr is selected as the active Date Picker Library in Global Settings.', 'formidable-pro' ),
-			'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">' . esc_html__( 'Update Now', 'formidable-pro' ) . '</a>',
+			'cta'     => '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">' . esc_html__( 'Update Now', 'formidable' ) . '</a>',
 			'type'    => 'news',
 		);
 
@@ -1112,17 +1117,15 @@ class FrmProAppController {
 			wp_enqueue_script( 'wp-color-picker-alpha', self::get_settings_js_url() . 'wp-color-picker-alpha.js', array( 'wp-color-picker' ), '3.0.2', true );
 		}
 
-		$dependencies = array( 'jquery', 'wp-i18n', 'wp-hooks', 'formidable_dom' );
-
-		if ( class_exists( 'FrmStylesPreviewHelper' ) ) { // This class only exists after the visual styler update in v6.0.
-			$dependencies[] = 'formidable_style';
-		}
+		$dependencies = array( 'jquery', 'wp-i18n', 'wp-hooks', 'formidable_dom', 'formidable_style' );
 
 		wp_register_script( 'formidable_pro_style_settings', self::get_settings_js_url() . 'style-settings.js', $dependencies, $version, true );
 
 		self::preload_svgs_for_style_settings();
 
 		wp_enqueue_script( 'formidable_pro_style_settings' );
+
+		self::maybe_register_and_enqueue_expired_script();
 	}
 
 	/**
@@ -1182,10 +1185,9 @@ class FrmProAppController {
 			wp_register_script( 'formidable_dom', FrmAppHelper::plugin_url() . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), FrmAppHelper::plugin_version(), true );
 		}
 
-		$plugin_url   = FrmProAppHelper::plugin_url();
 		$dependencies = array( 's11-floating-links', 'wp-hooks', 'formidable_dom' );
 		$version      = FrmProDb::$plug_version;
-		wp_register_script( 'frm_pro_floating_links', $plugin_url . '/js/admin/floating-links.js', $dependencies, $version, true );
+		wp_register_script( 'frm_pro_floating_links', FrmProAppHelper::plugin_url() . '/js/admin/floating-links.js', $dependencies, $version, true );
 		wp_enqueue_script( 'frm_pro_floating_links' );
 	}
 

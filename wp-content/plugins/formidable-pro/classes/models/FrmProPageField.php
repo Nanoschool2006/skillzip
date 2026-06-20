@@ -113,7 +113,7 @@ class FrmProPageField {
 					'formnovalidate' => 'formnovalidate',
 					'data-field'     => $field_id,
 				);
-			} elseif ( $page_break->field_order > $page_order && $current_page == 0 ) {
+			} elseif ( $page_break->field_order > $page_order && $current_page === 0 ) {
 				// Show current page
 				$page_array[ $page_number ] = array(
 					'data-page'     => '',
@@ -137,7 +137,7 @@ class FrmProPageField {
 			}
 		}
 
-		if ( $current_page == 0 ) {
+		if ( $current_page === 0 ) {
 			// Show current page if last
 			$page_array[ $page_number ] = array(
 				'data-page'     => '',

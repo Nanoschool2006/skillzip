@@ -28,7 +28,7 @@ class FrmProImages {
 	 * @return bool
 	 */
 	private static function field_type_support_image_options( $field ) {
-		if ( FrmField::is_field_type( $field, 'radio' ) || FrmField::is_field_type( $field, 'checkbox' ) ) {
+		if ( FrmField::is_field_type( $field, 'radio' ) || FrmField::is_field_type( $field, 'checkbox' ) || FrmField::is_field_type( $field, 'product' ) ) {
 			return true;
 		}
 
@@ -148,6 +148,10 @@ class FrmProImages {
 	public static function should_show_images( $field ) {
 		$image_options = FrmField::get_option( $field, 'image_options' );
 
+		if ( 'product' === FrmField::get_field_type( $field ) && ! in_array( FrmField::get_option( $field, 'data_type' ), array( 'radio', 'checkbox', 'single' ), true ) ) {
+			$image_options = 0;
+		}
+
 		/**
 		 * Allows show or hide choice field images using custom code.
 		 *
@@ -206,8 +210,7 @@ class FrmProImages {
 		}
 
 		$image_id = (int) $image_id;
-		$size     = self::get_default_size();
-		$src      = wp_get_attachment_image_src( $image_id, $size );
+		$src      = wp_get_attachment_image_src( $image_id, self::get_default_size() );
 		$url      = is_array( $src ) ? $src[0] : '';
 
 		if ( ! $url ) {

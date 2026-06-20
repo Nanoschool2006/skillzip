@@ -784,7 +784,7 @@ class FrmProPost {
 		$filtered = $settings;
 
 		foreach ( $settings as $name => $value ) {
-			if ( strpos( $name, 'post' ) !== 0 ) {
+			if ( ! str_starts_with( $name, 'post' ) ) {
 				unset( $filtered[ $name ] );
 			}
 		}

@@ -27,7 +27,7 @@
 				multiple: false
 			});
 
-			mediaUploader.on( 'select', function() {
+			mediaUploader.on( 'select', () => {
 				var icon,
 					attachment = mediaUploader.state().get( 'selection' ).first().toJSON();
 

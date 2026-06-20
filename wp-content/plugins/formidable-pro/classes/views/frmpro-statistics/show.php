@@ -137,7 +137,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			$post_boxes = FrmProReportsHelper::get_field_boxes( compact( 'field', 'entries' ) );
 
-			if ( empty( $post_boxes ) ) {
+			if ( ! $post_boxes ) {
 				continue;
 			}
             ?>

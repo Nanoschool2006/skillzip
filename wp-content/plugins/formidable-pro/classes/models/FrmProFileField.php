@@ -671,10 +671,9 @@ class FrmProFileField {
 			$mb_limit = 516;
 		}
 
-		$mb_limit   = (float) $mb_limit;
-		$upload_max = wp_max_upload_size() / 1000000;
+		$mb_limit = (float) $mb_limit;
 
-		return round( min( $upload_max, $mb_limit ), 2 );
+		return round( min( wp_max_upload_size() / 1000000, $mb_limit ), 2 );
 	}
 
 	/**
@@ -2655,9 +2654,11 @@ class FrmProFileField {
 			$leave[] = self::get_readonly_permission();
 		}
 
-		if ( ! in_array( self::get_chmod( array( 'file' => $file ) ), $leave, true ) ) {
-			self::chmod( $file, $chmod );
+		if ( in_array( self::get_chmod( array( 'file' => $file ) ), $leave, true ) ) {
+			return;
 		}
+
+		self::chmod( $file, $chmod );
 	}
 
 	/**
@@ -2670,6 +2671,13 @@ class FrmProFileField {
 
 		if ( ! is_null( $wp_filesystem ) ) {
 			$wp_filesystem->chmod( $file, $mode );
+		}
+
+		$current_mode = self::get_chmod( array( 'file' => $file ) );
+
+		// If it failed, try again using chmod directly.
+		if ( -1 !== $current_mode && $mode !== $current_mode ) {
+			@chmod( $file, $mode );
 		}
 	}
 
@@ -2765,7 +2773,7 @@ class FrmProFileField {
 			}
 		}
 
-		$is_pdf   = '.pdf' === substr( $filename, -4, 4 );
+		$is_pdf   = str_ends_with( $filename, '.pdf' );
 		$is_image = $is_pdf || wp_attachment_is_image( $file_id );
 		$size     = false;
 
@@ -3138,7 +3146,7 @@ class FrmProFileField {
 		$srcset = explode( ' ', $srcset_string );
 
 		foreach ( $srcset as $key => $src ) {
-			if ( 0 !== strpos( $src, 'http' ) ) {
+			if ( ! str_starts_with( $src, 'http' ) ) {
 				// Not a URL, so skip it.
 				continue;
 			}

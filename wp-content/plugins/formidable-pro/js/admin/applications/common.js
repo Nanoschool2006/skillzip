@@ -277,7 +277,7 @@
 				hookName,
 				{
 					object_id: objectId,
-					type: type,
+					type,
 					name: label
 				}
 			);

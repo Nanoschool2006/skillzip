@@ -536,8 +536,7 @@ class FrmProContent {
 	 * @param array $query
 	 */
 	public static function fix_home_page_query( $query ) {
-		$rewrite_params  = self::get_rewrite_params();
-		$included_params = array_intersect( $rewrite_params, array_keys( $query ) );
+		$included_params = array_intersect( self::get_rewrite_params(), array_keys( $query ) );
 
 		if ( $included_params ) {
 			foreach ( $included_params as $key ) {
@@ -578,8 +577,7 @@ class FrmProContent {
 	 * @return array The list of params with reserved words removed.
 	 */
 	private static function remove_reserved_words( $params ) {
-		$reserved_words = FrmFormsHelper::reserved_words();
-		return array_diff( $params, $reserved_words );
+		return array_diff( $params, FrmFormsHelper::reserved_words() );
 	}
 
 	/**
@@ -1498,7 +1496,7 @@ class FrmProContent {
 		$haystack = strtolower( $replace_with );
 		$needle   = strtolower( $atts['ends_with'] );
 
-		if ( $needle && substr( $haystack, -strlen( $needle ) ) !== $needle ) {
+		if ( $needle && ! str_ends_with( $haystack, $needle ) ) {
 			$replace_with = '';
 		}
 	}

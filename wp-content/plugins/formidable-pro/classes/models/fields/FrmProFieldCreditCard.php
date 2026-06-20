@@ -351,7 +351,7 @@ class FrmProFieldCreditCard extends FrmFieldType {
 			$sum += $map[ $card_number[ $last - $i ] + ( $i & 1 ) * 10 ];
 		}
 
-		if ( $sum % 10 != 0 ) {
+		if ( $sum % 10 !== 0 ) {
 			$is_valid = false;
 		}
 

@@ -64,7 +64,7 @@ class FrmProFieldTextarea extends FrmFieldTextarea {
 		$input_html .= '<div class="' . esc_attr( $class ) . '" data-max="' . intval( $max_limit ) . '" data-max-type="' . esc_attr( $max_limit_type ) . '">';
 		$input_html .= sprintf(
 			// Translators: %1$s: the current content length, %2$s: the max limitation of content, %3$s: type of max limitation.
-			esc_html( _x( '%1$s of %2$s max %3$s', 'content limitation description', 'formidable-pro' ) ),
+			esc_html_x( '%1$s of %2$s max %3$s', 'content limitation description', 'formidable-pro' ),
 			'<span id="frm_pro_content_length_' . intval( $this->field_id ) . '">' . intval( $content_length ) . '</span>',
 			intval( $max_limit ),
 			esc_html( 'word' === $max_limit_type ? __( 'words', 'formidable-pro' ) : __( 'characters', 'formidable-pro' ) )

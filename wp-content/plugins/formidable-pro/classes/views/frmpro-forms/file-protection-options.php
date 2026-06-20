@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p class="frm8 frm_form_field hide_protect_files <?php echo esc_attr( $values['protect_files'] ? '' : 'frm_hidden' ); ?>">
 		<select name="options[protect_files_role][]" id="protect_files_role" multiple="multiple" class="frm_multiselect">
 			<?php $roles = $values['protect_files_role'] ?? array( '' ); ?>
-			<option <?php FrmProAppHelper::selected( $roles, '' ); ?> value=""><?php esc_html_e( 'Everyone', 'formidable-pro' ); ?></option>
+			<option <?php FrmProAppHelper::selected( $roles, '' ); ?> value=""><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
 			<?php FrmAppHelper::roles_options( $roles ); ?>
 		</select>
 	</p>

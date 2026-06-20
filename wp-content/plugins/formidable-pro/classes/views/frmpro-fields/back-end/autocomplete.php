@@ -5,10 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p class="frm6 frm_form_field">
 	<label class="frm-h-stack-xs" id="for_field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" for="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>">
-		<span><?php esc_html_e( 'Autocomplete', 'formidable-pro' ); ?></span>
+		<span><?php esc_html_e( 'Autocomplete', 'formidable' ); ?></span>
 		<?php
 		FrmAppHelper::tooltip_icon(
-			__( 'The autocomplete attribute asks the browser to attempt autocompletion, based on user history.', 'formidable-pro' ),
+			__( 'The autocomplete attribute asks the browser to attempt autocompletion, based on user history.', 'formidable' ),
 			array(
 				'data-placement' => 'right',
 				'class'          => 'frm-flex',

@@ -133,8 +133,7 @@ class FrmProEntriesController {
 			self::get_new_vars( $errors, $form );
 		} else {
 			if ( ! $errors ) {
-				$settings = FrmAppHelper::get_settings();
-				$errors   = array( $settings->failed_msg );
+				$errors = array( FrmAppHelper::get_settings()->failed_msg );
 			}
 
 			self::get_new_vars( $errors, $form );
@@ -611,11 +610,12 @@ class FrmProEntriesController {
 
 	/**
 	 * @param array $params
+	 *
+	 * @return bool
 	 */
-	private static function &entry_previously_saved( $params ) {
+	private static function entry_previously_saved( $params ) {
 		global $frm_vars;
-		$saved = isset( $frm_vars['saved_entries'] ) && in_array( (int) $params['id'], (array) $frm_vars['saved_entries'] );
-		return $saved;
+		return isset( $frm_vars['saved_entries'] ) && in_array( (int) $params['id'], (array) $frm_vars['saved_entries'] );
 	}
 
 	/**
@@ -871,9 +871,8 @@ class FrmProEntriesController {
 			// For entry_id="last" in shortcode
 
 			// Get the last entry submitted by the current user
-			$user_ID  = get_current_user_id();
 			$where    = array(
-				'user_id' => $user_ID,
+				'user_id' => get_current_user_id(),
 				'form_id' => $args['form']->id,
 			);
 			$entry_id = FrmDb::get_col( 'frm_items', $where, 'id', array(), ' LIMIT 1' );
@@ -1587,7 +1586,7 @@ class FrmProEntriesController {
 		echo '<p>';
 
 		foreach ( (array) $frm_vars['post_forms'] as $form ) {
-			if ( $i != 1 ) {
+			if ( $i !== 1 ) {
 				echo ' | ';
 			}
 
@@ -1821,6 +1820,11 @@ class FrmProEntriesController {
 	 * @return void
 	 */
 	private static function get_edit_vars( $id, $errors = array(), $message = '' ) {
+		if ( FrmProAddonsController::is_expired_outside_grace_period() ) {
+			self::show_expired_edit_error();
+			return;
+		}
+
 		$description = true;
 		$title       = false;
         $entry       = FrmEntry::getOne( $id, true );
@@ -1873,6 +1877,26 @@ class FrmProEntriesController {
 		}
 
 		require FrmProAppHelper::plugin_path() . '/classes/views/frmpro-entries/edit.php';
+	}
+
+	/**
+	 * Show an error modal when the license is expired outside the grace period.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	private static function show_expired_edit_error() {
+		FrmAppController::show_error_modal(
+			array(
+				'title'         => __( 'You can\'t edit the entry', 'formidable-pro' ),
+				'body'          => __( 'Your license has expired. Renew your license to continue editing entries.', 'formidable-pro' ),
+				'cancel_url'    => admin_url( 'admin.php?page=formidable-entries' ),
+				'cancel_text'   => __( 'Go Back', 'formidable' ),
+				'continue_url'  => FrmAppHelper::admin_upgrade_link( 'expired-edit-entry', 'account/downloads/' ),
+				'continue_text' => __( 'Renew Now', 'formidable' ),
+			)
+		);
 	}
 
 	/**
@@ -1935,6 +1959,13 @@ class FrmProEntriesController {
 			return $value;
 		}
 
+		// Don't add image markup when show=price is set for product fields.
+		$show_price = isset( $atts['show'] ) && $atts['show'] === 'price' && $field->type === 'product';
+
+		if ( $show_price ) {
+			return $value;
+		}
+
 		if ( FrmProImages::showing_images( $field, $atts ) ) {
 			return FrmProImages::display( $field, $value, $atts );
 		}
@@ -1947,14 +1978,13 @@ class FrmProEntriesController {
 
 		$f_values = array();
 		$f_labels = array();
-        $show     = isset( $atts['show'] ) && $atts['show'] === 'price' ? 'price' : 'label';
 
 		foreach ( $field->options as $opt_key => $opt ) {
 			if ( ! is_array( $opt ) ) {
 				continue;
 			}
 
-			$f_labels[ $opt_key ] = $opt[ $show ] ?? reset( $opt );
+			$f_labels[ $opt_key ] = $opt['label'] ?? reset( $opt );
 			$f_values[ $opt_key ] = $opt['value'] ?? $f_labels[ $opt_key ];
 
 			if ( $f_labels[ $opt_key ] == $f_values[ $opt_key ] ) {
@@ -2130,14 +2160,14 @@ class FrmProEntriesController {
 	private static function get_dynamic_value_for_display( $field, $atts, &$value ) {
 		if ( ! is_numeric( $value ) ) {
 			if ( ! is_array( $value ) ) {
-				$value = explode( $atts['sep'], $value );
+				$value = explode( isset( $atts['sep'] ) && '' !== $atts['sep'] ? $atts['sep'] : ', ', $value );
 			}
 
 			if ( is_array( $value ) ) {
 				$new_value = '';
 
 				foreach ( $value as $entry_id ) {
-					if ( ! empty( $new_value ) ) {
+					if ( $new_value ) {
 						$new_value .= $atts['sep'];
 					}
 
@@ -2158,9 +2188,7 @@ class FrmProEntriesController {
         $new_value = FrmProFieldsHelper::get_data_value( $value, $field, $atts );
 
         if ( FrmProField::is_list_field( $field ) ) {
-            $linked_field = FrmField::getOne( $field->field_options['form_select'] );
-
-            if ( $linked_field && $linked_field->type === 'file' ) {
+            if ( FrmField::get_type( $field->field_options['form_select'] ) === 'file' ) {
                 $old_value = explode( ', ', $new_value );
                 $new_value = '';
 
@@ -2185,10 +2213,6 @@ class FrmProEntriesController {
 
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form' );
-
-		if ( in_array( $action, array( 'create', 'edit', 'update', 'duplicate', 'new' ), true ) ) {
-			wp_enqueue_style( 'formidable' );
-		}
 
 		switch ( $action ) {
 			case 'create':
@@ -2241,17 +2265,11 @@ class FrmProEntriesController {
 		global $frm_vars;
 		$form_id = FrmForm::get_current_form_id();
 
-		$cb_item                          = array( 'cb' => '<input type="checkbox" />' );
-		$columns                          = $cb_item + (array) $columns;
-		$columns[ $form_id . '_post_id' ] = __( 'Post', 'formidable' );
-
-		// Draft column moved to lite from version 6.4.2 and renamed to entry statuses.
-		if ( version_compare( FrmAppHelper::plugin_version(), '6.4.2', '<' ) ) {
-			$columns[ $form_id . '_is_draft' ] = __( 'Draft', 'formidable' );
-		}
-
+		$cb_item                                 = array( 'cb' => '<input type="checkbox" />' );
+		$columns                                 = $cb_item + (array) $columns;
+		$columns[ $form_id . '_post_id' ]        = __( 'Post', 'formidable' );
 		$columns[ $form_id . '_parent_item_id' ] = __( 'Parent Entry ID', 'formidable' );
-        $frm_vars['cols']                        = $columns;
+		$frm_vars['cols']                        = $columns;
 
 		return $columns;
 	}
@@ -3706,7 +3724,7 @@ class FrmProEntriesController {
 		}
 
 		if ( $atts['ip'] ) {
-			$use_current = $atts['ip'] === true || $atts['ip'] === '1' || $atts['ip'] === 'current';
+			$use_current = in_array( $atts['ip'], array( true, '1', 'current' ), true );
 			$query['ip'] = $use_current ? FrmAppHelper::get_ip_address() : $atts['ip'];
 		}
 
@@ -4608,14 +4626,12 @@ class FrmProEntriesController {
 			wp_send_json_error();
 		}
 
-		$user_id = get_current_user_id();
-
 		$entry_ids = FrmDb::get_col(
 			'frm_items',
 			array(
 				'is_draft' => 1,
 				'form_id'  => $form_id,
-				'user_id'  => $user_id,
+				'user_id'  => get_current_user_id(),
 			)
 		);
 

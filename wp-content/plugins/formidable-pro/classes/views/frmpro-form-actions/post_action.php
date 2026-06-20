@@ -6,8 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmProPostAction extends FrmFormAction {
 
 	public function __construct() {
+		$classes = 'frm_wordpress_icon frm_icon_font';
+
+		// Backwards compatibility "@since 6.31".
+		if ( ! FrmProAppHelper::lite_supports_form_actions_refresh() ) {
+			$classes .= ' frm-inverse';
+		}
+
 		$action_ops = array(
-			'classes'     => 'frm_wordpress_icon frm_icon_font frm-inverse',
+			'classes'     => $classes,
 			'color'       => 'rgb(0,160,210)',
 			'limit'       => 1,
 			'priority'    => 40,

@@ -322,7 +322,7 @@ class FrmProApplicationsHelper {
 		$split = explode( ' ', $options );
 
 		foreach ( $split as $current ) {
-			if ( 0 !== strpos( $current, 'id=' ) ) {
+			if ( ! str_starts_with( $current, 'id=' ) ) {
 				continue;
 			}
 

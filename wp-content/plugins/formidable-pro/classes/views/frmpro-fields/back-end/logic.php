@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'field_options[any_all_' . absint( $field['id'] ) . ']',
 				array(
 					'any' => esc_html__( 'Any', 'formidable-pro' ),
-					'all' => esc_html__( 'All', 'formidable-pro' ),
+					'all' => esc_html__( 'All', 'formidable' ),
 				),
 				$field['any_all']
 			);

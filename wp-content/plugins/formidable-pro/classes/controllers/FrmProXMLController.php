@@ -426,10 +426,9 @@ class FrmProXMLController {
 	 * @return array
 	 */
 	private static function sort_csv_headings( $headings ) {
-		$custom_columns  = self::get_custom_columns();
 		$sorted_headings = array();
 
-		foreach ( $custom_columns as $column ) {
+		foreach ( self::get_custom_columns() as $column ) {
 			if ( array_key_exists( $column, $headings ) ) {
 				$sorted_headings[ $column ] = $headings[ $column ];
 			} elseif ( in_array( $column, array( 'comment', 'comment_user_id', 'comment_created_at' ), true ) ) {
@@ -503,13 +502,12 @@ class FrmProXMLController {
 	 * @return array
 	 */
 	private static function get_custom_field_ids() {
-		$field_ids      = array();
-		$custom_columns = self::get_custom_columns();
+		$field_ids = array();
 
-		foreach ( $custom_columns as $key ) {
+		foreach ( self::get_custom_columns() as $key ) {
 			if ( is_numeric( $key ) ) {
 				$field_ids[] = $key;
-			} elseif ( '_label' === substr( $key, -6 ) ) {
+			} elseif ( str_ends_with( $key, '_label' ) ) {
 				$stripped_key = str_replace( '_label', '', $key );
 
 				if ( is_numeric( $stripped_key ) ) {

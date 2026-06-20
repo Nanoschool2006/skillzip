@@ -77,6 +77,7 @@ class FrmProStrpLiteController {
 	 * @return void
 	 */
 	public static function customer_info_after_email( $args ) {
+		$form_action         = $args['form_action'] ?? null;
 		$action_control      = $args['action_control'];
 		$field_dropdown_atts = $args['field_dropdown_atts'];
 
@@ -127,8 +128,34 @@ class FrmProStrpLiteController {
 	 * @return array
 	 */
 	public static function add_payment_action_defaults( $defaults ) {
-		$defaults['billing_address'] = '';
+		$defaults['billing_address']     = '';
+		$defaults['shipping_email']      = '';
+		$defaults['shipping_first_name'] = '';
+		$defaults['shipping_last_name']  = '';
+		$defaults['shipping_address']    = '';
 		return $defaults;
+	}
+
+	/**
+	 * Render PayPal-specific Billing and Shipping sections in the payment action settings.
+	 *
+	 * @since 6.31
+	 *
+	 * @param array $args {
+	 *
+	 *     @type WP_Post      $form_action         The form action post object.
+	 *     @type FrmFormAction $action_control      The action controller object.
+	 *     @type array         $field_dropdown_atts Attributes for field dropdown rendering.
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function render_paypal_shipping_billing( $args ) {
+		$form_action         = $args['form_action'];
+		$action_control      = $args['action_control'];
+		$field_dropdown_atts = $args['field_dropdown_atts'];
+
+		require FrmProAppHelper::plugin_path() . '/classes/views/frmpro-form-actions/_paypal_shipping_billing.php';
 	}
 
 	/**

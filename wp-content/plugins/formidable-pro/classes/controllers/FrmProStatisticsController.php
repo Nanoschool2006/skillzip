@@ -160,10 +160,9 @@ class FrmProStatisticsController {
 	 * @param array $atts
 	 */
 	private static function combine_defaults_and_user_defined_attributes( &$atts ) {
-		$defaults      = self::get_stats_defaults();
 		$combined_atts = array();
 
-		foreach ( $defaults as $k => $value ) {
+		foreach ( self::get_stats_defaults() as $k => $value ) {
 			if ( isset( $atts[ $k ] ) ) {
 				$combined_atts[ $k ] = $atts[ $k ];
 				unset( $atts[ $k ] );
@@ -609,7 +608,7 @@ class FrmProStatisticsController {
 			$val = str_replace( array( '&gt;', '&lt;' ), array( '>', '<' ), $val );
 
 			// If first character is a quote, but the last character is not a quote
-			if ( ( str_starts_with( $val, '"' ) && substr( $val, -1 ) !== '"' ) || ( str_starts_with( $val, "'" ) && substr( $val, -1 ) !== "'" ) ) {
+			if ( ( str_starts_with( $val, '"' ) && ! str_ends_with( $val, '"' ) ) || ( str_starts_with( $val, "'" ) && ! str_ends_with( $val, "'" ) ) ) {
 				// Parse atts back together if they were broken at spaces
 				$next_val = array(
 					'char' => substr( $val, 0, 1 ),

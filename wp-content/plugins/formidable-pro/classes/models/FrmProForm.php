@@ -569,6 +569,65 @@ class FrmProForm {
 	}
 
 	/**
+	 * Remap conditional-logic field references across every imported form after an XML import.
+	 *
+	 * Child forms are imported before their parent, so when a repeater's field references a
+	 * parent-form field in `hide_field`, that reference is still the old ID after the per-form
+	 * fix-up runs. Once every form has been imported, `$frm_duplicate_ids` contains the full
+	 * old-to-new map, so we can resolve any remaining cross-form references here.
+	 *
+	 * @since 6.30.2
+	 *
+	 * @param array $imported Summary returned by the XML importer. Expects
+	 *                        `forms` => array( old_form_id => new_form_id ).
+	 *
+	 * @return void
+	 */
+	public static function fix_cross_form_conditional_logic_after_import( $imported ) {
+		global $frm_duplicate_ids;
+
+		if ( empty( $imported['forms'] ) || ! $frm_duplicate_ids ) {
+			return;
+		}
+
+		$fields = FrmField::getAll(
+			array(
+				'fi.form_id'                => array_values( $imported['forms'] ),
+				'fi.field_options like'     => '"hide_field";a:',
+				'fi.field_options not like' => '"hide_field";a:0:{',
+			),
+			'field_order'
+		);
+
+		foreach ( $fields as $field ) {
+			if ( empty( $field->field_options['hide_field'] ) || ! is_array( $field->field_options['hide_field'] ) ) {
+				continue;
+			}
+
+			$updated = false;
+
+			foreach ( $field->field_options['hide_field'] as $key => $field_id ) {
+				// Skip entries already remapped to a new ID to avoid double-switching
+				// when a new ID happens to match another field's old ID.
+				if ( in_array( $field_id, $frm_duplicate_ids, true ) ) {
+					continue;
+				}
+
+				if ( ! isset( $frm_duplicate_ids[ $field_id ] ) ) {
+					continue;
+				}
+
+				$field->field_options['hide_field'][ $key ] = $frm_duplicate_ids[ $field_id ];
+				$updated                                    = true;
+			}
+
+			if ( $updated ) {
+				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
+			}
+		}
+	}
+
+	/**
 	 * Update the conditional logic for fields that depend on other fields that were not already duplicated.
 	 *
 	 * @param int $form_id the new duplicated form id.

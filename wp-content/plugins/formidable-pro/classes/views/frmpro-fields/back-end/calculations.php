@@ -57,40 +57,9 @@ if ( 'text' === $calc_type ) {
 				cols="30"
 			><?php echo esc_html( $calc ); ?></textarea>
 			<div class="frm-field-formula-height"></div>
-
-			<ul class="frm-field-formula-buttons">
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text -frm-mt-2xs">.</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text">%</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text">)</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text">(</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text">/</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text frm-mt-2xs">*</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text">-</span>
-				</li>
-				<li class="<?php echo esc_attr( $math_button_class ); ?>" role="button">
-					<span class="frm-math-button-text">+</span>
-				</li>
-
-				<li class="frm-field-formula-button frm-field-formula-insert-field frm-show-inline-modal frm-open-calc frm-force-mr-auto" role="button" data-open="frm-calc-box-<?php echo esc_attr( $field['id'] ); ?>">
-					<span><?php FrmAppHelper::icon_by_class( 'frmfont frm_more_horiz_icon frm_svg12' ); ?></span>
-					<span class="frm-white-space-nowrap"><?php esc_html_e( 'Insert Field', 'formidable-pro' ); ?></span>
-				</li>
-			</ul>
-
 			<?php
+			// Formula buttons are added here dynamically with JavaScript when the settings are displayed.
+
 			FrmFieldsHelper::inline_modal(
 				array(
 					'title'        => class_exists( 'FrmTextToggleStyleComponent' ) ? '' : __( 'Calculate Default Value', 'formidable-pro' ), // Backwards compatibility "@since 6.24".

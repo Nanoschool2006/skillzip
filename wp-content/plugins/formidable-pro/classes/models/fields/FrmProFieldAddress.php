@@ -45,9 +45,7 @@ class FrmProFieldAddress extends FrmFieldType {
 			'address_type' => 'international',
 		);
 
-		$default_labels = $this->default_labels();
-
-		foreach ( $default_labels as $key => $label ) {
+		foreach ( $this->default_labels() as $key => $label ) {
 			$options[ $key . '_desc' ] = $label;
 		}
 
@@ -204,11 +202,25 @@ class FrmProFieldAddress extends FrmFieldType {
 			return $value;
 		}
 
-		if ( ! empty( $value['line1'] ) ) {
-			return $this->format_address_for_display( $value, $atts );
+		$keys_to_check                = array( 'line1', 'city', 'state', 'zip', 'country' );
+		$at_least_one_field_populated = false;
+
+		foreach ( $keys_to_check as $key ) {
+			if ( ! empty( $value[ $key ] ) ) {
+				$at_least_one_field_populated = true;
+				break;
+			}
 		}
 
-		return '';
+		if ( ! $at_least_one_field_populated ) {
+			return '';
+		}
+
+		if ( ! isset( $value['line1'] ) ) {
+			$value['line1'] = '';
+		}
+
+		return $this->format_address_for_display( $value, $atts );
 	}
 
 	/**
@@ -227,7 +239,7 @@ class FrmProFieldAddress extends FrmFieldType {
 			return $value;
 		}
 
-		$format = $this->address_format_for_display( $atts );
+		$format = $this->address_format_for_display( $atts, $value );
 
 		foreach ( $defaults as $k => $part ) {
 			$format = str_replace( '[' . $k . ']', $value[ $k ], $format );
@@ -240,15 +252,22 @@ class FrmProFieldAddress extends FrmFieldType {
 	 * @since 3.0.06
 	 *
 	 * @param array $atts
+	 * @param array $value
+	 *
+	 * @return string
 	 */
-	private function address_format_for_display( $atts ) {
+	private function address_format_for_display( $atts, $value ) {
 		if ( ! empty( $atts['show'] ) ) {
 			return '[' . $atts['show'] . ']';
 		}
 
 		$line_sep       = $atts['line_sep'];
 		$address_type   = FrmField::get_option( $this->field, 'address_type' );
-		$address_format = '[line1]' . $line_sep . '[line2]' . $line_sep;
+		$address_format = '';
+
+		if ( ! empty( $value['line1'] ) ) {
+			$address_format = '[line1]' . $line_sep . '[line2]' . $line_sep;
+		}
 
 		if ( 'europe' === $address_type ) {
 			$address_format .= '[zip] [city]';
@@ -346,13 +365,13 @@ class FrmProFieldAddress extends FrmFieldType {
 
 		$last_item = end( $value );
 
-		if ( $count == 6 || ( $count == 5 && is_numeric( $last_item ) ) ) {
+		if ( $count === 6 || ( $count === 5 && is_numeric( $last_item ) ) ) {
 			$new_value['line2'] = $value[1];
 			$new_value['city']  = $value[2];
 			$new_value['state'] = $value[3];
 			$new_value['zip']   = $value[4];
 
-			if ( $count == 6 ) {
+			if ( $count === 6 ) {
 				$new_value['country'] = $value[5];
 			}
 		} else {
@@ -360,7 +379,7 @@ class FrmProFieldAddress extends FrmFieldType {
 			$new_value['state'] = $value[2];
 			$new_value['zip']   = $value[3];
 
-			if ( $count == 5 ) {
+			if ( $count === 5 ) {
 				$new_value['country'] = $value[4];
 			}
 		}

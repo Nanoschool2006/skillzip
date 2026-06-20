@@ -90,6 +90,17 @@ class FrmProAppHelper {
 	}
 
 	/**
+	 * Check if the installed Lite build includes the refreshed form-actions UI and supporting JS.
+	 *
+	 * @since 6.31
+	 *
+	 * @return bool
+	 */
+	public static function lite_supports_form_actions_refresh() {
+		return is_callable( 'FrmFormActionsController::disable_unlicensed_actions' );
+	}
+
+	/**
 	 * Try to show the SVG if possible. Otherwise, use the font icon.
 	 *
 	 * @since 4.0.02
@@ -648,7 +659,7 @@ class FrmProAppHelper {
 	 * @return bool
 	 */
 	private static function should_get_field_id_from_where_opt_split_val( $where_opt ) {
-		if ( self::is_name_subfield_option( $where_opt ) ) {
+		if ( self::is_combo_subfield_option( $where_opt ) ) {
 			return true;
 		}
 
@@ -662,19 +673,19 @@ class FrmProAppHelper {
 	}
 
 	/**
-	 * @since 6.8
+	 * @since 6.32
 	 *
 	 * @param string $option
 	 *
 	 * @return bool
 	 */
-	private static function is_name_subfield_option( $option ) {
+	public static function is_combo_subfield_option( $option ) {
 		if ( ! $option || is_numeric( $option ) ) {
 			return false;
 		}
 
 		$split = explode( '_', $option );
-		return 2 === count( $split ) && is_numeric( $split[0] ) && in_array( $split[1], array( 'first', 'last' ), true );
+		return 2 === count( $split ) && is_numeric( $split[0] ) && in_array( $split[1], array( 'first', 'last', 'line1', 'city', 'state', 'zip', 'country' ), true );
 	}
 
 	/**
@@ -841,7 +852,7 @@ class FrmProAppHelper {
 		$where_statement = array( 'fi.id' => (int) $args['where_opt'] );
 		$num_query       = self::maybe_query_as_number( $where_field->type );
 
-		if ( 'name' === $where_field->type ) {
+		if ( 'name' === $where_field->type || 'address' === $where_field->type ) {
 			$field_key = self::get_field_key_for_name_field_query( $num_query, $args );
 		} else {
 			$field_key = 'meta_value ' . $num_query . FrmDb::append_where_is( $args['temp_where_is'] );
@@ -978,7 +989,7 @@ class FrmProAppHelper {
 	 * @return string
 	 */
 	private static function get_field_key_for_name_field_query( $num_query, $args ) {
-		if ( ! self::is_name_subfield_option( $args['where_opt'] ) ) {
+		if ( ! self::is_combo_subfield_option( $args['where_opt'] ) ) {
 			// Filter for the whole name value.
 			// This query parses an "unserialized" full name string in-place with SQL.
 			return 'TRIM(
@@ -1364,8 +1375,7 @@ class FrmProAppHelper {
 			return mime_content_type( $file );
 		}
 
-		$filetype = wp_check_filetype( $file );
-		return $filetype['type'];
+		return wp_check_filetype( $file )['type'];
 	}
 
 	/**
@@ -1483,5 +1493,158 @@ class FrmProAppHelper {
 	 */
 	public static function no_gdpr_cookies() {
 		return is_callable( 'FrmAppHelper::no_gdpr_cookies' ) ? FrmAppHelper::no_gdpr_cookies() : false;
+	}
+
+	/**
+	 * Prints custom dropdown.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $options Array of options with keys are the values and values in the following formats:
+	 *                       - string: normal option.
+	 *                       - array( 'is_group' => true, [...options] ): a group of options.
+	 *                       - array( 'is_divider' => true ): a divider.
+	 *                       - array( 'url' => 'http://...', 'text' => 'Link text' ): a link.
+	 * @param array $args    See {@see FrmProAppHelper::custom_dropdown_default_args()}.
+	 *
+	 * @return void
+	 */
+	public static function custom_dropdown( $options, $args = array() ) {
+		$args           = wp_parse_args( $args, self::custom_dropdown_default_args() );
+		$selected_value = $args['selected'] ?? '';
+		$selected_label = $args['empty_label'];
+
+		// Get selected label, loop through the options to get it in the grouped options if needed.
+		foreach ( $options as $value => $label ) {
+			if ( $value === $selected_value ) {
+				if ( is_string( $label ) ) {
+					$selected_label = $label;
+					break;
+				}
+				continue;
+			}
+
+			if ( is_array( $label ) && ! empty( $label['is_group'] ) && isset( $label['options'] ) && is_array( $label['options'] ) && isset( $label['options'][ $selected_value ] ) ) {
+				$selected_label = $label['options'][ $selected_value ];
+				break;
+			}
+		}
+
+		if ( ! empty( $args['truncate'] ) ) {
+			$selected_label = FrmAppHelper::truncate( $selected_label, $args['truncate'] );
+		}
+
+		$hidden_input_attrs = array(
+			'type'  => 'hidden',
+			'value' => $selected_value,
+			'class' => 'frm-custom-dropdown-value',
+		);
+
+		if ( ! empty( $args['id'] ) ) {
+			$hidden_input_attrs['id'] = $args['id'];
+		}
+
+		if ( ! empty( $args['name'] ) ) {
+			$hidden_input_attrs['name'] = $args['name'];
+		}
+		?>
+		<div class="frm-custom-dropdown <?php echo esc_attr( $args['class'] ); ?>">
+			<input <?php FrmAppHelper::array_to_html_params( $hidden_input_attrs, true ); ?> />
+			<button class="frm-custom-dropdown-toggle" type="button">
+				<?php
+				echo '<span>' . esc_html( $selected_label ) . '</span>';
+				FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
+				?>
+			</button>
+			<div class="frm-custom-dropdown-menu">
+				<?php
+				foreach ( $options as $value => $label ) {
+					if ( is_string( $label ) ) {
+						if ( ! empty( $args['truncate'] ) ) {
+							$label = FrmAppHelper::truncate( $label, $args['truncate'] );
+						}
+						self::show_custom_dropdown_option( compact( 'value', 'label' ) + array( 'is_selected' => $value === $selected_value ) );
+						continue;
+					}
+
+					if ( ! empty( $label['is_divider'] ) ) {
+						echo '<div class="frm-custom-dropdown-divider"></div>';
+						continue;
+					}
+
+					if ( ! empty( $label['url'] ) ) {
+						printf(
+							'<a href="%1$s" class="frm-custom-dropdown-link" target="_blank">%2$s</a>',
+							esc_url( $label['url'] ),
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							FrmAppHelper::kses_icon( $label['text'] )
+						);
+						continue;
+					}
+
+					if ( empty( $label['is_group'] ) ) {
+						continue;
+					}
+
+					echo '<div class="frm-custom-dropdown-group">';
+
+					if ( isset( $label['options'] ) && is_array( $label['options'] ) ) {
+						foreach ( $label['options'] as $child_value => $child_label ) {
+							self::show_custom_dropdown_option(
+								array(
+									'value'       => $child_value,
+									'label'       => $child_label,
+									'is_selected' => $child_value === $selected_value,
+								)
+							);
+						}
+					}
+					echo '</div>';
+				}// end foreach $options.
+				?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Shows custom dropdown option.
+	 *
+	 * @param array $option {
+	 *     An array contains the option value and label.
+	 *
+	 *     @type string $value The option value.
+	 *     @type string $label The option label.
+	 * }
+	 *
+	 * @return void
+	 */
+	private static function show_custom_dropdown_option( $option ) {
+		$is_selected = ! empty( $option['is_selected'] );
+		$class       = 'frm-custom-dropdown-item' . ( $is_selected ? ' frm-custom-dropdown-item--selected' : '' );
+		$icon        = FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'echo' => false ) );
+		printf(
+			'<div class="%1$s" data-value="%2$s"><span>%3$s</span>%4$s</div>',
+			esc_attr( $class ),
+			esc_attr( $option['value'] ) ?? '',
+			esc_html( $option['label'] ) ?? '',
+			FrmAppHelper::kses_icon( $icon ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		);
+	}
+
+	/**
+	 * Gets custom dropdown default arguments.
+	 *
+	 * @return array
+	 */
+	private static function custom_dropdown_default_args() {
+		return array(
+			'name'        => '',
+			'id'          => '',
+			'empty_label' => __( 'Select an option', 'formidable' ),
+			'selected'    => '',
+			'class'       => '',
+			'truncate'    => false,
+		);
 	}
 }

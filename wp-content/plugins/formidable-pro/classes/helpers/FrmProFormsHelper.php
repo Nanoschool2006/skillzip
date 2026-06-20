@@ -162,11 +162,9 @@ class FrmProFormsHelper {
 		}
 
 		$frmpro_settings = FrmProAppHelper::get_settings();
-
-		reset( $frm_vars['datepicker_loaded'] );
-		$datepicker    = key( $frm_vars['datepicker_loaded'] );
-		$loaded_langs  = array();
-		$datepicker_js = array();
+		$datepicker      = array_key_first( $frm_vars['datepicker_loaded'] );
+		$loaded_langs    = array();
+		$datepicker_js   = array();
 
 		foreach ( $frm_vars['datepicker_loaded'] as $date_field_id => $options ) {
 			if ( ! $date_field_id ) {
@@ -1445,15 +1443,13 @@ echo $custom_options; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotE
 	 *
 	 * @return string
 	 */
-	public static function &post_type( $form ) {
+	public static function post_type( $form ) {
 		$form_id = is_numeric( $form ) ? $form : (array) $form['id'];
 
 		$action = FrmFormAction::get_action_for_form( $form_id, 'wppost' );
 		$action = reset( $action );
 
-		$type = ! $action || ! isset( $action->post_content['post_type'] ) ? 'post' : $action->post_content['post_type'];
-
-		return $type;
+		return ! $action || ! isset( $action->post_content['post_type'] ) ? 'post' : $action->post_content['post_type'];
 	}
 
 	/**
@@ -1582,6 +1578,35 @@ echo $custom_options; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotE
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Returns the form name or the no title text if the form name is empty.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array|stdClass $form   The form data.
+	 * @param int            $length The form name length to truncate to.
+	 *
+	 * @return string
+	 */
+	public static function get_form_name( $form, $length = 0 ) {
+		if ( is_callable( 'FrmFormsHelper::get_form_name' ) ) {
+			return FrmFormsHelper::get_form_name( $form, $length );
+		}
+
+		// Note: The logic here could be deleted once the lite version has been around long enough after release.
+		$form_name = is_object( $form ) ? $form->name : $form['name'];
+
+		if ( '' === $form_name || null === $form_name ) {
+			return FrmFormsHelper::get_no_title_text();
+		}
+
+		if ( ! $length ) {
+			return $form_name;
+		}
+
+		return FrmAppHelper::truncate( $form_name, $length );
 	}
 
 	/**

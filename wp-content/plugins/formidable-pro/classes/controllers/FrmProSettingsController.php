@@ -212,9 +212,8 @@ class FrmProSettingsController {
 		}
 
 		$settings = FrmProAppHelper::get_settings();
-		$types    = $settings->inbox_types();
 
-		foreach ( $types as $type => $label ) {
+		foreach ( $settings->inbox_types() as $type => $label ) {
 			if ( ! empty( $settings->inbox ) && ! isset( $settings->inbox[ $type ] ) ) {
 				$excluded[] = $type;
 			}
@@ -367,6 +366,16 @@ class FrmProSettingsController {
 
 		wp_enqueue_script( 'wp-color-picker-alpha', FrmProAppHelper::plugin_url() . '/js/admin/settings/wp-color-picker-alpha.js', array( 'wp-color-picker' ), '3.0.2', true );
 		wp_enqueue_script( 'formidable_pro_settings', FrmProAppHelper::plugin_url() . '/js/admin/settings.js', array( 'wp-color-picker' ), FrmProDb::$plug_version, true );
+		wp_localize_script(
+			'formidable_pro_settings',
+			'frmProSettings',
+			array(
+				'i18n' => array(
+					'selectColor' => __( 'Select Color', 'formidable' ),
+					'select'      => __( 'Select', 'formidable-pro' ),
+				),
+			)
+		);
 	}
 
 	/**

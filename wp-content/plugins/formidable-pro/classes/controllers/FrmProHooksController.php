@@ -27,6 +27,7 @@ class FrmProHooksController {
 		global $frm_vars;
 
 		if ( ! $frm_vars['pro_is_authorized'] ) {
+			add_action( 'plugins_loaded', 'FrmProAddonsController::block_addon_loading', 99 );
 			add_action( 'admin_notices', 'FrmProAppController::admin_notices' );
 			return;
 		}
@@ -40,6 +41,17 @@ class FrmProHooksController {
 		FrmHooksController::trigger_load_hook();
 		remove_filter( 'frm_load_controllers', 'FrmProHooksController::load_controllers' );
 		add_filter( 'frm_load_controllers', 'FrmProHooksController::add_hook_controller' );
+
+		if ( FrmProAddonsController::is_expired_outside_grace_period() ) {
+			add_action(
+				'plugins_loaded',
+				function () {
+					FrmProAddonsController::block_chat_addon();
+					FrmProAddonsController::block_abandonment_addon();
+				},
+				99
+			);
+		}
 	}
 
 	/**
@@ -256,8 +268,7 @@ class FrmProHooksController {
 		add_filter( 'as3cf_upload_object_key_as_private', 'FrmProBackupHelper::before_as3cf_upload_object', 10, 3 );
 		add_action( 'as3cf_post_handle_item', 'FrmProBackupHelper::after_as3cf_upload_object' );
 
-		$number_of_parameters_supported = version_compare( $wp_version, '5.3' ) === -1 ? 2 : 3;
-		add_filter( 'wp_generate_attachment_metadata', 'FrmProFileField::protect_metadata_attachments', 10, $number_of_parameters_supported );
+		add_filter( 'wp_generate_attachment_metadata', 'FrmProFileField::protect_metadata_attachments', 10, 3 );
 
 		// Applications
 		add_action( 'init', 'FrmProApplicationTaxonomyController::init' );
@@ -358,13 +369,18 @@ class FrmProHooksController {
 		add_filter( 'frm_single_input_fields', 'FrmProFieldsController::single_input_fields' );
 		add_filter( 'frm_radio_display_format_options', 'FrmProFieldsController::change_field_display_format_options', 5 );
 		add_filter( 'frm_checkbox_display_format_options', 'FrmProFieldsController::change_field_display_format_options', 5 );
+		add_filter( 'frm_product_display_format_options', 'FrmProFieldsController::change_field_display_format_options', 5 );
 
 		add_filter( 'frm_radio_display_format_args', 'FrmProFieldsController::change_radio_display_format_args', 5, 2 );
 		add_filter( 'frm_checkbox_display_format_args', 'FrmProFieldsController::change_checkbox_display_format_args', 5, 2 );
+		add_filter( 'frm_product_display_format_args', 'FrmProFieldsController::change_checkbox_display_format_args', 5, 2 );
 
 		add_action( 'frm_before_create_field', 'FrmProFieldsController::before_create_field', 1 );
 		add_filter( 'frm_should_sanitize_field_opt_string', 'FrmProFieldsController::should_sanitize_field_opt_string', 10, 2 );
 		add_filter( 'frm_conf_input_backend', 'FrmProFieldsController::add_show_password_html_to_backend_conf_input', 10, 2 );
+		add_action( 'frm_builder_preview_after_field', 'FrmProFieldsController::add_confirmation_field_preview' );
+		add_filter( 'frm_radio_align_options', 'FrmProFieldsController::add_additional_pro_align_options' );
+		add_filter( 'frm_checkbox_align_options', 'FrmProFieldsController::add_additional_pro_align_options' );
 
 		add_action( 'frm_field_validation_messages', 'FrmProFieldsController::field_validation_messages', 10, 2 );
 
@@ -409,11 +425,17 @@ class FrmProHooksController {
 			add_action( 'admin_enqueue_scripts', 'FrmProAppController::load_admin_js_assets' );
 		}
 
+		// Scope the custom CSS to .frm_form_fields for entry pages.
+		add_filter( 'frm_scope_custom_css_selector', array( 'FrmProFormsController', 'scope_custom_css_selector' ) );
+
 		add_action( 'admin_init', 'FrmProFormsController::admin_js', 1 );
-		// Enqueue right before scripts are printed
-		add_action( 'admin_footer', 'FrmProFormsController::admin_footer', 19 );
-		// Print our scripts after js files have been loaded
-		add_action( 'admin_print_footer_scripts', 'FrmProFormsController::footer_js', 40 );
+
+		if ( ! FrmAppHelper::is_style_editor_page() ) {
+			// Enqueue right before scripts are printed
+			add_action( 'admin_footer', 'FrmProFormsController::admin_footer', 19 );
+			// Print our scripts after js files have been loaded
+			add_action( 'admin_print_footer_scripts', 'FrmProFormsController::footer_js', 40 );
+		}
 
 		add_filter( 'frm_setup_new_form_vars', 'FrmProFormsController::setup_new_vars' );
 		add_filter( 'frm_setup_edit_form_vars', 'FrmProFormsController::setup_edit_vars' );
@@ -427,6 +449,9 @@ class FrmProHooksController {
 
 		// Form builder and import page
 		add_filter( 'frm_after_duplicate_form_values', 'FrmProFormsController::after_duplicate', 10, 2 );
+
+		// Fix cross-form conditional logic (e.g., a repeater referencing a parent field) after all XML forms are imported.
+		add_action( 'frm_after_import_forms', 'FrmProForm::fix_cross_form_conditional_logic_after_import' );
 
 		// Edit post page with shortcode popup
 		add_filter( 'frm_popup_shortcodes', 'FrmProFormsController::popup_shortcodes' );
@@ -542,6 +567,11 @@ class FrmProHooksController {
 			add_filter( 'frm_trans_settings_for_js', 'FrmProStrpLiteController::add_settings_for_js', 10, 2 );
 		}
 
+		if ( class_exists( 'FrmStrpLiteHooksController', false ) || class_exists( 'FrmStrpHooksController', false ) ) {
+			add_action( 'frm_payment_settings_after_customer_info', 'FrmProStrpLiteController::render_paypal_shipping_billing' );
+			add_filter( 'frm_pay_action_defaults', 'FrmProStrpLiteController::add_payment_action_defaults' );
+		}
+
 		add_action( 'admin_enqueue_scripts', 'FrmProFieldRte::enqueue_missing_media_gallery_scripts' );
 		add_filter( 'frm_trans_action_get_field_options_form_id', 'FrmProTransLiteController::trans_action_get_field_options_form_id' );
 		add_filter( 'frm_display_field_options', 'FrmProTransLiteController::display_field_options' );
@@ -606,6 +636,7 @@ class FrmProHooksController {
 		// Forms Controller.
 		add_action( 'wp_ajax_frm_load_form', 'FrmProFormsController::load_form_ajax' );
 		add_action( 'wp_ajax_nopriv_frm_load_form', 'FrmProFormsController::load_form_ajax' );
+		add_action( 'wp_ajax_frm_update_form_style', 'FrmProFormsController::ajax_update_form_style' );
 
 		// Fields Controller
 		add_action( 'wp_ajax_frm_get_field_selection', 'FrmProFieldsController::get_field_selection' );

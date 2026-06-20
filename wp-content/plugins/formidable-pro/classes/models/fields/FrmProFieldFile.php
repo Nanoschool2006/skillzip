@@ -275,7 +275,7 @@ class FrmProFieldFile extends FrmFieldType {
 
 		if ( ! $show_id && $replace_with ) {
 			// Size options are thumbnail, medium, large, or full
-			$size = $this->set_size( $atts );
+			$size = $this->set_size( $atts ); // phpcs:ignore Formidable.CodeAnalysis.InlineSingleUseVariable
 
 			$new_atts = $this->set_file_atts( $atts );
 
@@ -434,8 +434,7 @@ class FrmProFieldFile extends FrmFieldType {
 			$image_src = wp_get_attachment_image_src( $id, $atts['size'], ! $is_image );
 
 			if ( str_contains( $image_src[0], '/images/media/document.png' ) || str_contains( $image_src[0], '/images/media/document.svg' ) ) {
-				$file      = get_attached_file( $id );
-				$file_type = wp_check_filetype( $file );
+				$file_type = wp_check_filetype( get_attached_file( $id ) );
 				$html      = str_replace( $image_src[0], FrmProFileField::get_icon_for_file_type( $file_type['ext'] ), $html );
 				$html      = str_replace( 'width="48"', 'width="56"', $html );
 				$html      = str_replace( 'height="64"', 'height="56"', $html );

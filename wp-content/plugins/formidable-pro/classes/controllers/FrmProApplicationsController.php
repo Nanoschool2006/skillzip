@@ -149,10 +149,9 @@ class FrmProApplicationsController {
 	 * @return void
 	 */
 	public static function register_common_js() {
-		$plugin_url      = FrmProAppHelper::plugin_url();
 		$version         = FrmProDb::$plug_version;
 		$js_dependencies = array( 'formidable_dom' );
-		wp_register_script( 'frm_applications_common', $plugin_url . '/js/admin/applications/common.js', $js_dependencies, $version, true );
+		wp_register_script( 'frm_applications_common', FrmProAppHelper::plugin_url() . '/js/admin/applications/common.js', $js_dependencies, $version, true );
 
 		$js_vars = array(
 			'proImagesUrl' => FrmProAppHelper::plugin_url() . '/images/',
@@ -167,9 +166,8 @@ class FrmProApplicationsController {
 	 * @return void
 	 */
 	public static function register_common_css() {
-		$plugin_url = FrmProAppHelper::plugin_url();
-		$version    = FrmProDb::$plug_version;
-		wp_register_style( 'frm_applications_common', $plugin_url . '/css/admin/applications/common.css', array(), $version );
+		$version = FrmProDb::$plug_version;
+		wp_register_style( 'frm_applications_common', FrmProAppHelper::plugin_url() . '/css/admin/applications/common.css', array(), $version );
 	}
 
 	/**

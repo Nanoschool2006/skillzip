@@ -25,12 +25,12 @@ class FrmProApplicationRelationHelper {
 	private $post_types_by_id;
 
 	/**
-	 * @var array<int,int>
+	 * @var array<int,array<int>>
 	 */
 	private $parent_post_ids_by_child_post_id;
 
 	/**
-	 * @var array<int,int>
+	 * @var array<int,array<int>>
 	 */
 	private $parent_post_ids_by_child_form_id;
 
@@ -50,7 +50,7 @@ class FrmProApplicationRelationHelper {
 	private $embedded_form_ids_by_parent_form_id;
 
 	/**
-	 * @var array<int,int>
+	 * @var array<int,array<int>>
 	 */
 	private $parent_form_ids_by_embedded_form_id;
 
@@ -67,8 +67,6 @@ class FrmProApplicationRelationHelper {
 	/**
 	 * @param array<stdClass> $forms
 	 * @param array<WP_Post>  $posts
-	 *
-	 * @return void
 	 */
 	public function __construct( $forms, $posts ) {
 		$this->parent_post_ids_by_child_form_id    = array();

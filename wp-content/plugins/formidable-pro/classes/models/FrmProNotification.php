@@ -95,8 +95,7 @@ class FrmProNotification {
 			return;
 		}
 
-		$uploads = wp_upload_dir();
-		$path    = $uploads['basedir'] . '/' . $file;
+		$path = wp_upload_dir()['basedir'] . '/' . $file;
 
 		if ( self::$form_is_protected ) {
 			FrmProFileField::chmod( $path, FrmProFileField::get_readonly_permission() );

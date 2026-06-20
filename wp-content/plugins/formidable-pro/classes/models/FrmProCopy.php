@@ -175,9 +175,7 @@ class FrmProCopy {
 			return;
 		}
 
-		$templates = self::get_templates_to_copy();
-
-		foreach ( $templates as $template ) {
+		foreach ( self::get_templates_to_copy() as $template ) {
 			if ( 'form' === $template->type ) {
 				self::copy_form( $template );
 			} elseif ( 'display' === $template->type && is_callable( 'FrmViewsCopy::copy_view' ) ) {

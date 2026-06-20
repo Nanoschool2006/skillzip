@@ -5,10 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p class="frm6 frm_form_field">
 	<label class="frm-h-stack-xs" id="for_field_options_admin_only_<?php echo absint( $field['id'] ); ?>" for="field_options_admin_only_<?php echo absint( $field['id'] ); ?>">
-		<span><?php esc_html_e( 'Visibility', 'formidable-pro' ); ?></span>
+		<span><?php esc_html_e( 'Visibility', 'formidable' ); ?></span>
 		<?php
 		FrmAppHelper::tooltip_icon(
-			__( 'Determines who can see this field.', 'formidable-pro' ),
+			__( 'Determines who can see this field.', 'formidable' ),
 			array(
 				'data-placement' => 'right',
 				'class'          => 'frm-flex',
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<select name="field_options[admin_only_<?php echo absint( $field['id'] ); ?>][]" id="field_options_admin_only_<?php echo absint( $field['id'] ); ?>" multiple="multiple" class="frm_multiselect">
-		<option value="" <?php FrmProAppHelper::selected( $field['admin_only'], '' ); ?>><?php esc_html_e( 'Everyone', 'formidable-pro' ); ?></option>
+		<option value="" <?php FrmProAppHelper::selected( $field['admin_only'], '' ); ?>><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
 		<?php FrmAppHelper::roles_options( $field['admin_only'] ); ?>
 		<option value="loggedin" <?php FrmProAppHelper::selected( $field['admin_only'], 'loggedin' ); ?>>
 			<?php esc_html_e( 'Logged-in Users', 'formidable-pro' ); ?>

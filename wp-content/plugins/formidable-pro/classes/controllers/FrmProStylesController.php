@@ -21,7 +21,6 @@ class FrmProStylesController extends FrmStylesController {
 
 		// Actions.
 		add_action( 'frm_sample_style_form', 'FrmProStylesController::append_style_form' );
-		add_action( 'admin_enqueue_scripts', 'FrmProAppController::load_style_manager_js_assets' );
 		add_action( 'frm_style_settings_input_atts', 'FrmProStylesController::echo_style_settings_input_atts' );
 		add_action( 'frm_style_settings_bg_image_component_upload_button', 'FrmProStylesController::echo_bg_image_settings', 10 );
 		add_action( 'frm_style_settings_general_section_after_background', 'FrmProStylesController::echo_additional_background_image_settings', 20 );
@@ -221,7 +220,7 @@ class FrmProStylesController extends FrmStylesController {
 		$form       = self::get_form_for_page();
 		$theme_css  = FrmStylesController::get_style_val( 'theme_css', $form );
 		$action     = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_text_field' );
-		$is_builder = FrmAppHelper::is_admin_page( 'formidable' ) && $action !== 'settings' && ! FrmAppHelper::is_admin_page( 'formidable-styles' );
+		$is_builder = FrmAppHelper::is_admin_page( 'formidable' ) && ! in_array( $action, array( 'settings', 'update_settings' ), true ) && ! FrmAppHelper::is_admin_page( 'formidable-styles' );
 
 		if ( $theme_css != -1 && ! $is_builder ) {
 			// Without this line, datepickers load without proper styling in the Form Scheduling settings when you set the form status dropdown to "Schedule".
@@ -611,15 +610,14 @@ class FrmProStylesController extends FrmStylesController {
 	 * @return array
 	 */
 	private static function get_default_style() {
-		$frm_style     = new FrmStyle();
-		$default_style = $frm_style->get_default_style();
+		$frm_style = new FrmStyle();
 
 		if ( is_admin() && ! empty( $_POST ) && isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			// Reset to prevent posted values from being used on styler page.
 			$_POST['action'] = '';
 		}
 
-		return FrmStylesHelper::get_settings_for_output( $default_style );
+		return FrmStylesHelper::get_settings_for_output( $frm_style->get_default_style() );
 	}
 
 	/**
@@ -708,7 +706,7 @@ class FrmProStylesController extends FrmStylesController {
 		if ( in_array( $key, array( 'error_bg', 'error_border', 'error_text' ), true ) ) {
 			return true;
 		}
-		return '_color' === substr( $key, -6 ) || '_color_error' === substr( $key, -12 ) || '_color_active' === substr( $key, -13 ) || '_color_disabled' === substr( $key, -15 );
+		return str_ends_with( $key, '_color' ) || str_ends_with( $key, '_color_error' ) || str_ends_with( $key, '_color_active' ) || str_ends_with( $key, '_color_disabled' );
 	}
 
 	/**
@@ -731,6 +729,8 @@ class FrmProStylesController extends FrmStylesController {
 	 * @return void
 	 */
 	public static function before_render_style_page( $args ) {
+		FrmProAppController::load_style_manager_js_assets();
+
 		$form           = $args['form'];
 		$preview_helper = new FrmProStylesPreviewHelper();
 
@@ -1149,10 +1149,9 @@ class FrmProStylesController extends FrmStylesController {
 	 */
 	private static function get_template_match_from_api( $template_key ) {
 		$api      = new FrmStyleApi();
-		$info     = $api->get_api_info();
 		$template = false;
 
-		foreach ( $info as $key => $style ) {
+		foreach ( $api->get_api_info() as $key => $style ) {
 			if ( ! is_numeric( $key ) || ! is_array( $style ) || ! array_key_exists( 'slug', $style ) ) {
 				continue;
 			}

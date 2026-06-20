@@ -98,9 +98,7 @@ class FrmProCreditCardsController extends FrmProComboFieldsController {
 		$default_labels['month'] = __( 'Expiration Month', 'formidable-pro' );
 		$default_labels['year']  = __( 'Expiration Year', 'formidable-pro' );
 
-		$values = self::empty_value_array();
-
-		foreach ( $values as $heading => $value ) {
+		foreach ( self::empty_value_array() as $heading => $value ) {
 			$label = $default_labels[ $heading ] ?? $atts['field']->name;
 			$headings[ $atts['field']->id . '_' . $heading ] = strip_tags( $label );
 		}

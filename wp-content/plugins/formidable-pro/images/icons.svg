@@ -6,5 +6,6 @@
 <symbol id="frm_plus_folder_icon" viewBox="0 0 24 24" fill="none"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v11ZM12 11v6M9 14h6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_add_existing_forms_icon" viewBox="0 0 25 25" fill="none"><path d="M22.118 19.767a2 2 0 0 1-2 2h-16a2 2 0 0 1-2-2v-14a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2v11Z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 <symbol id="frm_dashed_list_icon" viewBox="0 0 24 24" fill="none"><path stroke="#282F36" stroke-opacity=".4" stroke-dasharray="4 4" d="M4.5 0v24M5 11.5h18"/></symbol>
+<symbol id="frm_pencil_with_underscore_icon" fill="none" viewBox="0 0 16 16"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3.17 12.83 6 12.17l6.2-6.2a.67.67 0 0 0 0-.94L10.97 3.8a.67.67 0 0 0-.94 0L3.83 10zM12.83 12.83H9.17"/></symbol>
 </defs>
 </svg>

@@ -128,8 +128,7 @@ class FrmProFieldRange extends FrmFieldType {
 		}
 
 		$default_value        = $this->get_default_value( $min, $max );
-		$value_position       = $this->get_value_position();
-		$show_value_at_bottom = str_contains( $value_position, 'bottom' );
+		$show_value_at_bottom = str_contains( $this->get_value_position(), 'bottom' );
 		$output               = '<div>' . $this->output_selected_value( $default_value, true ) . '</div>';
 		$is_range_slider      = FrmField::get_option( $this->field, 'is_range_slider' );
 
@@ -149,8 +148,7 @@ class FrmProFieldRange extends FrmFieldType {
 		$input .= '<input type="' . $type . '" name="' . esc_attr( $this->html_name( $name ) ) . '" value="' . esc_attr( $default_value ) . '" ' . $input_html . ' ';
 
 		if ( 'hidden' === $type ) {
-			$data_atts = $this->get_gap_data_atts();
-			$input    .= FrmAppHelper::array_to_html_params( $data_atts ) . ' />';
+			$input .= FrmAppHelper::array_to_html_params( $this->get_gap_data_atts() ) . ' />';
 		} else {
 			$input .= 'min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" />';
 		}
@@ -243,8 +241,7 @@ class FrmProFieldRange extends FrmFieldType {
 		$output = apply_filters( 'frm_range_output', $output, array( 'field' => $this->field ) );
 		$input  = '<div class="frm_range_container">';
 
-		$value_position       = $this->get_value_position();
-		$show_value_at_bottom = str_contains( $value_position, 'bottom' );
+		$show_value_at_bottom = str_contains( $this->get_value_position(), 'bottom' );
 		$output               = '<div>' . $output . '</div>';
 
 		if ( ! FrmField::get_option( $this->field, 'is_range_slider' ) ) {

@@ -1,4 +1,14 @@
 <?php
+/**
+ * View for product single in the back end.
+ *
+ * @package FormidablePro
+ *
+ * @since 6.30
+ *
+ * @var array  $field
+ * @var string $opt
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -8,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<input type="<?php echo esc_attr( $default_type ); ?>" name="<?php echo esc_attr( $field_name ); ?>" <?php echo ! empty( $checked ) ? 'checked="checked"' : ''; ?> value="<?php echo esc_attr( $field_val ); ?>"/>
 
 	<div class="frm_product_price_wrapper">
-		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][label]" value="<?php echo esc_attr( $opt ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" data-frmchange="trim,updateOption" placeholder="<?php esc_attr_e( 'Product Name', 'formidable-pro' ); ?>" />
-		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][price]" value="<?php echo esc_attr( $price ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option frm_product_price" placeholder="<?php esc_attr_e( 'Price', 'formidable-pro' ); ?>" data-frmchange="trim" />
+		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][label]" value="<?php echo esc_attr( $opt ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option <?php echo esc_attr( $field['separate_value'] ? 'frm_with_key' : '' ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" data-frmchange="trim,updateOption" placeholder="<?php esc_attr_e( 'Product Name', 'formidable' ); ?>" />
+		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][price]" value="<?php echo esc_attr( $price ); ?>" class="field_<?php echo esc_attr( $field['id'] ); ?>_option frm_product_price" placeholder="<?php esc_attr_e( 'Price', 'formidable' ); ?>" data-frmchange="trim" />
 	</div>
 
 	<a href="javascript:void(0)" class="frm_remove_tag<?php echo ! empty( $options_count ) && $options_count > 1 ? '' : ' frm_disabled'; ?>" data-fid="<?php echo esc_attr( $field['id'] ); ?>" data-removeid="frm_delete_field_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>_container" data-removemore="#frm_<?php echo esc_attr( $default_type . '_' . $field['id'] . '-' . $opt_key ); ?>" data-showlast="#frm_add_opt_<?php echo esc_attr( $field['id'] ); ?>">
@@ -20,9 +30,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus1_icon frm_add_tag frm_svg15' ); ?>
 	</a>
 
-	<span class="frm_option_key frm-with-right-icon field_<?php echo esc_attr( $field['id'] ); ?>_option_key<?php echo esc_attr( $field['separate_value'] ? '' : ' frm_hidden' ); ?>">
+	<?php
+	$saved_value_wrapper_atts = array(
+		'class' => 'frm_option_key frm-with-right-icon field_' . $field['id'] . '_option_key',
+	);
+
+	if ( ! $field['separate_value'] ) {
+		$saved_value_wrapper_atts['style'] = 'display: none';
+	}
+	?>
+	<span <?php FrmAppHelper::array_to_html_params( $saved_value_wrapper_atts, true ); ?>>
 		<input type="<?php echo esc_attr( $default_type ); ?>" class="frm_invisible" />
 		<input type="text" name="field_options[options_<?php echo esc_attr( $field['id'] ); ?>][<?php echo esc_attr( $opt_key ); ?>][value]" id="field_key_<?php echo esc_attr( $field['id'] . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>" placeholder="<?php esc_attr_e( 'Saved Value', 'formidable' ); ?>" data-frmchange="trim,updateDefault" />
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_save_icon' ); ?>
 	</span>
+
+	<?php do_action( 'frm_admin_single_opt', compact( 'field', 'opt', 'opt_key' ) ); ?>
 </li>

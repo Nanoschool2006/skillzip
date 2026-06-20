@@ -48,7 +48,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Close the form after a specific number of entries have been received.', 'formidable-pro' ), array( 'data-placement' => 'right' ) ); ?>
 	</label>
 
-	<input type="text" name="options[max_entries]" id="frm_max_entries" size="4" value="<?php echo esc_attr( $values['max_entries'] ); ?>" />
+	<input type="number" name="options[max_entries]" id="frm_max_entries" size="4" value="<?php echo esc_attr( $values['max_entries'] ); ?>" />
 </p>
 <p class="hide_form_status<?php echo ! empty( $values['open_status'] ) ? '' : ' frm_hidden'; ?>">
 	<label for="frm_closed_msg" class="frm_left_label">

@@ -48,7 +48,7 @@ $svg_args = array(
             <div class="frm_form_field frm_repeat_buttons frm_hidden_container">
 				<a href="javascript:void(0)" class="frm_button frm_add_form_row">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus1_icon', $svg_args ); ?>
-					<?php esc_html_e( 'Add', 'formidable-pro' ); ?>
+					<?php esc_html_e( 'Add', 'formidable' ); ?>
 				</a>
 				<a href="javascript:void(0)" class="frm_button frm_remove_form_row">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_minus1_icon', $svg_args ); ?>

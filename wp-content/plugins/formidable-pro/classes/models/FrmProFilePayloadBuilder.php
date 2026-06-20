@@ -89,9 +89,8 @@ class FrmProFilePayloadBuilder {
 	 * @return string the protected file url in either ?frm_file=payload or /file_file/payload format.
 	 */
 	public function get_protected_url( $protocol, $leave_size_out_of_payload ) {
-		$attached_file = get_attached_file( $this->id );
-		$filename      = basename( $attached_file );
-		$raw           = "id:{$this->id}|filename:{$filename}";
+		$filename = basename( get_attached_file( $this->id ) );
+		$raw      = "id:{$this->id}|filename:{$filename}";
 
 		if ( $this->size && ! $leave_size_out_of_payload ) {
 			if ( is_string( $this->size ) ) {
@@ -105,10 +104,9 @@ class FrmProFilePayloadBuilder {
 			}
 		}
 
-		$scheme   = self::maybe_is_ssl() ? 'https' : 'http';
-		$home_url = home_url( '', $scheme );
+		$scheme = self::maybe_is_ssl() ? 'https' : 'http';
 
-		return $home_url . $protocol . base64_encode( $raw );
+		return home_url( '', $scheme ) . $protocol . base64_encode( $raw );
 	}
 
 	/**

@@ -199,14 +199,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 	<?php unset( $post_field, $post_key, $field_class ); ?>
 
-	<h3><?php esc_html_e( 'Taxonomies/Categories', 'formidable-pro' ); ?></h3>
+	<h3 class="frm-mt-xs"><?php esc_html_e( 'Taxonomies/Categories', 'formidable-pro' ); ?></h3>
 
-	<div id="frm_posttax_rows" class="frm_add_remove frm_posttax_labels <?php echo ! empty( $form_action->post_content['post_category'] ) ? '' : 'frm_hidden'; ?>" style="padding-bottom:8px;">
-		<p class="frm_grid_container frm_no_margin">
-			<label class="frm4 frm_form_field">
+	<div id="frm_posttax_rows" class="frm_add_remove frm_posttax_labels <?php echo ! empty( $form_action->post_content['post_category'] ) ? '' : 'frm_hidden'; ?>">
+		<p class="frm_grid_container frm-m-0">
+			<label class="frm6 frm_form_field frm-mb-0">
 				<?php esc_html_e( 'Taxonomy Type', 'formidable-pro' ); ?>
 			</label>
-			<label class="frm6 frm_form_field">
+			<label class="frm6 frm_form_field frm-mb-0">
 				<?php esc_html_e( 'Populate Field', 'formidable-pro' ); ?>
 			</label>
 		</p>
@@ -222,9 +222,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 
-	<p>
+	<p class="frm-mb-xs">
 		<a href="javascript:void(0)" class="frm_add_posttax_row button frm-button-secondary <?php echo esc_attr( ! empty( $form_action->post_content['post_category'] ) ? 'frm_hidden' : '' ); ?>">
-			+ <?php esc_html_e( 'Add' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
+			<span><?php echo esc_html_x( 'Add', 'create post action taxonomies/categories', 'formidable' ); ?></span>
 		</a>
 	</p>
 
@@ -233,12 +234,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 
 	<div class="frm_add_remove frm_name_value<?php echo ! empty( $form_action->post_content['post_custom_fields'] ) ? '' : ' frm_hidden'; ?>">
-
-		<p class="frm_grid_container frm_no_margin">
-			<label class="frm4 frm_form_field">
+		<p class="frm_grid_container frm-m-0">
+			<label class="frm6 frm_form_field frm-mb-0">
 				<?php esc_html_e( 'Name', 'formidable' ); ?>
 			</label>
-			<label class="frm6 frm_form_field">
+			<label class="frm6 frm_form_field frm-mb-0">
 				<?php esc_html_e( 'Value', 'formidable-pro' ); ?>
 			</label>
 		</p>
@@ -260,9 +260,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	<p>
+	<p class="frm-mb-md">
 		<a href="javascript:void(0)" class="frm_add_postmeta_row button frm-button-secondary <?php echo esc_attr( $has_meta_row ? 'frm_hidden' : '' ); ?>">
-			+ <?php esc_html_e( 'Add' ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon' ); ?>
+			<span><?php echo esc_html_x( 'Add', 'create post action custom fields', 'formidable' ); ?></span>
 		</a>
 	</p>
 

@@ -376,7 +376,6 @@ class FrmProEntryMetaHelper {
 	 * @param array $atts
 	 */
 	private static function get_entry_id_for_dynamic_opts( $atts ) {
-		$user_id  = get_current_user_id();
 		$entry_id = 0;
 
 		if ( FrmAppHelper::is_admin() ) {
@@ -386,7 +385,7 @@ class FrmProEntryMetaHelper {
 		}
 
 		$atts['entry_id'] = $entry_id;
-		return self::user_for_dynamic_opts( $user_id, $atts );
+		return self::user_for_dynamic_opts( get_current_user_id(), $atts );
 	}
 
 	/**
@@ -424,7 +423,7 @@ class FrmProEntryMetaHelper {
 	 *
 	 * @return array|object|string|null
 	 */
-	public static function &value_exists( $field_id, $value, $entry_id = false ) {
+	public static function value_exists( $field_id, $value, $entry_id = false ) {
 		global $wpdb;
 
 		if ( is_object( $field_id ) ) {
@@ -444,13 +443,12 @@ class FrmProEntryMetaHelper {
 			$query['m.item_id !'] = $entry_id;
 		}
 
-		$value = FrmDb::get_var(
-			$wpdb->prefix . 'frm_item_metas m JOIN ' . $wpdb->prefix . 'frm_items i ON m.item_id = i.id',
+		// Use STRAIGHT_JOIN to optimize the query. On a customer site the STRAIGHT_JOIN was ~9x faster.
+		return FrmDb::get_var(
+			$wpdb->prefix . 'frm_item_metas m STRAIGHT_JOIN ' . $wpdb->prefix . 'frm_items i ON m.item_id = i.id',
 			$query,
 			'm.id'
 		);
-
-		return $value;
 	}
 
 	public static function post_value_exists( $post_field, $value, $post_id, $custom_field = '' ) {
@@ -479,21 +477,24 @@ class FrmProEntryMetaHelper {
 		return FrmDb::get_var( $table, $query, $db_field );
 	}
 
-	public static function &get_max( $field ) {
+	/**
+	 * @return string
+	 */
+	public static function get_max( $field ) {
 		if ( ! is_object( $field ) ) {
 			$field = FrmField::getOne( $field );
 		}
 
 		if ( ! $field ) {
-			$max = '';
-			return $max;
+			return '';
 		}
 
 		// The most recent entry ID is not necessarily the highest because of draft statuses.
 		// So try to get the highest from the most recent few meta values.
+		// Note that the STRAIGHT_JOIN optimizes this query. On a customer site the STRAIGHT_JOIN was ~60,000x faster.
 		global $wpdb;
 		$max_values = FrmDb::get_results(
-			$wpdb->prefix . 'frm_item_metas m JOIN ' . $wpdb->prefix . 'frm_items i ON i.id = m.item_id',
+			$wpdb->prefix . 'frm_item_metas m STRAIGHT_JOIN ' . $wpdb->prefix . 'frm_items i ON i.id = m.item_id',
 			array(
 				'm.field_id' => $field->id,
 				'i.is_draft' => 0,
@@ -501,6 +502,7 @@ class FrmProEntryMetaHelper {
 			'i.user_id, m.meta_value',
 			array(
 				'order_by' => 'item_id DESC',
+				'limit'    => 100,
 			)
 		);
 

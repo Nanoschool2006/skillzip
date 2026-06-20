@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$checked                = true;
 		$input_html['disabled'] = 'disabled';
 	}
-	FrmProHtmlHelper::admin_toggle(
+	FrmHtmlHelper::toggle(
 		'frm_inbox_' . $type,
 		'frm_inbox[' . esc_attr( $type ) . ']',
 		array(

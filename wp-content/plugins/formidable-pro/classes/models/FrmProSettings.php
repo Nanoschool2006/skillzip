@@ -203,8 +203,13 @@ class FrmProSettings extends FrmSettings {
 	 * @since 2.0.2
 	 */
 	public function get_cal_date() {
-		$formats               = FrmProAppHelper::display_to_datepicker_format();
-		$this->cal_date_format = $formats[ $this->date_format ] ?? 'mm/dd/yy';
+		$formats = FrmProAppHelper::display_to_datepicker_format();
+
+		$this->cal_date_format = 'mm/dd/yy';
+
+		if ( isset( $this->date_format, $formats[ $this->date_format ] ) ) {
+			$this->cal_date_format = $formats[ $this->date_format ];
+		}
 	}
 
 	/**

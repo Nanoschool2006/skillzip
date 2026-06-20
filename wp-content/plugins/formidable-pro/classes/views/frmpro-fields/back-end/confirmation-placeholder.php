@@ -4,6 +4,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p class="frm-conf-box-<?php echo esc_attr( $field['id'] . ( ! empty( $field['conf_field'] ) ? '' : ' frm_hidden' ) ); ?>">
+	<label for="field_options_conf_label_text_<?php echo esc_attr( $field['id'] ); ?>">
+		<?php esc_html_e( 'Confirmation Label Text', 'formidable-pro' ); ?>
+	</label>
+	<input type="text" name="field_options[conf_label_text_<?php echo absint( $field['id'] ); ?>]" id="field_options_conf_label_text_<?php echo esc_attr( $field['id'] ); ?>" class="frm-conf-label-text-input" value="<?php echo esc_attr( $field['conf_label_text'] ); ?>" />
+</p>
+<p class="frm-conf-box-<?php echo esc_attr( $field['id'] . ( ! empty( $field['conf_field'] ) ? '' : ' frm_hidden' ) ); ?>">
 	<label for="field_options_conf_input_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php esc_html_e( 'Confirmation Placeholder Text', 'formidable-pro' ); ?>
 	</label>

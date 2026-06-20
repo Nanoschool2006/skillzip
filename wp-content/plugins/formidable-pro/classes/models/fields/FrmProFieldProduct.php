@@ -30,7 +30,7 @@ class FrmProFieldProduct extends FrmFieldType {
 			'options' => serialize(
 				array(
 					'',
-					__( 'Product 1', 'formidable-pro' ),
+					__( 'Product 1', 'formidable' ),
 				)
 			),
 		);
@@ -59,8 +59,48 @@ class FrmProFieldProduct extends FrmFieldType {
 	 * {@inheritdoc}
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
-		$field = $args['field'];
-		include FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/back-end/separate-values.php';
+		$data_type = FrmField::get_option( $this->field, 'data_type' );
+		echo '<div class="frm_display_format_options" data-product-type="' . esc_attr( $data_type ) . '">';
+
+		if ( 'single' === $data_type ) {
+			add_filter( 'frm_product_display_format_options', array( $this, 'use_singular_image_label' ) );
+		}
+
+		FrmProImages::show_image_choices( $args );
+
+		if ( 'single' === $data_type ) {
+			remove_filter( 'frm_product_display_format_options', array( $this, 'use_singular_image_label' ) );
+		}
+		echo '</div>';
+	}
+
+	/**
+	 * Returns translatable UI strings for product field labels.
+	 * Single source of truth used by both PHP rendering and JS (via wp_localize_script).
+	 *
+	 * @return array
+	 */
+	public static function get_product_label_strings() {
+		return array(
+			'image'            => __( 'Image', 'formidable-pro' ),
+			'images'           => __( 'Images', 'formidable' ),
+			'hideProductName'  => __( 'Hide product name', 'formidable-pro' ),
+			'hideProductNames' => __( 'Hide product names', 'formidable-pro' ),
+		);
+	}
+
+	/**
+	 * Change "Images" to "Image" for single product type in Display format options.
+	 *
+	 * @param array $options
+	 *
+	 * @return array
+	 */
+	public function use_singular_image_label( $options ) {
+		if ( isset( $options['1'] ) ) {
+			$options['1']['text'] = self::get_product_label_strings()['image'];
+		}
+		return $options;
 	}
 
 	public function show_primary_options( $args ) {
@@ -75,7 +115,7 @@ class FrmProFieldProduct extends FrmFieldType {
 			'select'   => __( 'Dropdown', 'formidable' ),
 			'radio'    => __( 'Radio Buttons', 'formidable' ),
 			'checkbox' => __( 'Checkboxes', 'formidable' ),
-			'single'   => __( 'Single Product', 'formidable-pro' ),
+			'single'   => __( 'Single Product', 'formidable' ),
 			'user_def' => __( 'User Defined', 'formidable-pro' ),
 		);
 	}
@@ -86,9 +126,12 @@ class FrmProFieldProduct extends FrmFieldType {
 		return array_merge(
 			parent::extra_field_opts(),
 			array(
-				'data_type' => 'select',
+				'data_type'       => 'select',
 				/* 'align' is needed for the checkbox and radio 'data_type' cases. */
-				'align'     => FrmStylesController::get_style_val( 'check_align', $form_id ? $form_id : 'default' ),
+				'align'           => FrmStylesController::get_style_val( 'check_align', $form_id ? $form_id : 'default' ),
+				'image_options'   => 0,
+				'hide_image_text' => 0,
+				'image_size'      => '',
 			)
 		);
 	}
@@ -130,10 +173,14 @@ class FrmProFieldProduct extends FrmFieldType {
 			$this->field['options'] = array();
 		}
 
-		$product_type = FrmField::get_option( $this->field, 'data_type' );
-		$file         = FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/front-end/product-';
+		$product_type  = FrmField::get_option( $this->field, 'data_type' );
+		$file          = FrmProAppHelper::plugin_path() . '/classes/views/frmpro-fields/front-end/product-';
+		$image_options = FrmField::get_option( $this->field, 'image_options' );
 
-		if ( $product_type === 'checkbox' ) {
+		if ( in_array( $product_type, array( 'checkbox', 'radio' ), true ) && $image_options ) {
+			// Product with images.
+			$file .= 'image-options.php';
+		} elseif ( $product_type === 'checkbox' ) {
 			$file .= 'radio.php';
 		} elseif ( array_key_exists( $product_type, self::get_data_type_settings() ) ) {
 			$file .= str_replace( '_', '-', $product_type ) . '.php';
@@ -154,7 +201,7 @@ class FrmProFieldProduct extends FrmFieldType {
 	}
 
 	protected function get_bulk_edit_string() {
-		return __( 'Bulk Edit Products', 'formidable-pro' );
+		return __( 'Bulk Edit Products', 'formidable' );
 	}
 
 	protected function show_single_option( $args ) {
@@ -254,7 +301,13 @@ class FrmProFieldProduct extends FrmFieldType {
 	 */
 	private function get_price( $options, $value, &$price ) {
 		foreach ( $options as $option ) {
-			if ( ! is_array( $option ) || $option['value'] !== $value ) {
+			if ( ! is_array( $option ) ) {
+				continue;
+			}
+
+			$check_key = FrmField::get_option( $this->field, 'separate_value' ) ? 'value' : 'label';
+
+			if ( ! isset( $option[ $check_key ] ) || $option[ $check_key ] !== $value ) {
 				continue;
 			}
 
@@ -296,7 +349,7 @@ class FrmProFieldProduct extends FrmFieldType {
 
 	private static function hidden_field_option( $field ) {
 		$opt_key    = '000';
-		$field_val  = __( 'New Product', 'formidable-pro' );
+		$field_val  = __( 'New Product', 'formidable' );
 		$opt        = $field_val;
 		$price      = '';
 		$checked    = false;
@@ -320,6 +373,31 @@ class FrmProFieldProduct extends FrmFieldType {
 	}
 
 	/**
+	 * Gets displayed product label, include the name and price.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $name Product name.
+	 * @param float $price Product price.
+	 * @param array $field Field array.
+	 *
+	 * @return string
+	 */
+	public static function get_displayed_product_label( $name, $price, $field ) {
+		$text = array();
+
+		if ( $name ) {
+			$text[] = $name;
+		}
+
+		if ( $price ) {
+			$text[] = FrmProCurrencyHelper::format_amount_for_currency( $field['form_id'], $price );
+		}
+
+		return implode( ': ', $text );
+	}
+
+	/**
 	 * Format price when show=price.
 	 *
 	 * @since 4.05
@@ -334,15 +412,51 @@ class FrmProFieldProduct extends FrmFieldType {
 			return $value;
 		}
 
+		$options = is_array( $this->field ) ? $this->field['options'] : $this->field->options;
+
+		if ( ! is_array( $options ) ) {
+			return $value;
+		}
+
 		$is_array = is_array( $value );
 
 		if ( ! $is_array ) {
 			$value = explode( $atts['sep'], $value );
 		}
 
-		if ( is_array( $value ) ) {
-			foreach ( $value as $k => $v ) {
-				$value[ $k ] = FrmProCurrencyHelper::format_amount_for_currency( $this->get_field_column( 'form_id' ), $v );
+		$format    = $atts['format'] ?? 'currency';
+		$check_key = FrmField::get_option( $this->field, 'separate_value' ) ? 'value' : 'label';
+
+		if ( 'single' === FrmField::get_option( $this->field, 'data_type' ) ) {
+			foreach ( $options as $option ) {
+				if ( is_array( $option ) ) {
+					$options = array( $option );
+					break;
+				}
+			}
+		}
+
+		/**
+		 * @var array $value
+		 */
+
+		foreach ( $value as $k => $v ) {
+			foreach ( $options as $option ) {
+				if ( ! is_array( $option ) || ! isset( $option['price'] ) ) {
+					continue;
+				}
+
+				if ( ! isset( $option[ $check_key ] ) || $option[ $check_key ] !== $v ) {
+					continue;
+				}
+
+				if ( 'number' === $format ) {
+					$value[ $k ] = $option['price'];
+				} else {
+					$value[ $k ] = FrmProCurrencyHelper::format_amount_for_currency( $this->get_field_column( 'form_id' ), $option['price'] );
+				}
+
+				break;
 			}
 		}
 

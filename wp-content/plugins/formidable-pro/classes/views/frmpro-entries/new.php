@@ -24,34 +24,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="columns-2">
 
 		<div id="post-body-content">
-			<div class="frm-entry-container frm-fields <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $values ) ); ?>">
-			<h2><?php esc_html_e( 'Add New Entry', 'formidable-pro' ); ?></h2>
-			<?php if ( empty( $values ) ) { ?>
-				<p class="frm_error_style frm_form_fields">
-					<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
-					<?php printf( esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<br/><a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ); ?>
-				</p>
-				<?php
-        	} else {
-				include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
+			<div class="frm-entry-container">
+				<h2><?php esc_html_e( 'Add New Entry', 'formidable-pro' ); ?></h2>
+				<div class="frm-fields <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $values ) ); ?>">
+					<?php if ( empty( $values ) ) { ?>
+						<p class="frm_error_style frm_form_fields">
+							<strong><?php esc_html_e( 'Oops!', 'formidable' ); ?></strong>
+							<?php printf( esc_html__( 'You did not add any fields to your form. %1$sGo back%2$s and add some.', 'formidable' ), '<br/><a href="' . esc_url( admin_url( '?page=formidable&frm_action=edit&id=' . $form->id ) ) . '">', '</a>' ); ?>
+						</p>
+						<?php
+					} else {
+						include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 
-				$form_action = 'create';
-				require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php';
-				?>
+						$form_action = 'create';
+						require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/form.php';
+						?>
 
-			<p>
-				<?php echo FrmProFormsHelper::get_prev_button( $form, 'button-secondary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<input class="button-primary" type="submit" value="<?php echo esc_attr( $submit ); ?>" <?php do_action( 'frm_submit_button_action', $form, $form_action ); ?> />
-				<?php
-				echo FrmProFormsHelper::get_draft_link( $form ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo FrmProFormsHelper::get_start_over_html( $form ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				?>
-			</p>
-			<div class="clear"></div>
-				<?php
-			}
-			?>
-			</div>
+					<p>
+						<?php echo FrmProFormsHelper::get_prev_button( $form, 'button-secondary' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<input class="button-primary" type="submit" value="<?php echo esc_attr( $submit ); ?>" <?php do_action( 'frm_submit_button_action', $form, $form_action ); ?> />
+						<?php
+						echo FrmProFormsHelper::get_draft_link( $form ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						echo FrmProFormsHelper::get_start_over_html( $form ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						?>
+					</p>
+					<div class="clear"></div>
+						<?php
+					}
+					?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

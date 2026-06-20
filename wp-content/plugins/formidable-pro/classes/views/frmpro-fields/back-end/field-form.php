@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 $form = ! empty( $field['form_select'] ) ? FrmForm::getOne( $field['form_select'] ) : '';
 ?>
-<span class="frm-with-left-icon frm-not-set frm-block <?php if ( ! empty( $form ) ) { ?>
+<span class="frm-with-left-icon frm-not-set frm-block <?php if ( $form ) { ?>
 		frm_hidden
 	<?php } ?>" id="setup-message-<?php echo esc_attr( $field['id'] ); ?>">
 	<?php FrmAppHelper::icon_by_class( 'frmfont frm_report_problem_solid_icon' ); ?>
 	<input type="text" value="<?php esc_attr_e( 'This field is not set up yet.', 'formidable' ); ?>" disabled />
 </span>
 
-<div class="frm-embed-field-placeholder frm_grid_container <?php if ( empty( $form ) ) { ?>
+<div class="frm-embed-field-placeholder frm_grid_container <?php if ( ! $form ) { ?>
 		frm_hidden
 	<?php } ?>">
 	<div class="frm-fake-field"></div>
@@ -24,7 +24,7 @@ $form = ! empty( $field['form_select'] ) ? FrmForm::getOne( $field['form_select'
 			sprintf(
 				/* translators: %1$s: Form name */
 				__( 'Embedded Form: %1$s', 'formidable-pro' ),
-				! empty( $form ) ? $form->name : ''
+				$form ? $form->name : ''
 			)
 		);
 		?>

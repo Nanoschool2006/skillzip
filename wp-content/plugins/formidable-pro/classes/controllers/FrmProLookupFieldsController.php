@@ -63,10 +63,9 @@ class FrmProLookupFieldsController {
 	 * @return void
 	 */
 	public static function add_autopopulate_value_field_options( $values, $field, &$opts ) {
-		$field_type               = $field ? ( $field->field_options['original_type'] ?? $field->type ) : $values['type'];
-		$autopopulate_field_types = self::get_autopopulate_field_types();
+		$field_type = $field ? ( $field->field_options['original_type'] ?? $field->type ) : $values['type'];
 
-		if ( ! in_array( $field_type, $autopopulate_field_types ) ) {
+		if ( ! in_array( $field_type, self::get_autopopulate_field_types() ) ) {
 			return;
 		}
 

@@ -12,9 +12,10 @@ class FrmProFieldQuantity extends FrmProFieldNumber {
 	protected $type = 'quantity';
 
 	protected function field_settings_for_type() {
-		$settings           = parent::field_settings_for_type();
-		$settings['unique'] = false;
-		$settings['format'] = false;
+		$settings                 = parent::field_settings_for_type();
+		$settings['unique']       = false;
+		$settings['format']       = false;
+		$settings['autocomplete'] = false;
 
 		return $settings;
 	}

@@ -50,8 +50,6 @@ class FrmProEntryFormatter extends FrmEntryFormatter {
 	 * @since 3.0
 	 */
 	protected function skip_fields() {
-		$skip_fields = parent::skip_fields();
-
 		$skip_pro_fields = array(
 			'break',
 			'divider',
@@ -61,7 +59,7 @@ class FrmProEntryFormatter extends FrmEntryFormatter {
 			'credit_card',
 		);
 
-		return array_merge( $skip_fields, $skip_pro_fields );
+		return array_merge( parent::skip_fields(), $skip_pro_fields );
 	}
 
 	/**
@@ -465,9 +463,7 @@ class FrmProEntryFormatter extends FrmEntryFormatter {
 			$displayed_value          = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
 			$output[ $key ][ $index ] = $displayed_value;
 
-			$saved_value = $field_value->get_saved_value();
-
-			if ( $displayed_value === $saved_value ) {
+			if ( $displayed_value === $field_value->get_saved_value() ) {
 				continue;
 			}
 

@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<select class="frm_options_field_<?php echo absint( $field['id'] ); ?> frm_get_field_selection" name="field_options[get_values_form_<?php echo absint( $field['id'] ); ?>]" id="frm_options_field_<?php echo absint( $field['id'] ); ?>">
 			<option value="">&mdash; <?php esc_html_e( 'Select Form', 'formidable' ); ?> &mdash;</option>
 			<?php foreach ( $form_list as $form_opts ) { ?>
-			<option value="<?php echo absint( $form_opts->id ); ?>" <?php selected( $form_opts->id, $selected_form_id ); ?>><?php echo esc_html( FrmAppHelper::truncate( $form_opts->name, 30 ) ); ?></option>
+			<option value="<?php echo absint( $form_opts->id ); ?>" <?php selected( $form_opts->id, $selected_form_id ); ?>><?php echo esc_html( FrmProFormsHelper::get_form_name( $form_opts, 30 ) ); ?></option>
 			<?php } ?>
 		</select>
 	</p>

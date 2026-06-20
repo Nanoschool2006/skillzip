@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		foreach ( $lookup_args['form_list'] as $form_opts ) {
 			FrmProHtmlHelper::echo_dropdown_option(
-				FrmAppHelper::truncate( $form_opts->name, 30 ),
+				FrmProFormsHelper::get_form_name( $form_opts, 30 ),
 				(string) $form_opts->id === (string) ( $field['get_values_form'] ?? '' ),
 				array(
 					'value' => $form_opts->id,

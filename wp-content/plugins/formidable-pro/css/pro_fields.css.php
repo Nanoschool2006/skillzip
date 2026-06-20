@@ -102,6 +102,12 @@ if ( ! empty( $vars ) ) {
 	background-color:var(--section-bg-color)<?php echo esc_html( $important ); ?>;
 }
 
+.with_frm_style .frm-show-form .frm_section_heading h3.frm_trigger:focus-visible {
+	outline: 1px solid var(--border-color-active)<?php echo esc_html( $important ); ?>;
+	outline-offset: 2px;
+	box-shadow: 0px 0px 5px 0px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.6)<?php echo esc_html( $important ); ?>;
+}
+
 .frm_trigger .frmsvg {
 	width: 16px;
 	height: 16px;
@@ -1078,6 +1084,7 @@ input[type="checkbox"]:disabled + .frm_image_option_container{
 	padding-left: 0;
 	margin-left: 0;
 	min-height: 0;
+	width: 100%;
 	visibility: visible<?php echo esc_html( $important ); ?>; /* Overrides grid classes */
 }
 
@@ -1105,6 +1112,36 @@ input[type="checkbox"]:disabled + .frm_image_option_container{
 .frm_with_bg_image .frm_form_fields > fieldset > *:not(.frm_screen_reader) {
 	z-index: 1;
 	position: relative;
+}
+
+/* Fields focus style */
+.with_frm_style .frm_dropzone.dz-clickable,
+.with_frm_style .frm-star-group input + label,
+.with_frm_style .frm_rootline_group {
+	border: var(--field-border-style) var(--field-border-width) transparent;
+}
+
+.with_frm_style .frm_dropzone.dz-clickable:has(button:focus),
+.with_frm_style .frm-star-group input:focus + label,
+.with_frm_style .frm_rootline_group:focus {
+	background-color: var(--bg-color-active);
+	border-color: var(--border-color-active);
+	color: var(--text-color);
+	box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.6);
+}
+
+/* Subtle focus style for range slider: highlight the bar only */
+.with_frm_style .frm_range_container input[type=range]:focus::-webkit-slider-runnable-track {
+	box-shadow: 0 0 0 3px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.25);
+}
+
+.with_frm_style .frm_range_container input[type=range]:focus::-moz-range-track {
+	box-shadow: 0 0 0 3px rgba(<?php echo esc_html( FrmStylesHelper::hex2rgb( $defaults['border_color_active'] ) ); ?>, 0.25);
+}
+
+.with_frm_style .frm_rootline_group:focus-visible,
+.with_frm_style .frm_rootline_group input:focus-visible {
+	outline: none;
 }
 
 /**
@@ -1377,6 +1414,31 @@ ul.frm_inline_list li{
 .with_frm_style .frm_repeat_sec .frm_form_field.frm_repeat_buttons .frm_remove_form_row:hover svg.frmsvg {
 	fill: var(--submit-hover-color);
 }
+
+/* Make inline repeater responsive */
+@media only screen and (min-width: 601px) and (max-width: 782px) {
+	.frm_repeat_inline[data-column-count="2"][data-link-format="text"] .frm_first,
+	.frm_repeat_inline[data-column-count="2"][data-link-format="both"] .frm_first {
+		grid-column: span 8 / span 8;
+	}
+
+	.frm_repeat_inline[data-column-count="2"][data-link-format="text"] .frm_repeat_buttons,
+	.frm_repeat_inline[data-column-count="2"][data-link-format="both"] .frm_repeat_buttons {
+		grid-column: span 4 / span 4;
+	}
+}
+
+@media only screen and (min-width: 783px) and (max-width: 1249px) {
+	.frm_repeat_inline[data-column-count="2"][data-link-format="text"] .frm_first,
+	.frm_repeat_inline[data-column-count="2"][data-link-format="both"] .frm_first {
+		grid-column: span 9 / span 9;
+	}
+
+	.frm_repeat_inline[data-column-count="2"][data-link-format="text"] .frm_repeat_buttons,
+	.frm_repeat_inline[data-column-count="2"][data-link-format="both"] .frm_repeat_buttons {
+		grid-column: span 3 / span 3;
+	}
+}
 /* End Repeater Fields */
 
 .frm_tiles h3{
@@ -1437,6 +1499,38 @@ select.frm_loading_lookup[multiple="multiple"] {
 	animation-name: fadeIn;
 	animation-duration: 2s;
 	animation-fill-mode: both;
+}
+
+/* Single product with image */
+.frm_single_product_wrap {
+	display: flex;
+	align-items: center;
+}
+
+.frm_single_product_image {
+	height: var(--image-size);
+	width: auto;
+	margin-right: 8px;
+}
+
+.frm_single_product_wrap .frm_empty_url {
+	background: #ecf0f5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: var(--image-size);
+	height: var(--image-size);
+	margin-right: 8px;
+}
+
+.frm_single_product_wrap .frm_image_placeholder_icon svg {
+	width: 63px;
+	height: auto;
+	opacity: .2;
+}
+
+.form-field:not(.frm_image_options) .frm_single_product_image {
+	display: none;
 }
 
 @keyframes frmSlideInLeft {

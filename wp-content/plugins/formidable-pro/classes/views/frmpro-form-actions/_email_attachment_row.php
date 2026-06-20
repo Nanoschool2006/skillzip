@@ -11,8 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 
 	<!-- Attachment control container -->
-	<div class="frm_email_add_attachment_container frm_image_styling_frame" style="margin-left:0">
-		<p class="frm-m-0 frm-mb-sm">
+	<div class="frm_email_add_attachment_container frm_image_styling_frame frm-ml-0 frm-mb-sm">
+		<p class="frm-m-0 frm-mb-xs">
 			<a href="#" class="<?php echo esc_attr( $has_attachment ? 'frm_hidden' : '' ); ?> frm_email_add_attachment button frm-button-secondary frm-button-sm">
 				<?php esc_html_e( 'Add Attachment', 'formidable-pro' ); ?>
 			</a>
@@ -53,19 +53,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	if ( ! empty( $can_generate_csv_file ) ) {
-		FrmProHtmlHelper::admin_toggle(
-			'frm_attach_csv',
-			$pass_args['action_control']->get_field_name( 'attach_csv' ),
-			array(
-				'div_class' => 'with_frm_style frm_toggle',
-				'checked'   => ! empty( $form_action->post_content['attach_csv'] ),
-				'echo'      => true,
-			)
-		);
 		?>
-		<label id="frm_attach_csv_label" for="frm_attach_csv">
-			<?php esc_html_e( 'Attach CSV export of entry to email', 'formidable-pro' ); ?>
-		</label>
+		<div class="frm-h-stack-xs frm-mb-md">
+			<?php
+			FrmHtmlHelper::toggle(
+				'frm_attach_csv',
+				$pass_args['action_control']->get_field_name( 'attach_csv' ),
+				array(
+					'div_class' => 'with_frm_style frm_toggle',
+					'checked'   => ! empty( $form_action->post_content['attach_csv'] ),
+					'echo'      => true,
+				)
+			);
+			?>
+			<label id="frm_attach_csv_label" for="frm_attach_csv">
+				<?php esc_html_e( 'Attach CSV export of entry to email', 'formidable-pro' ); ?>
+			</label>
+		</div>
 		<?php
 	}
 

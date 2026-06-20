@@ -125,6 +125,13 @@
 			}
 
 			if ( this.alphaOptions.alphaEnabled ) {
+				// FORMIDABLE CUSTOM CHANGE
+				// Use hex or rgb when alpha is 1 and the input specifies a non-rgba format.
+				var elFormat = this.element[0].dataset.colorFormat;
+				if ( color._alpha >= 1 && elFormat && 'rgba' !== elFormat ) {
+					return 'hex' === elFormat ? color.toString() : color.toCSS( elFormat );
+				}
+				// END FORMIDABLE CUSTOM CHANGE
 				color = color.to_s( this.alphaOptions.alphaColorType );
 				if ( !this.alphaOptions.alphaColorWithSpace ) {
 					color = color.replace( /\s+/g, '' );

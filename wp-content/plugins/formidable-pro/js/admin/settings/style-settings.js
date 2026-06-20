@@ -44,6 +44,11 @@
 		 * @returns {void}
 		 */
 		function handleNewStyleTriggerClick() {
+			if ( 'undefined' !== typeof frmExpiredVars ) {
+				wp.hooks.doAction( 'frm_show_expired_modal' );
+				return;
+			}
+
 			stylerModal(
 				'frm_new_style_modal',
 				{
@@ -719,7 +724,7 @@
 					dateFormat: 'Y-m-d',
 					changeMonth: true,
 					changeYear: true,
-					onReady: function( selectedDates, dateStr, instance ) {
+					onReady( selectedDates, dateStr, instance ) {
 						instance.calendarContainer.classList.add( 'frm-datepicker' );
 					}
 				});
@@ -729,7 +734,7 @@
 			jQuery( target ).datepicker({
 				changeMonth: true,
 				changeYear: true,
-				beforeShow: function( _, options ) {
+				beforeShow( _, options ) {
 					if ( options.dpDiv ) {
 						options.dpDiv.addClass( 'frm-datepicker' );
 						getAllFormClasses( options.input.get( 0 ) ).forEach(
@@ -752,7 +757,7 @@
 			formClasses = [];
 			Array.prototype.forEach.call(
 				formContainer.className.split( ' ' ),
-				function( className ) {
+				( className ) => {
 					var trimmedClassName = className.trim();
 					if ( '' !== trimmedClassName && 'frm_forms' !== trimmedClassName ) {
 						formClasses.push( trimmedClassName );
@@ -896,7 +901,7 @@
 
 		function initializeSVGIcons() {
 			// Collapse icon position.
-			frmDom.util.documentOn( 'change', '#frm_collapse_pos', function( event ) {
+			frmDom.util.documentOn( 'change', '#frm_collapse_pos', ( event ) => {
 				const wrapperEls = document.querySelectorAll( '.frm_section_heading .frm_trigger' );
 				if ( ! wrapperEls ) {
 					return;
@@ -936,7 +941,7 @@
 				 * @param {String} iconNameFormat Icon name format, contains `{key}`, which is replaced by the setting value.
 				 */
 				function changeSVGIcon( inputSelector, svgTagSelector, iconNameFormat ) {
-					frmDom.util.documentOn( 'change', inputSelector, function( event ) {
+					frmDom.util.documentOn( 'change', inputSelector, ( event ) => {
 						if ( ! event.target.checked ) {
 							return;
 						}
@@ -1014,7 +1019,9 @@
 	 * @returns {void}
 	 */
 	function toggleSampleFormClass( className, toggleOn ) {
-		getSampleForms().forEach( formContainer => formContainer.querySelector( '.frm-show-form' ).classList.toggle( className, toggleOn ) );
+		getSampleForms().forEach( ( formContainer ) =>
+			formContainer.querySelector( '.frm-show-form' )?.classList.toggle( className, toggleOn )
+		);
 	}
 
 	/**
@@ -1031,7 +1038,7 @@
 				changeMonth: true,
 				changeYear: true,
 				inline: true,
-				onReady: function( selectedDates, dateStr, instance ) {
+				onReady( selectedDates, dateStr, instance ) {
 					instance.calendarContainer.classList.add( 'frm-datepicker' );
 					instance.calendarContainer.classList.add( 'frm-datepicker-inline-small' );
 				}

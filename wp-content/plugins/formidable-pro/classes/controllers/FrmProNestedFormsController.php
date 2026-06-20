@@ -831,7 +831,7 @@ class FrmProNestedFormsController {
 		}
 
 		$format = $args['parent_field']['format'] ?? '';
-		$end    = false;
+		$end    = self::get_end_repeat_field( $args );
 		$count  = 0;
 
 		foreach ( $values['fields'] as $subfield ) {
@@ -854,7 +854,17 @@ class FrmProNestedFormsController {
 		$field_class     = self::grid_field_class( $count, $format );
 		$section_classes = self::repeat_container_classes( $format, $args );
 
-		echo '<div id="frm_section_' . esc_attr( $args['parent_field']['id'] . '-' . $args['i'] ) . '" class="' . esc_attr( $section_classes ) . '">' . "\n";
+		echo '<div';
+		FrmAppHelper::array_to_html_params(
+			array(
+				'id'                => 'frm_section_' . $args['parent_field']['id'] . '-' . $args['i'],
+				'class'             => $section_classes,
+				'data-column-count' => $count,
+				'data-link-format'  => ! empty( $end['format'] ) ? $end['format'] : 'icon',
+			),
+			true
+		);
+		echo '>' . "\n";
 
 		self::add_hidden_repeat_row_id( $args );
 		self::add_default_item_meta_field( $args );
@@ -883,7 +893,7 @@ class FrmProNestedFormsController {
 			}
 
 			if ( $field_class ) {
-				if ( 1 == $field_num ) {
+				if ( 1 === $field_num ) {
 					$subfield['classes'] .= ' frm_first';
 				}
 				self::add_class_to_field( $field_class, 'field', $subfield['classes'] );
@@ -1052,15 +1062,20 @@ class FrmProNestedFormsController {
 	 *
 	 * @param array $args
 	 *
-	 * @return mixed|void
+	 * @return array|false
 	 */
 	private static function get_end_repeat_field( $args ) {
-		$query       = array(
+		$query     = array(
 			'fi.form_id'    => $args['parent_field']['form_id'],
 			'type'          => 'end_divider',
 			'field_order >' => $args['parent_field']['field_order'] + 1,
 		);
-		$end_field   = FrmField::getAll( $query, 'field_order', 1 );
+		$end_field = FrmField::getAll( $query, 'field_order', 1 );
+
+		if ( ! $end_field ) {
+			return false;
+		}
+
 		$field_array = FrmProFieldsHelper::initialize_array_field( $end_field );
 
 		foreach ( array( 'format', 'add_label', 'remove_label', 'classes' ) as $o ) {
@@ -1086,7 +1101,7 @@ class FrmProNestedFormsController {
 		$defaults = array(
 			'add_icon'                => '',
 			'remove_icon'             => '',
-			'add_label'               => __( 'Add', 'formidable-pro' ),
+			'add_label'               => __( 'Add', 'formidable' ),
 			'remove_label'            => __( 'Remove', 'formidable' ),
 			'passes_repeat_min_check' => true,
 			'repeat_min'              => '',
@@ -1154,5 +1169,31 @@ class FrmProNestedFormsController {
 		$triggers .= '<a href="#" class="frm_remove_form_row' . esc_attr( $args['remove_classes'] ) . '" data-key="' . esc_attr( $args['i'] ) . '" data-parent="' . esc_attr( $args['parent_field']['id'] ) . '" aria-label="' . esc_attr( $defaults['remove_label'] ) . '">' . $args['remove_icon'] . $args['remove_label'] . '</a> ';
 
 		return $triggers . '</div>';
+	}
+
+	/**
+	 * Gets IDs of the forms that contain the embedded form.
+	 *
+	 * @since 6.32
+	 *
+	 * @param int $embedded_form_id The ID of the embedded form.
+	 *
+	 * @return array
+	 */
+	public static function get_forms_contain_embedded_form( $embedded_form_id ) {
+		$like_value = sprintf(
+			's:11:"form_select";s:%1$d:"%2$d";',
+			strlen( (string) $embedded_form_id ),
+			$embedded_form_id
+		);
+
+		return FrmDb::get_col(
+			'frm_fields',
+			array(
+				'type'               => 'form',
+				'field_options LIKE' => $like_value,
+			),
+			'form_id'
+		);
 	}
 }

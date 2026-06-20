@@ -296,6 +296,11 @@ class FrmProFormActionsController {
 		 */
 		$exclude_fields = apply_filters( 'frm_action_logic_exclude_fields', $exclude_fields, compact( 'form_id', 'type' ) );
 
+		// Backwards compatibility "@since 6.31".
+		$showlast = FrmProAppHelper::lite_supports_form_actions_refresh()
+			? '#frm_logic_' . $key
+			: '#logic_link_' . $key;
+
 		FrmProFormsController::include_logic_row(
 			array(
 				'form_id'        => $form_id,
@@ -304,7 +309,7 @@ class FrmProFormActionsController {
 				'key'            => $key,
 				'name'           => 'frm_' . $type . '_action[' . $key . '][post_content][conditions][' . $meta_name . ']',
 				'hidelast'       => '#frm_logic_rows_' . $key,
-				'showlast'       => '#logic_link_' . $key,
+				'showlast'       => $showlast,
 				'exclude_fields' => $exclude_fields,
 			)
 		);
@@ -747,34 +752,31 @@ class FrmProFormActionsController {
 			return;
 		}
 
-		$data = FrmAddonsController::install_link( 'pdfs' );
+		$data   = FrmAddonsController::install_link( 'pdfs' );
+		$params = array(
+			'id'            => 'frm_attach_pdf_setting',
+			'class'         => 'frm-h-stack-xs frm-my-md',
+			'data-upgrade'  => __( 'Forms to PDF', 'formidable' ),
+			'data-oneclick' => json_encode( $data ),
+		);
 		?>
-		<div
-			id="frm_attach_pdf_setting"
-			style="margin-top: 15px;"
-			data-upgrade="<?php esc_attr_e( 'Forms to PDF', 'formidable' ); ?>"
-			data-oneclick="<?php echo esc_attr( wp_json_encode( $data ) ); ?>"
-		>
+		<div <?php FrmAppHelper::array_to_html_params( $params, true ); ?>>
 			<?php
-			FrmProHtmlHelper::admin_toggle(
+			FrmHtmlHelper::toggle(
 				'frm_attach_pdf',
 				'frm_attach_pdf',
 				array(
 					'div_class' => 'with_frm_style frm_toggle',
 					'checked'   => false,
 					'echo'      => true,
+					'disabled'  => true,
 				)
 			);
 			?>
-			<label id="frm_attach_pdf_label" for="frm_attach_pdf">
+			<label id="frm_attach_pdf_label" for="frm_attach_pdf" class="frm_noallow">
 				<?php esc_html_e( 'Attach PDF of entry to email', 'formidable-pro' ); ?>
 			</label>
 		</div>
-		<style>
-			#frm_attach_pdf_setting label {
-				color: var(--grey);
-			}
-		</style>
 		<?php
 	}
 
@@ -791,13 +793,13 @@ class FrmProFormActionsController {
 		$data = FrmAddonsController::install_link( 'acf' );
 		?>
 		<div
+			class="frm-h-stack-xs frm-bt-200 frm-py-md"
 			id="frm_acf_setting"
-			style="margin-top: 15px;"
 			data-upgrade="<?php esc_attr_e( 'ACF integration', 'formidable-pro' ); ?>"
 			data-oneclick="<?php echo esc_attr( wp_json_encode( $data ) ); ?>"
 		>
 			<?php
-			FrmProHtmlHelper::admin_toggle(
+			FrmHtmlHelper::toggle(
 				'frm_acf',
 				'frm_acf',
 				array(
@@ -807,7 +809,7 @@ class FrmProFormActionsController {
 				)
 			);
 			?>
-			<label id="frm_acf_label" for="frm_acf" style="color: var(--grey);">
+			<label id="frm_acf_label" for="frm_acf">
 				<?php esc_html_e( 'Map form fields to Advanced Custom Fields', 'formidable-pro' ); ?>
 			</label>
 		</div>

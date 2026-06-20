@@ -41,6 +41,7 @@ DEFAULT_HTML;
 		$settings['format']         = false;
 		$settings['autopopulate']   = false;
 		$settings['max']            = false;
+		$settings['autocomplete']   = false;
 
 		FrmProFieldsHelper::fill_default_field_display( $settings );
 		return $settings;

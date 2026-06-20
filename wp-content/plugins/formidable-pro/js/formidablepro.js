@@ -13,6 +13,7 @@ function frmProFormJS() {
 	const lookupQueues = {};
 	let hiddenSubmitButtons = [];
 	let pendingDynamicFieldAjax = [];
+	const frmMaskInstances = new Map();
 	const pendingLookupFieldAjax = [];
 	let listWrappersOriginal = {};
 	const intlPhoneInputs = {};
@@ -93,7 +94,7 @@ function frmProFormJS() {
 	 */
 	function maybeAddEmptyHiddenInputsForCheckboxes( form ) {
 		form.querySelectorAll( '.frm_opt_container' ).forEach(
-			function( optContainer ) {
+			( optContainer ) => {
 				var checkboxes, hiddenInput;
 				checkboxes = optContainer.querySelectorAll( 'input[type="checkbox"]' );
 				if ( checkboxes.length && ! jQuery( checkboxes ).filter( ':checked' ).length ) {
@@ -107,7 +108,7 @@ function frmProFormJS() {
 	}
 
 	function resetTinyMceOnDraftSave() {
-		jQuery( document ).one( 'frmFormComplete', function() {
+		jQuery( document ).one( 'frmFormComplete', () => {
 			jQuery( '.wp-editor-area' ).each( function() {
 				reInitializeRichText( this.id );
 			});
@@ -121,7 +122,7 @@ function frmProFormJS() {
 				removeIds.push( this.id );
 			}
 		);
-		jQuery( document ).one( 'frmPageChanged', function() {
+		jQuery( document ).one( 'frmPageChanged', () => {
 			var removeIndex, removeId;
 			// Remove tinymce from RTE fields on page update so they can initialize properly when the page becomes active again
 			for ( removeIndex = 0; removeIndex < removeIds.length; ++removeIndex ) {
@@ -136,10 +137,10 @@ function frmProFormJS() {
 		var $toggleContainer, togglingOn;
 
 		if ( e.key !== undefined ) {
-			if ( e.key !== ' ' ) {
+			if ( e.key !== ' ' && e.key !== 'Enter' ) {
 				return;
 			}
-		} else if ( e.keyCode !== undefined && e.keyCode !== 32 ) {
+		} else if ( e.keyCode !== undefined && e.keyCode !== 32 && e.keyCode !== 13 ) {
 			return;
 		}
 
@@ -352,19 +353,19 @@ function frmProFormJS() {
 			monthSelectorType: 'true' === settings.options.changeMonth ? 'dropdown' : 'static',
 			changeYear: settings.options.changeYear,
 			closeOnSelect: true,
-			showMonths: showMonths,
+			showMonths,
 			locale: {
 				...flatpickr.l10ns[ settings.locale || settings.options.locale ],
 				firstDayOfWeek: firstDay,
 			},
-			mode: mode,
+			mode,
 			disable: [
 				function( date ) {
 					return settings.formidable_dates && settings.formidable_dates.daysEnabled && -1 === settings.formidable_dates.daysEnabled.indexOf( date.getDay() );
 				},
 				...( disabledDates ? disabledDates : [] )
 			],
-			onReady: function( selectedDates, dateStr, instance ) {
+			onReady( selectedDates, dateStr, instance ) {
 				setTimeout( () => frmDatepickerPro.setDefaultRangeValue( instance.element ) );
 				if ( instance.config.inline ) {
 					instance.calendarContainer.classList.add( 'frm-datepicker', 'with_frm_style', 'frm_date_inline' );
@@ -385,7 +386,7 @@ function frmProFormJS() {
 				this.updateRangeFieldsOnChange( mode, instance, dateStr, selectedDates );
 
 			},
-			onOpen: function( selectedDates, dateStr, instance ) {
+			onOpen( selectedDates, dateStr, instance ) {
 				frmDatepickerPro.callbacks.onOpen( selectedDates, dateStr, instance );
 			},
 			onClose: frmDatepickerPro.callbacks.onClose,
@@ -514,7 +515,7 @@ function frmProFormJS() {
 			}
 			prevArrow.setAttribute( 'tabindex', '0' );
 			prevArrow.setAttribute( 'role', 'button' );
-			prevArrow.addEventListener( 'keydown', function( event ) {
+			prevArrow.addEventListener( 'keydown', ( event ) => {
 				if ( event.key === 'Enter' ) {
 					prevArrow.click();
 				}
@@ -535,7 +536,7 @@ function frmProFormJS() {
 			}
 			nextArrow.setAttribute( 'tabindex', '0' );
 			nextArrow.setAttribute( 'role', 'button' );
-			nextArrow.addEventListener( 'keydown', function( event ) {
+			nextArrow.addEventListener( 'keydown', ( event ) => {
 				if ( event.key === 'Enter' ) {
 					nextArrow.click();
 				}
@@ -741,7 +742,7 @@ function frmProFormJS() {
 		form = field.closest( 'form' );
 		uploadField = uploadFields[ i ];
 
-		field.dropzone({
+		const dropzoneConfig = {
 			url: getAjaxUrl( form.get( 0 ) ),
 			headers: {
 				'Frm-Dropzone': 1
@@ -772,33 +773,11 @@ function frmProFormJS() {
 			timeout: uploadField.timeout,
 			previewTemplate: filePreviewHTML( uploadField ),
 			acceptedFiles: uploadField.acceptedFiles,
-			/**
-			 * Fixes Chrome Android bug where cloud storage files (Google Drive, etc.) fail to upload.
-			 *
-			 * @see https://bugs.chromium.org/p/chromium/issues/detail?id=1063576
-			 */
-			transformFile: ( file, done ) => {
-				// Skip if not Android Chrome where this bug occurs.
-				if ( ! /Android/i.test( navigator.userAgent ) || ! /Chrome/i.test( navigator.userAgent ) ) {
-					done( file );
-					return;
-				}
-
-				const reader = new FileReader();
-				reader.onload = () => {
-					const blob = new Blob( [ reader.result ], { type: file.type } );
-					blob.name = file.name;
-					blob.lastModified = file.lastModified;
-					done( blob );
-				};
-				reader.onerror = () => done( file );
-				reader.readAsArrayBuffer( file );
-			},
-			fallback: function() {
+			fallback() {
 				// Force ajax submit to turn off
 				jQuery( this.element ).closest( 'form' ).removeClass( 'frm_ajax_submit' );
 			},
-			init: function() {
+			init() {
 				var hidden, mockFileIndex, mockFileData, mockFile;
 
 				hidden = field.parent().find( '.dz-hidden-input' );
@@ -859,14 +838,14 @@ function frmProFormJS() {
 					clearErrorsOnUpload( file.previewElement );
 				});
 
-				this.on( 'successmultiple', function( files, response ) {
+				this.on( 'successmultiple', ( files, response ) => {
 					var mediaIDs = JSON.parse( response );
 					for ( var m = 0; m < files.length; m++ ) {
 						jQuery( files[ m ].previewElement ).append( getHiddenUploadHTML( uploadFields[ i ], mediaIDs[ m ], fieldName ) );
 					}
 				});
 
-				this.on( 'complete', function( file ) {
+				this.on( 'complete', ( file ) => {
 					var fileName, node, img, thumbnail;
 
 					processesRunning--;
@@ -905,7 +884,7 @@ function frmProFormJS() {
 					}
 				});
 
-				this.on( 'addedfile', function( file ) {
+				this.on( 'addedfile', ( file ) => {
 					var ext, thumbnail;
 					ext = file.name.split( '.' ).pop();
 					thumbnail = maybeGetExtensionThumbnail( ext );
@@ -924,7 +903,7 @@ function frmProFormJS() {
 
 					container.classList.remove( 'frm_blank_field', 'has-error' );
 					container.querySelectorAll( '.form-field .frm_error, .frm_error_style' ).forEach(
-						function( error ) {
+						( error ) => {
 							if ( error.parentNode ) {
 								error.parentNode.removeChild( error );
 							}
@@ -973,7 +952,7 @@ function frmProFormJS() {
 					}
 				}
 			},
-			accept: function( file, done ) {
+			accept( file, done ) {
 				var message = this.options.dictFileTooSmall.replace( '{{minFilesize}}', this.options.minFilesize );
 				file.rejectSize = function() {
 					done( message );
@@ -981,7 +960,49 @@ function frmProFormJS() {
 
 				return done();
 			}
-		});
+		};
+
+		/**
+		 * Fixes Chrome Android bug where cloud storage files (Google Drive, etc.) fail to upload.
+		 *
+		 * @see https://bugs.chromium.org/p/chromium/issues/detail?id=1063576
+		 */
+		if ( /Android/i.test( navigator.userAgent ) && /Chrome/i.test( navigator.userAgent ) ) {
+			/**
+			 * Transforms a file before Dropzone uploads it on Android Chrome.
+			 *
+			 * @param {File}     file The file selected by the user.
+			 * @param {Function} done Callback invoked with the file or Blob to upload.
+			 * @returns {void}
+			 */
+			dropzoneConfig.transformFile = function( file, done ) {
+				/**
+				 * Forwards the file through Dropzone's resize when configured for images.
+				 *
+				 * @param {File|Blob} fileToUpload The file or in-memory Blob ready to upload.
+				 * @returns {void}
+				 */
+				const maybeResize = ( fileToUpload ) => {
+					if ( ( this.options.resizeWidth || this.options.resizeHeight ) && fileToUpload.type && fileToUpload.type.match( /image.*/ ) ) {
+						this.resizeImage( fileToUpload, this.options.resizeWidth, this.options.resizeHeight, this.options.resizeMethod, done );
+						return;
+					}
+					done( fileToUpload );
+				};
+
+				const reader = new FileReader();
+				reader.onload = () => {
+					const blob = new Blob( [ reader.result ], { type: file.type } );
+					blob.name = file.name;
+					blob.lastModified = file.lastModified;
+					maybeResize( blob );
+				};
+				reader.onerror = () => maybeResize( file );
+				reader.readAsArrayBuffer( file );
+			};
+		}
+
+		field.dropzone( dropzoneConfig );
 	}
 
 	/**
@@ -1022,6 +1043,9 @@ function frmProFormJS() {
 						}
 					}
 				);
+
+				// Store the mask instance for later access
+				frmMaskInstances.set( input, mask );
 
 				input.addEventListener( 'change', () => mask.updateValue() );
 
@@ -1398,10 +1422,10 @@ function frmProFormJS() {
 				form,
 				{
 					action: 'frm_fields_ajax_get_data_arr',
-					postData: postData
+					postData
 				},
 				ajaxHandler,
-				function( response ) {
+				( response ) => {
 					console.error( response );
 				},
 				{
@@ -1682,7 +1706,7 @@ function frmProFormJS() {
 		nameValues = [];
 
 		inputs.forEach(
-			function( input ) {
+			( input ) => {
 				nameValues.push( input.value );
 			}
 		);
@@ -2046,25 +2070,25 @@ function frmProFormJS() {
 		}
 
 		theOperators = {
-			'==': function( c, d ) {
+			'=='( c, d ) {
 				return c === d;
 			},
-			'!=': function( c, d ) {
+			'!='( c, d ) {
 				return c !== d;
 			},
-			'<': function( c, d ) {
+			'<'( c, d ) {
 				return c > d;
 			},
-			'<=': function( c, d ) {
+			'<='( c, d ) {
 				return c >= d;
 			},
-			'>': function( c, d ) {
+			'>'( c, d ) {
 				return c < d;
 			},
-			'>=': function( c, d ) {
+			'>='( c, d ) {
 				return c <= d;
 			},
-			'LIKE': function( c, d ) {
+			'LIKE'( c, d ) {
 				if ( ! d ) {
 					/* If no value, then assume no match */
 					return false;
@@ -2075,7 +2099,7 @@ function frmProFormJS() {
 
 				return d.includes(c);
 			},
-			'not LIKE': function( c, d ) {
+			'not LIKE'( c, d ) {
 				if ( ! d ) {
 					/* If no value, then assume no match */
 					return true;
@@ -2087,7 +2111,7 @@ function frmProFormJS() {
 				return !d.includes(c);
 			},
 			// Starts with
-			'LIKE%': function( c, d ) {
+			'LIKE%'( c, d ) {
 				if ( ! d ) {
 					/* If no value, then assume no match */
 					return false;
@@ -2104,7 +2128,7 @@ function frmProFormJS() {
 				return d.substr( 0, c.length ) === c;
 			},
 			// Ends with
-			'%LIKE': function( c, d ) {
+			'%LIKE'( c, d ) {
 				if ( ! d ) {
 					/* If no value, then assume no match */
 					return false;
@@ -2345,7 +2369,7 @@ function frmProFormJS() {
 	 * @param depFieldArgs
 	 */
 	function removeSubmitButtonFromHiddenList( depFieldArgs ) {
-		hiddenSubmitButtons = hiddenSubmitButtons.filter( function( button ) {
+		hiddenSubmitButtons = hiddenSubmitButtons.filter( ( button ) => {
 			return button !== depFieldArgs.formKey;
 		});
 	}
@@ -3140,7 +3164,8 @@ function frmProFormJS() {
 							maybeRemoveHiddenPlaceholder( input );
 						}
 
-						input.slim.setSelected( defaultValue );
+						// Convert numbers to strings so SlimSelect matches properly.
+						input.slim.setSelected( `${ defaultValue }` );
 					} else if ( input.classList.contains( 'frm_chzn' ) ) {
 						if ( '' === defaultValue ) {
 							maybeRemoveHiddenPlaceholder( input );
@@ -3237,7 +3262,7 @@ function frmProFormJS() {
 		if ( typeof defaultValue === 'object' ) {
 			// Convert the object to an array.
 			defaultValue = Object.keys( defaultValue ).map(
-				function( key ) {
+				( key ) => {
 					return defaultValue[ key ];
 				}
 			);
@@ -3285,7 +3310,7 @@ function frmProFormJS() {
 		if ( typeof defaultValue === 'object' ) {
 			// Convert the object to an array.
 			defaultValue = Object.keys( defaultValue ).map(
-				function( key ) {
+				( key ) => {
 					return defaultValue[ key ];
 				}
 			);
@@ -3427,7 +3452,7 @@ function frmProFormJS() {
 			const currentBatch = unprocessedPendingLookups.slice( start, end );
 
 			currentBatch.forEach(
-				function( pendingLookup ) {
+				( pendingLookup ) => {
 					pendingLookup.pending = false;
 					allFormIds.push( pendingLookup.childFieldArgs.formId );
 				}
@@ -3440,7 +3465,7 @@ function frmProFormJS() {
 					postData: currentBatch.map( pendingLookup => pendingLookup.childFieldArgs ),
 					nonce: frm_js.nonce
 				},
-				function( newOptionsByFieldId ) {
+				( newOptionsByFieldId ) => {
 					allFormIds.forEach( enableFormAfterLookup );
 
 					Object.entries( newOptionsByFieldId ).forEach( entry => {
@@ -3700,7 +3725,7 @@ function frmProFormJS() {
 
 			getLookupValues(
 				childFieldArgs,
-				function( newOptions, optionLabels ) {
+				( newOptions, optionLabels ) => {
 					replaceSelectLookupFieldOptions( childFieldArgs, childSelect, newOptions, optionLabels );
 					triggerLookupOptionsLoaded( jQuery( childDiv ) );
 					enableFormAfterLookup( childFieldArgs.formId );
@@ -3847,12 +3872,12 @@ function frmProFormJS() {
 		}
 
 		// Reset all options to unselected
-		Array.from( element.options ).forEach( function( option ) {
+		Array.from( element.options ).forEach( ( option ) => {
 			option.selected = false;
 		});
 
 		// Set selected attribute for the specified values
-		values.forEach( function( value ) {
+		values.forEach( ( value ) => {
 			option = element.querySelector( 'option[value="' + value + '"]' );
 			if ( option ) {
 				option.selected = true;
@@ -4062,7 +4087,7 @@ function frmProFormJS() {
 				content.innerHTML = '';
 			}
 		} else {
-			getLookupValues( childFieldArgs, function( response, optionLabels ) {
+			getLookupValues( childFieldArgs, ( response, optionLabels ) => {
 				content.innerHTML = optionLabels.length ? optionLabels.join( ', ' ) : response.join( ', ' );
 				inputs[0].value = response;
 
@@ -4220,7 +4245,7 @@ function frmProFormJS() {
 					field_id: childFieldArgs.fieldId,
 					nonce: frm_js.nonce
 				},
-				function( newValue ) {
+				( newValue ) => {
 					if ( ! isChildInputConditionallyHidden( childInput, childFieldArgs.formId ) && childInput.value != newValue ) {
 						insertValueInFieldWatchingLookup( childFieldArgs.fieldKey, childInput, newValue );
 					}
@@ -4263,7 +4288,7 @@ function frmProFormJS() {
 			lookupQueues[ elementId ] = [];
 		}
 
-		lookupQueues[ elementId ].push({ childFieldArgs: childFieldArgs, childInput: childInput });
+		lookupQueues[ elementId ].push({ childFieldArgs, childInput });
 	}
 
 	/**
@@ -4415,7 +4440,7 @@ function frmProFormJS() {
 			formId: depFieldArgs.formId,
 			containerId: depFieldArgs.containerId,
 			repeatRow: depFieldArgs.repeatRow,
-			dataLogic: dataLogic,
+			dataLogic,
 			children: '',
 			inputType: depFieldArgs.inputType
 		};
@@ -4444,8 +4469,8 @@ function frmProFormJS() {
 
 		pendingDynamicFieldAjax.push({
 			args: {
-				depFieldArgs: depFieldArgs,
-				onCurrentPage: onCurrentPage
+				depFieldArgs,
+				onCurrentPage
 			},
 			data: {
 				entry_id: depFieldArgs.dataLogic.actualValue,
@@ -4489,7 +4514,7 @@ function frmProFormJS() {
 				prev_val: prevValue,
 				nonce: frm_js.nonce
 			},
-			function( html ) {
+			( html ) => {
 				var $optContainer = $fieldDiv.find( '.frm_opt_container, .frm_data_container' );
 				$optContainer.html( html );
 				var $dynamicFieldInputs = $optContainer.find( 'select, input[type="checkbox"], input[type="radio"]' );
@@ -4715,7 +4740,7 @@ function frmProFormJS() {
 				return [];
 			}
 
-			formContainer = closest( fieldContainer, function( el ) {
+			formContainer = closest( fieldContainer, ( el ) => {
 				return el.tagName === 'FORM';
 			});
 
@@ -4943,12 +4968,93 @@ function frmProFormJS() {
 		return form.find( fieldKey );
 	}
 
+	/**
+	 * Set value on a field, properly handling IMask instances.
+	 * IMask handles formatting (leading zeros, fixed literals, etc.) natively
+	 * when value is set through the mask instance.
+	 *
+	 * @since 6.23
+	 *
+	 * @param {jQuery} field The field element
+	 * @param {string|number} value The value to set
+	 * @returns {void}
+	 */
+	function setFieldValueWithMask( field, value ) {
+		const fieldElement = field.get( 0 );
+
+		if ( fieldElement && frmMaskInstances.has( fieldElement ) ) {
+			const padded = padValueForMask( String( value ), fieldElement.dataset.frmmask || '' );
+			frmMaskInstances.get( fieldElement ).value = padded;
+		} else {
+			field.val( value );
+		}
+	}
+
+	/**
+	 * Pad a numeric value so it fills all digit slots in a mask pattern.
+	 * IMask processes characters left-to-right and cannot pad on its own,
+	 * so e.g. value "5" with mask "00.00" needs to become "05.00".
+	 *
+	 * Non-numeric values or masks without digit slots are returned as-is.
+	 *
+	 * @since 6.23
+	 *
+	 * @param {string} value The string value to pad.
+	 * @param {string} mask  The mask pattern (e.g. "00", "00.00", "P0").
+	 * @returns {string}
+	 */
+	function padValueForMask( value, mask ) {
+		if ( ! mask ) {
+			return value;
+		}
+
+		// Strip non-digit/non-decimal/non-minus characters from the value for counting.
+		const numericValue = value.replace( /[^0-9.\-]/g, '' );
+		if ( '' === numericValue || isNaN( Number( numericValue ) ) ) {
+			return value;
+		}
+
+		// Split the mask into parts around the literal "." if present.
+		const maskParts = mask.split( '.' );
+		const intMask = maskParts[0];
+		const decMask = maskParts.length > 1 ? maskParts.slice( 1 ).join( '.' ) : '';
+
+		// Count only digit-slot characters (0 and 9) in each part.
+		const intSlots = ( intMask.match( /[09]/g ) || [] ).length;
+		const decSlots = ( decMask.match( /[09]/g ) || [] ).length;
+
+		if ( 0 === intSlots && 0 === decSlots ) {
+			return value;
+		}
+
+		// Split the numeric value around the decimal point.
+		const valueParts = numericValue.split( '.' );
+		let intValue = ( valueParts[0] || '0' ).replace( /^-/, '' );
+		const isNegative = numericValue.startsWith( '-' );
+
+		// Pad integer part with leading zeros.
+		if ( intSlots > intValue.length ) {
+			intValue = intValue.padStart( intSlots, '0' );
+		}
+
+		let result = ( isNegative ? '-' : '' ) + intValue;
+
+		// Pad decimal part with trailing zeros.
+		if ( decSlots > 0 ) {
+			let decValue = valueParts[1] || '';
+			decValue = decValue.padEnd( decSlots, '0' ).substring( 0, decSlots );
+			result += '.' + decValue;
+		}
+
+		return result;
+	}
+
 	function doSingleCalculation( allCalcs, fieldKey, vals, triggerField ) {
 		var currency, total, dec, updatedTotal, totalField,
 			thisCalc = allCalcs.calc[ fieldKey ],
 			thisFullCalc = thisCalc.calc,
 			fieldInfo = {
-				triggerField: triggerField,
+				triggerField,
 				inSection: false,
 				thisFieldCall: 'input[id^="field_' + fieldKey + '-"]'
 			};
@@ -5051,17 +5157,18 @@ function frmProFormJS() {
 
 			if ( totalField.parent().is( '.frm_with_box.frm_hidden' ) && 'string' === typeof total ) {
 				updatedTotal = true;
-				totalField.val( total.replace( ',', '.' ) );
+				setFieldValueWithMask( totalField, total.replace( ',', '.' ) );
 			}
 		}
 
 		if ( ! updatedTotal ) {
-			totalField.val( total );
+			// Set value using proper mask handling
+			setFieldValueWithMask( totalField, total );
 		}
 
 		triggerEvent( document, 'frmCalcUpdatedTotal', {
-			totalField: totalField,
-			total: total
+			totalField,
+			total
 		});
 
 		if ( triggerField === null || triggerField === undefined || totalField.attr( 'name' ) != triggerField.attr( 'name' ) ) {
@@ -5182,14 +5289,14 @@ function frmProFormJS() {
 	function replaceShortcodesWithShowOptions( fullCalc, vals, field ) {
 		fullCalc = replaceShowShortcode(
 			fullCalc, vals, field, 'label',
-			function() {
+			() => {
 				return getOptionLabelsFromValues( vals[ field.valKey ], field );
 			}
 		);
 
 		Array.prototype.forEach.call(
 			[ 'first', 'middle', 'last' ],
-			function( nameFieldPart ) {
+			( nameFieldPart ) => {
 				fullCalc = replaceNameShortcode( fullCalc, vals, field, nameFieldPart );
 			}
 		);
@@ -5201,7 +5308,7 @@ function frmProFormJS() {
 		var valueCallback = function() {
 			var match = false;
 			document.querySelectorAll( field.thisFieldCall ).forEach(
-				function( input ) {
+				( input ) => {
 					if ( show === input.id.substr( -show.length ) ) {
 						match = input;
 					}
@@ -5555,7 +5662,7 @@ function frmProFormJS() {
 
 		nameParts = [];
 		document.querySelectorAll( field.thisFieldCall ).forEach(
-			function( input ) {
+			( input ) => {
 				nameParts.push( input.value );
 			}
 		);
@@ -5909,7 +6016,7 @@ function frmProFormJS() {
 			return;
 		}
 
-		Object.values( __FRMCALC.fieldKeys ).forEach( function( key ) {
+		Object.values( __FRMCALC.fieldKeys ).forEach( ( key ) => {
 			jQuery( key + ':not(label):not([type=hidden])' ).each( function() {
 				jQuery( this ).trigger({ type: 'change', selfTriggered: true });
 			});
@@ -5925,7 +6032,7 @@ function frmProFormJS() {
 	}
 
 	function generateSingleGoogleTable( opts, type ) {
-		google.load( 'visualization', '1.0', { packages: [ type ], callback: function() {
+		google.load( 'visualization', '1.0', { packages: [ type ], callback() {
 			compileGoogleTable( opts );
 		} });
 	}
@@ -6051,7 +6158,7 @@ function frmProFormJS() {
 	function addResponsiveGraphListener( graphData ) {
 		window.addEventListener(
 			'resize',
-			function() {
+			() => {
 				generateSingleGoogleGraph( graphData );
 			}
 		);
@@ -6059,7 +6166,7 @@ function frmProFormJS() {
 
 	function generateSingleGoogleGraph( graphData ) {
 		google.charts.load( 'current', { packages: [ graphData.package ] });
-		google.charts.setOnLoadCallback( function() {
+		google.charts.setOnLoadCallback( () => {
 			compileGoogleGraph( graphData );
 		});
 	}
@@ -6121,7 +6228,7 @@ function frmProFormJS() {
 			fields = thisRow.find( 'input, select, textarea, .frm_html_container' ),
 			formId = jQuery( this ).closest( 'form' ).find( 'input[name="form_id"]' ).val();
 
-		thisRow.fadeOut( 'slow', function() {
+		thisRow.fadeOut( 'slow', () => {
 			const repeaterRow = thisRow[0].closest( '.frm_section_heading');
 			if ( repeaterRow.querySelectorAll( '.frm_repeat_sec, .frm_repeat_inline, .frm_repeat_grid' )?.length === 1 ) {
 				repeaterRow.querySelector( '.frm_hidden_container.frm_repeat_buttons.frm_hidden' ).style.display = 'inline-block';
@@ -6226,7 +6333,7 @@ function frmProFormJS() {
 
 	function hideAddButton( sectionID ) {
 		getRepeaterAddButtons( sectionID ).forEach(
-			function( button ) {
+			( button ) => {
 				button.classList.add( 'frm_hide_add_button' );
 			}
 		);
@@ -6234,7 +6341,7 @@ function frmProFormJS() {
 
 	function showAddButton( sectionID ) {
 		getRepeaterAddButtons( sectionID ).forEach(
-			function( button ) {
+			( button ) => {
 				button.classList.remove( 'frm_hide_add_button' );
 			}
 		);
@@ -6246,7 +6353,7 @@ function frmProFormJS() {
 
 	function hideRemoveButtons( sectionID ) {
 		getRepeaterRemoveButtons( sectionID ).forEach(
-			function( button ) {
+			( button ) => {
 				button.classList.add( 'frm_hide_remove_button' );
 			}
 		);
@@ -6254,7 +6361,7 @@ function frmProFormJS() {
 
 	function showRemoveButtons( sectionID ) {
 		getRepeaterRemoveButtons( sectionID ).forEach(
-			function( button ) {
+			( button ) => {
 				button.classList.remove( 'frm_hide_remove_button' );
 			}
 		);
@@ -6300,7 +6407,7 @@ function frmProFormJS() {
 		if ( numberOfSections > 0 ) {
 			lastRowIndex = false;
 			document.querySelectorAll( '.frm_repeat_' + id ).forEach(
-				function( element ) {
+				( element ) => {
 					var strippedId = element.id.replace( 'frm_section_' + id + '-', '' ),
 						parsedId;
 
@@ -6331,8 +6438,8 @@ function frmProFormJS() {
 		data = {
 			action: 'frm_add_form_row',
 			field_id: id,
-			i: i,
-			numberOfSections: numberOfSections,
+			i,
+			numberOfSections,
 			nonce: frm_js.nonce,
 			frm_state: state
 		};
@@ -6531,11 +6638,11 @@ function frmProFormJS() {
 				entry_id: entryId,
 				id: formId,
 				nonce: frm_js.nonce,
-				fields: fields,
+				fields,
 				exclude_fields: excludeFields,
 				start_page: startPage
 			},
-			success: function( html ) {
+			success( html ) {
 				$cont.children( '.frm-loading-img' ).replaceWith( html );
 				$edit.removeClass( 'frm_inplace_edit' ).addClass( 'frm_cancel_edit' );
 				$edit.html( cancel );
@@ -6558,7 +6665,7 @@ function frmProFormJS() {
 
 		Array.prototype.forEach.call(
 			Object.keys( queryParams ),
-			function( queryParamKey ) {
+			( queryParamKey ) => {
 				url += -1 === url.indexOf( '?' ) ? '?' : '&';
 				url += queryParamKey + '=' + queryParams[ queryParamKey ];
 			}
@@ -6657,10 +6764,10 @@ function frmProFormJS() {
 				type: 'POST',
 				url: frm_js.ajax_url,
 				data: { action: 'frm_entries_destroy', entry: entryId, nonce: frm_js.nonce },
-				success: function( html ) {
+				success( html ) {
 					if ( html.replace( /^\s+|\s+$/g, '' ) === 'success' ) {
 						var container = jQuery( document.getElementById( prefix + entryId ) );
-						container.fadeOut( 'slow', function() {
+						container.fadeOut( 'slow', () => {
 							container.remove();
 						});
 						jQuery( document.getElementById( 'frm_delete_' + entryId ) ).fadeOut( 'slow' );
@@ -6854,7 +6961,7 @@ function frmProFormJS() {
 		}
 
 		dropdowns.forEach(
-			function( autocompleteInput ) {
+			( autocompleteInput ) => {
 				var emptyOption, allowDeselect, isMultiSelect, tabindex;
 
 				if ( 'none' === autocompleteInput.style.display || autocompleteInput.classList.contains( 'ss-main' ) || autocompleteInput.classList.contains( 'ss-content' ) ) {
@@ -6886,12 +6993,12 @@ function frmProFormJS() {
 						placeholderText: '',
 						searchText: frm_js.no_results,
 						searchPlaceholder: ' ', // Avoid default "Search" placeholder.
-						allowDeselect: allowDeselect,
+						allowDeselect,
 						closeOnSelect: ! isMultiSelect,
 						keepOrder: true
 					},
 					events: {
-						afterOpen: function() {
+						afterOpen() {
 							// Make some accessibility adjustments to the .ss-content pop up.
 							var ssContent, ssContentSearchInput, ssList, label;
 
@@ -7041,7 +7148,7 @@ function frmProFormJS() {
 			label.addEventListener( 'click', labelListener );
 			function labelListener() {
 				setTimeout(
-					function() {
+					() => {
 						autocompleteInput.slim.open();
 					},
 					0
@@ -7147,7 +7254,7 @@ function frmProFormJS() {
 
 		labels = starGroup.querySelectorAll( '.star-rating-on' );
 		if ( labels && labels.length ) {
-			labels.forEach( function( el ) {
+			labels.forEach( ( el ) => {
 				el.classList.remove( 'star-rating-on' );
 			});
 		}
@@ -7320,7 +7427,7 @@ function frmProFormJS() {
 	}
 
 	function fadeOut( $remove ) {
-		$remove.fadeOut( 'slow', function() {
+		$remove.fadeOut( 'slow', () => {
 			$remove.remove();
 		});
 	}
@@ -7660,8 +7767,18 @@ function frmProFormJS() {
 				currency.decimal_separator = '.';
 			}
 
+			// Round to the currency's decimal precision so floating-point artifacts
+			// like 189.89999999999998 aren't posted as the submitted total value.
+			// Avoid the normalized total as it can use commas as decimal separators.
+			totalField.val( roundTotal( total, currency ) );
+
+			// Make sure '0' is always set as '0.00' to avoid issues where
+			// the value is interpreted as empty instead of zero.
+			if ( '0' === totalField.val() && 2 === currency.decimals ) {
+				totalField.val( '0.00' );
+			}
+
 			total = normalizeTotal( total, currency );
-			totalField.val( total );
 
 			// because of e.g. fields that might be using this field for calculations
 			triggerChange( totalField );
@@ -7681,11 +7798,19 @@ function frmProFormJS() {
 	/**
 	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
 	 *
-	 * @param {number} total The total amount to normalize.
+	 * @param {float|string} total The total amount to normalize.
 	 * @param {Object} currency The currency object containing decimal information.
-	 * @returns {number}
+	 * @returns {string}
 	 */
 	function normalizeTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		total = roundTotal( total, currency );
+
+		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+	}
+
+	function roundTotal( total, currency ) {
 		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
 
 		if ( ! isLargeTotal ) {
@@ -7693,7 +7818,7 @@ function frmProFormJS() {
 			total = decimals > 0 ? Math.round10( total, decimals ) : Math.ceil( total );
 		}
 
-		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+		return total;
 	}
 
 	/**
@@ -8018,7 +8143,7 @@ function frmProFormJS() {
 	 */
 	function setAutoHeightForTextArea() {
 		document.querySelectorAll( '.frm-show-form textarea' ).forEach(
-			function( element ) {
+			( element ) => {
 				var minHeight, callback;
 
 				if ( element.dataset.autoGrow === undefined || element.getAttribute( 'frm-autogrow' ) ) {
@@ -8107,7 +8232,7 @@ function frmProFormJS() {
 			max  = parseInt( messageEl.getAttribute( 'data-max' ) );
 			if ( 'word' === type ) {
 				length = e.target.value.split( /\s+/ ).filter(
-					function( word ) {
+					( word ) => {
 						return word;
 					}
 				).length;
@@ -8188,7 +8313,7 @@ function frmProFormJS() {
 					repeatBtns.querySelector( '.frm_add_form_row' ).click();
 				} else if ( items.length > 1 ) {
 					// Remove all rows except the first one.
-					items.forEach( function( item, index ) {
+					items.forEach( ( item, index ) => {
 						if ( index ) {
 							item.parentElement.removeChild( item );
 						} else {
@@ -8205,7 +8330,7 @@ function frmProFormJS() {
 			clearValueForInputs( inputs, '', true );
 
 			// Remove "disabled" attribute added by limit selections option.
-			inputs.forEach( function( input ) {
+			inputs.forEach( ( input ) => {
 				if ( input.disabled && input.getAttribute( 'data-frmlimit' ) ) {
 					input.removeAttribute( 'disabled' );
 				}
@@ -8241,7 +8366,7 @@ function frmProFormJS() {
 					_ajax_nonce: frm_js.nonce,
 					frm_state: state
 				},
-				function( response ) {
+				( response ) => {
 					var idValueMapping;
 					if ( ! response.success ) {
 						console.warn( response );
@@ -8264,7 +8389,7 @@ function frmProFormJS() {
 
 					triggerCompletedEvent( formId );
 				},
-				function( response ) {
+				( response ) => {
 					console.warn( response );
 				}
 			);
@@ -8281,7 +8406,7 @@ function frmProFormJS() {
 				values = {};
 
 			inputs = formEl.querySelectorAll( '[data-frmval]' );
-			inputs.forEach( function( input ) {
+			inputs.forEach( ( input ) => {
 				values[ input.id ] = input.getAttribute( 'data-frmval' );
 			});
 
@@ -8294,7 +8419,7 @@ function frmProFormJS() {
 		 * @param {Object} idValueMapping Object with keys are input IDs, values are the default values.
 		 */
 		function setDefaultValues( idValueMapping ) {
-			Object.keys( idValueMapping ).forEach( function( id ) {
+			Object.keys( idValueMapping ).forEach( ( id ) => {
 				var input = document.getElementById( id );
 				if ( ! input ) {
 					return;
@@ -8373,7 +8498,7 @@ function frmProFormJS() {
 		}
 
 		function triggerCompletedEvent( formId ) {
-			triggerEvent( document, 'frm_after_start_over', { formId: formId });
+			triggerEvent( document, 'frm_after_start_over', { formId });
 		}
 
 		document.addEventListener( 'click', function( e ) {
@@ -8432,7 +8557,7 @@ function frmProFormJS() {
 
 			hiddenStepsWrapper = showMoreButtonLi.querySelector( '.frm_rootline_hidden_steps' );
 
-			hiddenSteps.forEach( function( hiddenStep ) {
+			hiddenSteps.forEach( ( hiddenStep ) => {
 				hiddenStepsWrapper.append( hiddenStep );
 			});
 
@@ -8537,7 +8662,7 @@ function frmProFormJS() {
 			uptoIndex = hiddenStepsWrapper.children.length;
 		}
 		rootlineTitles = [].slice.call( hiddenStepsWrapper.children, 0, uptoIndex );
-		rootlineTitles.forEach( function( el ) {
+		rootlineTitles.forEach( ( el ) => {
 			rootlineTitle = el.querySelector( '.frm_rootline_title' );
 			if ( rootlineTitle ) {
 				rootlineTitle.className += ' frm_prev_page_title';
@@ -8558,7 +8683,7 @@ function frmProFormJS() {
 	 * Validates form values when submitting form.
 	 */
 	function validateForm() {
-		document.addEventListener( 'frm_get_ajax_form_errors', function( event ) {
+		document.addEventListener( 'frm_get_ajax_form_errors', ( event ) => {
 			if ( ! event.frmData.formEl ) {
 				return;
 			}
@@ -8585,7 +8710,7 @@ function frmProFormJS() {
 		}
 
 		checkboxes = formEl.querySelectorAll( 'input[type="checkbox"][data-frmmin]:checked' );
-		checkboxes.forEach( function( checkbox ) {
+		checkboxes.forEach( ( checkbox ) => {
 			var min, fieldEl, checkedCheckboxes, key;
 
 			min = parseInt( checkbox.dataset.frmmin, 10 );
@@ -8615,7 +8740,7 @@ function frmProFormJS() {
 	}
 
 	function validateFieldValue() {
-		document.addEventListener( 'frm_validate_field_value', function( event ) {
+		document.addEventListener( 'frm_validate_field_value', ( event ) => {
 			if ( 'object' !== typeof event.frmData.field || 'object' !== typeof event.frmData.errors ) {
 				return;
 			}
@@ -8658,7 +8783,7 @@ function frmProFormJS() {
 	function showMoreStepsButtonEvents() {
 		var timeout;
 
-		window.addEventListener( 'resize', function() {
+		window.addEventListener( 'resize', () => {
 			var i, listWrappers, listWrapper, form;
 			listWrappers = document.getElementsByClassName( 'frm_rootline' );
 			for ( i = 0; i < listWrappers.length; i++ ) {
@@ -8673,7 +8798,7 @@ function frmProFormJS() {
 	}
 
 	function handleShowPasswordBtn() {
-		documentOn( 'click', '.frm_show_password_btn', function( event ) {
+		documentOn( 'click', '.frm_show_password_btn', ( event ) => {
 			var input = event.target.closest( '.frm_show_password_wrapper' ).querySelector( 'input' ),
 				button = input.nextElementSibling;
 
@@ -8691,7 +8816,7 @@ function frmProFormJS() {
 	}
 
 	function handleRangeSliders() {
-		document.querySelectorAll( '.frm_range_container' ).forEach( function( rangeContainer ) {
+		document.querySelectorAll( '.frm_range_container' ).forEach( ( rangeContainer ) => {
 			const rangeInput = rangeContainer.querySelector( 'input[type="hidden"]' );
 			if ( ! rangeInput || rangeInput.dataset.isRangeSliderInitialized ) {
 				return;
@@ -8737,12 +8862,12 @@ function frmProFormJS() {
 
 		if ( null !== elementorPopupWrapper ) {
 			// Make dropzone items clickable.
-			elementorPopupWrapper.querySelectorAll( '.frm_dropzone' ).forEach( function( item ) {
+			elementorPopupWrapper.querySelectorAll( '.frm_dropzone' ).forEach( ( item ) => {
 				item.classList.remove( 'dz-clickable' );
 			});
 
 			// Remove field chosen containers.
-			elementorPopupWrapper.querySelectorAll( '.frm_form_field .chosen-container' ).forEach( function( chosenContainer ) {
+			elementorPopupWrapper.querySelectorAll( '.frm_form_field .chosen-container' ).forEach( ( chosenContainer ) => {
 				chosenContainer.remove();
 			});
 		}
@@ -8762,7 +8887,7 @@ function frmProFormJS() {
 		formClasses = [];
 		Array.prototype.forEach.call(
 			formContainer.className.split( ' ' ),
-			function( className ) {
+			( className ) => {
 				var trimmedClassName = className.trim();
 				if ( '' !== trimmedClassName && 'frm_forms' !== trimmedClassName ) {
 					formClasses.push( trimmedClassName );
@@ -8778,7 +8903,7 @@ function frmProFormJS() {
 			return;
 		}
 
-		phoneInputs.forEach( function( phoneInput ) {
+		phoneInputs.forEach( ( phoneInput ) => {
 			const parentContainer = document.createElement( 'div' );
 			parentContainer.classList.add( 'frm_forms', 'with_frm_style' );
 
@@ -8788,7 +8913,7 @@ function frmProFormJS() {
 				initialCountry: 'auto',
 				formatOnDisplay: false,
 				dropdownContainer: parentContainer,
-				geoIpLookup: function( callback ) {
+				geoIpLookup( callback ) {
 					if ( 'function' === typeof window.fetch ) {
 						fetch( 'https://ipapi.co/json' )
 							.then( function( res ) { return res.json(); } )
@@ -8861,7 +8986,7 @@ function frmProFormJS() {
 	 */
 	function maybeUpdateFormsOverflowX() {
 		document.querySelectorAll('.frm-show-form').forEach(
-			function ( slideinForm ) {
+			( slideinForm ) => {
 				slideinForm.style['overflow-x'] = 'visible';
 			}
 		);
@@ -8873,7 +8998,7 @@ function frmProFormJS() {
 	 * @since 6.12
 	 */
 	function initRangeInput( rangeInputs ) {
-		rangeInputs.forEach( function( rangeInput ) {
+		rangeInputs.forEach( ( rangeInput ) => {
 			updateRangeInputBackground( rangeInput );
 			rangeInput.addEventListener( 'input', function() {
 				updateRangeInputBackground( rangeInput );
@@ -8955,7 +9080,8 @@ function frmProFormJS() {
 		 *
 		 * @param {FocusEvent} event Blur event for the field.
 		 */
-		function handleBlur( { target: field } ) {
+		function handleBlur( event ) {
+			const field            = event.target;
 			const previousValue    = field.value;
 			const previousRawValue = field.getAttribute( 'data-raw-value' ) ?? '';
 			const fieldKey         = getFieldKey( field.id, field.name );
@@ -8965,7 +9091,11 @@ function frmProFormJS() {
 			field.value = applyNumberFormatting( userTyped, fieldKey );
 
 			if ( previousValue !== field.value || previousRawValue !== userTyped ) {
-				field.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				if ( event.isTrusted ) {
+					field.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+				} else {
+					jQuery( field ).trigger({ type: 'change', selfTriggered: true });
+				}
 			}
 		}
 
@@ -9185,8 +9315,8 @@ function frmProFormJS() {
 		}
 
 		const values          = rangeInput.value.split( ',' );
-		values[0]             = values[0] || min;
-		values[1]             = values[1] || max;
+		values[0]             ||= min;
+		values[1]             ||= max;
 		const step            = parseFloat( rangeInput.step, 10 );
 		const sliderRange     = max - min;
 		const stepInPercent   = step / sliderRange * 100;
@@ -9250,7 +9380,7 @@ function frmProFormJS() {
 		updateHandlesPositionAndValue();
 
 		// Update track dimensions on resize
-		window.addEventListener( 'resize', function() {
+		window.addEventListener( 'resize', () => {
 			trackWidth = getWidthWithHiddenParent( track );
 		} );
 
@@ -9444,8 +9574,8 @@ function frmProFormJS() {
 			const minRange        = minGap || 0;
 			const sliderRange     = max - min;
 			const values          = rangeInput.value.split( ',' );
-			values[0]             = values[0] || min;
-			values[1]             = values[1] || max;
+			values[0]             ||= min;
+			values[1]             ||= max;
 			const initialMinValue = Math.max( values[0], min );
 			const initialMaxValue = Math.min( Math.max( values[1], initialMinValue + minRange ), max );
 
@@ -9456,7 +9586,7 @@ function frmProFormJS() {
 	}
 
 	return {
-		init: function() {
+		init() {
 			maybeUpdateFormsOverflowX();
 
 			maybeAddIntlTelInput( document.querySelectorAll( '.frm-intl-tel-input' ) );
@@ -9559,15 +9689,15 @@ function frmProFormJS() {
 			jQuery( document ).on( 'input change', 'input[data-frmrange]', handleSliderEvent );
 		},
 
-		savingDraft: function( object ) {
+		savingDraft( object ) {
 			return savingDraftEntry( object );
 		},
 
-		goingToPreviousPage: function( object ) {
+		goingToPreviousPage( object ) {
 			return goingToPrevPage( object );
 		},
 
-		hideOrShowFields: function( ids, event ) {
+		hideOrShowFields( ids, event ) {
 			if ( 'pageLoad' === event ) {
 				clearHideFields();
 			}
@@ -9581,7 +9711,7 @@ function frmProFormJS() {
 			}
 		},
 
-		hidePreviouslyHiddenFields: function() {
+		hidePreviouslyHiddenFields() {
 			var hiddenFields = getAllHiddenFields(),
 				len = hiddenFields.length;
 			for ( var i = 0, l = len; i < l; i++ ) {
@@ -9603,7 +9733,7 @@ function frmProFormJS() {
 			}
 		},
 
-		submitAllowed: function( object ) {
+		submitAllowed( object ) {
 			var formElementId = object.getAttribute( 'id' );
 
 			if ( ! isSubmitButtonOnPage( formElementId + ' .frm_final_submit' ) || goingToPrevPage( object ) || savingDraftEntry( object ) ) {
@@ -9615,7 +9745,7 @@ function frmProFormJS() {
 			return ! isOnPageSubmitButtonHidden( formKey );
 		},
 
-		checkDependentDynamicFields: function( ids ) {
+		checkDependentDynamicFields( ids ) {
 			var len = ids.length,
 				repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = len; i < l; i++ ) {
@@ -9623,7 +9753,7 @@ function frmProFormJS() {
 			}
 		},
 
-		checkDependentLookupFields: function( ids ) {
+		checkDependentLookupFields( ids ) {
 			var fieldId,
 				repeatArgs = { repeatingSection: '', repeatRow: '' };
 			for ( var i = 0, l = ids.length; i < l; i++ ) {
@@ -9632,7 +9762,7 @@ function frmProFormJS() {
 			}
 		},
 
-		loadGoogle: function() {
+		loadGoogle() {
 			var graphs, packages, i;
 
 			if ( typeof google === 'undefined' || ! google || ! google.load ) {
@@ -9652,7 +9782,7 @@ function frmProFormJS() {
 			}
 		},
 
-		removeUsedTimes: function( obj, timeField ) {
+		removeUsedTimes( obj, timeField ) {
 			var $form, form, e, data, success, extraParams;
 
 			$form = jQuery( obj ).parents( 'form' ).first();
@@ -9678,7 +9808,7 @@ function frmProFormJS() {
 				if ( opts.length > 0 ) {
 					for ( var i = 0, l = opts.length; i < l; i++ ) {
 						$timeField.get( 0 ).querySelectorAll( 'option[value="' + opts[ i ] + '"]' ).forEach(
-							function( option ) {
+							( option ) => {
 								option.disabled = true;
 								if ( option.selected ) {
 									option.selected = false;
@@ -9694,7 +9824,7 @@ function frmProFormJS() {
 			postToAjaxUrl( form, data, success, false, extraParams );
 		},
 
-		removeUsedTimesForMultipleDropdown: function( times, timeField ) {
+		removeUsedTimesForMultipleDropdown( times, timeField ) {
 			const self = this;
 
 			self.hDropdown = null;
@@ -9728,12 +9858,12 @@ function frmProFormJS() {
 					return;
 				}
 
-				getTimeDropdownsElements( timeField ).h.addEventListener( 'change', function( event ){
+				getTimeDropdownsElements( timeField ).h.addEventListener( 'change', ( event ) =>{
 					self.disableMinutes( event.target.value );
 				});
-				getTimeDropdownsElements( timeField ).m.addEventListener( 'change', function( event ){
+				getTimeDropdownsElements( timeField ).m.addEventListener( 'change', ( event ) =>{
 				});
-				getTimeDropdownsElements( timeField ).ampm.addEventListener( 'change', function(){
+				getTimeDropdownsElements( timeField ).ampm.addEventListener( 'change', () =>{
 					self.disableHours();
 				});
 
@@ -9794,7 +9924,7 @@ function frmProFormJS() {
 					return;
 				}
 
-				getTimeDropdownsElements( timeField ).h.querySelectorAll( 'option' ).forEach( function( option ) {
+				getTimeDropdownsElements( timeField ).h.querySelectorAll( 'option' ).forEach( ( option ) => {
 					option.disabled = ! self.hourHasEmptySlots( option.value );
 				});
 			};
@@ -9804,7 +9934,7 @@ function frmProFormJS() {
 					return;
 				}
 
-				getTimeDropdownsElements( timeField ).m.querySelectorAll( 'option' ).forEach( function( option ) {
+				getTimeDropdownsElements( timeField ).m.querySelectorAll( 'option' ).forEach( ( option ) => {
 					const timeString = hour + ':' + option.value + ' AM';
 					option.disabled = times.includes( timeString );
 				});
@@ -9814,7 +9944,7 @@ function frmProFormJS() {
 				if ( null === getTimeDropdownsElements( timeField ).ampm ) {
 					return;
 				}
-				getTimeDropdownsElements( timeField ).ampm.querySelectorAll( 'option' ).forEach( function( option ) {
+				getTimeDropdownsElements( timeField ).ampm.querySelectorAll( 'option' ).forEach( ( option ) => {
 					if ( times.includes( option.value ) ) {
 						option.disabled = true;
 					}
@@ -9824,18 +9954,18 @@ function frmProFormJS() {
 			this.init();
 		},
 
-		changeRte: function( editor ) {
-			editor.on( 'change', function() {
+		changeRte( editor ) {
+			editor.on( 'change', () => {
 				var content = editor.getBody().innerHTML;
 				jQuery( '#' + editor.id ).val( content ).trigger( 'change' );
 			});
 		},
 
-		addFormidableClassToDatepicker: function( _, options ) {
+		addFormidableClassToDatepicker( _, options ) {
 			if ( options.dpDiv ) {
 				Array.prototype.forEach.call(
 					getAllFormClasses( options.input.get( 0 ) ),
-					function( formClass ) {
+					( formClass ) => {
 						options.dpDiv.get( 0 ).classList.add( formClass );
 					}
 				);
@@ -9847,7 +9977,7 @@ function frmProFormJS() {
 			return options;
 		},
 
-		removeFormidableClassFromDatepicker: function( _, options ) {
+		removeFormidableClassFromDatepicker( _, options ) {
 			var dpDiv;
 			if ( options.dpDiv ) {
 				dpDiv = options.dpDiv.get( 0 );
@@ -9856,7 +9986,7 @@ function frmProFormJS() {
 
 				// Delay it slightly so it doesn't use styling while it's fading out.
 				setTimeout(
-					function() {
+					() => {
 						if ( dpDiv.hasAttribute( 'is-formidable-datepicker' ) ) {
 							// Avoid removing it the class if the datepicker was immediately opened again.
 							return;
@@ -9876,7 +10006,7 @@ function frmProFormJS() {
 			}
 		},
 
-		isIntlPhoneInput: function( field ) {
+		isIntlPhoneInput( field ) {
 			var pattern = field.getAttribute( 'pattern' );
 			if ( '\\+?\\d{1,4}[\\s\\-]?(?:\\(\\d{1,3}\\)[\\s\\-]?)?\\d{1,4}[\\s\\-]?\\d{1,4}[\\s\\-]?\\d{1,4}$' !== pattern ) {
 				return false;
@@ -9884,7 +10014,7 @@ function frmProFormJS() {
 			return 'undefined' !== typeof intlPhoneInputs && 'undefined' !== typeof intlPhoneInputs[ field.id ];
 		},
 
-		validateIntlPhoneInput: function( field ) {
+		validateIntlPhoneInput( field ) {
 			return intlPhoneInputs[ field.id ].isValidNumber();
 		},
 
@@ -9908,7 +10038,7 @@ var frmProForm = frmProFormJS();
 
 document.addEventListener(
 	'frmMaybeDelayFocus',
-	function( event ) {
+	( event ) => {
 		if ( 'object' !== typeof event.frmData || 'undefined' === typeof event.frmData.input ) {
 			return;
 		}
@@ -9927,7 +10057,7 @@ document.addEventListener(
 	}
 );
 
-jQuery( document ).ready( function() {
+jQuery( document ).ready( () => {
 	frmProForm.init();
 });
 
@@ -9947,10 +10077,10 @@ window.frmUpdateField = function( entryId, fieldId, value, message, num ) {
 			action: 'frm_entries_update_field_ajax',
 			entry_id: entryId,
 			field_id: fieldId,
-			value: value,
+			value,
 			nonce: frm_js.nonce // eslint-disable-line camelcase
 		},
-		success: function() {
+		success() {
 			if ( message.replace( /^\s+|\s+$/g, '' ) === '' ) {
 				jQuery( document.getElementById( 'frm_update_field_' + entryId + '_' + fieldId + '_' + num ) ).fadeOut( 'slow' );
 			} else {

@@ -19,3 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</option>
 	</select>
 </p>
+<p class="frm-conf-box-<?php echo esc_attr( $field['id'] . ( ! empty( $field['conf_field'] ) ? '' : ' frm_hidden' ) ); ?>">
+	<label for="frm_conf_label_<?php echo absint( $field['id'] ); ?>" class="frm-mb-0">
+		<input type="checkbox" id="frm_conf_label_<?php echo absint( $field['id'] ); ?>" class="frm-conf-label-checkbox" value="1" <?php checked( ! empty( $field['conf_label'] ) ); ?> />
+		<input type="hidden" name="field_options[conf_label_<?php echo absint( $field['id'] ); ?>]" value="<?php echo ! empty( $field['conf_label'] ) ? '1' : '0'; ?>" />
+		<?php esc_html_e( 'Show confirmation field label', 'formidable-pro' ); ?>
+	</label>
+</p>

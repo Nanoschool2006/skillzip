@@ -5,10 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <p class="frm_form_field frm6">
 	<label class="frm-h-stack-xs" for="prepend_<?php echo absint( $field['id'] ); ?>">
-		<span><?php esc_html_e( 'Before Input', 'formidable-pro' ); ?></span>
+		<span><?php esc_html_e( 'Before Input', 'formidable' ); ?></span>
 		<?php
 		FrmAppHelper::tooltip_icon(
-			__( 'A value entered here will show directly before the input box in the form.', 'formidable-pro' ),
+			__( 'A value entered here will show directly before the input box in the form.', 'formidable' ),
 			array(
 				'data-placement' => 'right',
 				'class'          => 'frm-flex',
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p class="frm_form_field frm6">
 	<label for="append_<?php echo absint( $field['id'] ); ?>">
-		<?php esc_html_e( 'After Input', 'formidable-pro' ); ?>
+		<?php esc_html_e( 'After Input', 'formidable' ); ?>
 	</label>
 
 	<input type="text" name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['append'] ); ?>" />

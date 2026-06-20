@@ -366,9 +366,7 @@ class FrmProFieldLookup extends FrmFieldType {
 	 * @return array|string
 	 */
 	protected function prepare_display_value( $value, $atts = array() ) {
-		$display_value_type = $this->get_display_value_type( $atts );
-
-		if ( 'label' === $display_value_type && 'label' !== FrmField::get_option( $this->field, 'lookup_saved_value' ) ) {
+		if ( 'label' === $this->get_display_value_type( $atts ) && 'label' !== FrmField::get_option( $this->field, 'lookup_saved_value' ) ) {
 			return $this->display_option_label( $value );
 		}
 

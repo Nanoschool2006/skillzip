@@ -420,12 +420,9 @@ class FrmProEntriesHelper {
 		$child_entries_data = self::get_display_value_child_entries_data( $entry, $field, $atts );
 		$child_entries      = $child_entries_data['child_entries'];
 
-		if ( count( $child_entries ) > $child_entries_data['child_entries_limit'] ) {
-			$truncated = true;
-		}
-
 		// Remove the extra item since we used '$child_entries_limit + 1' when querying db.
 		if ( count( $child_entries ) > $child_entries_data['child_entries_limit'] ) {
+			$truncated = true;
 			array_pop( $child_entries );
 		}
 
@@ -531,7 +528,7 @@ class FrmProEntriesHelper {
 	 * @return string
 	 */
 	private static function maybe_append_ellipses( $val ) {
-		if ( '' === $val || substr( $val, -3 ) === '...' ) {
+		if ( '' === $val || str_ends_with( $val, '...' ) ) {
 			return $val;
 		}
 
@@ -1224,7 +1221,6 @@ class FrmProEntriesHelper {
 			return false;
 		}
 
-		$search_terms = self::explode_search_terms( $s );
 		$spaces       = '';
 		$e_ids        = array();
 		$p_search     = array();
@@ -1239,7 +1235,7 @@ class FrmProEntriesHelper {
 
 		$data_field = FrmProFormsHelper::has_field( 'data', $form_id, false );
 
-		foreach ( $search_terms as $term ) {
+		foreach ( self::explode_search_terms( $s ) as $term ) {
 			$p_search[] = array(
 				$spaces . $wpdb->posts . '.post_title like' => $term,
 				$spaces . $wpdb->posts . '.post_content like' => $term,
@@ -1300,7 +1296,7 @@ class FrmProEntriesHelper {
 		$item_ids_from_posts = ! empty( $p_ids['item_id'] ) ? $p_ids['item_id'] : array();
 
 		if ( $e_ids ) {
-			$p_ids['item_id'] = isset( $p_ids['item_id'] ) ? array_merge( (array) $e_ids, (array) $p_ids['item_id'] ) : $e_ids;
+			$p_ids['item_id'] = isset( $p_ids['item_id'] ) ? array_merge( $e_ids, (array) $p_ids['item_id'] ) : $e_ids;
 		}
 
 		$searchable_form_ids = self::get_searchable_form_ids( $form_id );

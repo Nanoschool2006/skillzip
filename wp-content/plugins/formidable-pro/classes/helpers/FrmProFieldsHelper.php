@@ -237,9 +237,8 @@ class FrmProFieldsHelper {
 	 * @return array
 	 */
 	private static function get_shortcodes_from_string( $string ) {
-		$shortcode_functions = self::get_shortcode_to_functions();
-		$match_shortcodes    = implode( '|', array_keys( $shortcode_functions ) );
-		$match_shortcodes   .= '|user_meta|post_meta|server|auto_id|date|time|age|date_calc|get|if get';
+		$match_shortcodes  = implode( '|', array_keys( self::get_shortcode_to_functions() ) );
+		$match_shortcodes .= '|user_meta|post_meta|server|auto_id|date|time|age|date_calc|get|if get';
 		preg_match_all( '/\[(' . $match_shortcodes . '|get-(.?))\b(.*?)(?:(\/))?\]/s', $string, $matches, PREG_PATTERN_ORDER );
 		return $matches;
 	}
@@ -259,9 +258,7 @@ class FrmProFieldsHelper {
 	 * @return void
 	 */
 	private static function replace_shortcode_in_string( &$value, $args ) {
-		$shortcode_functions = self::get_shortcode_to_functions();
-
-		if ( isset( $shortcode_functions[ $args['shortcode'] ] ) ) {
+		if ( isset( self::get_shortcode_to_functions()[ $args['shortcode'] ] ) ) {
 			$new_value = self::get_shortcode_value_from_function( $args['shortcode'] );
 		} else {
 			$new_value = self::get_other_shortcode_values( $args );
@@ -291,10 +288,8 @@ class FrmProFieldsHelper {
 	 * @param string $shortcode
 	 */
 	private static function get_shortcode_value_from_function( $shortcode ) {
-		$shortcode_functions = self::get_shortcode_to_functions();
-		$shortcode_atts      = self::get_shortcode_function_parameters();
-
-		return call_user_func( $shortcode_functions[ $shortcode ], $shortcode_atts[ $shortcode ] ?? '' );
+		$shortcode_atts = self::get_shortcode_function_parameters();
+        return call_user_func( self::get_shortcode_to_functions()[ $shortcode ], $shortcode_atts[ $shortcode ] ?? '' );
 	}
 
 	/**
@@ -408,6 +403,16 @@ class FrmProFieldsHelper {
 
 		if ( self::adding_a_form_row() ) {
 			return self::get_get_shortcode_result_from_state( $atts['param'] );
+		}
+
+		// During AJAX form submissions, $_GET data is not available.
+		// Fall back to the form state value that was captured during the initial page load.
+		if ( ! isset( $_GET[ $atts['param'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$state_value = self::get_get_shortcode_result_from_state( $atts['param'] );
+
+			if ( '' !== $state_value ) {
+				return $state_value;
+			}
 		}
 
 		$atts['prev_val'] = $args['prev_val'];
@@ -1010,8 +1015,7 @@ class FrmProFieldsHelper {
 			$show_admin_field = FrmAppHelper::is_admin() && current_user_can( 'frm_edit_entries' ) && ! FrmAppHelper::is_admin_page( 'formidable' );
 
 			if ( $show_admin_field && self::field_on_current_page( $field ) ) {
-				$user_ID         = get_current_user_id();
-				$values['value'] = $_POST && isset( $_POST['item_meta'][ $field->id ] ) ? $_POST['item_meta'][ $field->id ] : $user_ID;
+				$values['value'] = $_POST && isset( $_POST['item_meta'][ $field->id ] ) ? $_POST['item_meta'][ $field->id ] : get_current_user_id();
 			}
 		}
 
@@ -1340,7 +1344,7 @@ class FrmProFieldsHelper {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		return array(
-			'align'                     => 'block',
+			'align'                     => '',
 			'form_select'               => '',
 			'enable_conditional_logic'  => '1',
 			'show_hide'                 => 'show',
@@ -1374,6 +1378,8 @@ class FrmProFieldsHelper {
 			'multiple'                  => 0,
 			'autocom'                   => 0,
 			'conf_field'                => '',
+			'conf_label'                => 1,
+			'conf_label_text'           => __( 'Confirm', 'formidable' ) . ' [field_name]',
 			'conf_input'                => '',
 			'conf_desc'                 => '',
 			'conf_msg'                  => __( 'The entered values do not match', 'formidable' ),
@@ -1430,7 +1436,7 @@ class FrmProFieldsHelper {
 		$field['original_type']  = $field['type'];
 		$field['type']           = apply_filters( 'frm_field_type', $field['type'], $field_object, '' );
 		$field['size']           = isset( $field_object->field_options['size'] ) && $field_object->field_options['size'] != '' ? $field_object->field_options['size'] : '';
-		$field['blank']          = $field_object->field_options['blank'];
+		$field['blank']          = $field_object->field_options['blank'] ?? '';
 		$field['default_value']  = $args['default_value'] ?? '';
 		$field['parent_form_id'] = $field_object->form_id;
 
@@ -1652,7 +1658,7 @@ class FrmProFieldsHelper {
 	 * @return string
 	 */
 	private static function get_the_input_type_for_logic_rules( $field, $field_type ) {
-		if ( $field_type === 'data' || $field_type === 'lookup' || $field_type === 'product' ) {
+		if ( in_array( $field_type, array( 'data', 'lookup', 'product' ), true ) ) {
 			$cond_type = $field['data_type'];
 
 			if ( $cond_type === 'single' || $cond_type === 'user_def' ) {
@@ -3075,7 +3081,7 @@ class FrmProFieldsHelper {
 			$html .= self::get_confirmation_field_html( $field, $atts );
 		}
 
-		if ( 'html' === FrmField::get_option( $field, 'type' ) ) {
+		if ( 'html' === FrmField::get_field_type( $field ) ) {
 			if ( str_contains( $html, '[form_name]' ) ) {
 				$html = str_replace( '[form_name]', FrmForm::getName( FrmField::get_option( $field, 'form_id' ) ), $html );
 			}
@@ -3184,6 +3190,12 @@ class FrmProFieldsHelper {
 	 * @return string
 	 */
 	private static function get_confirmation_field_class( $field ) {
+		// Show the confirmation field label when the "Show confirmation field labels" setting is on.
+		// Treat a missing option as on so existing fields show labels by default.
+		if ( ! isset( $field['conf_label'] ) || FrmField::is_option_true( $field, 'conf_label' ) ) {
+			return '';
+		}
+
 		$has_layout = ! empty( $field['classes'] ) && str_contains( $field['classes'], 'frm' );
 
 		if ( $field['conf_field'] === 'inline' || $has_layout ) {
@@ -3195,6 +3207,29 @@ class FrmProFieldsHelper {
 		}
 
 		return $add_class;
+	}
+
+	/**
+	 * Gets the confirmation field label text.
+	 *
+	 * Uses the field's "Confirmation Label Text" setting when set, and falls back to
+	 * the default "Confirm [field_name]". The [field_name] shortcode is replaced with
+	 * the field name.
+	 *
+	 * @since 6.32
+	 *
+	 * @param array $field Field data.
+	 *
+	 * @return string
+	 */
+	public static function get_confirmation_field_label( $field ) {
+		$label = $field['conf_label_text'] ?? __( 'Confirm', 'formidable' ) . ' [field_name]';
+
+		if ( '' === trim( $label ) ) {
+			$label = '&nbsp;';
+		}
+
+		return str_replace( '[field_name]', $field['name'], $label );
 	}
 
 	/**
@@ -3211,7 +3246,7 @@ class FrmProFieldsHelper {
 		$conf_field = $field;
 
 		$conf_field['id']          = 'conf_' . $field['id'];
-		$conf_field['name']        = __( 'Confirm', 'formidable' ) . ' ' . $field['name'];
+		$conf_field['name']        = self::get_confirmation_field_label( $field );
 		$conf_field['description'] = $field['conf_desc'];
 		$conf_field['field_key']   = 'conf_' . $field['field_key'];
 
@@ -4938,7 +4973,7 @@ class FrmProFieldsHelper {
 	public static function set_table_options( $field_options, $columns, $rows ) {
 		if ( is_array( $field_options ) ) {
 			foreach ( $field_options as $opt_key => $opt ) {
-				if ( substr( $opt_key, 0, 3 ) === 'col' || substr( $opt_key, 0, 3 ) === 'row' ) {
+				if ( str_starts_with( $opt_key, 'col' ) || str_starts_with( $opt_key, 'row' ) ) {
 					unset( $field_options[ $opt_key ] );
 				}
 			}
@@ -5303,7 +5338,8 @@ class FrmProFieldsHelper {
 	 * @return void
 	 */
 	public static function show_field_value_selector( $comparison, $selector_field_id, $selector_args ) {
-		$show_dropdown = in_array( $comparison, array( '==', '!=' ), true );
+		$show_dropdown                  = in_array( $comparison, array( '==', '!=' ), true );
+		$selector_args['show_dropdown'] = $show_dropdown;
 
 		if ( ! $show_dropdown ) {
 			/**
@@ -5390,6 +5426,12 @@ class FrmProFieldsHelper {
 	 * @return bool
 	 */
 	public static function should_show_choices_limit_message( $statuses, $field ) {
+		if ( ! $statuses ) {
+			// Option limits are likely not enabled.
+			// And there may not be any options for the field.
+			return false;
+		}
+
 		foreach ( $statuses as $choice_limit_reached ) {
 			if ( ! $choice_limit_reached ) {
 				return false;

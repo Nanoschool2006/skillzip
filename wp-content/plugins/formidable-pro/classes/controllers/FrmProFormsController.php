@@ -13,9 +13,14 @@ class FrmProFormsController {
 		wp_register_style( 'formidable-pro-form-settings', FrmProAppHelper::plugin_url() . '/css/settings/form-settings.css', array(), $version );
 
 		$frm_settings = FrmAppHelper::get_settings();
-		$unread_count = self::get_visible_unread_inbox_count();
+		$screen_base  = sanitize_title( $frm_settings->menu );
 
-		add_filter( 'manage_' . sanitize_title( $frm_settings->menu ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries_columns', 'FrmProEntriesController::manage_columns', 25 );
+		if ( ! is_callable( 'FrmAppController::add_menu_badge' ) ) { // Backwards compatibility "@since 6.32".
+			$unread_count = self::get_visible_unread_inbox_count();
+			$screen_base  = sanitize_title( $frm_settings->menu ) . ( $unread_count ? '-' . $unread_count : '' );
+		}
+
+		add_filter( 'manage_' . $screen_base . '_page_formidable-entries_columns', 'FrmProEntriesController::manage_columns', 25 );
 
 		wp_register_style( 'formidable-dropzone', FrmProAppHelper::plugin_url() . '/css/dropzone.css', array(), $version );
 		wp_register_style( 'formidable-pro-fields', admin_url( 'admin-ajax.php?action=pro_fields_css' ), array(), $version );
@@ -46,6 +51,8 @@ class FrmProFormsController {
 
 		wp_enqueue_style( 'formidable-pro-fields' );
 
+		self::maybe_load_scoped_entry_css( $action );
+
 		$theme_css = FrmStylesController::get_style_val( 'theme_css' );
 
 		if ( $theme_css == -1 ) {
@@ -53,6 +60,55 @@ class FrmProFormsController {
 		}
 
 		wp_enqueue_style( $theme_css, FrmProStylesController::jquery_css_url( $theme_css ), array(), FrmProDb::$plug_version );
+	}
+
+	/**
+	 * On admin entry edit/new pages, disable normal form CSS loading
+	 * and enqueue the CSS with scoped custom CSS to prevent UI bleed.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $action The current frm_action.
+	 *
+	 * @return void
+	 */
+	private static function maybe_load_scoped_entry_css( $action ) {
+		if ( ! in_array( $action, array( 'new', 'edit', 'create', 'update', 'duplicate' ), true ) ) {
+			return;
+		}
+
+		if ( ! is_callable( 'FrmStylesHelper::maybe_scope_custom_css_in_cached_output' ) ) {
+			return;
+		}
+
+		// Also hook to admin_enqueue_scripts for admin context.
+		add_action( 'admin_enqueue_scripts', array( self::class, 'replace_with_scoped_css' ), 100 );
+	}
+
+	/**
+	 * Dequeue formidable and enqueue scoped version.
+	 *
+	 * @since 6.30
+	 *
+	 * @return void
+	 */
+	public static function replace_with_scoped_css() {
+		wp_dequeue_style( 'formidable' );
+		$version = FrmAppHelper::plugin_version();
+		wp_enqueue_style( 'formidable-scoped', admin_url( 'admin-ajax.php?action=frmpro_css&frm_scope_custom_css=1&frm_pro_entry_page=1' ), array(), $version );
+	}
+
+	/**
+	 * Return .frm_form_fields as the scoping selector for entry pages.
+	 *
+	 * @since 6.30
+	 *
+	 * @param string $selector The default selector (.frm_forms).
+	 *
+	 * @return string
+	 */
+	public static function scope_custom_css_selector( $selector ) {
+		return isset( $_GET['frm_pro_entry_page'] ) ? '.frm-fields' : $selector;
 	}
 
 	/**
@@ -1801,21 +1857,29 @@ class FrmProFormsController {
 			return $columns;
 		}
 
-		$keys       = array_keys( $columns );
-		$name_index = array_search( 'name', $keys, true );
-		$key        = 'application';
-		$label      = __( 'Application', 'formidable-pro' );
+		$new_columns = array();
+		$app_key     = 'application';
+		$app_label   = __( 'Application', 'formidable-pro' );
 
-		if ( false === $name_index ) {
-            $columns[ $key ] = $label;
-        } else {
-            // Place application column after name column.
-            $columns = array_slice( $columns, 0, $name_index + 1, true ) +
-                        array( $key => $label ) +
-                        array_slice( $columns, $name_index, null, true );
-        }
+		foreach ( $columns as $key => $label ) {
+			if ( 'created_at' === $key ) {
+				// Add Style column before the Date column.
+				$new_columns['style2'] = __( 'Style', 'formidable' );
+			}
 
-		return $columns;
+			$new_columns[ $key ] = $label;
+
+			if ( 'name' === $key ) {
+				// Place application column after name column.
+				$new_columns[ $app_key ] = $app_label;
+			}
+		}
+
+		if ( ! isset( $new_columns[ $app_key ] ) ) {
+			$new_columns[ $app_key ] = $app_label;
+		}
+
+		return $new_columns;
 	}
 
 	/**
@@ -2010,6 +2074,49 @@ class FrmProFormsController {
 		);
 		return $classes;
 	}
+
+	/**
+	 * Updates form style via AJAX.
+	 *
+	 * @since 6.32
+	 *
+	 * @return void
+	 */
+	public static function ajax_update_form_style() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$form_id  = intval( FrmAppHelper::get_param( 'form_id', 0, 'absint' ) );
+		$style_id = intval( FrmAppHelper::get_param( 'style_id', 0, 'absint' ) );
+
+		if ( ! $form_id || ! $style_id ) {
+			wp_send_json_error( __( 'Empty form ID or style ID.', 'formidable-pro' ) );
+		}
+
+		$form = FrmForm::getOne( $form_id );
+
+		if ( ! $form ) {
+			wp_send_json_error( __( 'Invalid form ID.', 'formidable-pro' ) );
+		}
+
+		// If the style_id matches the actual default style ID, save 1 instead.
+		$default_style = ( new FrmStyle() )->get_default_style();
+
+		if ( $default_style && $style_id === $default_style->ID ) {
+			$style_id = 1;
+		}
+
+		$form->options['custom_style'] = $style_id;
+
+		$result = FrmForm::update( $form_id, array( 'options' => $form->options ) );
+
+		if ( false === $result ) {
+			wp_send_json_error( __( 'Error updating form.', 'formidable-pro' ) );
+		}
+
+		wp_send_json_success();
+	}
+
 	/**
 	 * @deprecated 6.12
 	 */

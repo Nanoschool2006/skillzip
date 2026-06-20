@@ -9,7 +9,7 @@
 	const { tag, div, a, img } = window.frmDom;
 	const { maybeCreateModal, footerButton } = window.frmDom.modal;
 
-	wp.hooks.addAction( 'frm_show_expired_modal', 'formidable', function () {
+	wp.hooks.addAction( 'frm_show_expired_modal', 'formidable', () => {
 		const modal = maybeCreateModal( 'frm_expired_modal', {
 			title: __( "You don't have access to do that", 'formidable-pro' ),
 			content: getExpiredModalContent(),
