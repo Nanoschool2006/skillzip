@@ -282,9 +282,12 @@ function frmFrontFormJS() {
 			maybeAddHttpsToUrl( field );
 		}
 		const form = field.closest( 'form' );
-		if ( form && hasClass( form, 'frm_js_validate' ) ) {
-			validateField( field );
+		if ( ! form ) {
+			return;
 		}
+
+		// Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+		validateField( field, hasClass( form, 'frm_js_validate' ) );
 	}
 
 	/**
@@ -301,11 +304,16 @@ function frmFrontFormJS() {
 	/**
 	 * Validate a field with JS.
 	 *
+	 * Removing stale errors is universal. Adding errors only happens when JS validation is enabled.
+	 *
+	 * @since 6.32 Added the `addErrors` parameter.
+	 *
 	 * @param {HTMLElement} field
+	 * @param {boolean}     addErrors Whether to add new errors. Defaults to `true`.
 	 *
 	 * @return {void}
 	 */
-	function validateField( field ) {
+	function validateField( field, addErrors = true ) {
 		let errors;
 		let key;
 
@@ -325,11 +333,18 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
-		removeFieldError( fieldContainer );
-		if ( Object.keys( errors ).length > 0 ) {
-			for ( key in errors ) {
-				addFieldError( fieldContainer, key, errors );
+		const hasErrors = Object.keys( errors ).length > 0;
+
+		if ( addErrors ) {
+			removeFieldError( fieldContainer );
+			if ( hasErrors ) {
+				for ( key in errors ) {
+					addFieldError( fieldContainer, key, errors );
+				}
 			}
+		} else if ( ! hasErrors ) {
+			// JS validation is off, so only remove existing errors once the field passes validation.
+			removeFieldError( fieldContainer );
 		}
 	}
 
@@ -606,7 +621,7 @@ function frmFrontFormJS() {
 		const strippedFieldID = fieldID.replace( 'conf_', '' );
 		const confirmField = document.getElementById( strippedId.replace( 'field_', 'field_conf_' ) );
 
-		if ( confirmField === null || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
+		if ( ! confirmField || errors[ `conf_${ strippedFieldID }` ] !== undefined ) {
 			return;
 		}
 
@@ -764,7 +779,7 @@ function frmFrontFormJS() {
 
 		if ( response.length === 0 ) {
 			const fieldContainer = recaptcha.closest( '.frm_form_field' );
-			if ( fieldContainer && fieldContainer.id ) {
+			if ( fieldContainer?.id ) {
 				const fieldID = fieldContainer.id.replace( 'frm_field_', '' ).replace( '_container', '' );
 				errors[ fieldID ] = '';
 			}
@@ -883,6 +898,8 @@ function frmFrontFormJS() {
 				}
 			}
 
+			let willRedirect = false;
+
 			if ( response.redirect !== undefined ) {
 				if ( shouldTriggerEvent ) {
 					triggerCustomEvent( object, 'frmSubmitEvent' );
@@ -896,6 +913,8 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
+
+				willRedirect = true;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
@@ -940,7 +959,7 @@ function frmFrontFormJS() {
 					},
 					delay
 				);
-			} else if ( Object.keys( response.errors ).length ) {
+			} else if ( response.errors !== undefined && Object.keys( response.errors ).length ) {
 				// errors were returned
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
@@ -956,10 +975,10 @@ function frmFrontFormJS() {
 
 					if ( $fieldCont.length ) {
 						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
-							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
+							const inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest, formidable/no-jquery-variable-methods
 							if ( inCollapsedSection.length ) {
 								let frmTrigger = inCollapsedSection.prev();
-								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
+								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) { // eslint-disable-line formidable/no-jquery-variable-methods
 									// If the frmTrigger object is the section description, check to see if the previous element is the trigger
 									frmTrigger = frmTrigger.prev( '.frm_trigger' );
 								}
@@ -1007,8 +1026,8 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else {
-				// there may have been a plugin conflict, or the form is not set to submit with ajax
+			} else if ( ! willRedirect ) { // Avoid double submission if redirecting to a page.
+				// There may have been a plugin conflict, or the form is not set to submit with ajax.
 
 				showFileLoading( object );
 
@@ -1140,10 +1159,10 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const input = container.querySelector( 'input, select, textarea' );
-		const id = getErrorElementId( key, input );
+		const inputs = container.querySelectorAll( 'input, select, textarea' );
+		const id = getErrorElementId( key, inputs[ 0 ] );
 
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		let describedBy;
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1156,8 +1175,8 @@ function frmFrontFormJS() {
 				errorHtml = `<div class="frm_error" ${ roleString } id="${ id }">${ jsErrors[ key ] }</div>`;
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
-
-			if ( input ) {
+			inputs.forEach( input => {
+				describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
@@ -1169,10 +1188,10 @@ function frmFrontFormJS() {
 					}
 				}
 				input.setAttribute( 'aria-describedby', describedBy );
-			}
+			} );
 		}
 
-		if ( input ) {
+		inputs.forEach( input => {
 			if ( [ 'radio', 'checkbox' ].includes( input.type ) ) {
 				const group = input.closest( '[role="radiogroup"], [role="group"]' );
 				if ( group ) {
@@ -1181,7 +1200,7 @@ function frmFrontFormJS() {
 			} else {
 				input.setAttribute( 'aria-invalid', 'true' );
 			}
-		}
+		} );
 
 		jQuery( document ).trigger( 'frmAddFieldError', [ jQuery( container ), key, jsErrors ] );
 	}
@@ -1215,9 +1234,7 @@ function frmFrontFormJS() {
 		}
 
 		const errorMessage = container.querySelector( '.frm_error' );
-		const errorId = errorMessage ? errorMessage.id : '';
 		const input = container.querySelector( 'input, select, textarea' );
-		let describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 
 		container.classList.remove( 'frm_blank_field', 'has-error' );
 
@@ -1233,25 +1250,43 @@ function frmFrontFormJS() {
 		}
 
 		if ( errorMessage ) {
+			removeElementFromInputDescribedBy( errorMessage );
 			errorMessage.remove();
 		}
+	}
 
-		if ( input ) {
-			input.removeAttribute( 'aria-describedby' );
-			if ( describedBy ) {
-				describedBy = describedBy.replace( errorId, '' ).trim();
-				if ( describedBy ) {
-					input.setAttribute( 'aria-describedby', describedBy );
-				}
+	/**
+	 * Updates the aria-describedby attribute, removing the target element ID.
+	 *
+	 * @since 6.32
+	 *
+	 * @param {HTMLElement} el The target element that is removed from the aria-describedby data.
+	 * @return {void}
+	 */
+	function removeElementFromInputDescribedBy( el ) {
+		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
+			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+			ariaDescribedBy = ariaDescribedBy.filter( value => {
+				const trimmedValue = value.trim();
+				return trimmedValue && trimmedValue !== el.id;
+			} );
+
+			if ( ariaDescribedBy.length ) {
+				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+				return;
 			}
-		}
+			input.removeAttribute( 'aria-describedby' );
+		} );
 	}
 
 	function removeAllErrors() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( error => error.remove() );
+		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+			removeElementFromInputDescribedBy( el );
+			el.remove();
+		} );
 		document.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
 	}
 
@@ -1277,7 +1312,7 @@ function frmFrontFormJS() {
 	}
 
 	function showLoadingIndicator( $object ) {
-		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class
+		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class, formidable/no-jquery-variable-methods
 			addLoadingClass( $object );
 			$object.trigger( 'frmStartFormLoading' );
 		}
@@ -1286,11 +1321,11 @@ function frmFrontFormJS() {
 	function addLoadingClass( $object ) {
 		const loadingClass = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
-		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class
+		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class, formidable/no-jquery-variable-methods
 	}
 
 	function isGoingToPrevPage( $object ) {
-		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
+		return typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object );
 	}
 
 	function removeSubmitLoading( _, enable, processesRunning ) {
@@ -1311,7 +1346,7 @@ function frmFrontFormJS() {
 
 	function showFileLoading( object ) {
 		const loading = document.getElementById( 'frm_loading' );
-		if ( loading === null ) {
+		if ( ! loading ) {
 			return;
 		}
 
@@ -1342,7 +1377,7 @@ function frmFrontFormJS() {
 	function onHoneypotFieldChange() {
 		/*jshint validthis:true */
 		const css = window.getComputedStyle( this ).boxShadow;
-		if ( css && css.match( /inset/ ) ) {
+		if ( css?.match( /inset/ ) ) {
 			this.remove();
 		}
 	}
@@ -1556,6 +1591,7 @@ function frmFrontFormJS() {
 			}
 
 			checkDropdownLabel();
+			calcProductsTotal();
 		};
 
 		runOnLoad( true );
@@ -1731,6 +1767,429 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Check to make sure the quantity field value is within the min and max values.
+	 *
+	 * @param {HTMLElement} input
+	 * @return {number} The quantity value.
+	 */
+	function checkQuantityFieldMinMax( input ) {
+		if ( '' === input.value ) {
+			// Leave the value if it is empty.
+			return 0;
+		}
+
+		const val = parseFloat( input.value ? input.value.trim() : 0 );
+		if ( isNaN( val ) ) {
+			return 0;
+		}
+
+		let max = input.hasAttribute( 'max' ) ? parseFloat( input.getAttribute( 'max' ) ) : 0;
+		let min = input.hasAttribute( 'min' ) ? parseFloat( input.getAttribute( 'min' ) ) : 0;
+
+		max = isNaN( max ) ? 0 : max;
+		min = isNaN( min ) ? 0 : Math.max( 0, min );
+
+		if ( val < min ) {
+			input.value = min;
+			return min;
+		}
+
+		if ( 0 !== max && val > max ) {
+			input.value = max;
+			return max;
+		}
+
+		return val;
+	}
+
+	function triggerChange( input, fieldKey ) {
+		if ( fieldKey === undefined ) {
+			fieldKey = 'dependent';
+		}
+
+		jQuery( input ).trigger( { type: 'change', selfTriggered: true, frmTriggered: fieldKey } );
+	}
+
+	/**
+	 * Calculates the total price.
+	 *
+	 * @param {Event|undefined} e The event object.
+	 * @return {void}
+	 */
+	function calcProductsTotal( e ) {
+		if ( 'object' === typeof frmProForm ) {
+			// Pro is installed, use the Pro JS.
+			return;
+		}
+
+		if ( typeof __FRMCURR === 'undefined' ) {
+			return;
+		}
+
+		const totalFields = document.querySelectorAll( '[data-frmtotal]' );
+		if ( ! totalFields.length ) {
+			return;
+		}
+
+		const formTotals = [];
+
+		totalFields.forEach( totalField => {
+			let total = 0;
+			const form = totalField.closest( 'form' );
+
+			if ( ! form ) {
+				return;
+			}
+
+			const formId = form.querySelector( 'input[name="form_id"]' ).value;
+			const currency = getCurrency( formId );
+
+			if ( undefined !== formTotals[ formId ] ) {
+				total = formTotals[ formId ];
+			} else {
+				form.querySelectorAll( 'input[data-frmprice],select:has([data-frmprice])' ).forEach( function( input ) {
+					let quantity = 0;
+					let price = 0;
+					const isSingle = 'hidden' === input.type;
+
+					if ( input.tagName === 'SELECT' ) {
+						if ( input.selectedIndex !== -1 ) {
+							price = input.options[ input.selectedIndex ].getAttribute( 'data-frmprice' );
+						}
+					} else {
+						if ( ! isSingle && ! input.matches( ':checked' ) ) {
+							return;
+						}
+						price = input.getAttribute( 'data-frmprice' );
+					}
+
+					if ( ! price ) {
+						price = 0;
+					} else {
+						price = preparePrice( price, currency );
+						quantity = getQuantity( input );
+						price = parseFloat( quantity ) * parseFloat( price );
+					}
+
+					if ( 'true' === input.getAttribute( 'data-frmdiscount' ) ) {
+						price = price * -1;
+					}
+
+					total += price;
+				} );
+
+				formTotals[ formId ] = total;
+			}
+
+			total = isNaN( total ) ? 0 : total;
+
+			// Set a decimal separator for currency if no default for it
+			currency.decimal_separator = currency.decimal_separator.trim(); // first remove unnecessary space(s)
+			if ( ! currency.decimal_separator.length ) {
+				currency.decimal_separator = '.';
+			}
+
+			totalField.value = roundTotal( total, currency );
+			total = normalizeTotal( total, currency );
+
+			// because of e.g. fields that might be using this field for calculations
+			triggerChange( totalField );
+
+			total = formatCurrency( total, currency );
+			const formatted = totalField.previousElementSibling;
+			if ( formatted?.matches( '.frm_total_formatted' ) ) {
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formatted.innerHTML = total;
+				return;
+			}
+
+			const formattedEls = totalField.closest( '.frm_form_field' ).querySelectorAll( '.frm_total_formatted' );
+			formattedEls.forEach( formattedEl => {
+				// Use innerHTML so that currency symbols like Euros can render and not their encoded string value.
+				formattedEl.innerHTML = total;
+			} );
+		} );
+	}
+
+	/**
+	 * Round total and maybe add trailing zeros so formatCurrency has a proper format to work with.
+	 *
+	 * @param {number} total    The total amount to normalize.
+	 * @param {Object} currency The currency object containing decimal information.
+	 * @return {string}         The normalized total amount.
+	 */
+	function normalizeTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		total = roundTotal( total, currency );
+
+		return maybeAddTrailingZeroToPrice( total, currency, isLargeTotal );
+	}
+
+	function roundTotal( total, currency ) {
+		const isLargeTotal = total > Number.MAX_SAFE_INTEGER;
+
+		if ( ! isLargeTotal ) {
+			const { decimals } = currency;
+			total = decimals > 0 ? round10( total, decimals ) : Math.ceil( total );
+		}
+
+		return total;
+	}
+
+	function round10( value, decimals ) {
+		return Number( `${ Math.round( `${ value }e${ decimals }` ) }e-${ decimals }` );
+	}
+
+	/**
+	 * Format a numeric value according to the specified currency format settings.
+	 *
+	 * @param {string} total    The numeric value to format.
+	 * @param {Object} currency The currency formatting configuration.
+	 * @return {string}         The formatted currency string.
+	 */
+	function formatCurrency( total, currency ) {
+		total = maybeAddTrailingZeroToPrice( total, currency );
+		if ( total.length && ( total[ total.length - 1 ] === '.' || total[ total.length - 1 ] === currency.decimal_separator ) ) {
+			total = total.substr( 0, total.length - 1 );
+		}
+
+		total = maybeRemoveTrailingZerosFromPrice( total, currency );
+		total = addThousands( total, currency );
+
+		const leftSymbol = currency.symbol_left ? ( currency.symbol_left + currency.symbol_padding ) : '';
+		const rightSymbol = currency.symbol_right ? ( currency.symbol_padding + currency.symbol_right ) : '';
+
+		return `${ leftSymbol }${ total }${ rightSymbol }`;
+	}
+
+	/**
+	 * Gets currency from form id.
+	 *
+	 * @param {number} formId Form ID.
+	 * @return {Object}       Currency object.
+	 */
+	function getCurrency( formId ) {
+		if ( undefined !== window.__FRMCURR && undefined !== window.__FRMCURR[ formId ] ) {
+			return window.__FRMCURR[ formId ];
+		}
+
+		return {
+			symbol_left: '$',
+			symbol_right: '',
+			symbol_padding: '',
+			thousand_separator: ',',
+			decimal_separator: '.',
+			decimals: 2,
+		};
+	}
+
+	/**
+	 * Gets quantity.
+	 *
+	 * @param {HTMLElement} field The field element.
+	 * @return {number} The quantity.
+	 */
+	function getQuantity( field ) {
+		const fieldID = frmFrontForm.getFieldId( field, false );
+		if ( ! fieldID ) {
+			return 0;
+		}
+
+		const quantityField = getQuantityField( field, fieldID );
+		if ( ! quantityField ) {
+			// If there is no quantity field, assume 1.
+			return 1;
+		}
+
+		return checkQuantityFieldMinMax( quantityField );
+	}
+
+	/**
+	 * Gets quantity field.
+	 *
+	 * @param {HTMLElement} element The element.
+	 * @param {number}      fieldID The field ID.
+	 * @return {HTMLElement|null} The quantity field.
+	 */
+	function getQuantityField( element, fieldID ) {
+		const quantityFields = element.closest( 'form' ).querySelectorAll( '[data-frmproduct]' );
+		if ( ! quantityFields.length ) {
+			return null;
+		}
+
+		fieldID = fieldID.toString();
+
+		return Array.from( quantityFields ).find( element => {
+			let ids;
+
+			ids = JSON.parse( element.getAttribute( 'data-frmproduct' ).trim() );
+			if ( '' === ids ) {
+				return false;
+			}
+
+			// Convert to array if necessary because of existing fields that are already using single product fields.
+			ids = 'string' === typeof ids ? [ ids ] : ids;
+			return ids.includes( fieldID );
+		} );
+	}
+
+	/**
+	 * Prepare a price for calculation.
+	 *
+	 * @param {number|string} price    The price to prepare.
+	 * @param {Object}        currency The currency object containing decimal information.
+	 * @return {string}                The prepared price.
+	 */
+	function preparePrice( price, currency ) {
+		if ( ! price ) {
+			return 0;
+		}
+		price = `${ price }`; // convert to string just to be sure
+
+		const regex = getRegexForPrice( currency );
+
+		const matches = price.match( regex );
+		if ( null === matches ) {
+			return 0;
+		}
+
+		price = matches.length ? matches[ matches.length - 1 ] : 0;
+		price = price.trim();
+
+		// Fix issues with parsing Fr.15.00. The regex catches .15.00.
+		// This checks for the leading decimal and removes it.
+		if ( currency.decimal_separator === '.' && 3 === price.split( '.' ).length && price[ 0 ] === '.' ) {
+			price = price.substr( 1 );
+		}
+
+		if ( price ) {
+			price = maybeUseDecimal( price, currency );
+			price = price.split( currency.thousand_separator ).join( '' ).replace( currency.decimal_separator, '.' );
+		}
+
+		return price;
+	}
+
+	/**
+	 * @param {Object} currency The currency object.
+	 * @return {RegExp} The regular expression object.
+	 */
+	function getRegexForPrice( currency ) {
+		let regexString = '[0-9,.';
+
+		if ( currency.thousand_separator !== '.' && currency.thousand_separator !== ',' ) {
+			regexString += currency.thousand_separator;
+		}
+		if ( currency.decimal_separator !== '.' && currency.decimal_separator !== ',' ) {
+			regexString += currency.decimal_separator;
+		}
+
+		regexString += ']*\\.?\\,?[0-9]+';
+
+		return new RegExp( regexString, 'g' );
+	}
+
+	/**
+	 * Maybe replace the decimal separator with the currency's decimal separator.
+	 *
+	 * @param {string} price    The price string.
+	 * @param {Object} currency The currency object.
+	 * @return {string}         The modified price string.
+	 */
+	function maybeUseDecimal( price, currency ) {
+		let usedForDecimal;
+		let priceParts;
+		if ( '.' === currency.thousand_separator ) {
+			priceParts = price.split( '.' );
+			usedForDecimal = 2 === priceParts.length && 2 === priceParts[ 1 ].length;
+			if ( usedForDecimal ) {
+				price = price.replace( '.', currency.decimal_separator );
+			}
+		}
+		return price;
+	}
+
+	/**
+	 * Add trailing zeros to a price if necessary and replace the decimal separator.
+	 *
+	 * @param {number|string} price         The price to format.
+	 * @param {Object}        currency      The currency object containing the decimal separator.
+	 * @param {boolean}       [force=false] Whether to force processing even if the price is not a number.
+	 * @return {string}                     The formatted price string.
+	 */
+	function maybeAddTrailingZeroToPrice( price, currency, force = false ) {
+		if ( 'number' !== typeof price && ! force ) {
+			return price;
+		}
+
+		price = String( price ); // first convert to string
+		const pos = price.indexOf( '.' );
+
+		if ( pos === -1 ) {
+			price = `${ price }.`;
+
+			for ( let n = 0; n < currency.decimals; ++n ) {
+				price += '0';
+			}
+		} else {
+			const decimalsString = price.substring( pos + 1 );
+			if ( decimalsString.length < currency.decimals ) {
+				if ( decimalsString.length < 2 ) {
+					price += '0';
+				}
+
+				for ( let n = 2; n < currency.decimals; ++n ) {
+					price += '0';
+				}
+			}
+		}
+
+		return price.replace( '.', currency.decimal_separator );
+	}
+
+	/**
+	 * Format a numeric string by adding thousand separators.
+	 *
+	 * @param {string|number} price                      The numeric value to format.
+	 * @param {Object}        options                    Formatting options.
+	 * @param {string}        options.decimal_separator  Character used as decimal separator.
+	 * @param {string}        options.thousand_separator Character used as thousand separator.
+	 *
+	 * @return {string} The price string with thousand separators.
+	 */
+	function addThousands( price, options ) {
+		const split = options.decimal_separator === ''
+			? [ price.toString() ]
+			: price.split( options.decimal_separator );
+
+		if ( options.thousand_separator ) {
+			split[ 0 ] = split[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, options.thousand_separator );
+		}
+
+		return split.join( options.decimal_separator );
+	}
+
+	/**
+	 * Maybe remove trailing zeros from a price string.
+	 *
+	 * @param {string} price    The price string.
+	 * @param {Object} currency The currency data.
+	 *
+	 * @return {string} The price string with trailing zeros removed.
+	 */
+	function maybeRemoveTrailingZerosFromPrice( price, currency ) {
+		const split = price.split( currency.decimal_separator );
+		if ( 2 !== split.length || split[ 1 ].length <= currency.decimals ) {
+			return price;
+		}
+		if ( 0 === currency.decimals ) {
+			return split[ 0 ];
+		}
+		return `${ split[ 0 ] }${ currency.decimal_separator }${ split[ 1 ].substr( 0, currency.decimals ) }`;
+	}
+
 	return {
 		init() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1764,6 +2223,11 @@ function frmFrontFormJS() {
 				'frmPageChanged',
 				destroyhCaptcha
 			);
+
+			jQuery( document ).on( 'frmAfterAddRow frmAfterRemoveRow', calcProductsTotal );
+			jQuery( document ).on( 'change', '[type="checkbox"][data-frmprice],[type="radio"][data-frmprice],[type="hidden"][data-frmprice],select:has([data-frmprice])', calcProductsTotal );
+			jQuery( document ).on( 'keyup change', '[data-frmproduct],[type="text"][data-frmprice]', calcProductsTotal );
+			calcProductsTotal();
 		},
 
 		getFieldId,
@@ -1901,7 +2365,7 @@ function frmFrontFormJS() {
 		 */
 		validateFormSubmit( object ) {
 			const form = object instanceof jQuery ? object.get( 0 ) : object;
-			if ( typeof tinyMCE !== 'undefined' && form && form.querySelector( '.wp-editor-wrap' ) ) {
+			if ( typeof tinyMCE !== 'undefined' && form?.querySelector( '.wp-editor-wrap' ) ) {
 				tinyMCE.triggerSave();
 			}
 
@@ -2107,7 +2571,7 @@ function frmCaptcha( captchaSelector ) {
 		if ( ! formIsVisible ) {
 			// If the form is not visible, try again later in 400ms.
 			// This fixes issues where the form fades visible on page load.
-			// Or whne the form is inside of a modal.
+			// Or when the form is inside of a modal.
 			const interval = setInterval(
 				function() {
 					if ( closestForm && closestForm.offsetParent !== null ) {

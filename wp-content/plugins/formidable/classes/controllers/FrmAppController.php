@@ -82,10 +82,9 @@ class FrmAppController {
 		}
 
 		if ( FrmAppHelper::is_full_screen() ) {
-			$full_screen_on = self::get_full_screen_setting();
-			$add_class      = '';
+			$add_class = '';
 
-			if ( $full_screen_on ) {
+			if ( self::get_full_screen_setting() ) {
 				$add_class = ' frm-full-screen is-fullscreen-mode';
 
 				// Load the CSS for .is-fullscreen-mode.
@@ -375,7 +374,9 @@ class FrmAppController {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			if ( FrmAddonsController::is_license_expired() ) {
+			$is_expired = FrmAddonsController::is_license_expired();
+
+			if ( $is_expired ) {
 				$label = __( 'Renew', 'formidable' );
 			} else {
 				$label = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_text' );
@@ -385,12 +386,18 @@ class FrmAppController {
 				}
 			}
 
-			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+			$upgrade_content = $is_expired ? 'renew' : 'upgrade';
+			$upgrade_link    = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+
+			$utm = array(
+				'campaign' => 'plugin-row',
+				'content'  => $upgrade_content,
+			);
 
 			if ( $upgrade_link ) {
-				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, array( 'medium' => 'plugin-row' ) );
+				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
 			} else {
-				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
+				$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
 			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
@@ -730,22 +737,26 @@ class FrmAppController {
 
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', self::get_admin_js_dependencies(), $version, true );
 
+		wp_register_script(
+			'formidable_forms_list',
+			$plugin_url . '/js/admin/forms-list.js',
+			array(
+				'formidable_dom',
+			),
+			$version,
+			true
+		);
+
 		if ( FrmAppHelper::on_form_listing_page() ) {
 			// For the existing page dropdown in the Form embed modal.
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
+			wp_enqueue_script( 'formidable_forms_list' );
 		}
 
 		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '2.0', true );
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
-			/**
-			 * Gateway fields are included for add-on compatibility but we do not want it to be visible.
-			 * They do however need to be visible when the payments submodule is active.
-			 */
-			wp_add_inline_style(
-				'formidable-admin',
-				'#frm_builder_page li[data-ftype="gateway"] { display: none; }'
-			);
+			FrmTransLiteAppController::hide_gateway_fields_in_builder();
 		}
 
 		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
@@ -785,6 +796,7 @@ class FrmAppController {
 			}
 
 			do_action( 'frm_enqueue_builder_scripts' );
+			self::maybe_enqueue_legacy_paypal_assets();
 			self::include_upgrade_overlay();
 			self::include_info_overlay();
 		} elseif ( FrmAppHelper::is_view_builder_page() ) {
@@ -942,6 +954,27 @@ class FrmAppController {
 		}
 
 		FrmUsageController::load_scripts();
+	}
+
+	/**
+	 * Enqueue legacy PayPal action settings styles when the PayPal add-on is active.
+	 *
+	 * @since 6.31
+	 *
+	 * @return void
+	 */
+	private static function maybe_enqueue_legacy_paypal_assets() {
+		if ( ! FrmAppHelper::is_form_builder_page() || ! class_exists( 'FrmPaymentsController' ) ) {
+			return;
+		}
+
+		wp_register_style(
+			'formidable-legacy-paypal',
+			FrmAppHelper::plugin_url() . '/css/admin/frm-legacy-paypal.css',
+			array( 'formidable-admin' ),
+			FrmAppHelper::plugin_version()
+		);
+		wp_enqueue_style( 'formidable-legacy-paypal' );
 	}
 
 	/**
@@ -1590,8 +1623,7 @@ class FrmAppController {
 			return;
 		}
 
-		$user_id             = get_current_user_id();
-		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
+		$preferred_list_sort = get_user_meta( get_current_user_id(), $meta_key, true );
 		$form_id             = FrmAppHelper::simple_get( 'form', 'absint' );
 
 		if ( is_array( $preferred_list_sort ) && $form_id && is_int( $form_id ) && isset( $preferred_list_sort[ $form_id ] ) ) {

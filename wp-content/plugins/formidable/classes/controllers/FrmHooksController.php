@@ -85,6 +85,9 @@ class FrmHooksController {
 
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
+		// Clear embed posts transient when posts are updated.
+		add_action( 'wp_insert_post', 'FrmFormsListHelper::maybe_clear_embed_posts_transient', 10, 2 );
+
 		// Form Shortcodes.
 		add_shortcode( 'formidable', 'FrmFormsController::get_form_shortcode' );
 
@@ -115,6 +118,7 @@ class FrmHooksController {
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
 		FrmSquareLiteHooksController::load_hooks();
+		FrmPayPalLiteHooksController::load_hooks();
 
 		// GDPR
 		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
@@ -158,6 +162,7 @@ class FrmHooksController {
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
+		add_action( 'admin_footer', 'FrmFormsController::print_forms_list_templates' );
 
 		// Elementor.
 		add_action( 'elementor/editor/footer', 'FrmElementorController::admin_init' );
@@ -219,6 +224,7 @@ class FrmHooksController {
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
 		FrmSquareLiteHooksController::load_admin_hooks();
+		FrmPayPalLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
