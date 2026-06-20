@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Burst\Admin\App\App;
+use Burst\Admin\Abilities_Api\Abilities_Api;
 use Burst\Admin\Archive\Archive;
 use Burst\Admin\Burst_Wp_Cli\Burst_Wp_Cli;
-use Burst\Admin\Capability\Capability;
 use Burst\Admin\Cron\Cron;
 use Burst\Admin\Dashboard_Widget\Dashboard_Widget;
 use Burst\Admin\Data_Sharing\Data_Sharing;
@@ -17,6 +17,8 @@ use Burst\Admin\Debug\Debug;
 use Burst\Admin\Posts\Posts;
 use Burst\Admin\Reports\Report_Logs;
 use Burst\Admin\Reports\Reports;
+use Burst\Admin\Search\Search;
+use Burst\Admin\Engagement\Reading_Engagement;
 use Burst\Admin\Share\Share;
 use Burst\Admin\Statistics\Goal_Statistics;
 use Burst\Admin\Statistics\Statistics;
@@ -36,109 +38,117 @@ class Admin {
 	public Tasks $tasks;
 	public Statistics $statistics;
 	public App $app;
+	public Share $share;
 
 	/**
 	 * Initialize the admin class
 	 */
 	public function init(): void {
-		/**
-		 * Tell the consent API we're following the api
-		 */
-		$plugin = BURST_PLUGIN;
-		add_filter( "wp_consent_api_registered_$plugin", '__return_true' );
-		add_filter( "plugin_action_links_$plugin", [ $this, 'plugin_settings_link' ] );
-		add_filter( "network_admin_plugin_action_links_$plugin", [ $this, 'plugin_settings_link' ] );
-
-		// deactivating.
-		add_action( 'admin_footer', [ $this, 'deactivate_popup' ], 40 );
-		add_action( 'admin_init', [ $this, 'listen_for_deactivation' ], 40 );
-		add_action( 'admin_init', [ $this, 'add_privacy_info' ], 10 );
-
-		// remove tables on multisite uninstall.
-		add_filter( 'wpmu_drop_tables', [ $this, 'ms_remove_tables' ], 10, 2 );
-		add_filter( 'burst_do_action', [ $this, 'maybe_delete_all_data' ], 10, 3 );
-		add_action( 'burst_after_updated_goals', [ $this, 'create_js_file' ], 10, 1 );
-		add_action( 'burst_after_saved_fields', [ $this, 'create_js_file' ], 10, 1 );
-		add_action( 'burst_daily', [ $this, 'create_js_file' ] );
-		add_action( 'burst_daily', [ $this, 'detect_malicious_data' ] );
-		add_action( 'burst_dismiss_task', [ $this, 'dismiss_malicious_data_notice' ], 10, 1 );
-		add_action( 'burst_dismiss_task', [ $this, 'dismiss_php_error_notice' ], 10, 1 );
-		add_action( 'wp_initialize_site', [ $this, 'create_js_file' ], 10, 1 );
-		add_action( 'admin_init', [ $this, 'activation' ] );
-		add_action( 'burst_activation', [ $this, 'setup_defaults' ], 20, 1 );
-
-		add_action( 'burst_activation', [ $this, 'run_table_init_hook' ], 10, 1 );
-		add_action( 'after_reset_stats', [ $this, 'run_table_init_hook' ], 10, 1 );
-		add_action( 'wp_initialize_site', [ $this, 'run_table_init_hook' ], 10, 1 );
-		add_action( 'burst_upgrade_before', [ $this, 'run_table_init_hook' ], 10, 1 );
-		add_action( 'burst_cron_table_upgrade', [ $this, 'run_table_init_hook' ], 10, 1 );
-		add_action( 'burst_daily', [ $this, 'validate_tasks' ] );
-		add_action( 'burst_validate_tasks', [ $this, 'validate_tasks' ] );
-		add_action( 'plugins_loaded', [ $this, 'init_wpcli' ] );
-		add_action( 'burst_scheduled_task_fix_malicious_data_removal', [ $this, 'clean_malicious_data' ] );
-		add_action( 'burst_daily', [ $this, 'test_database_tables' ] );
-		add_action( 'burst_attempt_database_fix', [ $this, 'test_database_tables' ] );
-		add_action( 'burst_weekly', [ $this, 'long_term_user_deal' ] );
-		add_action( 'burst_weekly', [ $this, 'cleanup_bf_dismissed_tasks' ] );
-		add_action( 'burst_daily', [ $this, 'cleanup_php_error_notices' ] );
 		$recalculate_cron_interval = apply_filters( 'burst_recalculate_cron_interval', 'burst_every_ten_minutes' );
 		add_action( $recalculate_cron_interval, [ $this, 'update_last_statistic_data' ] );
 		add_action( 'burst_recalculate_known_uids_cron', [ $this, 'update_known_uids_table' ] );
 		add_action( 'burst_recalculate_bounces_cron', [ $this, 'recalculate_bounces' ] );
 		add_action( 'burst_recalculate_first_time_visits_cron', [ $this, 'recalculate_first_time_visits' ] );
 
-		add_filter( 'burst_menu', [ $this, 'add_ecommerce_menu_item' ] );
+		if ( ! BURST_TRACK_ONLY ) {
+			/**
+			 * Tell the consent API we're following the api
+			 */
+			$plugin = BURST_PLUGIN;
+			add_filter( "wp_consent_api_registered_$plugin", '__return_true' );
+			add_filter( "plugin_action_links_$plugin", [ $this, 'plugin_settings_link' ] );
+			add_filter( "network_admin_plugin_action_links_$plugin", [ $this, 'plugin_settings_link' ] );
 
-		$this->maybe_update_site_scheme();
+			// deactivating.
+			add_action( 'admin_footer', [ $this, 'deactivate_popup' ], 40 );
+			add_action( 'admin_init', [ $this, 'listen_for_deactivation' ], 40 );
+			add_action( 'admin_init', [ $this, 'add_privacy_info' ], 10 );
 
-		$upgrade = new Upgrade();
-		$upgrade->init();
-		$db_upgrade = new DB_Upgrade();
-		$db_upgrade->init();
-		$cron = new Cron();
-		$cron->init();
+			// remove tables on multisite uninstall.
+			add_filter( 'wpmu_drop_tables', [ $this, 'ms_remove_tables' ], 10, 2 );
+			add_filter( 'burst_do_action', [ $this, 'maybe_delete_all_data' ], 10, 3 );
+			add_action( 'burst_after_updated_goals', [ $this, 'create_js_file' ], 10, 1 );
+			add_action( 'burst_after_saved_fields', [ $this, 'create_js_file' ], 10, 1 );
+			add_action( 'burst_daily', [ $this, 'create_js_file' ] );
+			add_action( 'burst_daily', [ $this, 'schedule_detect_malicious_data_cron' ] );
+			add_action( 'burst_detect_malicious_data', [ $this, 'detect_malicious_data' ] );
+			add_action( 'burst_dismiss_task', [ $this, 'dismiss_malicious_data_notice' ], 10, 1 );
+			add_action( 'burst_dismiss_task', [ $this, 'dismiss_php_error_notice' ], 10, 1 );
+			add_action( 'wp_initialize_site', [ $this, 'create_js_file' ], 10, 1 );
+			add_action( 'admin_init', [ $this, 'activation' ], 3, 1 );
+			add_action( 'burst_activation', [ $this, 'setup_defaults' ], 20, 1 );
+			add_action( 'burst_activation', [ $this, 'run_table_init_hook' ], 10, 1 );
+			add_action( 'after_reset_stats', [ $this, 'run_table_init_hook' ], 10, 1 );
+			add_action( 'wp_initialize_site', [ $this, 'run_table_init_hook' ], 10, 1 );
+			add_action( 'burst_upgrade_before', [ $this, 'run_table_init_hook' ], 10, 1 );
+			add_action( 'burst_cron_table_upgrade', [ $this, 'run_table_init_hook' ], 10, 1 );
+			add_action( 'burst_daily', [ $this, 'validate_tasks' ] );
+			add_action( 'burst_validate_tasks', [ $this, 'validate_tasks' ] );
+			add_action( 'plugins_loaded', [ $this, 'init_wpcli' ] );
+			add_action( 'burst_scheduled_task_fix_malicious_data_removal', [ $this, 'clean_malicious_data' ] );
+			add_action( 'burst_daily', [ $this, 'test_database_tables' ] );
+			add_action( 'burst_attempt_database_fix', [ $this, 'test_database_tables' ] );
+			add_action( 'burst_weekly', [ $this, 'long_term_user_deal' ] );
+			add_action( 'burst_weekly', [ $this, 'cleanup_bf_dismissed_tasks' ] );
+			add_action( 'burst_daily', [ $this, 'cleanup_php_error_notices' ] );
+			add_filter( 'burst_menu', [ $this, 'add_ecommerce_menu_item' ] );
 
-		$archive = new Archive();
-		$archive->init();
+			$this->maybe_update_site_scheme();
+			$upgrade = new Upgrade();
+			$upgrade->init();
+			$db_upgrade = new DB_Upgrade();
+			$db_upgrade->init();
+			$cron = new Cron();
+			$cron->init();
 
-		$goal_statistics = new Goal_Statistics();
-		$goal_statistics->init();
-		$this->statistics = new Statistics();
-		$this->statistics->init();
-		$reports = new Reports();
-		$reports->init();
-		$reports_logs = Report_Logs::instance();
-		$reports_logs->init();
-		$this->app = new App();
-		$this->app->init();
+			$archive = new Archive();
+			$archive->init();
 
-		$posts = new Posts();
-		$posts->init();
+			$goal_statistics = new Goal_Statistics();
+			$goal_statistics->init();
+			$this->statistics = new Statistics();
+			$this->statistics->init();
+			$search = new Search();
+			$search->init();
+			$reading_engagement = new Reading_Engagement();
+			$reading_engagement->init();
+			$reports = new Reports();
+			$reports->init();
+			$reports_logs = Report_Logs::instance();
+			$reports_logs->init();
+			$this->app = new App();
+			$this->app->init();
+			$abilities_api = new Abilities_Api();
+			$abilities_api->init();
 
-		$review = new Review();
-		$review->init();
-		$this->tasks = new Tasks();
-		$widget      = new Dashboard_Widget();
-		$widget->init();
+			$posts = new Posts();
+			$posts->init();
 
-		$debug = new Debug();
-		$debug->init();
+			$review = new Review();
+			$review->init();
+			$this->tasks = new Tasks();
+			$widget      = new Dashboard_Widget();
+			$widget->init();
 
-		$milestones = new Milestones();
-		$milestones->init();
+			$debug = new Debug();
+			$debug->init();
 
-		if ( $this->get_option_bool( 'anonymous_usage_data' ) ) {
-			$data_sharing = new Data_Sharing();
-			$data_sharing->init();
+			$milestones = new Milestones();
+			$milestones->init();
+
+			if ( $this->get_option_bool( 'anonymous_usage_data' ) ) {
+				$data_sharing = new Data_Sharing();
+				$data_sharing->init();
+			}
+
+			if ( defined( 'BURST_BLUEPRINT' ) && ! get_option( 'burst_demo_data_installed' ) ) {
+				add_action( 'init', [ $this, 'install_demo_data' ] );
+				update_option( 'burst_demo_data_installed', true, false );
+			}
+
+			$this->share = new Share();
+			$this->share->init();
 		}
-
-		if ( defined( 'BURST_BLUEPRINT' ) && ! get_option( 'burst_demo_data_installed' ) ) {
-			add_action( 'init', [ $this, 'install_demo_data' ] );
-			update_option( 'burst_demo_data_installed', true, false );
-		}
-
-		$share = new Share();
-		$share->init();
 	}
 
 	/**
@@ -188,27 +198,22 @@ class Admin {
 		$default_cutoff = time() - apply_filters( 'burst_cron_update_range_seconds', 15 * MINUTE_IN_SECONDS );
 		$time_cutoff    = ( $last_update < $default_cutoff ) ? $last_update : $default_cutoff;
 
-		// Mark as first-time visit if:
-		// 1. UID is NOT in known_uids, OR.
-		// 2. UID's first_seen timestamp is >= time_cutoff (meaning they're new in this batch).
+		// Mark session as first_time_visit = 1 only if the session's earliest statistic
+		// matches the UID's first_seen in known_uids — meaning this is genuinely their first visit.
 		$wpdb->query(
 			$wpdb->prepare(
-				"
-        UPDATE {$wpdb->prefix}burst_statistics bs
-        INNER JOIN (
-            SELECT curr.uid, MIN(curr.time) AS first_time
-            FROM {$wpdb->prefix}burst_statistics curr
-            LEFT JOIN {$wpdb->prefix}burst_known_uids known ON curr.uid = known.uid
-            WHERE curr.time >= %d
-              AND curr.first_time_visit = 0
-              AND (known.uid IS NULL OR known.first_seen >= %d)
-            GROUP BY curr.uid
-        ) first_visits ON bs.uid = first_visits.uid 
-                       AND bs.time = first_visits.first_time
-        SET bs.first_time_visit = 1
-        WHERE bs.first_time_visit = 0
-    ",
-				$time_cutoff,
+				"UPDATE {$wpdb->prefix}burst_sessions sess
+				INNER JOIN (
+					SELECT session_id, MIN(time) AS first_time, uid
+					FROM {$wpdb->prefix}burst_statistics
+					WHERE time >= %d
+					GROUP BY session_id, uid
+				) st ON st.session_id = sess.ID
+				INNER JOIN {$wpdb->prefix}burst_known_uids known ON st.uid = known.uid
+				SET sess.first_time_visit = 1
+				WHERE sess.first_time_visit = 0
+				AND known.first_seen >= st.first_time - 1
+				AND known.first_seen <= st.first_time + 1",
 				$time_cutoff
 			)
 		);
@@ -238,7 +243,7 @@ class Admin {
         FROM {$wpdb->prefix}burst_statistics
         WHERE time >= %d
         GROUP BY uid
-        ON DUPLICATE KEY UPDATE 
+        ON DUPLICATE KEY UPDATE
             first_seen = LEAST(first_seen, VALUES(first_seen)),
             last_seen = GREATEST(last_seen, VALUES(last_seen))
     ",
@@ -267,67 +272,30 @@ class Admin {
 		$last_update    = get_option( 'burst_last_bounces_update', time() - 15 * MINUTE_IN_SECONDS );
 		$default_cutoff = time() - apply_filters( 'burst_cron_update_range_seconds', 15 * MINUTE_IN_SECONDS );
 		$time_cutoff    = ( $last_update < $default_cutoff ) ? $last_update : $default_cutoff;
+
 		global $wpdb;
+
+		$bounce_time_milliseconds = apply_filters( 'burst_bounce_time', 5000 );
+		// Find sessions with >1 pageview or long time_on_page (engaged), then mark them as not bounced.
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE {$wpdb->prefix}burst_statistics bs
-        INNER JOIN (
-            SELECT session_id
-            FROM {$wpdb->prefix}burst_statistics
-            WHERE time > %d
-            GROUP BY session_id
-            HAVING COUNT(*) > 1
-                OR MAX(time_on_page) > 5000 -- long page time means engaged
-        ) nb ON bs.session_id = nb.session_id
-        SET bs.bounce = 0
-        WHERE bs.bounce = 1",
-				$time_cutoff
+				"UPDATE {$wpdb->prefix}burst_sessions sess
+            INNER JOIN (
+                SELECT session_id
+                FROM {$wpdb->prefix}burst_statistics
+                WHERE time > %d
+                GROUP BY session_id
+                HAVING COUNT(*) > 1
+                    OR MAX(time_on_page) > %d
+            ) nb ON sess.ID = nb.session_id
+            SET sess.bounce = 0
+            WHERE sess.bounce = 1",
+				$time_cutoff,
+				$bounce_time_milliseconds
 			)
 		);
+
 		update_option( 'burst_last_bounces_update', time(), false );
-	}
-
-	/**
-	 * Add ecommerce menu item to the admin menu
-	 *
-	 * @param array $menu_items The existing menu items.
-	 * @return array The modified menu items including the ecommerce menu item.
-	 */
-	public function add_ecommerce_menu_item( array $menu_items ): array {
-		$should_load_ecommerce = \Burst\burst_loader()->integrations->should_load_ecommerce();
-
-		if ( ! $should_load_ecommerce || ! $this->has_admin_access() || ! $this->user_can_view_sales() ) {
-			return $menu_items;
-		}
-
-		$ecommerce_menu_item = [
-			'id'             => 'sales',
-			'title'          => __( 'Sales', 'burst-statistics' ),
-			'default_hidden' => false,
-			'menu_items'     => [],
-			'capabilities'   => 'view_sales_burst_statistics',
-			'menu_slug'      => 'burst#/sales',
-			'show_in_admin'  => true,
-			'pro'            => true,
-			'shareable'      => true,
-		];
-
-		// Put ecommerce menu item before the id: settings menu item.
-		$settings_index = null;
-		foreach ( $menu_items as $index => $item ) {
-			if ( isset( $item['id'] ) && 'reporting' === $item['id'] ) {
-				$settings_index = $index;
-				break;
-			}
-		}
-
-		if ( null !== $settings_index ) {
-			array_splice( $menu_items, $settings_index, 0, [ $ecommerce_menu_item ] );
-		} else {
-			$menu_items[] = $ecommerce_menu_item;
-		}
-
-		return $menu_items;
 	}
 
 	/**
@@ -409,6 +377,15 @@ class Admin {
 		\WP_CLI::add_command( 'burst', Burst_Wp_Cli::class );
 	}
 
+	/**
+	 * Offload the malicious data detection two minutes later in the future.
+	 * This also resolves a missing table error right after deactivating, and activating the plugin again with data reset.
+	 */
+	public function schedule_detect_malicious_data_cron(): void {
+		if ( ! wp_next_scheduled( 'burst_detect_malicious_data' ) ) {
+			wp_schedule_single_event( time() + 2 * MINUTE_IN_SECONDS, 'burst_detect_malicious_data' );
+		}
+	}
 	/**
 	 * Check if there is anomalous data in the past 24 hours, over 1000 requests from one visitor.
 	 */
@@ -740,24 +717,24 @@ class Admin {
 							'referrer'          => $referrer,
 							'first_visited_url' => '/',
 							'last_visited_url'  => '/',
+							'browser_id'        => $browser_id,
+							'device_id'         => $device_id,
+							'platform_id'       => $platform_id,
+							'bounce'            => $bounce,
+							'first_time_visit'  => 1,
 						],
-						[ '%s', '%s', '%s' ]
+						[ '%s', '%s', '%s', '%d', '%d', '%d', '%d', '%d' ]
 					);
 
 					$session_id = $wpdb->insert_id;
 
-					$placeholders[] = '(%d, %s, %d, %d, %d, %d, %d, %d, %d, %d)';
+					$placeholders[] = '(%d, %s, %d, %d, %d)';
 					$values         = array_merge(
 						$values,
 						[
 							$stats_date_unix,
 							$page_url,
 							$uid,
-							1,
-							$bounce,
-							$browser_id,
-							$device_id,
-							$platform_id,
 							$time_on_page,
 							$session_id,
 						]
@@ -765,9 +742,9 @@ class Admin {
 				}
 
 				$query = "
-                    INSERT INTO {$wpdb->prefix}burst_statistics
-                    (time, page_url, uid, first_time_visit, bounce, browser_id, device_id, platform_id, time_on_page, session_id)
-                    VALUES " . implode( ', ', $placeholders );
+					INSERT INTO {$wpdb->prefix}burst_statistics
+					(time, page_url, uid, time_on_page, session_id)
+					VALUES " . implode( ', ', $placeholders );
                 // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- values are prepared.
 				$wpdb->query( $wpdb->prepare( $query, ...$values ) );
 			}
@@ -783,8 +760,6 @@ class Admin {
 		}
 
 		if ( get_option( 'burst_run_activation' ) ) {
-			Capability::add_capability( 'view', [ 'administrator', 'editor' ] );
-			Capability::add_capability( 'manage' );
 			do_action( 'burst_activation' );
 			update_option( 'burst_run_activation', false );
 		}
@@ -904,11 +879,11 @@ class Admin {
 	 */
 	public function setup_defaults(): void {
 		if ( get_option( 'burst_set_defaults' ) ) {
-			set_transient( 'burst_redirect_to_settings_page', true, 5 * MINUTE_IN_SECONDS );
 			update_option( 'burst_activation_time', time(), false );
 			update_option( 'burst_last_cron_hit', time(), false );
 			$this->update_option( 'combine_vars_and_script', true );
 			$this->update_option( 'enable_turbo_mode', true );
+			$this->update_option( 'track_external_links', true );
 			$this->create_js_file();
 
 			$this->tasks->add_initial_tasks();
@@ -1325,7 +1300,7 @@ class Admin {
 		$this->setup_defaults();
 
 		// ensure the tables are created.
-		delete_transient( 'burst_running_upgrade' );
+		delete_transient( 'burst_running_upgrade_process' );
 		$this->run_table_init_hook();
 	}
 
@@ -1344,6 +1319,10 @@ class Admin {
 
 		// delete tables.
 		foreach ( $table_names as $table_name ) {
+			// guard against deleting tables from other plugins, as these can be added using the tables filter.
+			if ( ! str_starts_with( $table_name, 'burst_' ) ) {
+				continue;
+			}
 			$sql = "DROP TABLE IF EXISTS {$wpdb->prefix}$table_name";
             // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- table name is from a predefined list.
 			$wpdb->query( $sql );
@@ -1415,13 +1394,60 @@ class Admin {
 	): array {
 		global $wpdb;
 
-		$tables[] = $wpdb->get_blog_prefix( $blog_id ) . 'burst_sessions';
-		$tables[] = $wpdb->get_blog_prefix( $blog_id ) . 'burst_statistics';
-		$tables[] = $wpdb->get_blog_prefix( $blog_id ) . 'burst_goals';
-		$tables[] = $wpdb->get_blog_prefix( $blog_id ) . 'burst_archived_months';
-		$tables[] = $wpdb->get_blog_prefix( $blog_id ) . 'burst_goal_statistics';
-		$tables[] = $wpdb->get_blog_prefix( $blog_id ) . 'burst_summary';
+		$table_names = $this->get_table_list();
+		foreach ( $table_names as $table_name ) {
+			if ( ! str_starts_with( $table_name, 'burst_' ) ) {
+				continue;
+			}
+			$tables[] = $wpdb->get_blog_prefix( $blog_id ) . $table_name;
+		}
 
 		return $tables;
+	}
+
+	/**
+	 * Add ecommerce menu item to the admin menu
+	 *
+	 * @param array $menu_items The existing menu items.
+	 * @return array The modified menu items including the ecommerce menu item.
+	 */
+	public function add_ecommerce_menu_item( array $menu_items ): array {
+		if ( ! $this->has_admin_access() ) {
+			return $menu_items;
+		}
+
+		$should_load_ecommerce = \Burst\burst_loader()->integrations->should_load_ecommerce();
+		if ( ! $should_load_ecommerce ) {
+			return $menu_items;
+		}
+
+		$ecommerce_menu_item = [
+			'id'             => 'sales',
+			'title'          => __( 'Sales', 'burst-statistics' ),
+			'default_hidden' => false,
+			'menu_items'     => [],
+			'capabilities'   => 'view_sales_burst_statistics',
+			'menu_slug'      => 'burst#/sales',
+			'show_in_admin'  => true,
+			'pro'            => true,
+			'shareable'      => true,
+		];
+
+		// Put ecommerce menu item before the id: settings menu item.
+		$settings_index = null;
+		foreach ( $menu_items as $index => $item ) {
+			if ( isset( $item['id'] ) && 'reporting' === $item['id'] ) {
+				$settings_index = $index;
+				break;
+			}
+		}
+
+		if ( null !== $settings_index ) {
+			array_splice( $menu_items, $settings_index, 0, [ $ecommerce_menu_item ] );
+		} else {
+			$menu_items[] = $ecommerce_menu_item;
+		}
+
+		return $menu_items;
 	}
 }

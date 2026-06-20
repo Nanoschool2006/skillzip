@@ -12,13 +12,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 use Burst\Frontend\Endpoint;
-use Burst\Frontend\Goals\Goal;
 use Burst\Frontend\Ip\Ip;
+use Burst\Frontend\Search\Search;
+use Burst\Pro\Frontend\External_Link\External_Link_Frontend;
+use Burst\Traits\Database_Helper;
 use Burst\Traits\Helper;
 use Burst\Traits\Sanitize;
 use Burst\UserAgentParser\UserAgentParser;
 
 class Tracking {
+	use Database_Helper;
 	use Helper;
 	use Sanitize;
 
@@ -51,7 +54,12 @@ class Tracking {
 	 * Burst Statistics endpoint for collecting hits
 	 */
 	public function track_hit( array $data ): string {
-		// validate & sanitize all data.
+		$is_test_hit = $this->is_test_hit( $data['url'] ?? '' );
+		if ( Ip::is_ip_blocked() && ! $is_test_hit ) {
+			return 'ip blocked';
+		}
+
+		// Validate & sanitize all data.
 		$sanitized_data = $this->prepare_tracking_data( $data );
 
 		if ( $this->blocked_by_custom_block_rules( $sanitized_data ) ) {
@@ -67,34 +75,57 @@ class Tracking {
 		$should_load_ecommerce = $sanitized_data['should_load_ecommerce'];
 		unset( $sanitized_data['should_load_ecommerce'] );
 
+		$external_link_url = '';
+		if ( $this->get_option_bool( 'track_external_links' ) && ! empty( $sanitized_data['external_link_url'] ) ) {
+			$external_link_url = $sanitized_data['external_link_url'];
+		}
+
 		// If new hit, get the last row.
 		$result = $this->get_hit_type( $sanitized_data );
 		if ( empty( $result ) ) {
 			return 'failed to determine hit type';
 		}
 
-		// create or update.
-		$hit_type = $result['hit_type'];
-		// last row. create can also have a last row from the previous hit.
-		$previous_hit          = $result['last_row'];
-		$filtered_previous_hit = $previous_hit;
-		if ( $previous_hit === null ) {
-			$filtered_previous_hit = [];
-		}
-		$sanitized_data = apply_filters( 'burst_before_track_hit', $sanitized_data, $hit_type, $filtered_previous_hit );
-		$session_arr    = [
-			'last_visited_url' => $this->create_path( $sanitized_data ),
-			'city_code'        => $sanitized_data['city_code'] ?? '',
-			'referrer'         => $sanitized_data['referrer'],
-		];
-		unset( $sanitized_data['city_code'], $sanitized_data['referrer'] );
+		$hit_type     = $result['hit_type'];
+		$previous_hit = $result['last_row'];
 
-		// keep track of the hosts, to check if this is a multi domain setup.
-		$destructured = $this->sanitize_url( $sanitized_data['host'] );
-		$host         = $destructured['host'] ?? '';
-		// Normalize host by removing www. prefix for comparison.
+		$filtered_previous_hit = $previous_hit ?? [];
+		$sanitized_data        = apply_filters( 'burst_before_track_hit', $sanitized_data, $hit_type, $filtered_previous_hit );
+
+		// Centralize all session-level fields in $session.
+		$session = [
+			'last_visited_url'   => $this->create_path( $sanitized_data ),
+			'city_code'          => $sanitized_data['city_code'] ?? '',
+			'referrer'           => $sanitized_data['referrer'],
+			'bounce'             => $sanitized_data['bounce'] ?? 1,
+			'browser_id'         => $sanitized_data['browser_id'] ?? 0,
+			'browser_version_id' => $sanitized_data['browser_version_id'] ?? 0,
+			'platform_id'        => $sanitized_data['platform_id'] ?? 0,
+			'device_id'          => $sanitized_data['device_id'] ?? 0,
+		];
+
+		$search_term = $sanitized_data['search_term'] ?? '';
+
+		// $statistic contains only fields that belong on burst_statistics.
+		unset(
+			$sanitized_data['city_code'],
+			$sanitized_data['referrer'],
+			$sanitized_data['bounce'],
+			$sanitized_data['external_link_url'],
+			$sanitized_data['browser_id'],
+			$sanitized_data['browser_version_id'],
+			$sanitized_data['platform_id'],
+			$sanitized_data['device_id'],
+			$sanitized_data['search_term']
+		);
+		$statistic = $sanitized_data;
+
+		// Keep track of the hosts, to check if this is a multi domain setup.
+		$destructured    = $this->sanitize_url( $statistic['host'] );
+		$host            = $destructured['host'] ?? '';
 		$normalized_host = preg_replace( '/^www\./i', '', $host );
 		$is_multi_domain = get_option( 'burst_is_multi_domain' );
+
 		if ( ! $is_multi_domain ) {
 			$first_domain = get_option( 'burst_first_domain' );
 			// only update this once, on the first used domain.
@@ -108,67 +139,65 @@ class Tracking {
 		}
 
 		if ( $this->get_option_bool( 'filtering_by_domain' ) ) {
-			$session_arr['host'] = $host;
+			$session['host'] = $host;
 		}
 
-		// update burst_sessions table.
-		// Get the last record with the same uid within 30 minutes. If it exists, use session_id. If not, create a new session.
+		// Handle session: reuse existing or create new.
 		if ( isset( $previous_hit ) && $previous_hit['session_id'] > 0 ) {
-			$sanitized_data['session_id'] = $previous_hit['session_id'];
-			if ( $this->session_needs_update( $previous_hit, $session_arr ) ) {
-				$this->update_session( (int) $sanitized_data['session_id'], $session_arr );
+			$statistic['session_id'] = $previous_hit['session_id'];
+			if ( $this->session_needs_update( $previous_hit, $session ) ) {
+				$this->update_session( (int) $statistic['session_id'], $session );
 			}
 		} elseif ( $previous_hit === null ) {
-			$session_arr['first_visited_url'] = $this->create_path( $sanitized_data );
-			$sanitized_data['session_id']     = $this->create_session( $session_arr );
+			// New session — include first_visited_url and all session-level fields.
+			$session['first_visited_url'] = $this->create_path( $statistic );
+			$statistic['session_id']      = $this->create_session( $session );
 		}
 
-		// if there is a fingerprint use that instead of uid.
-		if ( $sanitized_data['fingerprint'] && ! $sanitized_data['uid'] ) {
-			$this->store_fingerprint_in_session( $sanitized_data['fingerprint'], $should_load_ecommerce );
-			$sanitized_data['uid'] = $sanitized_data['fingerprint'];
+		// If there is a fingerprint, use that instead of uid.
+		if ( $statistic['fingerprint'] && ! $statistic['uid'] ) {
+			$this->store_fingerprint_in_session( $statistic['fingerprint'], $should_load_ecommerce );
+			$statistic['uid'] = $statistic['fingerprint'];
 		}
+		unset( $statistic['fingerprint'] );
 
-		unset( $sanitized_data['fingerprint'] );
-
-		// update burst_statistics table.
-		// Get the last record with the same uid and page_url. If it exists update it. If not, create a new record and add time() to $sanitized_data['time'].
-		// if update hit, make sure that the URL matches.
+		// Determine if URL changed (for update hit).
 		$previous_page_url = $previous_hit['page_url'] ?? '';
+		$new_page_url      = $statistic['page_url'];
 
-		$new_page_url = $sanitized_data['page_url'];
-
-		// if track_url_changes is enabled, also check for changing parameters.
 		if ( $this->get_option_bool( 'track_url_change' ) ) {
 			$previous_page_url .= $previous_hit['parameters'] ?? '';
-			$new_page_url      .= $sanitized_data['parameters'];
+			$new_page_url      .= $statistic['parameters'];
 		}
 		$is_same_url = $previous_page_url === $new_page_url;
 
 		if ( $hit_type === 'update' && ( $is_same_url || $previous_hit['session_id'] === '' ) ) {
-			// add up time_on_page to the existing record.
-			$sanitized_data['time_on_page'] += $previous_hit['time_on_page'];
-			$sanitized_data['ID']            = $previous_hit['ID'];
-			$this->update_statistic( $sanitized_data );
+			// Accumulate time_on_page on the existing statistic row.
+			$statistic['time_on_page'] += $previous_hit['time_on_page'];
+			$statistic['ID']            = $previous_hit['ID'];
+			$this->update_statistic( $statistic );
 		} elseif ( $hit_type === 'create' ) {
-			do_action( 'burst_before_create_statistic', $sanitized_data );
-			// if it is not an update hit, create a new record.
-			$sanitized_data['time']             = time();
-			$sanitized_data['first_time_visit'] = 0;
-			$insert_id                          = $this->create_statistic( $sanitized_data );
-			do_action( 'burst_after_create_statistic', $insert_id, $sanitized_data );
+			do_action( 'burst_before_create_statistic', $statistic );
+			$statistic['time'] = time();
+			$insert_id         = $this->create_statistic( $statistic );
+			if ( ! empty( $search_term ) ) {
+				$frontend_search = new Search();
+				$frontend_search->init();
+				$statistic['search_term'] = $search_term;
+			}
+			do_action( 'burst_after_create_statistic', $insert_id, $statistic );
 		}
 
-		if ( array_key_exists( 'ID', $sanitized_data ) && $sanitized_data['ID'] > 0 ) {
-			$statistic_id = $sanitized_data['ID'];
-		} else {
-			$statistic_id = $insert_id ?? 0;
-		}
+		$statistic_id = $statistic['ID'] ?? ( $insert_id ?? 0 );
+
 		if ( $statistic_id > 0 ) {
-			$completed_goals = $this->get_completed_goals( $sanitized_data['completed_goals'], $sanitized_data['page_url'] );
-			// if $sanitized_data['completed_goals'] is not an empty array, update burst_goals table.
+			$completed_goals = $this->get_completed_goals( $statistic['completed_goals'], $statistic['page_url'] );
 			if ( ! empty( $completed_goals ) ) {
 				$this->create_goal_statistic( $statistic_id, $completed_goals );
+			}
+
+			if ( $this->get_option_bool( 'track_external_links' ) && ! empty( $external_link_url ) ) {
+				External_Link_Frontend::track_external_link( (int) $statistic_id, $external_link_url );
 			}
 		}
 
@@ -252,15 +281,10 @@ class Tracking {
 		if ( empty( $request ) ) {
 			wp_die( 'not a valid request' );
 		}
+
 		if ( $request === 'request=test' ) {
 			http_response_code( 200 );
 			return 'success';
-		}
-
-		if ( IP::is_ip_blocked() && strpos( $request, 'burst_test_hit' ) === false ) {
-			http_response_code( 200 );
-
-			return 'ip blocked';
 		}
 
 		$data = json_decode( $request, true );
@@ -289,15 +313,7 @@ class Tracking {
 			);
 		}
 
-		$data     = json_decode( $raw_data, true );
-		$test_hit = isset( $data['url'] ) && strpos( $data['url'], 'burst_test_hit' ) !== false;
-
-		if ( Ip::is_ip_blocked() && ! $test_hit ) {
-			// @phpstan-ignore-next-line.
-			$status_code = WP_DEBUG ? 202 : 200;
-			return new \WP_REST_Response( 'Burst Statistics: Your IP is blocked from tracking.', $status_code );
-		}
-
+		$data = json_decode( $raw_data, true );
 		if ( isset( $data['request'] ) && $data['request'] === 'test' ) {
 			return new \WP_REST_Response( [ 'success' => 'test' ], 200 );
 		}
@@ -312,6 +328,36 @@ class Tracking {
 	}
 
 	/**
+	 * Verify if this is a test hit, using nonce verification to prevent bypassing the ip block.
+	 */
+	private function is_test_hit( string $url ): bool {
+		if ( empty( $url ) ) {
+			return false;
+		}
+
+		$test_hit = str_contains( $url, 'burst_test_hit' );
+		if ( ! $test_hit ) {
+			return false;
+		}
+		// extract nonce from url.
+		$nonce = null;
+
+		// wp_parse_url() isn't available in shortinit.
+        // phpcs:ignore
+		$parsed = parse_url( $url );
+
+		if ( isset( $parsed['query'] ) ) {
+			parse_str( $parsed['query'], $query_params );
+			$nonce = $query_params['nonce'] ?? null;
+		}
+		$stored_token = get_transient( 'burst_onboarding_token' );
+		if ( empty( $stored_token ) || empty( $nonce ) ) {
+			return false;
+		}
+		return hash_equals( $stored_token, $nonce );
+	}
+
+	/**
 	 * Prepare and sanitize raw tracking data from the client for storage.
 	 *
 	 * @param array<string, mixed> $data Raw tracking data input.
@@ -323,6 +369,7 @@ class Tracking {
 	 *     uid: string,
 	 *     fingerprint: string,
 	 *     referrer: string,
+	 *     external_link_url: string,
 	 *     time_on_page: int,
 	 *     bounce: int,
 	 *     browser_id?: int,
@@ -351,6 +398,7 @@ class Tracking {
 			'uid'                   => null,
 			'fingerprint'           => null,
 			'referrer_url'          => null,
+			'external_link_url'     => null,
 			'user_agent'            => null,
 			'time_on_page'          => null,
 			'completed_goals'       => null,
@@ -374,6 +422,7 @@ class Tracking {
 		$sanitized_data['uid']                   = $this->sanitize_uid( $data['uid'] );
 		$sanitized_data['fingerprint']           = $this->sanitize_fingerprint( $data['fingerprint'] );
 		$sanitized_data['referrer']              = $this->sanitize_referrer( $data['referrer_url'] );
+		$sanitized_data['external_link_url']     = $this->sanitize_external_link_url( $data['external_link_url'] );
 		$sanitized_data['browser_id']            = self::get_lookup_table_id( 'browser', $user_agent_data['browser'] );
 		$sanitized_data['browser_version_id']    = self::get_lookup_table_id( 'browser_version', $user_agent_data['browser_version'] );
 		$sanitized_data['platform_id']           = self::get_lookup_table_id( 'platform', $user_agent_data['platform'] );
@@ -383,6 +432,7 @@ class Tracking {
 		$sanitized_data['page_id']               = (int) $data['page_id'];
 		$sanitized_data['page_type']             = $this->sanitize_page_identifier( $data['page_type'] );
 		$sanitized_data['should_load_ecommerce'] = filter_var( $data['should_load_ecommerce'], FILTER_VALIDATE_BOOLEAN );
+		$sanitized_data['search_term']           = isset( $data['search_term'] ) ? sanitize_text_field( wp_unslash( (string) $data['search_term'] ) ) : '';
 		return $sanitized_data;
 	}
 
@@ -422,6 +472,31 @@ class Tracking {
 		}
 
 		return sanitize_title( $page_identifier );
+	}
+
+	/**
+	 * Sanitize tracked external link URL.
+	 */
+	private function sanitize_external_link_url( ?string $external_link_url ): string {
+		if ( empty( $external_link_url ) ) {
+			return '';
+		}
+
+		$url = esc_url_raw( $external_link_url, [ 'http', 'https' ] );
+		if ( empty( $url ) ) {
+			return '';
+		}
+
+		$parsed = wp_parse_url( $url );
+		if ( empty( $parsed['scheme'] ) || empty( $parsed['host'] ) ) {
+			return '';
+		}
+
+		if ( ! in_array( $parsed['scheme'], [ 'http', 'https' ], true ) ) {
+			return '';
+		}
+
+		return $url;
 	}
 
 	/**
@@ -586,6 +661,7 @@ class Tracking {
 	 *         do_not_track: int,
 	 *         enable_turbo_mode: int,
 	 *         track_url_change: int,
+	 *         track_external_links: int,
 	 *         cookie_retention_days: int
 	 *     },
 	 *     goals: array{
@@ -620,8 +696,9 @@ class Tracking {
 					'do_not_track'          => $this->get_option_int( 'enable_do_not_track' ),
 					'enable_turbo_mode'     => $this->get_option_int( 'enable_turbo_mode' ),
 					'track_url_change'      => $this->get_option_int( 'track_url_change' ),
+					'track_external_links'  => $this->get_option_int( 'track_external_links' ),
 					'cookie_retention_days' => apply_filters( 'burst_cookie_retention_days', 30 ),
-					'debug'                 => defined( 'BURST_DEBUG' ) && BURST_DEBUG ? 1 : 0,
+					'debug'                 => defined( 'BURST_DEBUG' ) && \BURST_DEBUG ? 1 : 0,
 				],
 				'goals'    => [
 					'completed' => [],
@@ -673,6 +750,10 @@ class Tracking {
 			defined( 'BURST_INSTALL_TABLES_RUNNING' ) ||
 			defined( 'BURST_UNINSTALLING' )
 		) {
+			return [];
+		}
+
+		if ( ! $this->table_exists( 'burst_goals' ) ) {
 			return [];
 		}
 
@@ -826,39 +907,33 @@ class Tracking {
 		if ( $page_url !== '' ) {
 			$destructured_url = $this->sanitize_url( $page_url );
 			$parameters       = $destructured_url['parameters'];
-			$where            = ! empty( $parameters ) ? $wpdb->prepare( ' AND parameters = %s', $parameters ) : '';
+			$where            = ! empty( $parameters ) ? $wpdb->prepare( ' AND s.parameters = %s', $parameters ) : '';
 		}
 
-		$where .= $wpdb->prepare( ' AND time > %d', strtotime( '-30 minutes' ) );
-		// Build query based on whether we need session data.
-		if ( $need_session_data ) {
-			// With JOIN to get host.
-			$last_row = $wpdb->get_row(
-                // phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where consists of only prepared parts.
-				$wpdb->prepare(
-					"SELECT 
-                    s.ID, 
-                    s.session_id, 
-                    s.parameters, 
-                    s.time_on_page, 
-                    s.bounce, 
-                    s.page_url,
-                    sess.host
-                FROM {$wpdb->prefix}burst_statistics s
-                LEFT JOIN {$wpdb->prefix}burst_sessions sess ON s.session_id = sess.ID
-                WHERE s.uid = %s {$where} 
-                ORDER BY s.ID DESC 
-                LIMIT 1",
-					$uid
-				)
-                // phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			);
-		} else {
-			$last_row = $wpdb->get_row(
-                // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where consists of only prepared parts.
-				$wpdb->prepare( "SELECT ID, session_id, parameters, time_on_page, bounce, page_url FROM {$wpdb->prefix}burst_statistics WHERE uid = %s {$where} ORDER BY ID DESC LIMIT 1", $uid )
-			);
-		}
+		$where .= $wpdb->prepare( ' AND s.time > %d', strtotime( '-30 minutes' ) );
+
+		$host_select = $need_session_data ? ', sess.host' : '';
+
+		$last_row = $wpdb->get_row(
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where and $host_select are from trusted prepared parts.
+			$wpdb->prepare(
+				"SELECT
+                s.ID,
+                s.session_id,
+                s.parameters,
+                s.time_on_page,
+                sess.bounce,
+                s.page_url
+                {$host_select}
+            FROM {$wpdb->prefix}burst_statistics s
+            LEFT JOIN {$wpdb->prefix}burst_sessions sess ON s.session_id = sess.ID
+            WHERE s.uid = %s {$where}
+            ORDER BY s.ID DESC
+            LIMIT 1",
+				$uid
+			)
+			// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
 
 		return $last_row ? (array) $last_row : [];
 	}

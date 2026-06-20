@@ -79,6 +79,7 @@ const TodayBlock = () => {
 	});
 
 	const liveVisitorsQuery = useLiveVisitorsData();
+	const isLoading = todayDataQuery.isFetching || liveVisitorsQuery.isFetching;
 	const live = liveVisitorsQuery.data;
 	let data = todayDataQuery.data;
 	if ([ liveVisitorsQuery, todayDataQuery ].some( ( query ) => query.isError ) ) {
@@ -91,15 +92,16 @@ const TodayBlock = () => {
 	}
 
 	return (
-		<Block className="row-span-2 lg:col-span-6 xl:col-span-3 overflow-hidden">
+		<Block className="row-span-2 @lg:col-span-6 @xl:col-span-3 overflow-hidden">
 			<BlockHeading
 				title={__( 'Today', 'burst-statistics' )}
 				controls={undefined}
 				className="border-b border-gray-200"
+				isLoading={isLoading}
 			/>
 			<BlockContent className="px-0 py-0">
 				<div className="burst-today">
-					<div className="px-2.5 py-6 md:px-5 grid w-full grid-cols-2 gap-4 bg-green-light">
+					<div className="px-2.5 py-6 md:px-5 grid w-full grid-cols-2 gap-4 bg-green-50">
 						<Tooltip content={data.live.tooltip}>
 							<div className="rounded-md flex flex-col justify-center text-center py-4 items-center flex-wrap bg-white burst-tooltip-live">
 								<Icon name={liveIcon} size="26" />

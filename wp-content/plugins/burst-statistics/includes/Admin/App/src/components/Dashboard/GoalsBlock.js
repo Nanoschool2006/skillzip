@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect, useMemo, memo, useCallback } from 'react';
+import { useState, useEffect, useMemo, memo } from 'react';
 import Tooltip from '@/components/Common/Tooltip';
 import ClickToFilter from '@/components/Common/ClickToFilter';
 import Icon from '@//utils/Icon';
@@ -12,12 +12,10 @@ import { BlockHeading } from '@/components/Blocks/BlockHeading';
 import { BlockContent } from '@/components/Blocks/BlockContent';
 import { BlockFooter } from '@/components/Blocks/BlockFooter';
 import GoalsHeader from './GoalsHeader';
-import { setOption } from '@//utils/api';
 import { useQueries } from '@tanstack/react-query';
 import getLiveGoals from '@//api/getLiveGoals';
 import getGoalsData from '@//api/getGoalsData';
-import { burst_get_website_url, safeDecodeURI } from '@//utils/lib';
-import Overlay from '@/components/Common/Overlay';
+import { safeDecodeURI } from '@//utils/lib';
 import ButtonInput from '../Inputs/ButtonInput';
 
 // Utility function to select the goal icon based on value
@@ -39,6 +37,7 @@ const TodayFilterItem = memo(
 			filterValue={filterValue}
 			label={label}
 			startDate={startDate}
+			useContainerForFilter
 		>
 			<div className="rounded-md flex flex-col justify-center items-center text-center flex-wrap bg-white py-4 [&.active]:shadow-greenShadow [&.active]:border-2 [&.active]:border-green">
 				<Icon name={icon} size="26" />
@@ -62,13 +61,13 @@ const TotalFilterItem = memo(
 			label={label}
 			startDate={startDate}
 			endDate={endDate}
+			useContainerForFilter
 		>
 			<div className="rounded-md flex flex-col justify-center items-center text-center flex-wrap bg-white py-4 [&.active]:shadow-greenShadow [&.active]:border-2 [&.active]:border-green">
 				<Icon name={icon} size="26" />
 				<h2 className="mt-1.5 font-extrabold">{count}</h2>
 				<span className="flex gap-[3px] justify-center text-xs">
-					<Icon name="calendar" size="13" />{' '}
-					{__( 'Total', 'burst-statistics' )}
+					<Icon name="calendar" size="13" /> {__( 'Total', 'burst-statistics' )}
 				</span>
 			</div>
 		</ClickToFilter>
@@ -208,12 +207,6 @@ const GoalsBlock = () => {
 		]
 	});
 
-	const onGoalsInfoClick = useCallback( () => {
-		burst_settings.goals_information_shown = '1';
-		setOption( 'goals_information_shown', true );
-		window.location.hash = '#settings/goals';
-	}, []);
-
 	// Safely extract data from queries
 	const isLoading =
 		queries.some( ( query ) => query.isLoading ) || isGoalsLoading;
@@ -264,53 +257,19 @@ const GoalsBlock = () => {
 	);
 
 	return (
-		<Block className="row-span-2 lg:col-span-6 xl:col-span-3">
-			{/* Example usage of the new Overlay component */}
-			{'0' === burst_settings.goals_information_shown && (
-				<Overlay>
-					<h4 className="mb-4 text-lg font-bold">
-						{__( 'Goals', 'burst-statistics' )}
-					</h4>
-					<p className="mb-4">
-						{__(
-							'Keep track of customizable goals and get valuable insights. Add your first goal!',
-							'burst-statistics'
-						)}
-					</p>
-					<p className="mb-4">
-						<a
-							className="text-blue underline"
-							href={burst_get_website_url( 'how-to-set-goals', {
-								utm_source: 'goals-block-overlay'
-							})}
-						>
-							{__(
-								'Learn how to set your first goal',
-								'burst-statistics'
-							)}
-						</a>
-					</p>
-					<ButtonInput
-						onClick={onGoalsInfoClick}
-						btnVariant="secondary"
-						btnSize="small"
-					>
-						{__( 'Create my first goal', 'burst-statistics' )}
-					</ButtonInput>
-				</Overlay>
-			)}
-
-			<BlockHeading
-				title={__( 'Goals', 'burst-statistics' )}
-				controls={
-					<GoalsHeader
-						goalId={goalId}
-						goals={goals}
-						setGoalId={setGoalId}
-					/>
-				}
-				className="border-b border-gray-200"
-			/>
+		<Block className="row-span-2 @lg:col-span-6 @xl:col-span-3">
+		<BlockHeading
+			title={__( 'Goals', 'burst-statistics' )}
+			controls={
+				<GoalsHeader
+					goalId={goalId}
+					goals={goals}
+					setGoalId={setGoalId}
+				/>
+			}
+			className="border-b border-gray-200"
+			isLoading={isLoading}
+		/>
 			<BlockContent className="px-0 py-0 relative">
 				{isError ? (
 					<div className="text-red p-4">
@@ -321,7 +280,7 @@ const GoalsBlock = () => {
 					</div>
 				) : (
 					<>
-						<div className="px-2.5 py-5 md:px-6 grid w-full grid-cols-2 gap-4 bg-yellow-light">
+						<div className="px-2.5 py-5 md:px-6 grid w-full grid-cols-2 gap-4 bg-yellow-50">
 							<TodayFilterItem {...todayFilterProps} />
 							<TotalFilterItem {...totalFilterProps} />
 						</div>
@@ -395,12 +354,10 @@ const GoalsBlock = () => {
 
 			{0 !== goals.length && (
 				<BlockFooter>
-					{burst_settings.manage_burst_statistics && <a
-						className={'burst-button burst-button--secondary'}
-						href={'#settings/goals'}
-					>
+					{burst_settings.manage_burst_statistics && <ButtonInput btnVariant={'tertiary'} link={{ to: '/settings/goals' }}>
 						{__( 'View setup', 'burst-statistics' )}
-					</a> }
+					</ButtonInput>
+					}
 					<div className="ml-auto">
 						{! isLoading && ! isError && <GoalStatus data={data} />}
 					</div>

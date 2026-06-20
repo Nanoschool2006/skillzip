@@ -96,21 +96,6 @@ class Upgrade {
 			}
 		}
 
-		if ( $prev_version
-			&& version_compare( $prev_version, '1.6.1', '<' ) ) {
-			// add the admin to the email reports mailing list.
-			$mailinglist = burst_get_option( 'email_reports_mailinglist' );
-			if ( ! $mailinglist ) {
-				$defaults = [
-					[
-						'email'     => get_option( 'admin_email' ),
-						'frequency' => 'monthly',
-					],
-				];
-				$this->update_option( 'email_reports_mailinglist', $defaults );
-			}
-		}
-
 		// check if column 'device_id' exists in the table 'burst_statistics'.
 		$is_version_upgrade      = $prev_version && version_compare( $prev_version, '1.7.0', '<' );
 		$lookup_table_incomplete = version_compare( $prev_version, '1.7.1', '=' ) && ! $this->column_exists( 'burst_statistics', 'device_id' );
@@ -175,6 +160,20 @@ class Upgrade {
 			$mu_plugin = trailingslashit( WPMU_PLUGIN_DIR ) . 'burst_rest_api_optimizer.php';
 			if ( file_exists( $mu_plugin ) ) {
 				wp_delete_file( $mu_plugin );
+			}
+
+			// Remove duplicates before dbDelta adds UNIQUE constraint.
+			// Keep only the row with the lowest ID for each (goal_id, statistic_id) pair.
+			// this is an old upgrade, moving it here to clean up the install_goal_statistics_table() function and ensure it only runs once.
+			if ( $this->table_exists( 'burst_goal_statistics' ) ) {
+				global $wpdb;
+				$wpdb->query(
+					"DELETE gs1 FROM {$wpdb->prefix}burst_goal_statistics gs1
+                INNER JOIN {$wpdb->prefix}burst_goal_statistics gs2
+                WHERE gs1.goal_id = gs2.goal_id
+                AND gs1.statistic_id = gs2.statistic_id
+                AND gs1.ID > gs2.ID"
+				);
 			}
 		}
 
@@ -264,6 +263,76 @@ class Upgrade {
 			if ( $this->get_option_bool( 'enable_cookieless_tracking' ) && ! $this->get_option_bool( 'enable_turbo_mode' ) ) {
 				\Burst\burst_loader()->admin->tasks->add_task( 'turbo_mode_recommended' );
 			}
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.3.0-beta1', '<' ) ) {
+			update_option( 'burst_db_upgrade_move_columns_to_sessions', true, false );
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.4.0', '<' ) ) {
+			// Truncate query_stats table because SQL normalization changed (timestamps are now replaced with placeholders).
+			if ( $this->table_exists( 'burst_query_stats' ) ) {
+				global $wpdb;
+				$wpdb->query( "TRUNCATE TABLE {$wpdb->prefix}burst_query_stats" );
+			}
+
+			// Reinstalling rest API optimizer for new REST API endpoint `get_action/ecommerce/<action>`.
+			burst_reinstall_rest_api_optimizer();
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.4.2', '<' ) ) {
+			global $wpdb;
+			$oldest_timestamp = (int) $wpdb->get_var( "SELECT MIN(time) FROM {$wpdb->prefix}burst_statistics" );
+			$activation_time  = (int) get_option( 'burst_activation_time', 0 );
+
+			if ( $oldest_timestamp > 0
+				&& $activation_time > 0
+				&& $oldest_timestamp < ( $activation_time - WEEK_IN_SECONDS )
+			) {
+				update_option( 'burst_activation_time', $oldest_timestamp, false );
+			}
+			burst_reinstall_rest_api_optimizer();
+
+			if ( class_exists( '\WP_Application_Passwords' ) ) {
+				$viewer = get_user_by( 'login', 'burst_statistics_viewer' );
+				if ( $viewer ) {
+					\WP_Application_Passwords::delete_all_application_passwords( $viewer->ID );
+				}
+			}
+
+			flush_rewrite_rules();
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.4.2.1', '<' ) ) {
+			// No-op code to pass the unit test when no upgrade required.
+			$prev_version .= '';
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.4.3', '<' ) ) {
+			// Drop burst_plugin_path and store only the validated
+			// plugin directory slug instead. The MU optimizer now builds the
+			// integration path from WP_PLUGIN_DIR + slug.
+			delete_option( 'burst_plugin_path' );
+			$burst_plugin_slug = basename( untrailingslashit( BURST_PATH ) );
+			if ( preg_match( '/^[a-zA-Z0-9_-]+$/', $burst_plugin_slug ) ) {
+				update_option( 'burst_plugin_slug', $burst_plugin_slug, true );
+			}
+			// Reinstall the optimizer so the on-disk MU plugin matches the new loader logic.
+			burst_reinstall_rest_api_optimizer();
+			delete_transient( 'burst_use_fallback_licensing_domain' );
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.5.0', '<' ) ) {
+			// External link tracking is enabled by default for upgraded installs.
+			$this->update_option( 'track_external_links', true );
+			( new Tasks() )->add_task( 'external_links_tracking' );
+
+			burst_reinstall_rest_api_optimizer();
+		}
+
+		if ( $prev_version && version_compare( $prev_version, '3.5.1', '<' ) ) {
+			// Convert oversized/string report columns to fitted/native types.
+			update_option( 'burst_db_upgrade_report_table_types', true, false );
 		}
 
 		$admin = new Admin();

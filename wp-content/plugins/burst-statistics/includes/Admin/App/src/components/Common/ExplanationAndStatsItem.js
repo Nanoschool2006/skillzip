@@ -1,5 +1,6 @@
 import Icon from '../../utils/Icon';
 import HelpTooltip from '@/components/Common/HelpTooltip';
+import { formatNumber } from '@/utils/formatting';
 
 /**
  * ExplanationAndStatsItem component.
@@ -30,7 +31,7 @@ const ExplanationAndStatsItem = ({
 }) => {
 
 	if ( exactValue && 1000 < exactValue ) {
-		tooltipText = tooltipText ? tooltipText : exactValue.toLocaleString();
+		tooltipText = tooltipText ? tooltipText : formatNumber( exactValue, 1, false );
 	}
 
 	return (
@@ -38,21 +39,21 @@ const ExplanationAndStatsItem = ({
 			{iconKey && <Icon name={iconKey} className="mt-1" />}
 
 			<div className="flex-1 label">
-				<h3 className="text-base font-semibold text-black">{title}</h3>
+				<h3 className="text-base font-semibold text-text-black">{title}</h3>
 
-				{subtitle && <p className="text-sm text-gray">{subtitle}</p>}
+				{subtitle && <p className="text-sm text-text-gray">{subtitle}</p>}
 			</div>
 
 			<div className="text-right">
 				{
 					exactValue && 1000 < exactValue && tooltipText ? (
 					<HelpTooltip content={ tooltipText } delayDuration={1000}>
-						<span className="text-xl font-bold text-black value">
+						<span className="text-xl font-bold text-text-black value">
 							{value}
 						</span>
 					</HelpTooltip>
 				) : (
-					<span className="text-xl font-bold text-black value">
+					<span className="text-xl font-bold text-text-black value">
 						{value}
 					</span>
 				)}

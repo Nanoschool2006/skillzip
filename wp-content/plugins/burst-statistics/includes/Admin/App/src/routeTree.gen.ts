@@ -9,16 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SubscriptionsRouteImport } from './routes/subscriptions'
 import { Route as StoryRouteImport } from './routes/story'
 import { Route as StatisticsRouteImport } from './routes/statistics'
 import { Route as SourcesRouteImport } from './routes/sources'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalesRouteImport } from './routes/sales'
 import { Route as ReportingRouteImport } from './routes/reporting'
+import { Route as EngagementRouteImport } from './routes/engagement'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TableVariantRouteImport } from './routes/table.$variant'
 import { Route as SettingsSettingsIdRouteImport } from './routes/settings.$settingsId'
 import { Route as ReportingReportingIdRouteImport } from './routes/reporting.$reportingId'
 
+const SubscriptionsRoute = SubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StoryRoute = StoryRouteImport.update({
   id: '/story',
   path: '/story',
@@ -49,9 +57,19 @@ const ReportingRoute = ReportingRouteImport.update({
   path: '/reporting',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EngagementRoute = EngagementRouteImport.update({
+  id: '/engagement',
+  path: '/engagement',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TableVariantRoute = TableVariantRouteImport.update({
+  id: '/table/$variant',
+  path: '/table/$variant',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsSettingsIdRoute = SettingsSettingsIdRouteImport.update({
@@ -67,86 +85,114 @@ const ReportingReportingIdRoute = ReportingReportingIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/engagement': typeof EngagementRoute
   '/reporting': typeof ReportingRouteWithChildren
   '/sales': typeof SalesRoute
   '/settings': typeof SettingsRouteWithChildren
   '/sources': typeof SourcesRoute
   '/statistics': typeof StatisticsRoute
   '/story': typeof StoryRoute
+  '/subscriptions': typeof SubscriptionsRoute
   '/reporting/$reportingId': typeof ReportingReportingIdRoute
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
+  '/table/$variant': typeof TableVariantRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/engagement': typeof EngagementRoute
   '/reporting': typeof ReportingRouteWithChildren
   '/sales': typeof SalesRoute
   '/settings': typeof SettingsRouteWithChildren
   '/sources': typeof SourcesRoute
   '/statistics': typeof StatisticsRoute
   '/story': typeof StoryRoute
+  '/subscriptions': typeof SubscriptionsRoute
   '/reporting/$reportingId': typeof ReportingReportingIdRoute
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
+  '/table/$variant': typeof TableVariantRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/engagement': typeof EngagementRoute
   '/reporting': typeof ReportingRouteWithChildren
   '/sales': typeof SalesRoute
   '/settings': typeof SettingsRouteWithChildren
   '/sources': typeof SourcesRoute
   '/statistics': typeof StatisticsRoute
   '/story': typeof StoryRoute
+  '/subscriptions': typeof SubscriptionsRoute
   '/reporting/$reportingId': typeof ReportingReportingIdRoute
   '/settings/$settingsId': typeof SettingsSettingsIdRoute
+  '/table/$variant': typeof TableVariantRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/engagement'
     | '/reporting'
     | '/sales'
     | '/settings'
     | '/sources'
     | '/statistics'
     | '/story'
+    | '/subscriptions'
     | '/reporting/$reportingId'
     | '/settings/$settingsId'
+    | '/table/$variant'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/engagement'
     | '/reporting'
     | '/sales'
     | '/settings'
     | '/sources'
     | '/statistics'
     | '/story'
+    | '/subscriptions'
     | '/reporting/$reportingId'
     | '/settings/$settingsId'
+    | '/table/$variant'
   id:
     | '__root__'
     | '/'
+    | '/engagement'
     | '/reporting'
     | '/sales'
     | '/settings'
     | '/sources'
     | '/statistics'
     | '/story'
+    | '/subscriptions'
     | '/reporting/$reportingId'
     | '/settings/$settingsId'
+    | '/table/$variant'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EngagementRoute: typeof EngagementRoute
   ReportingRoute: typeof ReportingRouteWithChildren
   SalesRoute: typeof SalesRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   SourcesRoute: typeof SourcesRoute
   StatisticsRoute: typeof StatisticsRoute
   StoryRoute: typeof StoryRoute
+  SubscriptionsRoute: typeof SubscriptionsRoute
+  TableVariantRoute: typeof TableVariantRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/subscriptions': {
+      id: '/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/subscriptions'
+      preLoaderRoute: typeof SubscriptionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/story': {
       id: '/story'
       path: '/story'
@@ -189,11 +235,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReportingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/engagement': {
+      id: '/engagement'
+      path: '/engagement'
+      fullPath: '/engagement'
+      preLoaderRoute: typeof EngagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/table/$variant': {
+      id: '/table/$variant'
+      path: '/table/$variant'
+      fullPath: '/table/$variant'
+      preLoaderRoute: typeof TableVariantRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings/$settingsId': {
@@ -239,12 +299,15 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EngagementRoute: EngagementRoute,
   ReportingRoute: ReportingRouteWithChildren,
   SalesRoute: SalesRoute,
   SettingsRoute: SettingsRouteWithChildren,
   SourcesRoute: SourcesRoute,
   StatisticsRoute: StatisticsRoute,
   StoryRoute: StoryRoute,
+  SubscriptionsRoute: SubscriptionsRoute,
+  TableVariantRoute: TableVariantRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -3,7 +3,7 @@ import * as Popover from '@radix-ui/react-popover';
 import Icon from '@/utils/Icon';
 import { useReportsStore } from '@/store/reports/useReportsStore';
 import { __ } from '@wordpress/i18n';
-import { toast } from 'react-toastify';
+import { toast } from '@/utils/toast';
 import {useWizardStore} from '@/store/reports/useWizardStore';
 import useLicenseData from '@/hooks/useLicenseData';
 import ProBadge from '@/components/Common/ProBadge';
@@ -29,7 +29,6 @@ export const ReportActionMenu: React.FC<ReportActionMenuProps> = ({ row }) => {
 	const deleteReport = useReportsStore( ( state ) => state.deleteReport );
 	const duplicateReport = useReportsStore( ( state ) => state.duplicateReport );
 	const duplicateAndLoadReportIntoWizard = useReportsStore( ( state ) => state.duplicateAndLoadReportIntoWizard );
-	const sendTestEmail = useReportsStore( ( state ) => state.sendTestEmail );
 	const sendEmailNow = useReportsStore( ( state ) => state.sendEmailNow );
 	const openPreview = useReportsStore( ( state ) => state.openPreview );
 	const { isLicenseValidFor } = useLicenseData();
@@ -109,22 +108,6 @@ export const ReportActionMenu: React.FC<ReportActionMenuProps> = ({ row }) => {
 						);
 					}
 				});
-			}
-		},
-		{
-			label: __( 'Send test email', 'burst-statistics' ),
-			action: () => {
-				sendTestEmail( row.id ).then( ( response: boolean ) => {
-					if ( response ) {
-						toast.success(
-							__( 'Test email sending has been started.', 'burst-statistics' )
-						);
-					} else {
-						toast.error(
-							__( 'Failed to start test email sending.', 'burst-statistics' )
-						);
-					}
-				});
 			},
 			divider: true
 		},
@@ -159,13 +142,13 @@ export const ReportActionMenu: React.FC<ReportActionMenuProps> = ({ row }) => {
 	return (
 		<Popover.Root open={isOpen} onOpenChange={setIsOpen}>
 			<Popover.Trigger asChild>
-				<button className="bg-gray-100 border border-gray-400 focus:ring-blue-500 rounded-full p-2.5 transition-all duration-200 hover:bg-gray-400 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2">
+				<button className="bg-gray-100 border border-gray-400 focus:ring-blue-500 rounded-full p-2.5 transition-all duration-200 hover:bg-gray-400 hover:shadow-md focus:outline-hidden focus:ring-2 focus:ring-offset-2">
 					<Icon name="ellipsis" />
 				</button>
 			</Popover.Trigger>
 
 			<Popover.Content
-				className="z-[200] min-w-[200px] rounded-lg border border-gray-200 bg-white shadow-xl"
+				className="z-200 min-w-[200px] rounded-lg border border-gray-200 bg-white shadow-xl"
 				align="end"
 				sideOffset={8}
 			>
@@ -193,10 +176,10 @@ export const ReportActionMenu: React.FC<ReportActionMenuProps> = ({ row }) => {
 										disabled={item.disabled}
 										className={`w-full text-left pl-6 pr-8 py-3 text-base transition-colors ${radiusClasses} ${
 											item.disabled ?
-												'text-gray-400 cursor-not-allowed opacity-50' :
+												'text-text-gray-light cursor-not-allowed opacity-50' :
 												item.danger ?
 													'text-red-600 hover:bg-red-50' :
-													'text-gray-900 hover:bg-gray-50'
+													'text-text-gray hover:bg-gray-50'
 										}`}
 									>
 										{item.label}
