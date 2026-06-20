@@ -2,7 +2,7 @@
 /*
 Plugin Name: Formidable Landing Pages
 Description: Create full page forms without distractions.
-Version: 1.0.02
+Version: 1.0.03
 Plugin URI: https://formidableforms.com/
 Author URI: https://formidableforms.com/
 Author: Strategy11
@@ -57,8 +57,13 @@ function load_formidable_landing() {
 		// Add the autoloader
 		spl_autoload_register( 'frm_forms_landing_autoloader' );
 
-		FrmLandingAppController::load_hooks();
-		FrmLandingSettingsController::load_hooks();
+		add_action(
+			'plugins_loaded',
+			function() {
+				FrmLandingAppController::load_hooks();
+				FrmLandingSettingsController::load_hooks();
+			}
+		);
 	}
 }
 
@@ -105,3 +110,29 @@ function frm_landing_pro_missing_add_message( $messages ) {
 }
 
 add_action( 'plugins_loaded', 'load_formidable_landing', 1 );
+
+/**
+ * Handles plugin activation.
+ *
+ * This hook is executed upon plugin activation.
+ */
+register_activation_hook(
+	__FILE__,
+	function () {
+		// Clear embed posts transient since landing pages add to embed locations.
+		delete_transient( 'frm_posts_contain_form' );
+	}
+);
+
+/**
+ * Handles plugin deactivation.
+ *
+ * This hook is executed upon plugin deactivation.
+ */
+register_deactivation_hook(
+	__FILE__,
+	function () {
+		// Clear embed posts transient since landing pages add to embed locations.
+		delete_transient( 'frm_posts_contain_form' );
+	}
+);

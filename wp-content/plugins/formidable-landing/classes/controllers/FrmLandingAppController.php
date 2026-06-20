@@ -16,21 +16,26 @@ class FrmLandingAppController {
 
 	public static function load_hooks() {
 		// The load_hooks function is called on plugins_loaded so call load_lang without a hook.
-		self::load_lang();
+		add_action( 'init', __CLASS__ . '::load_lang', 0 );
 
 		// actions
 		add_action( 'init', array( __CLASS__, 'register_post_types' ), 0 );
 		add_action( 'admin_init', array( __CLASS__, 'include_updater' ) );
+		add_action( 'parse_request', array( __CLASS__, 'maybe_intercept_landing_request' ), 1 );
 		add_action( 'pre_get_posts', array( __CLASS__, 'parse_request' ), 99 );
 		add_action( 'frm_update_form', 'FrmLandingAppHelper::sync_landing_page', 11, 2 );
 		add_action( 'wp_ajax_frm_validate_landing_page_url', 'FrmLandingSettingsController::validate_landing_page_url' );
 
 		// filters
 		add_filter( 'template_include', array( __CLASS__, 'maybe_template_include' ) );
+		add_filter( 'wp_unique_post_slug_is_bad_hierarchical_slug', array( __CLASS__, 'is_bad_hierarchical_slug' ), 10, 2 );
 		add_filter( 'post_type_link', array( __CLASS__, 'remove_slug' ), 10, 2 );
-		add_filter( 'frm_form_list_actions', array( __CLASS__, 'maybe_add_landing_page_action' ), 10, 2 );
+		if ( ! method_exists( 'FrmProFormsListHelper', 'column_embeds' ) ) {
+			add_filter( 'frm_form_list_actions', array( __CLASS__, 'maybe_add_landing_page_action' ), 10, 2 );
+		}
 		add_filter( 'get_canonical_url', array( __CLASS__, 'get_canonical_url' ), 10, 2 );
 		add_filter( 'frm_abandonment_edit_entry_url', array( __CLASS__, 'update_edit_entry_url' ), 10, 2 );
+		add_filter( 'frm_usage_form', array( __CLASS__, 'form_usage_data' ), 10, 2 );
 
 		if ( is_admin() ) {
 			self::load_admin_hooks();
@@ -46,6 +51,7 @@ class FrmLandingAppController {
 	 */
 	private static function load_admin_hooks() {
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+		add_filter( 'frm_get_posts_contain_form', array( __CLASS__, 'add_landing_post_to_posts' ), 10, 2 );
 	}
 
 	/**
@@ -146,7 +152,7 @@ class FrmLandingAppController {
 	 *
 	 * @return void
 	 */
-	private static function load_lang() {
+	public static function load_lang() {
 		load_plugin_textdomain( 'formidable-landing', false, basename( FrmLandingAppHelper::path() ) . '/languages/' );
 	}
 
@@ -173,7 +179,7 @@ class FrmLandingAppController {
 
 	public static function include_updater() {
 		if ( class_exists( 'FrmAddon' ) ) {
-			include FrmLandingAppHelper::path() . '/classes/models/FrmLandingUpdate.php';
+			include_once FrmLandingAppHelper::path() . '/classes/models/FrmLandingUpdate.php';
 			FrmLandingUpdate::load_hooks();
 		}
 	}
@@ -196,12 +202,15 @@ class FrmLandingAppController {
 				'capability_type'     => 'page',
 				'capabilities'        => array(
 					'edit_post'         => 'frm_change_settings',
+					'edit_page'         => 'frm_change_settings',
 					'edit_posts'        => 'frm_change_settings',
 					'edit_others_posts' => 'frm_change_settings',
 					'publish_posts'     => 'frm_change_settings',
 					'delete_post'       => 'frm_change_settings',
+					'delete_page'       => 'frm_change_settings',
 					'delete_posts'      => 'frm_change_settings',
 					'read_post'         => 'frm_change_settings',
+					'read_page'         => 'frm_change_settings',
 				),
 				'show_in_rest'       => true,
 				'supports'           => array( 'editor' ),
@@ -235,6 +244,115 @@ class FrmLandingAppController {
 			return $post_link;
 		}
 		return str_replace( '/' . self::$post_type . '/', '/', $post_link );
+	}
+
+	/**
+	 * Handle landing page requests when a custom permalink structure is active.
+	 * Standard permalink structures already set 'name'/'pagename' via rewrite rules,
+	 * so this is a no-op for them.
+	 *
+	 * @param WP $wp
+	 * @return void
+	 */
+	public static function maybe_intercept_landing_request( $wp ) {
+		// Already resolved by standard rewrite rules — nothing to do.
+		if ( ! empty( $wp->query_vars['name'] ) || ! empty( $wp->query_vars['pagename'] ) ) {
+			return;
+		}
+
+		$slug = self::get_slug_from_wp_request( $wp );
+		if ( ! $slug ) {
+			return;
+		}
+
+		// Only act if a published landing page actually exists with this slug.
+		if ( ! self::get_landing_page_by_slug( $slug ) ) {
+			return;
+		}
+
+		// Override query vars to load this landing page cleanly.
+		$wp->query_vars = array(
+			'post_type' => self::$post_type,
+			'name'      => $slug,
+			'page'      => '',
+		);
+	}
+
+	/**
+	 * Extract the last path segment from $wp->request as a candidate slug.
+	 *
+	 * @param WP $wp
+	 * @return string
+	 */
+	private static function get_slug_from_wp_request( $wp ) {
+		$request = isset( $wp->request ) ? trim( $wp->request, '/' ) : '';
+		if ( '' === $request ) {
+			return '';
+		}
+		$parts = explode( '/', $request );
+		if ( 1 !== count( $parts ) ) {
+			// Landing pages always include a single path segment (the slug).
+			// So ignore anything with more.
+			return '';
+		}
+		return end( $parts );
+	}
+
+	/**
+	 * Get a published landing page post by slug.
+	 *
+	 * @since 1.0.03
+	 *
+	 * @param string $slug The post slug to look up.
+	 *
+	 * @return WP_Post|null The published landing page, or null if not found.
+	 */
+	private static function get_landing_page_by_slug( $slug ) {
+		$post = get_page_by_path( $slug, OBJECT, self::$post_type );
+		if ( ! $post instanceof WP_Post || 'publish' !== $post->post_status ) {
+			return null;
+		}
+
+		$form_id = FrmDb::get_var(
+			'postmeta',
+			array(
+				'meta_key' => 'frm_landing_form_id',
+				'post_id'  => $post->ID,
+			),
+			'meta_value'
+		);
+		if ( ! $form_id ) {
+			return null;
+		}
+
+		$form = FrmForm::getOne( $form_id );
+		if ( ! $form ) {
+			return null;
+		}
+
+		if ( empty( $form->options['landing_page_id'] ) ) {
+			return null;
+		}
+
+		return $post;
+	}
+
+	/**
+	 * Mark a slug as bad when it conflicts with a published landing page slug.
+	 *
+	 * @since 1.0.03
+	 *
+	 * @param bool   $bad_slug Whether the slug is already considered bad.
+	 * @param string $slug     The candidate post slug.
+	 *
+	 * @return bool
+	 */
+	public static function is_bad_hierarchical_slug( $bad_slug, $slug ) {
+		if ( $bad_slug ) {
+			return true;
+		}
+
+		return null !== self::get_landing_page_by_slug( $slug );
 	}
 
 	/**
@@ -346,7 +464,8 @@ class FrmLandingAppController {
 		}
 
 		$url  = home_url() . '/' . $landing_page_post_name;
-		$icon = FrmAppHelper::icon_by_class( 'frmfont frm_file_text_icon', array( 'echo' => false ) );
+		$icon_class = is_callable( 'FrmFormActionsController::disable_unlicensed_actions' ) ? 'frm_cross_device_icon' : 'frm_file_text_icon';
+		$icon       = FrmAppHelper::icon_by_class( 'frmfont ' . $icon_class, array( 'echo' => false ) );
 
 		return '&nbsp;&nbsp;<a role="button" aria-label="' . esc_attr__( 'Open Landing Page', 'formidable-landing' ) . '" href="' . esc_url_raw( $url ) . '">' . $icon . '</a>';
 	}
@@ -363,5 +482,91 @@ class FrmLandingAppController {
 			return home_url() . '/' . $post->post_name;
 		}
 		return $canonical_url;
+	}
+
+	/**
+	 * Modifies form usage data.
+	 *
+	 * @since 1.0.03
+	 *
+	 * @param array $data Form usage data.
+	 * @param array $args Contains `form`: the form object.
+	 * @return array
+	 */
+	public static function form_usage_data( $data, $args ) {
+		$form = $args['form'];
+		if ( ! empty( $form->options['landing_page_id'] ) ) {
+			$data['landing_page_id']         = 1;
+			$data['has_landing_bg_image_id'] = ! empty( $form->options['landing_bg_image_id'] ) ? 1 : 0;
+			$data['landing_layout']          = isset( $form->options['landing_layout'] ) ? $form->options['landing_layout'] : '';
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Add landing page post to the list of posts that contain a form.
+	 *
+	 * @since 1.0.03
+	 *
+	 * @param stdClass[] $posts Array of posts that contain the form shortcode.
+	 * @param array      $args  Arguments including the form object.
+	 *
+	 * @return stdClass[] Modified posts array including landing page if it exists.
+	 */
+	public static function add_landing_post_to_posts( $posts, $args ) {
+		if ( empty( $args['form'] ) || ! is_object( $args['form'] ) ) {
+			return $posts;
+		}
+
+		$form = $args['form'];
+		if ( empty( $form->options['landing_page_id'] ) ) {
+			return $posts;
+		}
+		$landing_page_post_name = FrmLandingSettingsController::get_landing_page_post_name( $form->id );
+
+		if ( ! $landing_page_post_name ) {
+			return $posts;
+		}
+
+		$landing_post = self::get_post_by_name( $landing_page_post_name );
+		if ( ! $landing_post ) {
+			return $posts;
+		}
+
+		// Cast to stdClass so dynamic properties (permalink, title_contains_html) can be added.
+		$landing_post_data                    = (object) (array) $landing_post;
+		$landing_post_data->permalink         = home_url() . '/' . $landing_page_post_name;
+		$landing_post_data->post_title        = FrmAppHelper::icon_by_class( 'frmfont frm_file_text_icon', array( 'echo' => false ) ) . __( 'Form Landing Page', 'formidable-landing' );
+		$landing_post_data->title_contains_html = true;
+		$posts[]                              = $landing_post_data;
+
+		return $posts;
+	}
+
+	/**
+	 * Get a post by its post_name (slug).
+	 *
+	 * @since 1.0.03
+	 *
+	 * @param string $post_name The post name/slug.
+	 * @return WP_Post|null The post object if found, null otherwise.
+	 */
+	private static function get_post_by_name( $post_name ) {
+		if ( empty( $post_name ) ) {
+			return null;
+		}
+
+		$args = array(
+			'name'        => $post_name,
+			'post_type'   => self::$post_type,
+			'post_status' => 'publish',
+			'numberposts' => 1,
+		);
+
+		$posts = get_posts( $args );
+		$post  = ! empty( $posts ) ? $posts[0] : null;
+
+		return $post instanceof WP_Post ? $post : null;
 	}
 }

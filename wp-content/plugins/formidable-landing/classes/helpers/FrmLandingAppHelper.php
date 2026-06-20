@@ -7,7 +7,7 @@ class FrmLandingAppHelper {
 	 *
 	 * @var string $plug_version
 	 */
-	public static $plug_version = '1.0.02';
+	public static $plug_version = '1.0.03';
 
 	/**
 	 * @return string

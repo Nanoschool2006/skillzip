@@ -1,15 +1,15 @@
-# Copyright (C) 2024 Strategy11
+# Copyright (C) 2026 Strategy11
 # This file is distributed under the same license as the Formidable Landing Pages plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Landing Pages 1.0.02\n"
+"Project-Id-Version: Formidable Landing Pages 1.0.03\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable-landing\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-11-18T18:42:50+00:00\n"
+"POT-Creation-Date: 2026-06-16T16:51:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable-landing\n"
@@ -35,39 +35,43 @@ msgstr ""
 msgid "Strategy11"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:185
-#: classes/controllers/FrmLandingAppController.php:210
+#: classes/controllers/FrmLandingAppController.php:191
+#: classes/controllers/FrmLandingAppController.php:219
 msgid "Landing Pages"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:211
-#: classes/controllers/FrmLandingAppController.php:212
+#: classes/controllers/FrmLandingAppController.php:220
+#: classes/controllers/FrmLandingAppController.php:221
 msgid "Landing Page"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:213
+#: classes/controllers/FrmLandingAppController.php:222
 msgid "Edit"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:214
+#: classes/controllers/FrmLandingAppController.php:223
 msgid "Search Landing Pages"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:215
+#: classes/controllers/FrmLandingAppController.php:224
 msgid "No Landing Pages Found."
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:216
+#: classes/controllers/FrmLandingAppController.php:225
 msgid "Add New Landing Page"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:217
+#: classes/controllers/FrmLandingAppController.php:226
 #: views/settings/settings.php:73
 msgid "Edit Landing Page"
 msgstr ""
 
-#: classes/controllers/FrmLandingAppController.php:351
+#: classes/controllers/FrmLandingAppController.php:470
 msgid "Open Landing Page"
+msgstr ""
+
+#: classes/controllers/FrmLandingAppController.php:540
+msgid "Form Landing Page"
 msgstr ""
 
 #: classes/controllers/FrmLandingSettingsController.php:111
@@ -94,15 +98,15 @@ msgstr ""
 msgid "This URL is available"
 msgstr ""
 
-#: formidable-landing.php:74
+#: formidable-landing.php:79
 msgid "Formidable Landing Pages requires Formidable Forms to be installed."
 msgstr ""
 
-#: formidable-landing.php:76
+#: formidable-landing.php:81
 msgid "Install Formidable Forms"
 msgstr ""
 
-#: formidable-landing.php:91
+#: formidable-landing.php:96
 msgid "Formidable Landing Pages requires Formidable Forms Pro to be installed."
 msgstr ""
 

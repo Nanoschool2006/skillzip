@@ -55,7 +55,7 @@ class FrmLandingSettingsController {
 		$sections['landing'] = array(
 			'function' => array( __CLASS__, 'settings_section' ),
 			'name'     => __( 'Form Landing Page', 'formidable' ),
-			'icon'     => 'frm_icon_font frm_file_text_icon',
+			'icon'     => 'frm_icon_font ' . ( is_callable( 'FrmFormActionsController::disable_unlicensed_actions' ) ? 'frm_cross_device_icon' : 'frm_file_text_icon' ),
 			'anchor'   => 'landing',
 		);
 		return $sections;
