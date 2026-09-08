@@ -207,6 +207,17 @@ class Thrive_AB_Page extends Thrive_AB_Post {
 			$variation->get_meta()->update( 'thrive_post_template', $original_page->get( 'thrive_post_template' ) );
 		}
 
+		// Copy visibility settings from parent page to variation
+		if ( ! empty( $model['post_parent'] ) ) {
+			$parent_visibility = get_post_meta( $model['post_parent'], 'thrive_element_visibility', true );
+			if ( ! empty( $parent_visibility ) ) {
+				update_post_meta( $variation->ID, 'thrive_element_visibility', $parent_visibility );
+			}
+
+			$original_page = new Thrive_AB_Meta( $model['post_parent'] );
+			$original_page->copy_thrive_theme_meta( $variation->ID );
+		}
+
 		return $variation;
 	}
 

@@ -245,6 +245,36 @@ class Thrive_AB_Test_Item extends Thrive_AB_Model {
 	}
 
 	/**
+	 * Columns that exist in the test_items table.
+	 *
+	 * Note this is narrower than the allowlist in _prepare_data(), which also names thankyou_id and
+	 * goal_pages - neither of which is a column on this table.
+	 *
+	 * @see migrations/install-1.0.php      base columns
+	 * @see migrations/stopped_date-1.2.php stopped_date
+	 *
+	 * @return string[]
+	 */
+	protected function _table_columns() {
+
+		return array(
+			'id',
+			'page_id',
+			'variation_id',
+			'test_id',
+			'title',
+			'is_control',
+			'is_winner',
+			'impressions',
+			'unique_impressions',
+			'conversions',
+			'revenue',
+			'active',
+			'stopped_date',
+		);
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	protected function _get_default_data() {

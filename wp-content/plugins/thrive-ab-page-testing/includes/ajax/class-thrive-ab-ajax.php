@@ -30,17 +30,18 @@ class Thrive_AB_Ajax {
 
 	public static function add_ajax_actions() {
 
+		/**
+		 * These handlers perform privileged operations (creating pages, selecting A/B test winners,
+		 * uploading variation thumbnails, searching posts) and must never be exposed to unauthenticated
+		 * visitors. They are intentionally registered for logged-in users only - no `nopriv` variant.
+		 */
 		$actions = array(
-			self::$action            => true,
-			self::$controller_action => true,
+			self::$action,
+			self::$controller_action,
 		);
 
-		foreach ( $actions as $action => $nopriv ) {
+		foreach ( $actions as $action ) {
 			add_action( 'wp_ajax_' . $action, array( __CLASS__, $action ) );
-
-			if ( $nopriv ) {
-				add_action( 'wp_ajax_nopriv_' . $action, array( __CLASS__, $action ) );
-			}
 		}
 
 		/**
@@ -50,15 +51,47 @@ class Thrive_AB_Ajax {
 	}
 
 	/**
+	 * Whitelist of methods that may be dispatched through the generic `custom` parameter.
+	 *
+	 * Only these methods are reachable from {@see thrive_ab_ajax_action()}; this prevents the
+	 * dynamic dispatch from invoking arbitrary public static methods on the class.
+	 *
+	 * @return string[]
+	 */
+	public static function get_allowed_actions() {
+
+		return array(
+			'post_search',
+			'add_new_page',
+			'set_winner',
+			'save_variation_thumb',
+			/**
+			 * The admin dashboard and edit-post screens dispatch the controller through this generic
+			 * handler (action=thrive_ab_ajax_action&custom=thrive_ab_ajax_controller&route=...).
+			 * `thrive_ab_ajax_controller()` re-validates the nonce and the controller's handle()
+			 * re-validates capability + nonce, so re-entry here is safe.
+			 */
+			'thrive_ab_ajax_controller',
+		);
+	}
+
+	/**
 	 * Handler for all
 	 */
 	public static function thrive_ab_ajax_action() {
 
-		$custom = isset( $_REQUEST['custom'] ) ? $_REQUEST['custom'] : '';
+		if ( ! Thrive_AB_Product::has_access() ) {
+			wp_send_json_error();
+		}
+
+		check_ajax_referer( self::NONCE_NAME, 'nonce' );
+
+		// Sanitize to a scalar string; array input (e.g. custom[]=) collapses to '' and is rejected below.
+		$custom = isset( $_REQUEST['custom'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['custom'] ) ) : '';
 
 		$response = array();
 
-		if ( method_exists( __CLASS__, $custom ) ) {
+		if ( in_array( $custom, self::get_allowed_actions(), true ) && method_exists( __CLASS__, $custom ) ) {
 			$response = call_user_func( array( __CLASS__, $custom ), $_REQUEST );
 		} else {
 			wp_send_json_error();
@@ -289,6 +322,7 @@ class Thrive_AB_Ajax {
 
 			$data['ajax']['thrive_ab'] = array(
 				'action'       => self::$action,
+				'nonce'        => wp_create_nonce( self::NONCE_NAME ),
 				'running_test' => $running_test instanceof Thrive_AB_Test ? $running_test->id : false,
 			);
 		} catch ( Exception $e ) {

@@ -360,7 +360,7 @@ class Thrive_AB_Admin {
 		$view_test_page = new Thrive_AB_Admin_View_Test_Page();
 		$has_access     = class_exists( 'Thrive_AB_Product', false ) ? Thrive_AB_Product::cap() : current_user_can( 'manage_options' );
 		add_submenu_page(
-			null,
+			'',
 			__( 'View test', 'thrive-ab-page-testing' ),
 			__( 'View Test', 'thrive-ab-page-testing' ),
 			$has_access,

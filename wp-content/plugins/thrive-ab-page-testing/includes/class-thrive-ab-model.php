@@ -93,11 +93,22 @@ abstract class Thrive_AB_Model {
 	 */
 	public function init() {
 
-		if ( ! $this->id ) {
+		/**
+		 * Only digit strings and positive integers are valid ids.
+		 * is_numeric() is too loose here: it accepts '1.9' and '1e2', which %d
+		 * would then coerce to 1 and 100 and silently load the wrong row.
+		 */
+		if ( ! $this->id || ! ctype_digit( (string) $this->id ) ) {
 			throw new Exception( __( 'Invalid model id', 'thrive-ab-page-testing' ) );
 		}
 
-		$data = $this->wpdb->get_row( 'SELECT * FROM ' . $this->_table_name() . ' WHERE id = ' . $this->id, ARRAY_A );
+		/**
+		 * Table name comes from a hardcoded literal, only the id is dynamic
+		 */
+		$sql    = 'SELECT * FROM ' . $this->_table_name() . ' WHERE id = %d';
+		$params = array( $this->id );
+
+		$data = $this->wpdb->get_row( $this->wpdb->prepare( $sql, $params ), ARRAY_A );
 
 		if ( ! empty( $data ) ) {
 			foreach ( $data as $key => $value ) {
@@ -125,6 +136,21 @@ abstract class Thrive_AB_Model {
 		if ( isset( $data['unique'] ) ) {
 			unset( $data['unique'] );
 		}
+
+		/*
+		 * Keep only real columns.
+		 *
+		 * $this->_data is populated from request payloads - __set() accepts any key, and the ajax
+		 * controller json_decode()s the request body straight into the model - so without this an
+		 * attacker-chosen key becomes a raw column identifier. $wpdb->insert()/update() build the
+		 * column list and SET clause by backtick-joining array_keys( $data ) with no escaping and no
+		 * column validation, then hand the result to $wpdb->prepare() as its format argument, where
+		 * prepare() can no longer sanitize it.
+		 *
+		 * Filtering here rather than in each _prepare_data() means every subclass is covered,
+		 * including ones that do not override it.
+		 */
+		$data = array_intersect_key( $data, array_flip( $this->_table_columns() ) );
 
 		if ( $this->id ) {
 			$saved = $this->wpdb->update( $this->_table_name(), $data, array( 'id' => $this->id ) );
@@ -206,6 +232,21 @@ abstract class Thrive_AB_Model {
 	 * @return string
 	 */
 	abstract protected function _table_name();
+
+	/**
+	 * Columns that actually exist in the model's table.
+	 *
+	 * The save() method intersects the model data against this list before writing, so anything
+	 * omitted here can never reach $wpdb->insert()/update() as a column identifier. Abstract on
+	 * purpose: a new subclass that forgets to declare its columns should fail loudly at development
+	 * time rather than silently inherit an unfiltered write path.
+	 *
+	 * Keep in step with migrations/ when a column is added, or the new column is silently dropped
+	 * from every write.
+	 *
+	 * @return string[]
+	 */
+	abstract protected function _table_columns();
 
 	/**
 	 * Called before saving _data in DB

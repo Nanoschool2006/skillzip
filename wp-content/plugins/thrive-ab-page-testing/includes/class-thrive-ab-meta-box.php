@@ -105,8 +105,10 @@ class Thrive_AB_Meta_Box {
 				'page_id' => $_REQUEST['post_ID'],
 			) );
 
+			// get_edit_post_link() can return null (no edit cap); always terminate the flow
+			// with a clean fallback so the delete never leaves the page half-rendered.
 			$return_url = get_edit_post_link( $_REQUEST['post_ID'], '' );
-			wp_redirect( $return_url );
+			wp_redirect( $return_url ?: admin_url() );
 			exit;
 		}
 	}

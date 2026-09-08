@@ -163,9 +163,10 @@ class Thrive_AB_Ajax_Controller {
 						if ( ! empty( $variation_data ) ) {
 							$variation_id = $variation_data['ID'];
 							$source_variation->get_meta()->init( array(
-								get_post_type( $post_parent ),
+								'page',
 								'template',
 							) )->copy_to( $variation_id );
+							$source_variation->get_meta()->copy_thrive_theme_meta( $variation_id );
 							$source_variation->copy_thumb_to( $variation_id );
 						}
 					}

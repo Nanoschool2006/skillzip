@@ -72,6 +72,7 @@
 
 			form.append( 'custom', 'save_variation_thumb' );
 			form.append( 'action', TVE.CONST.ajax.thrive_ab.action );
+			form.append( 'nonce', TVE.CONST.ajax.thrive_ab.nonce );
 			form.append( 'post_id', TVE.CONST.post_id );
 
 			if ( typeof TVE.CONST.reset_stats !== 'undefined' ) {

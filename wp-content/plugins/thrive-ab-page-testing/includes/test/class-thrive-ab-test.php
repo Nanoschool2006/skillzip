@@ -162,6 +162,34 @@ class Thrive_AB_Test extends Thrive_AB_Model {
 	}
 
 	/**
+	 * Columns that exist in the tests table.
+	 *
+	 * @see migrations/install-1.0.php  base columns
+	 * @see migrations/revenue-1.1.php  goal_pages
+	 *
+	 * @return string[]
+	 */
+	protected function _table_columns() {
+
+		return array(
+			'id',
+			'page_id',
+			'title',
+			'status',
+			'auto_win_enabled',
+			'auto_win_min_conversions',
+			'auto_win_min_duration',
+			'auto_win_chance_original',
+			'notes',
+			'type',
+			'date_added',
+			'date_started',
+			'date_completed',
+			'goal_pages',
+		);
+	}
+
+	/**
 	 * Save the model into db and push it into _data[items]
 	 *
 	 * @param $model

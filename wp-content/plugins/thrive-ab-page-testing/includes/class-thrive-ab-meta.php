@@ -69,8 +69,9 @@ class Thrive_AB_Meta {
 			'_tve_header',
 			'_tve_footer',
 			//template
-			'thrive_post_template'
-
+			'thrive_post_template',
+			// Visibility settings from Thrive Theme
+			'thrive_element_visibility',
 		);
 	}
 

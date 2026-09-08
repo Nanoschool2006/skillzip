@@ -20,6 +20,28 @@ class Thrive_AB_Event extends Thrive_AB_Model {
 	}
 
 	/**
+	 * Columns that exist in the event_log table.
+	 *
+	 * @see migrations/install-1.0.php  base columns
+	 * @see migrations/revenue-1.1.php  revenue, goal_page
+	 *
+	 * @return string[]
+	 */
+	protected function _table_columns() {
+
+		return array(
+			'id',
+			'page_id',
+			'variation_id',
+			'test_id',
+			'date',
+			'event_type',
+			'revenue',
+			'goal_page',
+		);
+	}
+
+	/**
 	 * @inheritdoc
 	 */
 	protected function is_valid() {

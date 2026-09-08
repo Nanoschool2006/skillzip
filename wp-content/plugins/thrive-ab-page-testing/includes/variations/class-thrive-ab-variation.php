@@ -158,7 +158,8 @@ class Thrive_AB_Variation extends Thrive_AB_Post {
 			);
 
 
-			$link = add_query_arg( $params, get_edit_post_link( $this->_post->ID ) );
+			$edit_link = get_edit_post_link( $this->_post->ID );
+			$link      = $edit_link ? add_query_arg( $params, $edit_link ) : '';
 
 		} else {
 
