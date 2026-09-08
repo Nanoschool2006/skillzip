@@ -337,7 +337,7 @@ class TCB_Image_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'image_element',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425765-how-to-use-the-image-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-image-element-in-thrive-architect/',
 			],
 		];
 	}

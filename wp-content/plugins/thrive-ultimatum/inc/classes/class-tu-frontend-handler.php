@@ -532,10 +532,35 @@ class TU_Frontend_Handler {
 	 * @return array|void
 	 */
 	public function prepare_campaign_response( $campaign, $is_shortcode = false ) {
+		$this->campaign = $campaign;
+		/** @var TU_Schedule_Abstract $schedule */
+		$schedule = $campaign->tu_schedule_instance;
+
+		$event   = new TU_Event( $campaign );
+		$designs = $event->get_designs();
+
+		/**
+		 * Check if we have viewport-based designs (widget or shortcode)
+		 * These designs should defer impression tracking until they're visible
+		 */
+		$has_viewport_based_designs = false;
+		$viewport_based_types       = array( 'widget', TVE_Ult_Const::DESIGN_TYPE_SHORTCODE );
+
+		foreach ( $designs as $design ) {
+			if ( in_array( $design['post_type'], $viewport_based_types, true ) ) {
+				$has_viewport_based_designs = true;
+				break;
+			}
+		}
+
 		/**
 		 * Registers an impression for the campaign
+		 * Skip immediate impression tracking if campaign has viewport-based designs (widget/shortcode)
+		 * These impressions will be tracked via JavaScript when the element becomes visible
+		 *
+		 * @see https://github.com/awesomemotive/thrive-themes/issues/2956
 		 */
-		if ( ! isset( $_COOKIE[ TVE_Ult_Const::COOKIE_IMPRESSION . $campaign->ID ] ) ) {
+		if ( ! $has_viewport_based_designs && ! isset( $_COOKIE[ TVE_Ult_Const::COOKIE_IMPRESSION . $campaign->ID ] ) ) {
 
 			$email_log = tve_ult_get_email_log( $campaign->ID, $this->param( 'tu_em' ) );
 
@@ -571,13 +596,6 @@ class TU_Frontend_Handler {
 			setcookie( TVE_Ult_Const::COOKIE_IMPRESSION . $campaign->ID, $now, $expiry, '/' );
 			$_COOKIE[ TVE_Ult_Const::COOKIE_IMPRESSION . $campaign->ID ] = $now;
 		}
-
-		$this->campaign = $campaign;
-		/** @var TU_Schedule_Abstract $schedule */
-		$schedule = $campaign->tu_schedule_instance;
-
-		$event   = new TU_Event( $campaign );
-		$designs = $event->get_designs();
 
 		/**
 		 * $html will containing a key-value pair for the designs
@@ -633,6 +651,20 @@ class TU_Frontend_Handler {
 				if ( $schedule->use_gmt() ) {
 					$response['timer_components']['timezone'] = tve_ult_get_timezone_format( tve_ult_gmt_offset_from_tzstring( $schedule->get()['gmt_offset'] ) );
 				}
+			}
+
+			/**
+			 * Add deferred impression data for viewport-based designs (widget/shortcode)
+			 * This data will be used by JavaScript to track impressions when elements become visible
+			 *
+			 * @see https://github.com/awesomemotive/thrive-themes/issues/2956
+			 */
+			if ( $has_viewport_based_designs && ! isset( $_COOKIE[ TVE_Ult_Const::COOKIE_IMPRESSION . $campaign->ID ] ) ) {
+				$response['deferred_impression'] = array(
+					'campaign_id' => $campaign->ID,
+					'campaign_type' => $campaign->type,
+					'tu_em' => $this->param( 'tu_em', '' ),
+				);
 			}
 		} else {
 			$response = array();
@@ -942,6 +974,86 @@ class TU_Frontend_Handler {
 	}
 
 	/**
+	 * helper function
+	 *
+	 * @return string admin-ajax action for JS-based viewport impression tracking
+	 */
+	public function impression_action() {
+		return 'tve_ult_viewport_impression';
+	}
+
+	/**
+	 * Handle viewport-based impression tracking from JavaScript
+	 * Called when a widget or shortcode element becomes visible in the viewport
+	 *
+	 * @see https://github.com/awesomemotive/thrive-themes/issues/2956
+	 *
+	 * @return void
+	 */
+	public function ajax_viewport_impression() {
+		// Validate nonce
+		if ( ! check_ajax_referer( 'tu_viewport_impression', '_nonce', false ) ) {
+			wp_send_json_error( array( 'message' => 'Invalid nonce' ) );
+			return;
+		}
+
+		$campaign_id = $this->param( 'campaign_id' );
+		$tu_em       = $this->param( 'tu_em', '' );
+
+		if ( empty( $campaign_id ) ) {
+			wp_send_json_error( 'Missing campaign ID' );
+			return;
+		}
+
+		$campaign_id = intval( $campaign_id );
+
+		// Check if impression already registered via cookie
+		if ( isset( $_COOKIE[ TVE_Ult_Const::COOKIE_IMPRESSION . $campaign_id ] ) ) {
+			wp_send_json_success( 'Impression already registered' );
+			return;
+		}
+
+		// Get campaign data
+		$campaign = tve_ult_get_campaign( $campaign_id, array(
+			'get_settings' => true,
+		) );
+
+		if ( empty( $campaign ) ) {
+			wp_send_json_error( 'Campaign not found' );
+			return;
+		}
+
+		// Get email log if email parameter is provided
+		$email_log = ! empty( $tu_em ) ? tve_ult_get_email_log( $campaign_id, $tu_em ) : null;
+
+		/**
+		 * Register impression if not a crawler and not already tracked
+		 */
+		if ( ! tve_dash_is_crawler() && ( empty( $email_log ) || empty( $email_log['has_impression'] ) ) ) {
+			do_action( 'tve_ult_action_impression', $campaign );
+
+			if ( ! empty( $email_log ) ) {
+				$email_log['has_impression'] = 1;
+				tve_ult_save_email_log( $email_log );
+			}
+		}
+
+		/**
+		 * Set impression cookie
+		 */
+		$expiry = tve_ult_current_time( 'timestamp' ) + YEAR_IN_SECONDS;
+		if ( $campaign->type === TVE_Ult_Const::CAMPAIGN_TYPE_EVERGREEN && ! empty( $campaign->settings ) && ! empty( $campaign->settings['end'] ) && is_numeric( $campaign->settings['end'] ) ) {
+			$cookie = $campaign->settings['end'] + $campaign->settings['duration'];
+			$expiry = tve_ult_current_time( 'timestamp' ) + $cookie * DAY_IN_SECONDS;
+		}
+		$now = tve_ult_current_time( 'Y-m-d H:i:s' );
+		setcookie( TVE_Ult_Const::COOKIE_IMPRESSION . $campaign_id, $now, $expiry, '/' );
+		$_COOKIE[ TVE_Ult_Const::COOKIE_IMPRESSION . $campaign_id ] = $now;
+
+		wp_send_json_success( 'Impression registered' );
+	}
+
+	/**
 	 * prepares the localization of frontend javascript
 	 *
 	 * @param array $campaigns                    a list of campaigns that matches the display settings for the current request
@@ -1023,6 +1135,8 @@ class TU_Frontend_Handler {
 			'ajaxurl'                  => admin_url( 'admin-ajax.php' ),
 			'ajax_load_action'         => $this->ajax_load_action(),
 			'conversion_events_action' => $this->conversion_events_action(),
+			'impression_action'        => $this->impression_action(),
+			'impression_nonce'         => wp_create_nonce( 'tu_viewport_impression' ),
 			// at this point, campaign_ids should be ordered. In the ajax call, it's sufficient to just display the first one that matches
 			'shortcode_campaign_ids'   => TU_Shortcodes::get_campaigns(),
 			'matched_display_settings' => $matched_display_settings_ids,

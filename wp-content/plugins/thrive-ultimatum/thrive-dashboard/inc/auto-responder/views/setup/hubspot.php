@@ -32,7 +32,7 @@
 		</p>
 		<p class="tvd-toggle-version-2 tvd-margin-top-normal <?php echo $version == 2 ? '' : 'tvd-hide'; ?>">
 			<?php echo esc_html__( 'Please make sure you set Read and Write permissions for Contacts and Lists in order for your connection to work. ', 'thrive-dash' ) ?>
-			<a href="https://help.thrivethemes.com/en/articles/4647663-how-to-set-up-and-use-an-api-connection-with-hubspot/"
+			<a href="https://thrivethemes.com/docs/setting-up-an-api-connection-with-hubspot/"
 			   target="_blank"><?php echo esc_html__( 'Learn more', 'thrive-dash' ) ?></a>
 		</p>
 		<?php $this->display_video_link(); ?>

@@ -697,7 +697,11 @@ function tve_ult_append_shortcode_campaigns( $data ) {
  */
 function tve_ult_render_shortcode( $arguments, $is_editor = true ) {
 	if ( ! $is_editor ) {
-		return class_exists( 'TU_Shortcode_Countdown' ) ? TU_Shortcode_Countdown::instance()->code( $arguments['tve_ult_campaign'], $arguments['tve_ult_shortcode'] ) : '';
+		if ( ! is_array( $arguments ) || empty( $arguments['tve_ult_campaign'] ) || empty( $arguments['tve_ult_shortcode'] ) ) {
+			return '';
+		}
+
+		return class_exists( 'TU_Shortcodes' ) ? TU_Shortcodes::get_countdown_shortcode( $arguments['tve_ult_campaign'], $arguments['tve_ult_shortcode'] ) : '';
 	}
 
 	$design    = tve_ult_get_design( $arguments['tve_ult_shortcode'] );
@@ -857,10 +861,14 @@ function tu_fluentcrm_trigger_campaign( $tagIds, $contact ) {
 		return false;
 	}
 
+	if ( ! is_array( $tagIds ) ) {
+		$tagIds = array( $tagIds );
+	}
+
 	foreach ( $campaigns as $campaign ) {
 		$trigger = $campaign->settings['trigger'];
 
-		if ( empty( $trigger ) || ! isset( $trigger['api'] ) || $trigger['api'] !== 'fluentcrm' ) {
+		if ( empty( $trigger ) || ! isset( $trigger['api'] ) || $trigger['api'] !== 'fluentcrm' || empty( $trigger['ids'] ) ) {
 			continue;
 		}
 
@@ -869,7 +877,8 @@ function tu_fluentcrm_trigger_campaign( $tagIds, $contact ) {
 		}
 
 		if ( ! empty( array_intersect( $tagIds, $trigger['ids'] ) ) ) {
-			$encrypted_email = md5( $contact->email );
+			$contact_email = $contact->email ?? '';
+			$encrypted_email = md5( $contact_email );
 
 			if ( tve_ult_get_email_log( $campaign->ID, $encrypted_email ) ) {
 				continue;
@@ -886,7 +895,7 @@ function tu_fluentcrm_trigger_campaign( $tagIds, $contact ) {
 				'started'     => $date,
 			);
 
-			tve_ult_save_email_log( $model );
+			tve_ult_save_email_log( $model, $contact_email );
 		}
 	}
 
@@ -935,7 +944,7 @@ function tu_start_campaign( $campaign_id, $user_email ) {
 	/**
 	 * Return for no email because we dont have to save the log
 	 */
-	return $user_email ? tve_ult_save_email_log( $model ) : true;
+	return $user_email ? tve_ult_save_email_log( $model, $user_email ) : true;
 }
 
 /**

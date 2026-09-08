@@ -207,7 +207,7 @@ class TCB_Responsivevideo_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'video_element',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425782-how-to-use-the-video-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-video-element-in-thrive-architect/',
 			],
 		];
 	}

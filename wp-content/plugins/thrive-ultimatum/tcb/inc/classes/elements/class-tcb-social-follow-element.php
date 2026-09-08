@@ -161,7 +161,7 @@ class TCB_Social_Follow_Element extends TCB_Social_Element {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'social_follow',
-				'link' => 'https://help.thrivethemes.com/en/articles/4472330-how-to-use-the-social-follow-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-social-elements-in-thrive-architect/',
 			],
 		];
 	}

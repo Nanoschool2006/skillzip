@@ -5,7 +5,7 @@
 </div>
 
 <div class="tcb-editor-meta-boxes-wrapper">
-	<iframe id="tcb-editor-meta-boxes-iframe" data-src="<?php echo add_query_arg( TCB_Editor_Meta_Boxes::FLAG, 1, get_edit_post_link() ); ?>"></iframe>
+	<iframe id="tcb-editor-meta-boxes-iframe" data-src="<?php echo esc_url( add_query_arg( TCB_Editor_Meta_Boxes::FLAG, 1, get_edit_post_link() ?? '' ) ); ?>"></iframe>
 </div>
 
 <div class="tcb-meta-boxes-modal-footer">

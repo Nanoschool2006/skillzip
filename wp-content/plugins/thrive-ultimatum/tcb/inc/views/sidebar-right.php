@@ -78,6 +78,14 @@
 				</a>
 			<?php endif ?>
 
+			<a href="javascript:void(0)" class="sidebar-item" data-position="left"
+			   data-tooltip="<?php echo esc_attr__( 'Navigator', 'thrive-cb' ); ?>"
+			   data-toggle="navigator">
+				<?php tcb_icon( 'list-ul-light' ); ?>
+				<?php tcb_icon( 'list-ul-light', false, 'sidebar', 'active' ); ?>
+				<span class="sidebar-label"><?php echo esc_html__( 'Navigator', 'thrive-cb' ); ?></span>
+			</a>
+
 			<?php do_action( 'tcb_sidebar_extra_links' ); ?>
 		</div>
 
@@ -113,6 +121,35 @@
 		</div>
 		<div id="tve-promoted-elements"><?php tcb_template( 'elements/-list-promoted' ); ?></div>
 		<div id="tve-elements" class="scrollbar"><?php tcb_template( 'elements/-sidebar-list' ); ?></div>
+	</div>
+
+	<div class="drawer navigator" data-drawer="navigator">
+		<div class="header fill" id="navigator-search">
+			<span class="text s-normal"><?php echo esc_html__( 'Navigator', 'thrive-cb' ); ?></span>
+			<div class="s-links s-normal">
+				<a href="javascript:void(0)" class="s-icon click search" data-fn="state" data-state="search"><?php tcb_icon( 'search-regular' ); ?></a>
+				<a href="javascript:void(0)" class="s-icon click close" data-fn="hide_drawers"><?php tcb_icon( 'times-regular' ); ?></a>
+			</div>
+			<input autocomplete="off" type="text" name="s" placeholder="<?php echo esc_attr__( 'Search elements...', 'thrive-cb' ); ?>" class="s-search q">
+			<a href="javascript:void(0)" class="x-icon click search s-search" data-fn="state" data-state="normal">
+				<?php tcb_icon( 'times-light' ); ?>
+			</a>
+		</div>
+		<div class="navigator-tree scrollbar" tabindex="0" role="tree" aria-label="<?php echo esc_attr__( 'Page elements', 'thrive-cb' ); ?>"></div>
+		<div class="navigator-empty" style="display:none;">
+			<p><?php echo esc_html__( 'No elements on this page.', 'thrive-cb' ); ?></p>
+		</div>
+		<div class="navigator-no-results" style="display:none;">
+			<p><?php echo esc_html__( 'No elements found.', 'thrive-cb' ); ?></p>
+		</div>
+		<div class="navigator-loading-template" style="display:none;">
+			<div class="nav-loading">
+				<svg class="nav-loading-spinner" viewBox="0 0 24 24">
+					<path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/>
+				</svg>
+				<span class="nav-loading-text"><?php echo esc_html__( 'Updating...', 'thrive-cb' ); ?></span>
+			</div>
+		</div>
 	</div>
 
 	<div class="drawer central_style_panel" data-drawer="central_style_panel">

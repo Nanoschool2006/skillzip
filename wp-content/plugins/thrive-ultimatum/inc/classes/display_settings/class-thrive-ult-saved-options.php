@@ -64,9 +64,19 @@ class Thrive_Ult_Saved_Options {
 		if ( $from_data !== null ) {
 			$row = $from_data;
 		} else {
-			$where = $byId === false ? "name = '{$this->name}'" : "id = {$byId}";
-			$sql   = "SELECT * FROM {$this->table_name} WHERE {$where}";
-			$row   = $this->db->get_row( $sql );
+			/*
+			 * $byId reaches this method from $_REQUEST['template_id'], so it is bound rather than
+			 * interpolated. $this->name is bound too, though no current caller reaches this branch
+			 * with request data - the instances that call initOptions() are constructed without a
+			 * name, and the one built from $_POST['name'] is only ever used for save().
+			 *
+			 * $this->table_name is built internally by tve_ult_table_name(), hence still inline.
+			 */
+			$sql = false === $byId
+				? $this->db->prepare( "SELECT * FROM {$this->table_name} WHERE name = %s", $this->name )
+				: $this->db->prepare( "SELECT * FROM {$this->table_name} WHERE id = %d", $byId );
+
+			$row = $this->db->get_row( $sql );
 		}
 		if ( $row ) {
 			$this->show_options = $row->show_options;

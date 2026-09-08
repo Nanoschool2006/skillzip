@@ -413,7 +413,7 @@ class TCB_Tabs_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => array(
 				'type' => 'help',
 				'url'  => 'tabs',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425806-how-to-use-the-tabs-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-tabs-element-in-thrive-architect/',
 			),
 		);
 	}

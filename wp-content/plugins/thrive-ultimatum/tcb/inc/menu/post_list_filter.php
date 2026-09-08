@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="info-text grey-text">
 					<span>
 						<?php echo __( 'The query must match the dynamic filter on a post list for filtering to apply.', 'thrive-cb' ); ?>
-						<a href="https://help.thrivethemes.com/en/articles/6533678-how-to-use-the-post-list-filter-element#h_f7158be702" target="_blank" class="blue-text">
+						<a href="https://thrivethemes.com/docs/how-to-use-the-post-list-element-in-thrive-architect/#h_f7158be702" target="_blank" class="blue-text">
 							<?php echo __( 'Learn more.', 'thrive-cb' ); ?>
 						</a>
 					</span>

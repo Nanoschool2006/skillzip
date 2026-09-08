@@ -194,7 +194,7 @@ function tcb_get_default_edit_url( $post_id = 0 ) {
 	}
 
 	$post      = get_post( $post_id );
-	$edit_link = set_url_scheme( get_edit_post_link( $post_id ) );
+	$edit_link = set_url_scheme( get_edit_post_link( $post_id ) ?? '' );
 
 	/**
 	 * Allows changing the default wp post's edit link
@@ -2205,11 +2205,12 @@ function tve_enqueue_editor_scripts() {
 
 				/* some params will be needed also for the frontend script */
 				$frontend_options = array(
-					'is_editor_page'   => true,
-					'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-					'social_fb_app_id' => tve_get_social_fb_app_id(),
-					'is_single'        => (string) ( (int) is_singular() ),
-					'nonce'            => TCB_Utils::create_nonce(),
+					'is_editor_page'    => true,
+					'ajaxurl'           => admin_url( 'admin-ajax.php' ),
+					'social_fb_app_id'  => tve_get_social_fb_app_id(),
+					'is_single'         => (string) ( (int) is_singular() ),
+					'nonce'             => TCB_Utils::create_nonce(),
+					'file_upload_nonce' => wp_create_nonce( 'tcb_file_upload' ),
 				);
 
 				/**
@@ -3117,7 +3118,7 @@ function tve_update_post_meta( $post_id, $meta_key, $meta_value ) {
 function tve_get_downloaded_templates() {
 	$options = get_option( 'thrive_tcb_download_lp', [] );
 
-	return empty( $options ) ? [] : $options;
+	return is_array( $options ) ? $options : [];
 }
 
 
@@ -3925,7 +3926,9 @@ function tve_revert_page_to_theme() {
 			'post_modified_gmt' => current_time( 'mysql' ),
 			'post_title'        => get_the_title( $post_id ),
 		) );
-		wp_redirect( get_edit_post_link( $post_id, 'url' ) );
+		/* get_edit_post_link() returns null if the user can't edit - fall back to the posts list so the flow always terminates cleanly */
+		$edit_link = get_edit_post_link( $post_id, 'url' );
+		wp_redirect( $edit_link ?: admin_url( 'edit.php' ) );
 		exit();
 	}
 }
@@ -4122,6 +4125,32 @@ function tve_custom_form_submit() {
 	 *
 	 */
 	do_action( 'tcb_api_form_submit', $post );
+
+	/**
+	 * Standardized form submission hook.
+	 *
+	 * Note: No form_id is included because the only available identifier at this level
+	 * (_tcb_id) is an internal FormSettings post ID with no meaning outside TCB.
+	 * Plugin-specific hooks (e.g. thrivethemes_leads_form_submitted) provide
+	 * meaningful form identifiers within their own context.
+	 *
+	 * @param array $payload {
+	 *     @type int    $user_id    Current user ID (0 for guests).
+	 *     @type array  $form_data  Submitted form data.
+	 *     @type string $source     'architect' or 'leads'.
+	 *     @type string $source_url URL of the page where form was submitted.
+	 *     @type int    $post_id    Post/page ID where form was submitted.
+	 *     @type int    $timestamp  Unix timestamp.
+	 * }
+	 */
+	do_action( 'thrivethemes_form_submitted', array(
+		'user_id'    => (int) get_current_user_id(),
+		'form_data'  => $post,
+		'source'     => 'architect',
+		'source_url' => ! empty( $post['url'] ) ? $post['url'] : ( isset( $post['post_id'] ) ? get_permalink( (int) $post['post_id'] ) : '' ),
+		'post_id'    => isset( $post['post_id'] ) ? (int) $post['post_id'] : 0,
+		'timestamp'  => (int) time(),
+	) );
 }
 
 function valid_spam_check( $data ) {
@@ -4252,6 +4281,16 @@ function tve_api_form_submit( $output = true ) {
 	 *
 	 */
 	do_action( 'tcb_api_form_submit', $post );
+
+	/** Standardized form submission hook — see tve_custom_form_submit() for full PHPDoc. */
+	do_action( 'thrivethemes_form_submitted', array(
+		'user_id'    => (int) get_current_user_id(),
+		'form_data'  => $post,
+		'source'     => ! empty( $post['thrive_leads'] ) ? 'leads' : 'architect',
+		'source_url' => ! empty( $post['url'] ) ? $post['url'] : ( isset( $post['post_id'] ) ? get_permalink( (int) $post['post_id'] ) : '' ),
+		'post_id'    => isset( $post['post_id'] ) ? (int) $post['post_id'] : 0,
+		'timestamp'  => (int) time(),
+	) );
 
 	$slug = strtolower( trim( preg_replace( '/[^A-Za-z0-9-]+/', '-', $data['_tcb_id'] ) ) );
 	do_action( 'tcb_api_form_submit_' . $slug, $post );
@@ -4840,6 +4879,22 @@ if ( ! function_exists( 'tve_frontend_enqueue_scripts' ) ) {
 	 * enqueue scripts for the frontend - also editor and preview
 	 */
 	function tve_frontend_enqueue_scripts( $quiz_optin_id = null ) {
+		/**
+		 * Thrive Dashboard defines TVE_DASH_URL lazily on `init` (via tve_dash_set_dash_url()).
+		 * A third-party plugin can render wp_head() earlier - e.g. FluentCart's modal checkout
+		 * runs during `plugins_loaded`, firing wp_enqueue_scripts before that constant exists -
+		 * which would fatal on the TVE_DASH_URL / tve_dash_* usages below. Define it defensively
+		 * via Dashboard's own helper, or bail if Dashboard isn't available yet. See issue #4006.
+		 */
+		if ( ! defined( 'TVE_DASH_URL' ) ) {
+			if ( function_exists( 'tve_dash_set_dash_url' ) ) {
+				tve_dash_set_dash_url();
+			}
+			if ( ! defined( 'TVE_DASH_URL' ) ) {
+				return;
+			}
+		}
+
 		/* Prevent loading TCB frontend scripts on third-party page builder editor pages to avoid script conflicts */
 		if ( tve_is_third_party_editor_page() ) {
 			return;
@@ -4938,6 +4993,7 @@ if ( ! function_exists( 'tve_frontend_enqueue_scripts' ) ) {
 				'video_reporting' => get_rest_url( get_current_blog_id(), 'tcb/v1' . '/video-reporting' ),
 			),
 			'nonce'                           => TCB_Utils::create_nonce(),
+			'file_upload_nonce'               => wp_create_nonce( 'tcb_file_upload' ),
 			'allow_video_src'                 => tve_dash_allow_video_src(),
 			'google_client_id'                => tvd_get_google_api_client_id(),
 			'facebook_app_id'                 => tvd_get_facebook_app_id(),
@@ -5662,56 +5718,56 @@ function tve_get_post_author( $post ) {
 function tve_get_intercom_article_url( $key = '' ) {
 	$articles = [
 		'menu'                      => 'https://api.intercom.io/articles/4425832',
-		'responsive'                => 'https://help.thrivethemes.com/en/articles/4425813-responsive-editing-why-doesn-t-my-page-look-exactly-like-the-preview-on-my-mobile-device',
-		'image_element'             => 'https://help.thrivethemes.com/en/articles/4425765-how-to-use-the-image-element',
-		'lead_generation'           => 'https://help.thrivethemes.com/en/articles/4425779-how-to-use-the-lead-generation-element',
-		'lg_custom_fields'          => 'https://help.thrivethemes.com/en/articles/4425882-how-to-add-a-custom-field-to-the-lead-generation-element',
-		'block'                     => 'https://help.thrivethemes.com/en/articles/4425843-how-to-use-the-block-element',
-		'login_registration'        => 'https://help.thrivethemes.com/en/articles/4425883-how-to-use-the-login-registration-form-element',
-		'text'                      => 'https://help.thrivethemes.com/en/articles/4425764-how-to-use-the-text-element',
-		'button'                    => 'https://help.thrivethemes.com/en/articles/4425768-how-to-use-the-button-element',
-		'columns'                   => 'https://help.thrivethemes.com/en/articles/4425769-how-to-use-the-columns-element',
-		'background_section'        => 'https://help.thrivethemes.com/en/articles/4425770-how-to-use-the-background-section-element',
-		'contentbox'                => 'https://help.thrivethemes.com/en/articles/4425774-how-to-use-the-content-box-element',
-		'templates_symbols'         => 'https://help.thrivethemes.com/en/articles/4425777-how-to-use-the-templates-and-symbols-element',
-		'logo'                      => 'https://help.thrivethemes.com/en/articles/4425848-how-to-use-the-logo-element',
-		'click_to_tweet'            => 'https://help.thrivethemes.com/en/articles/4425790-how-to-use-the-click-to-tweet-element',
-		'content_reveal'            => 'https://help.thrivethemes.com/en/articles/4425778-how-to-use-the-content-reveal-element',
+		'responsive'                => 'https://thrivethemes.com/docs/how-to-fix-display-and-responsive-issues-in-thrive-architect/',
+		'image_element'             => 'https://thrivethemes.com/docs/how-to-use-the-image-element-in-thrive-architect/',
+		'lead_generation'           => 'https://thrivethemes.com/docs/how-to-use-the-lead-generation-element-in-thrive-architect/',
+		'lg_custom_fields'          => 'https://thrivethemes.com/docs/autoresponders-that-supports-the-custom-field-integration-with-the-lead-generation-element/',
+		'block'                     => 'https://thrivethemes.com/docs/how-to-use-the-block-element-in-thrive-architect/',
+		'login_registration'        => 'https://thrivethemes.com/docs/how-to-use-the-login-and-registration-form-element-in-thrive-architect/',
+		'text'                      => 'https://thrivethemes.com/docs/how-to-use-the-text-element-in-thrive-architect/',
+		'button'                    => 'https://thrivethemes.com/docs/how-to-use-the-button-element-in-thrive-architect/',
+		'columns'                   => 'https://thrivethemes.com/docs/how-to-use-the-columns-element-in-thrive-architect/',
+		'background_section'        => 'https://thrivethemes.com/docs/how-to-use-the-background-section-element-in-thrive-architect/',
+		'contentbox'                => 'https://thrivethemes.com/docs/how-to-use-the-content-box-element-in-thrive-architect/',
+		'templates_symbols'         => 'https://thrivethemes.com/docs/how-to-use-the-templates-and-symbols-element-in-thrive-architect/',
+		'logo'                      => 'https://thrivethemes.com/docs/how-to-use-the-icon-element-in-thrive-architect/',
+		'click_to_tweet'            => 'https://thrivethemes.com/docs/how-to-use-the-post-to-x-click-to-tweet-element-in-thrive-architect/',
+		'content_reveal'            => 'https://thrivethemes.com/docs/how-to-use-the-content-reveal-element-in-thrive-architect/',
 		'countdown'                 => 'https://help.thrivethemes.com/en/articles/4425793-how-to-use-the-countdown-elements',
 		'countdown_evergreen'       => 'https://help.thrivethemes.com/en/articles/4425793-how-to-use-the-countdown-elements',
-		'credit_card'               => 'https://help.thrivethemes.com/en/articles/4425794-how-to-use-the-credit-card-element',
-		'custom_html'               => 'https://help.thrivethemes.com/en/articles/4425799-how-to-use-the-custom-html-and-google-map-elements',
-		'disqus_comments'           => 'https://help.thrivethemes.com/en/articles/4425808-how-to-add-facebook-disqus-comments-in-thrive-architect',
-		'divider'                   => 'https://help.thrivethemes.com/en/articles/4425791-how-to-use-the-divider-and-star-rating-elements',
-		'facebook_comments'         => 'https://help.thrivethemes.com/en/articles/4425808-how-to-add-facebook-disqus-comments-in-thrive-architect',
-		'fill_counter'              => 'https://help.thrivethemes.com/en/articles/4425789-how-to-use-the-fill-counter-element',
-		'google_map'                => 'https://help.thrivethemes.com/en/articles/4425799-how-to-use-the-custom-html-and-google-map-elements',
-		'icon'                      => 'https://help.thrivethemes.com/en/articles/4425785-how-to-use-the-icon-element',
-		'progress_bar'              => 'https://help.thrivethemes.com/en/articles/4790886-how-to-use-the-progress-bar-element',
-		'social_share'              => 'https://help.thrivethemes.com/en/articles/4425796-how-to-use-the-social-share-element',
-		'social_follow'             => 'https://help.thrivethemes.com/en/articles/4472330-how-to-use-the-social-follow-element',
-		'star_rating'               => 'https://help.thrivethemes.com/en/articles/4425791-how-to-use-the-divider-and-star-rating-elements',
-		'styled_list'               => 'https://help.thrivethemes.com/en/articles/4425800-how-to-use-the-styled-list-element',
-		'table'                     => 'https://help.thrivethemes.com/en/articles/4425798-how-to-use-the-table-element',
-		'table_of_contents'         => 'https://help.thrivethemes.com/en/articles/4425803-how-to-set-up-the-table-of-contents-element',
-		'tabs'                      => 'https://help.thrivethemes.com/en/articles/4425806-how-to-use-the-tabs-element',
-		'testimonial'               => 'https://help.thrivethemes.com/en/articles/4425805-how-to-add-a-testimonial-to-your-page-with-thrive-architect',
-		'toggle'                    => 'https://help.thrivethemes.com/en/articles/4425878-how-to-use-the-toggle-element',
-		'video_element'             => 'https://help.thrivethemes.com/en/articles/4425782-how-to-use-the-video-element',
-		'wordpress_content'         => 'https://help.thrivethemes.com/en/articles/4425781-how-to-use-the-wordpress-content-element',
-		'audio_element'             => 'https://help.thrivethemes.com/en/articles/4425842-how-to-use-the-audio-element',
-		'call_to_action'            => 'https://help.thrivethemes.com/en/articles/4425745-adding-a-call-to-action-element-with-thrive-architect',
-		'guarantee_box'             => 'https://help.thrivethemes.com/en/articles/4425744-adding-guarantee-boxes-to-your-thrive-architect-pages',
-		'contact_form'              => 'https://help.thrivethemes.com/en/articles/4430139-how-to-use-the-contact-form-element',
-		'numbered_list'             => 'https://help.thrivethemes.com/en/articles/4425821-how-to-use-the-numbered-list-element',
-		'post_list'                 => 'https://help.thrivethemes.com/en/articles/4425844-how-to-use-the-post-list-element',
-		'pricing_table'             => 'https://help.thrivethemes.com/en/articles/4425836-how-to-use-the-pricing-table-element',
-		'search_element'            => 'https://help.thrivethemes.com/en/articles/4425871-how-to-use-the-search-element',
-		'styled_box'                => 'https://help.thrivethemes.com/en/articles/4425825-how-to-use-the-styled-box-element-in-thrive-architect',
-		'carousel_options'          => 'https://help.thrivethemes.com/en/articles/5126221-using-the-image-gallery-carousel-options',
-		'number_counter'            => 'https://help.thrivethemes.com/en/articles/5579404-how-to-use-the-number-counter-element',
-		'post_list_filter'          => 'https://help.thrivethemes.com/en/articles/6533678-how-to-use-the-post-list-filter-element',
-		'email_phone_dynamic_links' => 'https://help.thrivethemes.com/en/articles/7150618-how-to-add-a-phone-or-email-dynamic-link',
+		'credit_card'               => 'https://thrivethemes.com/docs/how-to-use-the-credit-card-element-in-thrive-architect/',
+		'custom_html'               => 'https://thrivethemes.com/docs/how-to-use-html-attributes-custom-html-and-google-maps-in-thrive-architect/',
+		'disqus_comments'           => 'https://thrivethemes.com/docs/how-to-use-third-party-images-and-cdn-services-with-thrive-architect/',
+		'divider'                   => 'https://thrivethemes.com/docs/how-to-use-the-divider-and-star-rating-elements-in-thrive-architect/',
+		'facebook_comments'         => 'https://thrivethemes.com/docs/how-to-use-third-party-images-and-cdn-services-with-thrive-architect/',
+		'fill_counter'              => 'https://thrivethemes.com/docs/how-to-use-the-counter-elements-in-thrive-architect/',
+		'google_map'                => 'https://thrivethemes.com/docs/how-to-use-html-attributes-custom-html-and-google-maps-in-thrive-architect/',
+		'icon'                      => 'https://thrivethemes.com/docs/how-to-use-the-icon-element-in-thrive-architect/',
+		'progress_bar'              => 'https://thrivethemes.com/docs/how-to-use-the-progress-bar-element-in-thrive-architect/',
+		'social_share'              => 'https://thrivethemes.com/docs/how-to-use-the-social-elements-in-thrive-architect/',
+		'social_follow'             => 'https://thrivethemes.com/docs/how-to-use-the-social-elements-in-thrive-architect/',
+		'star_rating'               => 'https://thrivethemes.com/docs/how-to-use-the-divider-and-star-rating-elements-in-thrive-architect/',
+		'styled_list'               => 'https://thrivethemes.com/docs/how-to-use-the-styled-list-and-numbered-list-elements-in-thrive-architect/',
+		'table'                     => 'https://thrivethemes.com/docs/how-to-use-html-attributes-custom-html-and-google-maps-in-thrive-architect/',
+		'table_of_contents'         => 'https://thrivethemes.com/docs/configuring-the-table-of-contents-element-of-thrive-architect/',
+		'tabs'                      => 'https://thrivethemes.com/docs/how-to-use-the-tabs-element-in-thrive-architect/',
+		'testimonial'               => 'https://thrivethemes.com/docs/how-to-get-started-with-thrive-ovation/',
+		'toggle'                    => 'https://thrivethemes.com/docs/how-to-use-the-toggle-element-in-thrive-architect/',
+		'video_element'             => 'https://thrivethemes.com/docs/how-to-use-the-video-element-in-thrive-architect/',
+		'wordpress_content'         => 'https://thrivethemes.com/docs/how-to-use-the-wordpress-content-element-in-thrive-architect/',
+		'audio_element'             => 'https://thrivethemes.com/docs/how-to-use-the-audio-element-in-thrive-architect/',
+		'call_to_action'            => 'https://thrivethemes.com/docs/how-to-use-the-call-to-action-element-in-thrive-architect/',
+		'guarantee_box'             => 'https://thrivethemes.com/docs/how-to-use-the-call-to-action-element-in-thrive-architect/',
+		'contact_form'              => 'https://thrivethemes.com/docs/how-to-use-the-contact-form-element-in-thrive-architect/',
+		'numbered_list'             => 'https://thrivethemes.com/docs/how-to-use-the-styled-list-and-numbered-list-elements-in-thrive-architect/',
+		'post_list'                 => 'https://thrivethemes.com/docs/how-to-use-the-post-list-element-in-thrive-architect/',
+		'pricing_table'             => 'https://thrivethemes.com/docs/how-to-use-the-pricing-table-element-in-thrive-architect/',
+		'search_element'            => 'https://thrivethemes.com/docs/how-to-use-the-custom-menu-element-in-thrive-architect/',
+		'styled_box'                => 'https://thrivethemes.com/docs/how-to-use-the-styled-box-element-in-thrive-architect/',
+		'carousel_options'          => 'https://thrivethemes.com/docs/how-to-use-the-image-gallery-element-in-thrive-architect/',
+		'number_counter'            => 'https://thrivethemes.com/docs/how-to-use-the-counter-elements-in-thrive-architect/',
+		'post_list_filter'          => 'https://thrivethemes.com/docs/how-to-use-the-post-list-element-in-thrive-architect/',
+		'email_phone_dynamic_links' => 'https://thrivethemes.com/docs/how-to-use-hyperlinks-and-link-styling-in-thrive-architect/',
 		'multiselect_mode'          => 'https://api.intercom.io/articles/8624582',
 	];
 

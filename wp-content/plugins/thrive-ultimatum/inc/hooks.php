@@ -73,6 +73,14 @@ if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 	add_action( 'wp_ajax_' . $tve_ult_frontend->conversion_events_action(), array( $tve_ult_frontend, 'ajax_conversion_event_check' ) );
 	add_action( 'wp_ajax_nopriv_' . $tve_ult_frontend->conversion_events_action(), array( $tve_ult_frontend, 'ajax_conversion_event_check' ) );
 
+	/**
+	 * Viewport-based impression tracking from JavaScript
+	 *
+	 * @see https://github.com/awesomemotive/thrive-themes/issues/2956
+	 */
+	add_action( 'wp_ajax_' . $tve_ult_frontend->impression_action(), array( $tve_ult_frontend, 'ajax_viewport_impression' ) );
+	add_action( 'wp_ajax_nopriv_' . $tve_ult_frontend->impression_action(), array( $tve_ult_frontend, 'ajax_viewport_impression' ) );
+
 	add_filter( 'tve_dash_main_ajax_tu_lazy_load', array( $tve_ult_frontend, 'ajax_load' ), 10, 2 );
 	add_filter( 'tve_dash_main_ajax_tu_conversion_events', array( $tve_ult_frontend, 'ajax_conversion_event_check' ), 10, 2 );
 

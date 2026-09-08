@@ -168,6 +168,8 @@ registerBlockType( 'thrive/ultimatum-block', {
 					id: `tvu-block-${selectedDesign}`,
 					class: `${className} tvu-block-preview tvu-block-${selectedDesign}`,
 					scrolling: 'no',
+					/* iframes default to 300px wide; the design's responsive CSS shrinks at narrow widths, so force full block width here (blocks/css/styles.css is uncompiled and 404s in dev) */
+					style: { width: '100%' },
 					onLoad() {
 						const iframes = document.getElementsByClassName(
 							`tvu-block-${selectedDesign}`

@@ -234,7 +234,7 @@ class TCB_Search_Form_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'search_element',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425871-how-to-use-the-search-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-custom-menu-element-in-thrive-architect/',
 			],
 		];
 	}

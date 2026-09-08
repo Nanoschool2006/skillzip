@@ -213,7 +213,7 @@ class TCB_Icon_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'icon',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425785-how-to-use-the-icon-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-icon-element-in-thrive-architect/',
 			],
 		];
 	}

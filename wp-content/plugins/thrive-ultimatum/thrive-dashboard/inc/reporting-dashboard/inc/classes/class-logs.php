@@ -17,6 +17,35 @@ class Logs {
 
 	const TABLE_NAME = 'thrive_reporting_logs';
 
+	/**
+	 * Physical columns of the reporting log table.
+	 *
+	 * Every identifier this class emits - filter keys, ORDER BY, GROUP BY, COUNT() and the
+	 * DISTINCT column in get_fields() - has to be one of these. None of them can be bound as a
+	 * placeholder, and the strings they are concatenated into end up either inside
+	 * $wpdb->prepare()'s format argument or, in the case of the SELECT list, outside prepare()
+	 * altogether. So an unvalidated identifier is raw SQL.
+	 *
+	 * These are also exactly the keys of Event::get_registered_fields(), which maps a report's
+	 * logical field names onto them.
+	 *
+	 * @see inc/db-manager/migrations/reporting-logs-install-1.0.3.php
+	 */
+	const TABLE_COLUMNS = [
+		'id',
+		'event_type',
+		'created',
+		'item_id',
+		'user_id',
+		'post_id',
+		'int_field_1',
+		'int_field_2',
+		'float_field',
+		'varchar_field_1',
+		'varchar_field_2',
+		'text_field_1',
+	];
+
 	/** @var \Tve_Wpdb */
 	protected $db;
 
@@ -59,6 +88,66 @@ class Logs {
 	}
 
 	/**
+	 * Identifiers this query is allowed to emit, on top of TABLE_COLUMNS.
+	 *
+	 * Reports may legitimately group or sort by a SELECT alias rather than a physical column -
+	 * Created::get_query_select_field() emits `DATE_FORMAT(...) AS date`, and reports then group by
+	 * `date`. Report::parse_query() supplies the alias set for the event type in play; it is built
+	 * from the registered field classes, so it is entirely plugin-defined and never request-derived.
+	 *
+	 * @var string[]
+	 */
+	private $allowed_aliases = [];
+
+	/**
+	 * Reduce an identifier to a known column or alias, or to $fallback when it is neither.
+	 *
+	 * Report queries take their column names from the request, and no amount of escaping makes an
+	 * arbitrary string safe in an identifier position - esc_sql() and _escape() both leave
+	 * backticks, spaces, commas and parentheses untouched. Matching against a fixed set is the only
+	 * thing that works here.
+	 *
+	 * @param mixed  $column   Candidate identifier, usually request-derived.
+	 * @param string $fallback Returned when $column is not recognised.
+	 *
+	 * @return string
+	 */
+	protected function valid_column( $column, $fallback = '' ) {
+		if ( ! is_string( $column ) && ! is_int( $column ) ) {
+			return $fallback;
+		}
+
+		if ( in_array( $column, static::TABLE_COLUMNS, true ) ) {
+			return (string) $column;
+		}
+
+		return in_array( $column, $this->allowed_aliases, true ) ? (string) $column : $fallback;
+	}
+
+	/**
+	 * Build a bound placeholder list for an IN ( ... ) clause, pushing the values onto $this->args.
+	 *
+	 * @param array $values Values to bind.
+	 *
+	 * @return string Comma-separated placeholders, or '' when there is nothing to bind.
+	 */
+	protected function bind_in_list( $values ) {
+		$values = array_values( (array) $values );
+
+		if ( empty( $values ) ) {
+			return '';
+		}
+
+		$placeholders = [];
+		foreach ( $values as $value ) {
+			$placeholders[] = is_int( $value ) || ctype_digit( (string) $value ) ? '%d' : '%s';
+			$this->args[]   = $value;
+		}
+
+		return implode( ', ', $placeholders );
+	}
+
+	/**
 	 * @param Event|mixed $event
 	 *
 	 * @return bool|int|\mysqli_result|resource|null
@@ -89,16 +178,40 @@ class Logs {
 	public function get_fields( $event_type, $field, $values = [] ) {
 		$this->args = [];
 
+		/*
+		 * Logs is a singleton and $allowed_aliases is only ever assigned by set_query(), so without
+		 * this reset a report query earlier in the same request would leave its SELECT aliases behind
+		 * and valid_column() would keep accepting them here. Nothing exploits that today - every
+		 * caller passes a physical column - but the guard is only meaningful if it cannot be widened
+		 * by request ordering.
+		 */
+		$this->allowed_aliases = [];
+
+		/*
+		 * $field is an identifier and $values arrive from the REST `ids` parameter. The identifier is
+		 * validated against the real columns and the values are bound, rather than imploded straight
+		 * into the clause as before. An unknown column yields no rows instead of injected SQL.
+		 */
+		$field = $this->valid_column( $field );
+
+		if ( '' === $field ) {
+			return [];
+		}
+
 		$this->where  = "event_type='%s'";
 		$this->args[] = $event_type;
 
 		if ( ! empty( $values ) ) {
-			$this->where .= sprintf( ' AND %s IN ( %s )', $field, implode( ', ', $values ) );
+			$placeholders = $this->bind_in_list( $values );
+
+			if ( '' !== $placeholders ) {
+				$this->where .= sprintf( ' AND `%s` IN ( %s )', $field, $placeholders );
+			}
 		}
 
 		//exp:   'SELECT DISTINCT item_id FROM wp_thrive_reporting_logs WHERE event_type = "tqb_quiz_completed"';
 		$query = sprintf(
-			"SELECT DISTINCT %s as 'value' FROM %s WHERE %s",
+			"SELECT DISTINCT `%s` as 'value' FROM %s WHERE %s",
 			$field,
 			$this->table,
 			// phpcs:ignore
@@ -131,6 +244,9 @@ class Logs {
 		$conditions = [];
 		$values     = [];
 
+		// See get_fields(): stale aliases from an earlier set_query() must not widen a DELETE.
+		$this->allowed_aliases = [];
+
 		if ( isset( $where_args['event_type'] ) ) {
 			$conditions[] = 'event_type IN (' . implode( ',', array_fill( 0, count( $where_args['event_type'] ), "'%s'" ) ) . ')';
 			$values       = array_values( $where_args['event_type'] );
@@ -138,7 +254,48 @@ class Logs {
 		}
 
 		foreach ( $where_args as $field => $value ) {
-			$conditions[] = "`$field` = " . $value;
+			/*
+			 * Both halves used to be concatenated raw - `$field` as an identifier and $value straight
+			 * into the string that becomes prepare()'s format argument, so the value was not bound
+			 * either. Callers all pass hardcoded keys today, but the values include request-derived
+			 * ids, so the column is validated and the value is bound.
+			 */
+			$column = $this->valid_column( $field );
+
+			if ( '' === $column ) {
+				/*
+				 * Bail rather than skip. Dropping the condition and carrying on would WIDEN a DELETE:
+				 * an unrecognised column used to produce invalid SQL and delete nothing, so skipping
+				 * it would start deleting every row matching the remaining conditions instead.
+				 */
+				return $this->db;
+			}
+
+			if ( is_array( $value ) ) {
+				$placeholders = [];
+				foreach ( array_values( $value ) as $item ) {
+					$placeholders[] = is_int( $item ) || ctype_digit( (string) $item ) ? '%d' : '%s';
+					$values[]       = $item;
+				}
+
+				if ( empty( $placeholders ) ) {
+					continue;
+				}
+
+				$conditions[] = "`$column` IN ( " . implode( ', ', $placeholders ) . ' )';
+			} else {
+				$conditions[] = "`$column` = " . ( is_int( $value ) || ctype_digit( (string) $value ) ? '%d' : '%s' );
+				$values[]     = $value;
+			}
+		}
+
+		/*
+		 * Never emit an unconstrained DELETE. Today an empty $conditions would produce invalid SQL
+		 * and fail, but that is an accident rather than a guard - a refactor that tidied the WHERE
+		 * away would turn this into a table wipe.
+		 */
+		if ( empty( $conditions ) ) {
+			return $this->db;
 		}
 
 		$conditions = implode( ' AND ', $conditions );
@@ -158,6 +315,15 @@ class Logs {
 		$this->where    = '';
 		$this->group_by = '';
 		$this->order_by = '';
+
+		/*
+		 * Aliases the caller vouches for. Report::parse_query() derives these from the registered
+		 * field classes of the event type being reported on, so callers that build a query by hand
+		 * (User_Events, Privacy) simply get the physical columns and nothing else.
+		 */
+		$this->allowed_aliases = empty( $args['allowed_columns'] ) || ! is_array( $args['allowed_columns'] )
+			? []
+			: array_filter( $args['allowed_columns'], 'is_string' );
 
 		if ( empty( $args['fields'] ) ) {
 			$this->select = '*';
@@ -194,11 +360,33 @@ class Logs {
 		}
 
 		if ( ! empty( $args['group_by'] ) ) {
-			$group_by = is_string( $args['group_by'] ) ? $args['group_by'] : implode( ', ', $args['group_by'] );
+			/*
+			 * group_by and count are request-derived identifiers, and $this->group_by ends up inside
+			 * $wpdb->prepare()'s format argument while $this->select is concatenated outside prepare()
+			 * entirely. Both are reduced to known columns; unrecognised ones are dropped rather than
+			 * emitted.
+			 */
+			$group_by = is_array( $args['group_by'] ) ? $args['group_by'] : [ $args['group_by'] ];
+			$group_by = array_filter( array_map( [ $this, 'valid_column' ], $group_by ) );
 
-			$this->group_by = " GROUP BY $group_by";
+			if ( ! empty( $group_by ) ) {
+				$this->group_by = ' GROUP BY `' . implode( '`, `', $group_by ) . '`';
 
-			$this->select .= ', COUNT(' . $args['count'] . ') AS count';
+				/*
+				 * The COUNT() target is deliberately NOT validated as a column: report classes set
+				 * it to expressions on purpose (Course_Finish uses a DISTINCT CONCAT to stop
+				 * double-counting repeat completions, #2544). It is safe because it is server-owned -
+				 * Report_App::register_rest_routes() strips `count` out of the request at the route
+				 * boundary, before any report class runs, and the callers that pass it directly all
+				 * hardcode it. Note it is NOT stripped in Report::parse_query(): by that point a
+				 * report's own expression is indistinguishable from a request value.
+				 */
+				$count = isset( $args['count'] ) && is_string( $args['count'] ) && '' !== $args['count']
+					? $args['count']
+					: 'id';
+
+				$this->select .= ', COUNT(' . $count . ') AS count';
+			}
 		}
 
 		if ( empty( $args['page'] ) || empty( $args['items_per_page'] ) ) {
@@ -209,7 +397,18 @@ class Logs {
 		}
 
 		if ( ! empty( $args['order_by'] ) && ! empty( $args['order_by_direction'] ) ) {
-			$this->order_by = ' ORDER BY ' . $args['order_by'] . ' ' . $args['order_by_direction'];
+			/*
+			 * Both halves are request-derived. order_by is only ever run through
+			 * Event::get_field_table_col(), which returns its input unchanged when nothing matches -
+			 * a mapper, not an allowlist - and order_by_direction is not filtered anywhere upstream.
+			 */
+			$order_by = $this->valid_column( $args['order_by'] );
+
+			if ( '' !== $order_by ) {
+				$direction = 'ASC' === strtoupper( (string) $args['order_by_direction'] ) ? 'ASC' : 'DESC';
+
+				$this->order_by = ' ORDER BY `' . $order_by . '` ' . $direction;
+			}
 		}
 
 		return $this;
@@ -241,10 +440,37 @@ class Logs {
 			case Post_Id::key():
 			case Item_Id::key():
 			default:
+				/*
+				 * This is the sink behind #4463, and it is the same shape as #4404: $key is an array
+				 * KEY taken from the request, concatenated into $this->where, which prepare_query()
+				 * hands to $wpdb->prepare() as its FORMAT argument - so prepare() sanitizes the bound
+				 * values and never the injected identifier. The array branch was worse still, imploding
+				 * the values in unbound as well.
+				 *
+				 * The /user-events route reaches here without passing through
+				 * Report::parse_query(), so its allowlist is not in play on that path; the key has to
+				 * be validated here.
+				 */
+				$column = $this->valid_column( $key );
+
+				if ( '' === $column ) {
+					/*
+					 * Fail closed. Simply dropping the clause would return a SUPERSET - on
+					 * /user-events an unmapped filter key would hand back every user's events
+					 * instead of the requested user's, where before it errored and returned none.
+					 */
+					$this->where .= ' AND 1=0';
+					break;
+				}
+
 				if ( is_array( $values ) ) {
-					$this->where .= sprintf( ' AND %s IN ( %s )', $key, implode( ', ', $values ) );
+					$placeholders = $this->bind_in_list( $values );
+
+					if ( '' !== $placeholders ) {
+						$this->where .= sprintf( ' AND `%s` IN ( %s )', $column, $placeholders );
+					}
 				} else {
-					$this->where .= " AND $key='%s'";
+					$this->where .= " AND `$column`='%s'";
 
 					$this->args[] = $values;
 				}

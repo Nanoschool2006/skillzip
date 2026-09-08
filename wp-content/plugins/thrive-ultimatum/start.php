@@ -21,6 +21,7 @@ require_once TVE_Ult_Const::plugin_path() . 'inc/classes/class-tu-campaign-event
 require_once TVE_Ult_Const::plugin_path() . 'inc/classes/class-tu-event.php';
 require_once TVE_Ult_Const::plugin_path() . 'inc/classes/class-tu-shortcodes.php';
 require_once TVE_Ult_Const::plugin_path() . 'blocks/ultimatum-block.php';
+require_once TVE_Ult_Const::plugin_path() . 'inc/classes/class-thrive-ultimatum-api.php';
 /**
  *  Include automator and its files
  */

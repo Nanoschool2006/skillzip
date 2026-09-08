@@ -482,9 +482,6 @@ function tve_dash_get_dash_const_options() {
 			'affiliate_links'               => 'affiliateLinks',
 			'add_aff_id'                    => 'saveAffiliateId',
 			'get_aff_id'                    => 'getAffiliateId',
-			'token'                         => 'token',
-			'save_token'                    => 'saveToken',
-			'delete_token'                  => 'deleteToken',
 			'change_capability'             => 'changeCapability',
 			'update_user_functionality'     => 'updateUserFunctionality',
 			'reset_capabilities_to_default' => 'resetCapabilitiesToDefault',
@@ -542,20 +539,6 @@ function tve_dash_enqueue() {
 
 	wp_localize_script( 'tve-dash-main-js', 'TVE_Dash_Const', tve_dash_get_dash_const_options() );
 	tve_dash_enqueue_script( 'tvd-fa-kit', get_option( 'tvd_fa_kit', '' ) );
-
-	/**
-	 * Localize token data
-	 */
-	$token_options          = array();
-	$token_options['model'] = get_option( 'thrive_token_support' );
-	if ( ! empty( $token_options['model']['token'] ) && ! get_option( 'tve_dash_generated_token' ) ) {
-		/* Backwards-compat: store this option separately in the database */
-		update_option( 'tve_dash_generated_token', array(
-			'token'   => $token_options['model']['token'],
-			'referer' => $token_options['model']['referer'],
-		) );
-	}
-	wp_localize_script( 'tve-dash-main-js', 'TVE_Token', $token_options );
 
 	/**
 	 * output the main tpls for backbone views used in dashboard
@@ -1206,7 +1189,7 @@ function tvd_get_individual_plugin_license_message( $product, $inner = true ) {
                     <h4>Heads up! Your %s license has expired.</h4>
                     <p>' . esc_html( $text ) . ' %s</p>
                     <div>
-                        <a href="https://help.thrivethemes.com/en/articles/8223498-what-happens-when-your-thrive-product-license-expires" target="_blank">' . esc_html__( 'Learn more', 'thrive-dash' ) . '</a>
+                        <a href="https://thrivethemes.com/docs/what-happens-when-your-thrive-product-license-expires/" target="_blank">' . esc_html__( 'Learn more', 'thrive-dash' ) . '</a>
                         <a class="tve-license-link" target="_blank" href="' . tvd_get_individual_plugin_license_link( $tag ) . '">' . esc_html__( 'Renew now', 'thrive-dash' ) . '</a>
                     </div>
                 </div>', $tag, $tag, $product->get_title(), '<a href="' . TD_TTW_User_Licenses::get_instance()->get_recheck_url() . '">' . esc_html__( 'Click here to refresh your license now.', 'thrive-dash' ) . '</a>' );

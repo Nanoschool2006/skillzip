@@ -1517,11 +1517,13 @@ function tve_ult_purge_cache() {
 /**
  * Inserts or updates an email log
  *
- * @param $model
+ * @param array  $model       Email log data (campaign_id, email, started).
+ * @param string $plain_email Optional plain-text email for user resolution when
+ *                            $model['email'] is already MD5-hashed.
  *
  * @return false|int
  */
-function tve_ult_save_email_log( $model ) {
+function tve_ult_save_email_log( $model, $plain_email = '' ) {
 
 	if ( empty( $model['campaign_id'] ) ) {
 		return false;
@@ -1546,9 +1548,13 @@ function tve_ult_save_email_log( $model ) {
 	 */
 	$user       = null;
 	$user_email = $model['email'];
+
 	if ( is_email( $model['email'] ) ) {
 		$user           = get_user_by( 'email', $model['email'] );
 		$model['email'] = md5( $model['email'] );
+	} elseif ( is_email( $plain_email ) ) {
+		$user       = get_user_by( 'email', $plain_email );
+		$user_email = $plain_email;
 	}
 
 	global $tve_ult_db;
@@ -1563,6 +1569,41 @@ function tve_ult_save_email_log( $model ) {
 			'countdown_event_id'    => '',
 			'user_email'            => $user_email,
 		), $user );
+
+		$source  = 'frontend';
+		$hook_user_id = $user ? (int) $user->ID : (int) get_current_user_id();
+		if ( class_exists( 'Thrive_Ultimatum_API' ) && Thrive_Ultimatum_API::$current_source ) {
+			$source = Thrive_Ultimatum_API::$current_source;
+			if ( Thrive_Ultimatum_API::$current_user_id ) {
+				$hook_user_id = (int) Thrive_Ultimatum_API::$current_user_id;
+			}
+		}
+
+		/**
+		 * Fires when an evergreen campaign starts for a user.
+		 *
+		 * Standardized hook that fires alongside the legacy
+		 * 'thrive_ultimatum_specific_user_evergreen_campaign_start' hook.
+		 * Both hooks fire for the same event. Listeners should be
+		 * idempotent to avoid duplicate side effects.
+		 *
+		 * @param array $data {
+		 *     Campaign trigger data.
+		 *
+		 *     @type int    $user_id     WordPress user ID (0 if unresolved).
+		 *     @type int    $campaign_id Ultimatum campaign ID.
+		 *     @type string $source      Trigger source: 'api' or 'frontend'.
+		 *     @type int    $timestamp   Unix timestamp.
+		 * }
+		 */
+		tve_debug_log( "Hook thrivethemes_ultimatum_campaign_triggered: user_id={$hook_user_id}, campaign_id=" . (int) $campaign->ID . ", source={$source}" );
+
+		do_action( 'thrivethemes_ultimatum_campaign_triggered', array(
+			'user_id'     => $hook_user_id,
+			'campaign_id' => (int) $campaign->ID,
+			'source'      => $source,
+			'timestamp'   => (int) time(),
+		) );
 
 		return true;
 	}
@@ -1772,8 +1813,9 @@ function tve_ult_get_campaign_with_shortcodes() {
 	$filtered = array();
 
 	foreach ( $campaigns as $campaign ) {
+		/* edit_links must be true: the Gutenberg block reads tcb_preview_url + tcb_edit_url from each design to render the inspector preview iframe */
 		$campaign->designs = tve_ult_get_designs( $campaign->ID, [
-			'edit_links' => false,
+			'edit_links' => true,
 		] );
 		if ( empty( $campaign->designs ) ) {
 			continue;
