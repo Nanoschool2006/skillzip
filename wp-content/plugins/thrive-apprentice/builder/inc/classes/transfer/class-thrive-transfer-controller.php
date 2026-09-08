@@ -56,6 +56,11 @@ class Thrive_Transfer_Controller {
 	private $layout;
 
 	/**
+	 * @var Thrive_Transfer_Palettes
+	 */
+	private $palettes;
+
+	/**
 	 * @var ZipArchive
 	 */
 	public $zip;

@@ -233,7 +233,7 @@ function tve_dash_get_features() {
 		'api_connections'  => array(
 			'icon'        => 'tvd-icon-exchange',
 			'title'       => __( "API Connections", 'thrive-dash' ),
-			'description' => __( "Connect to your email marketing system, reCaptcha, email delivery services & more.", 'thrive-dash' ),
+			'description' => __( "Manage connections to your email marketing, reCaptcha, delivery services & API keys that let external tools talk to your Thrive products.", 'thrive-dash' ),
 			'btn_link'    => add_query_arg( 'page', 'tve_dash_api_connect', admin_url( 'admin.php' ) ),
 			'btn_text'    => __( "Manage Connections", 'thrive-dash' ),
 		),
@@ -970,6 +970,20 @@ function tve_dash_is_debug_on() {
 }
 
 /**
+ * Log a message when TVE_DEBUG is enabled.
+ *
+ * All Thrive plugins use this single entry point for debug logging.
+ * Messages are prefixed with [Thrive Debug] for easy grep filtering.
+ *
+ * @param string $message The debug message to log.
+ */
+function tve_debug_log( $message ) {
+	if ( tve_dash_is_debug_on() ) {
+		error_log( '[Thrive Debug] ' . $message );
+	}
+}
+
+/**
  * Global recursive function for sanitizing data,
  * by using custom class methods or wp standard sanitize functions,
  * sent in $callback param
@@ -1346,34 +1360,6 @@ function thrive_get_transient( $transient ) {
 	}
 
 	return $value;
-}
-
-/**
- * Delete any possible support user
- *
- * @return void
- */
-function tve_dash_delete_support_user() {
-	if ( ! function_exists( 'get_users' ) ) {
-		require_once( ABSPATH . 'wp-includes/user.php' );
-	}
-
-
-	if ( ! function_exists( 'wp_delete_user' ) ) {
-		require_once( ABSPATH . 'wp-admin/includes/user.php' );
-	}
-
-
-	foreach ( get_users( [ 'meta_key' => '_thrive_support_user', 'meta_value' => 1 ] ) as $user ) {
-		wp_delete_user( $user->ID );
-	}
-	/**
-	 * Make sure the previously saved user is also deleted in case nothing is found by meta query
-	 */
-	$user = get_user_by( 'email', 'support@thrivethemes.com' );
-	if ( isset( $user->ID ) && $user->ID ) {
-		wp_delete_user( $user->ID );
-	}
 }
 
 /**

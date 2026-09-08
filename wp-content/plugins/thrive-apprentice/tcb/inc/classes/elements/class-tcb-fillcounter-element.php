@@ -170,7 +170,7 @@ class TCB_Fillcounter_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'fill_counter',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425789-how-to-use-the-fill-counter-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-counter-elements-in-thrive-architect/',
 			],
 		];
 	}

@@ -15,7 +15,7 @@
 			<label for="tvd-stripe-test-key"><?php echo esc_html__( 'Test API key', 'thrive-apprentice' ) ?></label>
 		</div>
 		<p class="tve-form-description tvd-note-text">
-			<a href="https://help.thrivethemes.com/en/articles/8428265-how-to-set-up-stripe-in-thrive-apprentice#h_5ca42d7556" target="_blank"><?php echo esc_html__( 'I need help with this', 'thrive-apprentice' ) ?></a>
+			<a href="https://thrivethemes.com/docs/how-to-set-up-stripe-in-thrive-apprentice/" target="_blank"><?php echo esc_html__( 'I need help with this', 'thrive-apprentice' ) ?></a>
 		</p>
 	</form>
 </div>

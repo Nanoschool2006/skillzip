@@ -91,7 +91,7 @@ class TCB_Html_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'custom_html',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425799-how-to-use-the-custom-html-and-google-map-elements',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-html-attributes-custom-html-and-google-maps-in-thrive-architect/',
 			],
 		];
 	}

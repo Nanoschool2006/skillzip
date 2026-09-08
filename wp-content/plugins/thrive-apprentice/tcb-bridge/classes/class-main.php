@@ -80,6 +80,11 @@ class Main {
 		 * Buy Now functionality
 		 */
 		Buy_now\Main::init();
+
+		/**
+		 * Cancel Subscription dynamic link
+		 */
+		Cancel_Subscription\Main::init();
 	}
 
 	/**

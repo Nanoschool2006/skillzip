@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<span class="tvd-left">
 					<?php echo esc_html__( 'MailPoet', 'thrive-dash' ) ?>
 				</span>
-				<a href="https://help.thrivethemes.com/en/articles/4625431-how-to-connect-mailpoet-with-thrive-architect" target="_blank" class="tvd-right">
+				<a href="https://thrivethemes.com/docs/setting-up-an-api-connection-with-mailpoet/" target="_blank" class="tvd-right">
 					<?php echo esc_html__( 'Need help?', 'thrive-dash' ) ?>
 				</a>
 			</div>

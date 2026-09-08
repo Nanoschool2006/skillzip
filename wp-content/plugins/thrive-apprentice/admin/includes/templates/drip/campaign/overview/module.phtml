@@ -30,8 +30,8 @@
 		</div>
 	</div>
 	<div class="tva-module-content">
-		<# _.each( module.get( 'lessons' ), function( lesson ) { #>
-		<#= view.renderCourseItem( lesson ) #>
+		<# _.each( module.get( 'children' ) || module.get( 'lessons' ) || [], function( child ) { #>
+		<#= view.renderCourseItem( child ) #>
 		<# }, this ) #>
 	</div>
 </div>

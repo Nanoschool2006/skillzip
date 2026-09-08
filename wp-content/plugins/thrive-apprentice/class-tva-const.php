@@ -14,18 +14,18 @@ class TVA_Const {
 	/**
 	 * TVP plugin version
 	 */
-	const PLUGIN_VERSION = '10.8.9.1';
+	const PLUGIN_VERSION = '10.9.3.3';
 
 	/**
 	 * Version for clearing the rewrite rules
 	 */
-	const FLUSH_REWRITE_RULES_VERSION = '1.0.1';
+	const FLUSH_REWRITE_RULES_VERSION = '1.0.2';
 
 	/**
 	 * Database version for current TVA version
 	 */
   
-	const DB_VERSION = '1.0.16';
+	const DB_VERSION = '1.0.18';
 
 	/**
 	 * Database version for current TVA version
@@ -336,6 +336,8 @@ class TVA_Const {
 
 	const SQUARE_GETWAY = 'Square';
 
+	const PAYPAL_GATEWAY = 'PayPal';
+
 	/**
 	 * Orders which come from WooCommerce
 	 */
@@ -347,6 +349,7 @@ class TVA_Const {
 		self::WOOCOMMERCE_GATEWAY => self::WOOCOMMERCE_GATEWAY,
 		self::STRIPE_GATEWAY      => self::STRIPE_GATEWAY,
 		self::SQUARE_GETWAY       => self::SQUARE_GETWAY,
+		self::PAYPAL_GATEWAY      => self::PAYPAL_GATEWAY,
 	];
 
 	/**
@@ -361,6 +364,8 @@ class TVA_Const {
 	const STATUS_FAILED = 3;
 
 	const STATUS_EMPTY = 4;
+
+	const STATUS_GRACE_PERIOD = 5;
 
 	/**
 	 * Limit Sendowl customers per page
@@ -428,6 +433,11 @@ class TVA_Const {
 	 * Expire reason sign for access histort
 	 */
 	const ACCESS_HISTORY_REASON_EXPIRE = 1;
+
+	/**
+	 * Refund reason sign for access history — set when a gateway refund revokes access.
+	 */
+	const ACCESS_HISTORY_REASON_REFUND = 2;
 
 	/**
 	 * Full path to the plugin folder (!includes a trailing slash if the $file argument is missing)

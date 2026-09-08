@@ -571,7 +571,7 @@ class TCB_Menu_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'menu',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425832-how-to-use-the-custom-menu-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-custom-menu-element-in-thrive-architect/',
 			],
 		];
 	}

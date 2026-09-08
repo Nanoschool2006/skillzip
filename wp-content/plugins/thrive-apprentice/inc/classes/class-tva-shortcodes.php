@@ -458,9 +458,19 @@ class TVA_Shortcodes {
 
 		$product_id = isset( $atts['product'] ) ? $atts['product'] : ( isset( $atts['pid'] ) ? $atts['pid'] : null );
 		$bundle_id  = isset( $atts['bundle'] ) ? $atts['bundle'] : ( isset( $atts['bid'] ) ? $atts['bid'] : null );
-		$query_url  = ! empty( $product_id ) ? '&pid=' . $product_id : '&bid=' . $bundle_id;
-		$discount   = isset( $atts['thrv_so_discount'] ) ? '&thrv_so_discount=' . $atts['thrv_so_discount'] : '';
-		$content    = '<a href="' . $checkout_url . '?pp=' . $atts['pp'] . $query_url . $discount . '">' . $atts['title'] . '</a>';
+
+		$query_args = array( 'pp' => $atts['pp'] );
+		if ( ! empty( $product_id ) ) {
+			$query_args['pid'] = $product_id;
+		} else {
+			$query_args['bid'] = $bundle_id;
+		}
+		if ( isset( $atts['thrv_so_discount'] ) ) {
+			$query_args['thrv_so_discount'] = $atts['thrv_so_discount'];
+		}
+
+		$url     = add_query_arg( $query_args, $checkout_url );
+		$content = '<a href="' . esc_url( $url ) . '">' . wp_kses_post( $atts['title'] ) . '</a>';
 
 		return $content;
 	}
@@ -473,15 +483,28 @@ class TVA_Shortcodes {
 	public function tva_sendowl_product() {
 		$data = array();
 		if ( isset( $_COOKIE[ TVA_Const::TVA_SENDOWL_COOKIE_NAME ] ) ) {
-			$cookie = stripslashes( $_COOKIE[ TVA_Const::TVA_SENDOWL_COOKIE_NAME ] );
-			$data   = maybe_unserialize( $cookie );
+			$raw     = stripslashes( $_COOKIE[ TVA_Const::TVA_SENDOWL_COOKIE_NAME ] );
+			$decoded = json_decode( $raw, true );
+
+			/* Legacy PHP-serialized cookies written before the JSON migration: extract via regex, never unserialize(). */
+			if ( ! is_array( $decoded ) && preg_match( '/s:4:"type";s:3:"(pid|bid)"/', $raw, $tm ) && preg_match( '/s:2:"id";i:(\d+);/', $raw, $im ) ) {
+				$decoded = array( 'type' => $tm[1], 'id' => (int) $im[1] );
+			}
+
+			if ( is_array( $decoded ) ) {
+				$type = isset( $decoded['type'] ) ? (string) $decoded['type'] : '';
+				if ( in_array( $type, array( 'pid', 'bid' ), true ) ) {
+					$data['type'] = $type;
+					$data['id']   = isset( $decoded['id'] ) ? (int) $decoded['id'] : 0;
+				}
+			}
 		}
 
-		if ( ! isset( $_REQUEST['pp'] ) && ! isset( $cookie ) ) {
+		if ( ! isset( $_REQUEST['pp'] ) && empty( $data ) ) {
 			return '';
 		}
 
-		if ( ! isset( $_REQUEST['pid'] ) && ! isset( $_REQUEST['bid'] ) && ! isset( $cookie ) ) {
+		if ( ! isset( $_REQUEST['pid'] ) && ! isset( $_REQUEST['bid'] ) && empty( $data ) ) {
 			return '';
 		}
 
@@ -493,13 +516,17 @@ class TVA_Shortcodes {
 			$data['id']   = (int) $_REQUEST['bid'];
 		}
 
+		if ( empty( $data['type'] ) ) {
+			return '';
+		}
+
 		if ( $data['type'] === 'pid' ) {
 			$product = TVA_SendOwl::get_product_by_id( $data['id'] );
 		} else {
 			$product = TVA_SendOwl::get_bundle_by_id( $data['id'] );
 		}
 
-		return $product['name'];
+		return is_array( $product ) && isset( $product['name'] ) ? $product['name'] : '';
 	}
 
 	/**

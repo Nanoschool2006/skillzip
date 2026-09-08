@@ -236,8 +236,20 @@ function updateButtonClassAfterActivated( button ) {
  * @returns {Promise} A promise rejected with the error message.
  */
 function handleError( response ) {
-    return response.json().then( errorData => {
-        return Promise.reject( new Error( errorData.message ) );
+    // Read the body as text first so a non-JSON error page (e.g. a 403 served
+    // by the server rather than the REST API) doesn't make response.json()
+    // throw a SyntaxError that masks the real status.
+    return response.text().then( text => {
+        let message;
+        try {
+            message = JSON.parse( text ).message;
+        } catch ( e ) {
+            message = text;
+        }
+        if ( ! message ) {
+            message = 'Request failed (' + response.status + ').';
+        }
+        return Promise.reject( new Error( message ) );
     });
 }
 

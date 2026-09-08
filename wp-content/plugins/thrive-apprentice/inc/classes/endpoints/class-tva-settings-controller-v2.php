@@ -231,10 +231,12 @@ class TVA_Settings_Controller_V2 extends TVA_REST_Controller {
 			case 'index_page':
 				/* when the index changes, make sure the rewrite rules are flushed, so that any permalinks built on top of this page's URL will work (e.g. course URLs) */
 				/* in order for `flush_rewrite_rules()` to work, the slug for the taxonomy needs to be updated too to reflect the selected course homepage */
-				$post                      = get_post( $id );
-				$taxonomy                  = get_taxonomy( TVA_Const::COURSE_TAXONOMY );
-				$taxonomy->rewrite['slug'] = $post->post_name;
-				$taxonomy->add_rewrite_rules();
+				/* Derive the slug from tva_get_slug_for_courses() (canonical source, honours the `tva_course_slug` filter) rather than the raw page slug. Using $post->post_name here bypassed the filter, so the flushed rewrite rules could desync from the slug the taxonomy is actually registered with on front-end loads, 404-ing every course URL (#3946). */
+				$taxonomy = get_taxonomy( TVA_Const::COURSE_TAXONOMY );
+				if ( $taxonomy instanceof WP_Taxonomy ) {
+					$taxonomy->rewrite['slug'] = tva_get_slug_for_courses();
+					$taxonomy->add_rewrite_rules();
+				}
 				flush_rewrite_rules();
 				break;
 		}

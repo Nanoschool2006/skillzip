@@ -181,32 +181,58 @@ class TVA_Customer_Manager {
 			}
 		}
 
-		// Only send email after order is created and course name is set. We are adding this to fix cases where emails go out before shortcodes are rendered. With this approach, after all is set, and shortcodes are rendered, email can go out. 
-		if ( true === $config['send_email'] && $order_created && ! empty( $processed_orders ) ) {
-			// Set the course name before sending email
-			if ( ! empty( $processed_orders[0] ) ) {
-				$order_items = $processed_orders[0]->get_order_items();
-				if ( ! empty( $order_items ) && isset( $order_items[0] ) ) {
-					$product_id = $order_items[0]->get_product_id();
-					if ( $product_id ) {
-						$product = new \TVA\Product( $product_id );
-						if ( $product instanceof \TVA\Product ) {
-							$name = $product->get_name();
-							if ( ! empty( $name ) ) {
-								$GLOBALS['tva_current_course_name'] = $name;
-							}
-						}
-					}
-				}
-			}
+		/**
+		 * Always consume (and reset) the flag to prevent it from leaking across
+		 * multiple insert_customer() calls in the same request (e.g. bulk import).
+		 * The course welcome email hook fires during create_order_for_customer() regardless
+		 * of the send_email setting, so the flag must be consumed unconditionally.
+		 */
+		$course_welcome_already_sent = tva_email_templates()->consume_course_welcome_sent_flag();
 
-			// Now send the email with course name set
+		// Only send email after order is created and course name is set. We are adding this to fix cases where emails go out before shortcodes are rendered. With this approach, after all is set, and shortcodes are rendered, email can go out.
+		if ( $send_email && $order_created && ! empty( $processed_orders ) && ! $course_welcome_already_sent ) {
+			static::set_course_name_from_order( $processed_orders[0] );
 			wp_send_new_user_notifications( $user_obj->ID, 'user' );
 		}
 
 		$tva_user_object = new TVA_Customer( $user_obj->ID );
 
 		return $tva_user_object->jsonSerialize();
+	}
+
+	/**
+	 * Set the course name on the email templates instance from the first order item's product.
+	 * This allows the [course_name] shortcode to resolve correctly in the new account email.
+	 *
+	 * @param TVA_Order|null $order The order to extract the course name from.
+	 */
+	private static function set_course_name_from_order( $order ) {
+		// Reset any stale course context from a previous call (e.g. bulk import)
+		tva_email_templates()->set_course_context( null );
+
+		if ( empty( $order ) ) {
+			return;
+		}
+
+		$order_items = $order->get_order_items();
+		if ( empty( $order_items ) || ! isset( $order_items[0] ) ) {
+			return;
+		}
+
+		$product_id = $order_items[0]->get_product_id();
+		if ( ! $product_id ) {
+			return;
+		}
+
+		$product = new \TVA\Product( $product_id );
+		if ( ! $product instanceof \TVA\Product ) {
+			return;
+		}
+
+		$name = $product->get_name();
+		if ( ! empty( $name ) ) {
+			tva_email_templates()->set_course_context( $name );
+		}
 	}
 
 	/**

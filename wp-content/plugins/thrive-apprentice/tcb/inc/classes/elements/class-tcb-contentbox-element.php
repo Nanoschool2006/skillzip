@@ -236,7 +236,7 @@ class TCB_ContentBox_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'contentbox',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425774-how-to-use-the-content-box-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-content-box-element-in-thrive-architect/',
 			],
 		];
 	}

@@ -310,7 +310,7 @@ class TCB_Lead_Generation_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'lead_generation',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425779-how-to-use-the-lead-generation-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-lead-generation-element-in-thrive-architect/',
 			],
 		];
 	}

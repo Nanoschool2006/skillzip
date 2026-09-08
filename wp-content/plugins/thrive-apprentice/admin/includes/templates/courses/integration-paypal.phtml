@@ -1,0 +1,200 @@
+<?php
+/**
+ * PayPal access-integration row.
+ * Connection state + live/sandbox mode come from Credentials (set during
+ * onboarding). Pricing is handled by paypal-integration.js and persisted to the
+ * integration=paypal entry in tva_rules.
+ */
+$tva_pp_live_connected = \TVA\PayPal\Credentials::is_mode_enabled( 'live' );
+$tva_pp_test_connected = \TVA\PayPal\Credentials::is_mode_enabled( 'test' );
+$tva_pp_connected      = $tva_pp_live_connected || $tva_pp_test_connected;
+// One mode is active at a time; prefer live when both somehow exist. 'test' = Sandbox.
+$tva_pp_mode           = $tva_pp_live_connected ? 'live' : 'test';
+?>
+<div class="tva-rule-header pt-15 pb-15 click" data-fn="toggleItemsList" data-paypal-connected="<?php echo $tva_pp_connected ? '1' : '0'; ?>">
+	<div class="tva-rule-img <#= model.get('slug') #> ml-15"><?php tva_get_svg_icon( 'paypal' ); ?></div>
+
+	<button class="click tva-paypal-connect mr-20" data-fn="connectAccount" data-href="<?php echo esc_url( admin_url( 'admin.php?page=thrive_apprentice' ) . '#settings/payments/paypal' ); ?>"><?php esc_html_e( 'Connect PayPal', 'thrive-apprentice' ); ?></button>
+	<div class="tva-course-integration-label"></div>
+	<div class="tva-paypal-mode" data-mode="<?php echo esc_attr( $tva_pp_mode ); ?>">
+		<div class="tva-paypal-connection-state mr-15">
+			<?php tva_get_svg_icon( 'check-circle-green' ); ?>
+			<p class="m-0"><?php esc_html_e( 'Connected', 'thrive-apprentice' ); ?></p>
+		</div>
+		<span class="tva-paypal-selected-label"><?php esc_html_e( 'Product Price Set', 'thrive-apprentice' ); ?></span>
+		<span class="current-state"><?php echo esc_html( 'live' === $tva_pp_mode ? __( 'LIVE', 'thrive-apprentice' ) : __( 'SANDBOX', 'thrive-apprentice' ) ); ?></span>
+	</div>
+	<div class="tva-rule-status tva-integration-status"></div>
+	<div class="tva-rule-toggle">
+		<span class="tva-arrow-icon">&nbsp;</span>
+	</div>
+</div>
+<div class="tva-rule-items tva-course-integration-items-wrapper" style="display: none">
+	<div class="tva-flex tva-paypal-product-header mb-20">
+
+		<div class="tva-paypal-env-labels tva-flex tva-space-between">
+			<span><?php esc_html_e( 'Environment', 'thrive-apprentice' ); ?></span>
+			<div class="tva-tooltip-parent tva-paypal-test-tooltip">
+				<div class="tva-info-icon"><?php tva_get_svg_icon( 'info-solid' ); ?>
+					<div class="tva-custom-tooltip tva-tooltip-inherited">
+						<?php esc_html_e( 'The test environment lets you simulate a purchase without taking real payment. Switch to the live environment when you are ready to sell.', 'thrive-apprentice' ); ?>
+					</div>
+				</div>
+			</div>
+			<select id="tva-paypal-mode-select" disabled>
+				<option value="test" <?php selected( $tva_pp_mode, 'test' ); ?>><?php esc_html_e( 'Sandbox', 'thrive-apprentice' ); ?></option>
+				<option value="live" <?php selected( $tva_pp_mode, 'live' ); ?>><?php esc_html_e( 'Live', 'thrive-apprentice' ); ?></option>
+			</select>
+		</div>
+		<a class="tva-paypal-manage-link" style="margin-left:auto;" href="<?php echo esc_url( admin_url( 'admin.php?page=thrive_apprentice#settings/payments/paypal' ) ); ?>" rel="noopener" target="_blank"><?php tva_get_svg_icon( 'cog' ); ?><?php esc_html_e( 'Manage PayPal' ); ?></a>
+	</div>
+	<div class="tva-container-notice tva-container-notice-orange tva-buy-button-notice tva-hide mb-20">
+		<?php tva_get_svg_icon( 'info-circle_light' ); ?>
+		<?php esc_html_e( 'To display the buy now button for this product you must change the action button display settings to “Buy now” > “PayPal” ', 'thrive-apprentice' ); ?> <a href="javascript:void(0)" class="click" data-fn="goToAccessRules">&nbsp;<?php esc_html_e( 'here', 'thrive-apprentice' ); ?> </a>
+	</div>
+	<div id="tva-paypal-pricing-list" class="tva-paypal-product-pricing tva-paypal-product-price-wrapper tva-flex-column tva-flex" data-price-set="false">
+		<div class="tva-flex tva-paypal-price mt-20 tvd-input-field">
+			<p class="m-0"><?php esc_html_e( 'Product Pricing', 'thrive-apprentice' ); ?></p>
+			<div class="tva-paypal-price-select">
+				<select id="tva-paypal-manageable-prices" class="change" data-fn="selectPrice"></select>
+			</div>
+		</div>
+		<div class="tva-rule-items-clear-wrapper">
+			<div class="tva-rule-items-clear click" data-fn="clearSelectedItems">
+				<?php tva_get_svg_icon( 'times-circle_light' ); ?>
+				<a href="javascript:void(0)"><?php echo esc_html__( 'Clear selection', 'thrive-apprentice' ); ?></a>
+			</div>
+		</div>
+	</div>
+	<?php // Recurring (subscription) prices have no PayPal-hosted billing portal, so buyers can only cancel from the site. Remind the merchant to place the "Cancel subscription" dynamic link on the course template. Shown by paypal-integration.js only when the selected price is recurring. ?>
+	<div class="tva-container-notice tva-container-notice-blue tva-paypal-cancel-link-notice tva-hide mb-20">
+		<span><?php
+			echo wp_kses_post(
+				sprintf(
+					/* translators: %s: dynamic-link picker path, kept as one bold string */
+					__( 'To allow subscribers to cancel their subscription — add a “Cancel subscription” button/link to the course template and set %s.', 'thrive-apprentice' ),
+					'<strong>' . esc_html__( 'Dynamic Link → PayPal → Cancel subscription', 'thrive-apprentice' ) . '</strong>'
+				)
+			);
+		?></span>
+	</div>
+	<div id="tva-paypal-add-pricing" class="tva-paypal-product-pricing tva-paypal-add-price-wrapper tva-flex" data-price-set="true">
+		<div class="tva-paypal-add-price">
+			<p class="m-0"><?php esc_html_e( 'Product pricing', 'thrive-apprentice' ); ?></p>
+			<a href="javascript:void(0);" class="click tva-btn tva-btn-blue float-right mb-0 tva-add-rule-btn" data-fn="openPriceModal">
+				<?php tva_get_svg_icon( 'add-btn' ); ?>
+				<?php esc_html_e( 'Add Price', 'thrive-apprentice' ); ?>
+			</a>
+		</div>
+	</div>
+	<div class="tva-sub-advanced-settings-wrapper tva-collapsed mb-10">
+		<div class="tva-sub-advanced-settings-header click" data-fn="toggleSettingsExpanded">
+			<p class="m-0"><?php esc_html_e( 'Advanced settings', 'thrive-apprentice' ); ?></p>
+			<?php tva_get_svg_icon( 'caret-down' ); ?>
+		</div>
+		<div class="tva-sub-advanced-settings">
+			<div class="tva-paypal-free-trial mb-20">
+				<div class="tvd-switch">
+					<label class="tva-slide-checkbox">
+						<input type="checkbox" class="click" id="tva-paypal-trial-enabled" data-fn="changeTrialSetting">
+						<span class="lever"></span>
+						<span class="settings-checkbox-label"><?php echo esc_html__( 'Product includes a free trial', 'thrive-apprentice' ); ?></span>
+						<div class="tva-tooltip-parent tva-paypal-free-trial-tooltip">
+							<div class="tva-info-icon"><?php tva_get_svg_icon( 'info-solid' ); ?>
+								<div class="tva-custom-tooltip tva-tooltip-inherited">
+									<?php esc_html_e( 'When enabled, buyers get free access for the number of days you set here before their first payment is taken.', 'thrive-apprentice' ); ?>
+								</div>
+							</div>
+						</div>
+					</label>
+				</div>
+				<div class="tva-paypal-trial-days-wrap">
+					<input id="tva-paypal-trial-days" class="change" data-fn="changeTrialSetting" type="number" min="1" max="365" value="1"/>
+					<span class="tva-paypal-trial-days-unit"><?php echo esc_html__( 'Days', 'thrive-apprentice' ); ?></span>
+				</div>
+			</div>
+			<div class="tva-paypal-reference mb-20">
+				<div class="tvd-switch">
+					<label class="tva-slide-checkbox">
+						<input type="checkbox" class="click" data-fn="changeClientReferenceSetting" id="tva-paypal-client-reference-enabled">
+						<span class="lever"></span>
+						<span class="settings-checkbox-label"><?php echo esc_html__( 'Pass a client reference to checkout', 'thrive-apprentice' ); ?></span>
+						<div class="tva-tooltip-parent tva-paypal-reference-tooltip">
+							<div class="tva-info-icon"><?php tva_get_svg_icon( 'info-solid' ); ?>
+								<div class="tva-custom-tooltip tva-tooltip-inherited">
+									<?php esc_html_e( 'When enabled, the chosen identifier (User ID or User name) is sent to PayPal as the order invoice ID so you can match the payment back to this user. Guests have no account yet at checkout, so their email is sent instead. Note: if your PayPal account blocks multiple payments per invoice ID, leave this off.', 'thrive-apprentice' ); ?>
+								</div>
+							</div>
+						</div>
+					</label>
+				</div>
+				<select id="tva-paypal-client-reference" class="change" data-fn="changeClientReferenceSetting">
+					<option value="user_id"><?php esc_html_e( 'User ID', 'thrive-apprentice' ); ?></option>
+					<option value="user_name"><?php esc_html_e( 'User name', 'thrive-apprentice' ); ?></option>
+				</select>
+			</div>
+			<div class="tvd-switch mb-20 tva-paypal-prepopulate-email">
+				<label class="tva-slide-checkbox">
+					<input type="checkbox" class="click" data-fn="changePrepopulateEmail" id="tva-paypal-prepopulate-email">
+					<span class="lever"></span>
+					<span class="settings-checkbox-label paypal-email-label"><?php echo esc_html__( 'Pre-populate email at checkout when user is logged in', 'thrive-apprentice' ); ?></span>
+					<div class="tva-tooltip-parent tva-paypal-email-tooltip">
+						<div class="tva-info-icon"><?php tva_get_svg_icon( 'info-solid' ); ?>
+							<div class="tva-custom-tooltip tva-tooltip-inherited">
+								<?php esc_html_e( "When enabled, the buyer's email is pre-filled at checkout for logged-in users.", 'thrive-apprentice' ); ?>
+							</div>
+						</div>
+					</div>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="tva-paypal-urls tva-flex tva-flex-column">
+		<div class="tva-flex tva-paypal-url mt-20 tvd-input-field">
+			<p class="m-0"><?php esc_html_e( 'Success', 'thrive-apprentice' ); ?></p>
+			<input id="tva-paypal-success-url" class="change ml-15" data-fn="changeSuccessUrl" type="text" placeholder="<?php echo esc_html__( 'https://', 'thrive-apprentice' ); ?>">
+			<label id="tva-paypal-success-label" class="tvd-active" data-error="<?php echo esc_attr__( 'You need to add a valid URL link', 'thrive-apprentice' ) ?>">&nbsp;</label>
+		</div>
+		<div class="tva-add-paypal-page">
+			<a href="javascript:void(0)" class="tva-create-new-page click" data-fn="toggleSuccessPage">
+				<?php tva_get_svg_icon( 'plus-circle' ); ?><?php esc_html_e( 'Create new page', 'thrive-apprentice' ) ?>
+			</a>
+			<div class="tva-login-box tva-hide tva-paypal-success-create">
+				<input placeholder="<?php echo esc_attr__( 'Page title', 'thrive-apprentice' ) ?>">
+
+				<div class="tva-login-box-footer mt-0">
+					<button class="tva-empty-btn mr-10 click" data-fn="toggleSuccessPage">
+						<?php esc_html_e( 'Cancel', 'thrive-apprentice' ) ?>
+					</button>
+					<button class="tva-save-btn click" data-fn="saveSuccessPage">
+						<?php tva_get_svg_icon( 'plus' ); ?>
+						<?php esc_html_e( 'Add page', 'thrive-apprentice' ) ?>
+					</button>
+				</div>
+			</div>
+		</div>
+		<div class="tva-flex tva-paypal-url mt-20 tvd-input-field">
+			<p class="m-0"><?php esc_html_e( 'Cancel/failure', 'thrive-apprentice' ); ?></p>
+			<input id="tva-paypal-cancel-url" class="change ml-15" data-fn="changeCancelUrl" type="text" placeholder="<?php echo esc_html__( 'https://', 'thrive-apprentice' ); ?>">
+			<label id="tva-paypal-cancel-label" class="tvd-active" data-error="<?php echo esc_attr__( 'You need to add a valid URL link', 'thrive-apprentice' ) ?>">&nbsp;</label>
+		</div>
+		<div class="tva-add-paypal-page">
+			<a href="javascript:void(0)" class="tva-create-new-page click" data-fn="toggleCancelPage">
+				<?php tva_get_svg_icon( 'plus-circle' ); ?><?php esc_html_e( 'Create new page', 'thrive-apprentice' ) ?>
+			</a>
+			<div class="tva-login-box tva-hide tva-paypal-cancel-create">
+				<input placeholder="<?php echo esc_attr__( 'Page title', 'thrive-apprentice' ) ?>" class="tvd-save input" type="text" data-fn="onInput" data-field="title">
+
+				<div class="tva-login-box-footer mt-0">
+					<button class="tva-empty-btn mr-10 click" data-fn="toggleCancelPage">
+						<?php esc_html_e( 'Cancel', 'thrive-apprentice' ) ?>
+					</button>
+					<button class="tva-save-btn click" data-fn="saveCancelPage">
+						<?php tva_get_svg_icon( 'plus' ); ?>
+						<?php esc_html_e( 'Add page', 'thrive-apprentice' ) ?>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

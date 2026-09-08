@@ -194,3 +194,147 @@ if ( ! empty( $WishListMemberInstance ) && is_object( $WishListMemberInstance ) 
 		} );
 	}
 }
+
+/**
+ * Compatibility with Google SiteKit - Google Tag Manager
+ *
+ * Ensures GTM scripts are properly output on Thrive landing pages.
+ * SiteKit hooks into wp_head/wp_body_open which work fine on regular pages,
+ * but landing pages use custom hooks that SiteKit doesn't know about.
+ *
+ * This fix ONLY outputs GTM on landing pages where SiteKit's hooks don't fire.
+ * Regular pages are handled by SiteKit natively.
+ */
+if ( defined( 'GOOGLESITEKIT_PLUGIN_MAIN_FILE' ) ) {
+
+	/**
+	 * Get Google Tag Manager container ID from SiteKit settings
+	 *
+	 * @return string|false Container ID or false if not configured/disabled
+	 */
+	function thrive_get_sitekit_gtm_container_id() {
+		$settings = get_option( 'googlesitekit_tagmanager_settings' );
+
+		if ( empty( $settings ) || ! is_array( $settings ) ) {
+			return false;
+		}
+
+		// Respect user's choice to disable SiteKit snippet output
+		if ( isset( $settings['useSnippet'] ) && $settings['useSnippet'] === false ) {
+			return false;
+		}
+
+		return ! empty( $settings['containerID'] ) ? $settings['containerID'] : false;
+	}
+
+	/**
+	 * Output GTM head script
+	 *
+	 * @param string $container_id GTM container ID
+	 */
+	function thrive_output_gtm_head_script( $container_id ) {
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		// Validate container ID format (GTM-XXXXXXX) - allows uppercase/lowercase letters and numbers
+		if ( ! preg_match( '/^GTM-[A-Za-z0-9]+$/', $container_id ) ) {
+			return;
+		}
+
+		?>
+<!-- Google Tag Manager (Thrive Compatibility) -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','<?php echo esc_js( $container_id ); ?>');</script>
+<!-- End Google Tag Manager -->
+		<?php
+	}
+
+	/**
+	 * Output GTM noscript tag
+	 *
+	 * @param string $container_id GTM container ID
+	 */
+	function thrive_output_gtm_noscript( $container_id ) {
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		// Validate container ID format - allows uppercase/lowercase letters and numbers
+		if ( ! preg_match( '/^GTM-[A-Za-z0-9]+$/', $container_id ) ) {
+			return;
+		}
+
+		?>
+<!-- Google Tag Manager (noscript) (Thrive Compatibility) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_attr( $container_id ); ?>"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+		<?php
+	}
+
+	/**
+	 * Ensure GTM head script is output on landing pages (with duplicate prevention)
+	 */
+	function thrive_ensure_sitekit_gtm_head() {
+		static $already_output = false;
+
+		if ( $already_output ) {
+			return;
+		}
+
+		// Skip in editor context
+		if ( function_exists( 'is_editor_page_raw' ) && is_editor_page_raw() ) {
+			return;
+		}
+
+		$container_id = thrive_get_sitekit_gtm_container_id();
+
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		thrive_output_gtm_head_script( $container_id );
+		$already_output = true;
+	}
+
+	/**
+	 * Ensure GTM noscript is output on landing pages (with duplicate prevention)
+	 */
+	function thrive_ensure_sitekit_gtm_body_open() {
+		static $already_output = false;
+
+		if ( $already_output ) {
+			return;
+		}
+
+		// Skip in editor context
+		if ( function_exists( 'is_editor_page_raw' ) && is_editor_page_raw() ) {
+			return;
+		}
+
+		$container_id = thrive_get_sitekit_gtm_container_id();
+
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		thrive_output_gtm_noscript( $container_id );
+		$already_output = true;
+	}
+
+	// Landing pages only - output GTM script in landing page head
+	// Regular pages are handled by SiteKit's native wp_head hook
+	add_action( 'tcb_landing_head_frontend', static function () {
+		thrive_ensure_sitekit_gtm_head();
+	}, 1 );
+
+	// Landing pages only - output noscript after landing page body opens
+	// Regular pages are handled by SiteKit's native wp_body_open hook
+	add_action( 'tcb_landing_body_open_frontend', static function () {
+		thrive_ensure_sitekit_gtm_body_open();
+	}, 1 );
+}

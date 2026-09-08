@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="thrv_wrapper tve_lg_checkbox_wrapper tve-updated-dom tcb-local-vars-root <?php echo esc_attr( $data['classes'] ); ?>"
 	 data-id="<?php echo esc_attr( $data['id'] ); ?>"
 	 data-name="<?php echo esc_attr( $data['name'] ); ?>"
+	<?php if ( ! empty( $data['slug'] ) ) : ?>
+	 data-slug="<?php echo esc_attr( $data['slug'] ); ?>"
+	<?php endif; ?>
 	 data-value="<?php echo ! empty( $data['template'] ) ? esc_attr( $data['template'] ) : 'default'; ?>"
 	 data-override-colors="<?php echo ! empty( $data['override_colors'] ) ? esc_attr( $data['override_colors'] ) : ''; ?>"
 	 data-selector="<?php echo ! empty( $data['css'] ) ? esc_attr( $data['css'] ) : ''; ?>">

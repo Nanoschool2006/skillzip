@@ -52,8 +52,6 @@ class TVA_Orders_Controller extends WP_REST_Controller {
 	 */
 	public function create_item( $request ) {
 
-		error_log('krle create_item 1');
-
 		TVA_Logger::set_type( 'REQUEST NewOrder' );
 		TVA_Logger::log(
 			'/newOrder',

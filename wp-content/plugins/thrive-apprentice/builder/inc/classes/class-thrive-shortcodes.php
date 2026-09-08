@@ -1282,7 +1282,7 @@ class Thrive_Shortcodes {
 		global $wp_query;
 
 		if ( is_search() ) {
-			$title = $wp_query->query['s'];
+			$title = get_search_query( false );
 		} elseif ( $wp_query->queried_object !== null ) {
 			if ( is_author() ) {
 				$title = empty( $wp_query->queried_object->data->display_name ) ? '' : $wp_query->queried_object->data->display_name;
@@ -1294,7 +1294,7 @@ class Thrive_Shortcodes {
 		}
 
 		return static::before_wrap( [
-			'content' => $title,
+			'content' => esc_html( $title ),
 			'tag'     => 'span',
 			'class'   => [ 'thrive-archive-name', THRIVE_WRAPPER_CLASS, THRIVE_SHORTCODE_CLASS ],
 		], $attr );

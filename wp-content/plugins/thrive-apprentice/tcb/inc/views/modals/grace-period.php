@@ -35,7 +35,7 @@ $attributes = tcb_editor()->lcns_attributes();
 		</p>
 
 		<div class="tve-license-buttons">
-			<button class="tve-button-empty" onclick="window.open('https://help.thrivethemes.com/en/articles/8223498-what-happens-when-your-thrive-product-license-expires', '_blank')"><?php _e( 'Learn more', 'thrive-cb' ); ?></button>
+			<button class="tve-button-empty" onclick="window.open('https://thrivethemes.com/docs/what-happens-when-your-thrive-product-license-expires/', '_blank')"><?php _e( 'Learn more', 'thrive-cb' ); ?></button>
 			<button class="tve-button-action" onclick="window.open('<?php echo $attributes['link'] ?>', '_blank')"><?php _e( 'Renew now', 'thrive-cb' ); ?></button>
 		</div>
 	</div>

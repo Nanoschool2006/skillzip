@@ -1,0 +1,31 @@
+<div class="tvd-modal-content">
+	<h3 class="tvd-modal-title"><?php esc_html_e( 'Are you sure you want to proceed?', 'thrive-apprentice' ); ?></h3>
+
+	<p><?php esc_html_e( 'By disconnecting PayPal, your configured products will be unable to be purchased until you reconnect.', 'thrive-apprentice' ); ?></p>
+</div>
+<div class="tva-modal-footer">
+	<button type="button" class="tva-modal-btn tvd-modal-close"><?php esc_html_e( 'No', 'thrive-apprentice' ); ?></button>
+	<button type="button" class="tva-modal-btn click" data-fn="confirm"><?php esc_html_e( 'Yes', 'thrive-apprentice' ); ?></button>
+</div>
+<?php $active_subscriptions = \TVA\PayPal\Subscription_Winddown::count_active(); ?>
+<div class="tva-modal-notice">
+	<?php tva_get_svg_icon( 'info-circle_light' ); ?>
+	<div class="ml-10">
+		<span>
+			<strong>
+				<?php
+				echo esc_html(
+					$active_subscriptions > 0
+						? sprintf(
+							/* translators: %d: number of active subscriptions. */
+							_n( 'Active subscription (%d):', 'Active subscriptions (%d):', $active_subscriptions, 'thrive-apprentice' ),
+							$active_subscriptions
+						)
+						: __( 'Active subscriptions:', 'thrive-apprentice' )
+				);
+				?>
+			</strong>
+			<?php esc_html_e( 'Disconnecting cancels each active subscription at the end of its current billing period.', 'thrive-apprentice' ); ?>
+		</span>
+	</div>
+</div>

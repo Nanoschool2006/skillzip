@@ -680,8 +680,14 @@ class TVA_Course_V2 extends TVA_Course implements JsonSerializable {
 		// Increment the cache version so all existing cache keys become stale.
 		// This works with any cache backend (database, Redis, Memcached) because
 		// we never need to find or delete individual transient keys.
+		//
+		// Deliberately NOT autoloaded: this option is written on every conversion and on
+		// every course change, and each write to an autoloaded option invalidates the whole
+		// `alloptions` cache entry for the site. Keeping it out of alloptions means a write
+		// only busts this one key. Reads still come from the object cache after the first
+		// get_option() in a request.
 		$version = (int) get_option( 'tva_courses_cache_version', 0 );
-		update_option( 'tva_courses_cache_version', $version + 1, true );
+		update_option( 'tva_courses_cache_version', $version + 1, false );
 	}
 
 	/**

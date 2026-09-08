@@ -114,12 +114,23 @@ class Utils {
 	 *
 	 * @return mixed|string
 	 */
-	public static function apply_date_filter( $sql_where, $date_col_name, $query ) {
+	public static function apply_date_filter( $sql_where, $date_col_name, $query, &$params = array() ) {
+		/*
+		 * The dates come from $query['filters']['date'], which on the report routes is the raw
+		 * request array. These used to be sprintf()'d into hand-written quotes - note the %s there
+		 * were PHP format specifiers, not placeholders, so nothing escaped them and a single quote
+		 * broke straight out of the literal.
+		 *
+		 * $params is by reference so the caller can bind these alongside its own values; the return
+		 * value stays a string, which keeps the existing call contract.
+		 */
 		if ( ! empty( $query['filters']['date']['from'] ) ) {
-			$sql_where .= sprintf( " AND DATE(%s) >= '%s'", $date_col_name, $query['filters']['date']['from'] );
+			$sql_where .= " AND DATE(`$date_col_name`) >= %s";
+			$params[]   = $query['filters']['date']['from'];
 		}
 		if ( ! empty( $query['filters']['date']['to'] ) ) {
-			$sql_where .= sprintf( " AND DATE(%s) <= '%s'", $date_col_name, $query['filters']['date']['to'] );
+			$sql_where .= " AND DATE(`$date_col_name`) <= %s";
+			$params[]   = $query['filters']['date']['to'];
 		}
 
 		return $sql_where;
@@ -196,11 +207,44 @@ class Utils {
 
 		$db_instance    = $wpdb;
 		$comments_table = $db_instance->prefix . 'comments';
-		$where          = sprintf( '%s IN ( %s )', 'comment_post_ID', implode( ', ', $lesson_ids ) );
 		$group_by       = '';
 
+		/*
+		 * Both IN lists used to be imploded straight into the clause, and the user_id one comes from
+		 * $query['filters'], which on this route is the raw request array - get_pie_data() and
+		 * get_table_data() are handed the request without going through Report::parse_query().
+		 * Both are bound now.
+		 */
+		$lesson_ids = array_filter( array_map( 'absint', (array) $lesson_ids ) );
+
+		if ( empty( $lesson_ids ) ) {
+			return $just_count ? 0 : array();
+		}
+
+		$params = array();
+		$where  = 'comment_post_ID IN ( ' . implode( ', ', array_fill( 0, count( $lesson_ids ), '%d' ) ) . ' )';
+
+		foreach ( $lesson_ids as $lesson_id ) {
+			$params[] = $lesson_id;
+		}
+
 		if ( ! empty( $query['filters'][ User_Id::key() ] ) ) {
-			$where .= sprintf( ' AND %s IN ( %s )', 'comment_author', implode( ', ', $query['filters'][ User_Id::key() ] ) );
+			/*
+			 * Bound as %d rather than %s deliberately, to keep the comparison numeric.
+			 *
+			 * The filter carries user ids, but this clause matches them against `comment_author`,
+			 * which is a display-name varchar - a pre-existing wrong-column bug, tracked separately.
+			 * Master emitted an unquoted `IN ( 5, 12 )`, so MySQL coerced the column numerically.
+			 * Quoting the values with %s would turn that into an exact string match and silently
+			 * change which rows the report counts, so %d reproduces master's SQL byte for byte while
+			 * still binding.
+			 */
+			$authors = array_map( 'absint', array_values( (array) $query['filters'][ User_Id::key() ] ) );
+			$where  .= ' AND comment_author IN ( ' . implode( ', ', array_fill( 0, count( $authors ), '%d' ) ) . ' )';
+
+			foreach ( $authors as $author ) {
+				$params[] = $author;
+			}
 		}
 
 		if ( $just_count ) {
@@ -218,8 +262,19 @@ class Utils {
 			}
 		}
 
-		$where = Utils::apply_date_filter( $where, 'comment_date', $query );
-		$where = $db_instance->prepare( $where );
+		$where = self::apply_date_filter( $where, 'comment_date', $query, $params );
+
+		/*
+		 * Only the WHERE clause goes through prepare(), which is why $params is threaded through
+		 * rather than preparing the finished statement: $select carries the DATE_FORMAT mask from
+		 * Created::get_query_select_field() (e.g. "%M %Y"), and prepare() would treat those percent
+		 * signs as placeholders.
+		 *
+		 * The previous $db_instance->prepare( $where ) call passed no values at all, so it was a
+		 * no-op that read like protection - with every value already interpolated there was nothing
+		 * left for it to escape.
+		 */
+		$where = $db_instance->prepare( $where, $params );
 
 		$results = $db_instance->get_results( "SELECT $select FROM $comments_table WHERE $where $group_by", ARRAY_A );
 

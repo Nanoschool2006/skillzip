@@ -279,6 +279,11 @@ $tva_menu = [
 						'route' => '#settings/payments/stripe',
 						'label' => esc_html__( 'Stripe', 'thrive-apprentice' ),
 					],
+					'paypal' => [
+						'slug'  => 'paypal',
+						'route' => '#settings/payments/paypal',
+						'label' => esc_html__( 'PayPal', 'thrive-apprentice' ),
+					],
 					'square' => [
 						'slug'  => 'square',
 						'route' => '#settings/payments/square',

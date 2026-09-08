@@ -64,6 +64,14 @@ class TVA_Transaction {
 	protected $created_at = '0000-00-00 00:00:00';
 
 	/**
+	 * PayPal-Debug-Id for the most recent transaction-affecting call on this order.
+	 * Empty for non-PayPal gateways and for webhook-only completions.
+	 *
+	 * @var string
+	 */
+	protected $debug_id = '';
+
+	/**
 	 * Database object
 	 *
 	 * @var WP_Query|wpdb
@@ -84,7 +92,7 @@ class TVA_Transaction {
 		 * Skip everything else if we don't have any order id
 		 */
 		if ( ! $ID ) {
-			$this->set_created_at( date( 'Y-m-d H:i:s' ) );
+			$this->set_created_at( gmdate( 'Y-m-d H:i:s' ) );
 
 			return;
 		}
@@ -145,17 +153,18 @@ class TVA_Transaction {
 		unset( $data['ID'] );
 
 		$types = array(
-			'%d',
-			'%s',
-			'%s',
-			'%s',
-			'%s',
-			'%s',
-			'%d',
-			'%s',
-			'%s',
-			'%s',
-			'%s',
+			'%d', // order_id
+			'%s', // transaction_id
+			'%s', // currency
+			'%s', // price
+			'%s', // price_gross
+			'%s', // gateway_fee
+			'%d', // transaction_type
+			'%s', // gateway
+			'%s', // card_last_4_digits
+			'%s', // card_expires_at
+			'%s', // created_at
+			'%s', // debug_id
 		);
 
 		if ( ! $this->get_id() ) {
@@ -169,7 +178,9 @@ class TVA_Transaction {
 			);
 
 			if ( $result ) {
-				$this->set_id( $result );
+				// insert() returns rows-affected (1), not the new row id — read insert_id so a
+				// later save() on this object updates the right row instead of ID 1.
+				$this->set_id( $this->wpdb->insert_id );
 			}
 
 
@@ -359,5 +370,146 @@ class TVA_Transaction {
 		$this->created_at = $created_at;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function get_debug_id() {
+		return $this->debug_id;
+	}
+
+	/**
+	 * @param string $debug_id
+	 */
+	public function set_debug_id( $debug_id ) {
+		$this->debug_id = (string) $debug_id;
+	}
+
+	/**
+	 * Find the most recent transaction row for a given transaction id + gateway.
+	 *
+	 * @param string $transaction_id Gateway transaction id (capture/refund id).
+	 * @param string $gateway        Gateway label (e.g. TVA_Const::PAYPAL_GATEWAY).
+	 *
+	 * @return TVA_Transaction|null
+	 */
+	public static function find_by_transaction_id( $transaction_id, $gateway ) {
+		if ( empty( $transaction_id ) ) {
+			return null;
+		}
+
+		global $wpdb;
+		$table = $wpdb->prefix . TVA_Const::DB_PREFIX . TVA_Const::TRANSACTIONS_TABLE_NAME;
+		$id    = $wpdb->get_var( $wpdb->prepare(
+			'SELECT ID FROM `' . $table . '` WHERE transaction_id = %s AND gateway = %s ORDER BY ID DESC LIMIT 1',
+			$transaction_id,
+			$gateway
+		) );
+
+		return $id ? new self( (int) $id ) : null;
+	}
+
+	/**
+	 * Idempotently upsert a PayPal transaction row keyed on (transaction_id, 'PayPal').
+	 *
+	 * Insert when no row exists. When a row exists, only fill debug_id if the incoming
+	 * value is non-empty and the stored one is empty — so a later webhook never clobbers
+	 * a debug id the synchronous path already captured, and an empty value never overwrites
+	 * a real one.
+	 *
+	 * @param array $args order_id, transaction_id, currency, price, price_gross,
+	 *                     gateway_fee, transaction_type, debug_id, created_at.
+	 *
+	 * @return void
+	 */
+	public static function record_paypal( array $args ) {
+		$transaction_id = (string) ( $args['transaction_id'] ?? '' );
+		if ( '' === $transaction_id ) {
+			return;
+		}
+
+		$existing = self::find_by_transaction_id( $transaction_id, TVA_Const::PAYPAL_GATEWAY );
+
+		if ( $existing instanceof self ) {
+			$incoming_debug = (string) ( $args['debug_id'] ?? '' );
+			if ( '' !== $incoming_debug && '' === $existing->get_debug_id() ) {
+				$existing->set_debug_id( $incoming_debug );
+				if ( ! $existing->save() ) {
+					TVA_Logger::set_type( 'PayPal' );
+					TVA_Logger::log( 'transaction_debug_id_save_failed', array( 'transaction_id' => $transaction_id ), true );
+				}
+			}
+			return;
+		}
+
+		$transaction = new self();
+		$transaction->set_data( array(
+			'order_id'         => (int) ( $args['order_id'] ?? 0 ),
+			'transaction_id'   => $transaction_id,
+			'currency'         => (string) ( $args['currency'] ?? '' ),
+			'price'            => (string) ( $args['price'] ?? 0 ),
+			'price_gross'      => (string) ( $args['price_gross'] ?? 0 ),
+			'gateway_fee'      => (string) ( $args['gateway_fee'] ?? 0 ),
+			'transaction_type' => (int) ( $args['transaction_type'] ?? TVA_Const::STATUS_COMPLETED ),
+			'gateway'          => TVA_Const::PAYPAL_GATEWAY,
+			'debug_id'         => (string) ( $args['debug_id'] ?? '' ),
+		) );
+
+		if ( ! empty( $args['created_at'] ) ) {
+			$transaction->set_created_at( (string) $args['created_at'] );
+		}
+
+		if ( ! $transaction->save() ) {
+			TVA_Logger::set_type( 'PayPal' );
+			TVA_Logger::log( 'transaction_save_failed', array( 'transaction_id' => $transaction_id ), true );
+		}
+	}
+
+	/**
+	 * Set/refresh the debug id on an existing PayPal transaction row by transaction id.
+	 * No-op when the row is missing or already has a debug id.
+	 *
+	 * @param string $transaction_id Capture/refund id.
+	 * @param string $debug_id       PayPal-Debug-Id.
+	 *
+	 * @return void
+	 */
+	public static function set_paypal_debug_id( $transaction_id, $debug_id ) {
+		if ( '' === (string) $debug_id ) {
+			return;
+		}
+
+		$existing = self::find_by_transaction_id( $transaction_id, TVA_Const::PAYPAL_GATEWAY );
+		if ( $existing instanceof self && '' === $existing->get_debug_id() ) {
+			$existing->set_debug_id( (string) $debug_id );
+			if ( ! $existing->save() ) {
+				TVA_Logger::set_type( 'PayPal' );
+				TVA_Logger::log( 'debug_id_save_failed', array( 'transaction_id' => (string) $transaction_id ), true );
+			}
+		}
+	}
+
+	/**
+	 * Most recent COMPLETED PayPal transaction row for an order (the capture), for admin display.
+	 *
+	 * @param int $order_id
+	 *
+	 * @return TVA_Transaction|null
+	 */
+	public static function get_completed_for_order( $order_id ) {
+		if ( $order_id <= 0 ) {
+			return null;
+		}
+
+		global $wpdb;
+		$table = $wpdb->prefix . TVA_Const::DB_PREFIX . TVA_Const::TRANSACTIONS_TABLE_NAME;
+		$id    = $wpdb->get_var( $wpdb->prepare(
+			'SELECT ID FROM `' . $table . '` WHERE order_id = %d AND gateway = %s AND transaction_type = %d ORDER BY ID DESC LIMIT 1',
+			(int) $order_id,
+			TVA_Const::PAYPAL_GATEWAY,
+			TVA_Const::STATUS_COMPLETED
+		) );
+
+		return $id ? new self( (int) $id ) : null;
+	}
 
 }

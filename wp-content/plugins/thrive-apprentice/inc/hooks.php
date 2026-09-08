@@ -547,9 +547,8 @@ add_filter( 'rest_endpoints', 'tva_filter_endpoints_for_thrive_cart' );
 
 /**
  * WP-API-SWAGGER uses Basic Authorization
- * - but we overwrite its logic with TVA Token
+ * - token authentication is now handled by Thrive Dashboard (Public_API\Main::filter_authenticate)
  */
-add_filter( 'authenticate', 'tva_filter_authenticate', 100, 3 );
 
 add_action( 'thrive_theme_shortcode_prefixes', 'tva_thrive_theme_shortcode_prefixes' );
 

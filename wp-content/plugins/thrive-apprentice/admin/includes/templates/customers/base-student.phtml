@@ -24,7 +24,11 @@
 			</a>
 			<a href="javascript:void(0)" class="tva-link-btn click" data-id="<#= model.get('ID') #>" data-fn="editCustomer">
 				<?php tva_get_svg_icon( 'lock-alt' ); ?>
-				<?php echo esc_html__( 'Edit access rights', 'thrive-apprentice' ); ?>
+				<# if ( model.get('has_paypal_order') ) { #>
+					<?php echo esc_html__( 'Edit Access / Refund', 'thrive-apprentice' ); ?>
+				<# } else { #>
+					<?php echo esc_html__( 'Edit access rights', 'thrive-apprentice' ); ?>
+				<# } #>
 			</a>
 
 			<a href="javascript:void(0)" class="tva-link-btn click" data-nonce="<?php echo wp_create_nonce( 'wp_rest' ); ?>" data-fn="loginAsCustomer">

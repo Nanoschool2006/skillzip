@@ -363,14 +363,24 @@ final class TVA_Course_Certificate implements JsonSerializable {
 	 * @return array
 	 */
 	public function download( $customer ) {
-		list( $width, $height ) = explode( 'x', $this->get_dimensions() );
+		$dimensions = $this->get_dimensions();
+		$parts      = explode( 'x', $dimensions );
+		$width      = isset( $parts[0] ) ? (int) $parts[0] : 0;
+		$height     = isset( $parts[1] ) ? (int) $parts[1] : 0;
+
+		// Fall back to landscape A4 @ 96dpi (editor default) when meta is missing or malformed.
+		if ( $width < 100 || $height < 100 ) {
+			error_log( 'TVA: certificate ' . $this->ID . ' has missing/malformed dimensions meta "' . $dimensions . '", falling back to 1123x794' );
+			$width  = 1123;
+			$height = 794;
+		}
 
 		$pdf_from_url = new TVD_PDF_From_URL(
 			$this->get_public_url( $customer->get_id() ),
 			array(
 				'file_name' => $customer->compute_certificate_file_name( $this ),
-				'width'     => (int) $width,
-				'height'    => (int) $height,
+				'width'     => $width,
+				'height'    => $height,
 			)
 		);
 

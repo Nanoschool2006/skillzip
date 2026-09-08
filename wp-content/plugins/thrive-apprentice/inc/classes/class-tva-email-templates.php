@@ -52,6 +52,16 @@ class TVA_Email_Templates {
 	protected $_course;
 
 	/**
+	 * @var TVA_Course_V2[]|null Array of courses for batched welcome email context.
+	 */
+	private $_courses = null;
+
+	/**
+	 * @var array<int, int[]> Snapshot of course IDs per content set before update, keyed by set ID.
+	 */
+	private $_pre_update_set_courses = array();
+
+	/**
 	 * @var string certificate download link for the certificate template; kept on this instance to be available for rendering the shortcodes
 	 */
 	protected $_certificate_download;
@@ -60,6 +70,22 @@ class TVA_Email_Templates {
 	 * @var string assessment for the assessment template; kept on this instance to be available for rendering the shortcodes
 	 */
 	protected $_user_assessment;
+
+	/**
+	 * Tracks which users have already been sent a welcome email in this request.
+	 * Prevents duplicate emails when multiple products are granted in a single automation run.
+	 *
+	 * @var array
+	 */
+	protected static $_automator_welcome_sent_this_request = array();
+
+	/**
+	 * Tracks whether a course welcome email was sent during the current request.
+	 * Used to prevent sending duplicate emails (new account + course welcome) for the same user.
+	 *
+	 * @var bool
+	 */
+	protected $_course_welcome_sent_in_request = false;
 
 	/**
 	 * TVA_Email_Templates constructor.
@@ -98,9 +124,13 @@ class TVA_Email_Templates {
 		add_filter( 'tva_admin_localize', array( $this, 'get_connected_email_apis' ) );
 		add_filter( 'tva_admin_localize', array( $this, 'get_admin_data_localization' ) );
 		
-		// Automator email coordination
-		add_action( 'user_register', array( $this, 'track_automator_user_creation' ), 10, 1 );
+		// Automator email coordination - prevent duplicate emails
+		// When automation creates a user, we block WordPress's automatic email and send our own when product access is granted
+		// Priority 5 ensures this runs before other user_register hooks (like TVA_Customer::on_user_register) that may grant product access
+		add_action( 'user_register', array( $this, 'track_automator_user_creation' ), 5, 1 );
+		add_filter( 'wp_send_new_user_notification_to_user', array( $this, 'prevent_automator_user_notification' ), 10, 2 );
 		add_action( 'tva_user_receives_product_access', array( $this, 'send_automator_welcome_email' ), 10, 2 );
+
 		add_filter( 'tva_admin_localize', array( $this, 'get_shortcodes' ) );
 		add_filter( 'tva_admin_localize', array( $this, 'get_triggers' ) );
 		add_action( 'rest_api_init', array( $this, 'rest_api_init' ) );
@@ -116,6 +146,9 @@ class TVA_Email_Templates {
 		add_action( 'tva_user_receives_product_access', array( $this, 'send_course_welcome_email' ), 20, 2 );
 		add_action( 'tva_course_published', array( $this, 'send_welcome_emails_for_published_course' ), 10, 1 );
 		add_action( 'tva_prepare_new_course_welcome_email_template', array( $this, 'prepare_new_course_welcome_email_template' ) );
+		add_action( 'tvd_content_set_before_update', array( $this, 'capture_content_set_courses_before_update' ) );
+		add_action( 'tvd_content_set_after_update', array( $this, 'send_welcome_emails_for_added_courses' ) );
+		add_action( 'tva_product_sets_courses_changed', array( $this, 'send_welcome_emails_for_product_courses_added' ), 10, 3 );
 
 		// Batch processing cron hook for course welcome emails
 		add_action( 'tva_process_course_welcome_batch', array( $this, 'process_course_welcome_batch' ) );
@@ -185,6 +218,15 @@ class TVA_Email_Templates {
 		add_shortcode(
 			'course_name',
 			function () {
+				// Batched context: return comma-separated course names
+				if ( ! empty( $this->_courses ) && is_array( $this->_courses ) ) {
+					$names = array_filter( array_map( function ( $c ) {
+						return $c->name ?? '';
+					}, $this->_courses ) );
+
+					return implode( ', ', $names );
+				}
+
 				// First, check if course is already set on the instance
 				// If $_course is not empty, return its value.
 				// The condition prioritizes checking if $_course is a string; if true, it returns the string directly.
@@ -483,15 +525,15 @@ class TVA_Email_Templates {
 		$GLOBALS['tva_user_pass_generated'] = true;
 	}
 
-	public function generate_password_set_link_for_user( $user ) {	
+	public function generate_password_set_link_for_user( $user ) {
+		if ( ! $user || ! isset( $user->ID ) ) {
+			error_log( 'generate_password_set_link_for_user: User not found.' );
+			return new WP_Error( 'user_not_found', 'User not found.' );
+		}
+
 		if ( ! empty( get_transient( 'generate_password_set_link_for_user_transition' . $user->ID ) ) ) {
 			$reset_link = get_transient( 'generate_password_set_link_for_user_transition' . $user->ID );
 			return esc_html__( 'Reset your password: ', 'thrive-apprentice' ) . '<a href="' . $reset_link . '" target="_blank">' . $reset_link . '</a>';
-		}
-
-		if ( ! $user ) {
-			error_log( 'generate_password_set_link_for_user: User not found with ID ' . $user->ID );
-			return new WP_Error( 'user_not_found', 'User not found.' );
 		}		
 	
 		// Generate the reset key. This also stores it in user meta with an expiration.
@@ -508,16 +550,16 @@ class TVA_Email_Templates {
 		return esc_html__( 'Reset your password: ', 'thrive-apprentice' ) . '<a href="' . $reset_link . '" target="_blank">' . $reset_link . '</a>';
 	}
 
-	public function generate_password_set_link_for_user_v2( $user, $content ) {	
+	public function generate_password_set_link_for_user_v2( $user, $content ) {
 		$sc_text = ! empty( $content ) ? $content : esc_html__( 'Set your password', 'thrive-apprentice' );
-		if ( ! empty( get_transient( 'generate_password_set_link_for_user_transition' . $user->ID ) ) ) {
-			$reset_link = get_transient( 'generate_password_set_link_for_user_transition' . $user->ID );
-			return  '<a href="' . $reset_link . '" target="_blank">' . $sc_text . '</a>';
+		if ( ! $user || ! isset( $user->ID ) ) {
+			error_log( 'generate_password_set_link_for_user_v2: User not found.' );
+			return new WP_Error( 'user_not_found', 'User not found.' );
 		}
 
-		if ( ! $user ) {
-			error_log( 'generate_password_set_link_for_user: User not found with ID ' . $user->ID );
-			return new WP_Error( 'user_not_found', 'User not found.' );
+		if ( ! empty( get_transient( 'generate_password_set_link_for_user_transition' . $user->ID ) ) ) {
+			$reset_link = get_transient( 'generate_password_set_link_for_user_transition' . $user->ID );
+			return '<a href="' . $reset_link . '" target="_blank">' . $sc_text . '</a>';
 		}		
 	
 		// Generate the reset key. This also stores it in user meta with an expiration.
@@ -1149,72 +1191,102 @@ class TVA_Email_Templates {
 	}
 
 	/**
-	 * Track user creation from automation tools
+	 * Track user creation from automation tools.
+	 * Sets a transient to indicate this user was created via automation webhook.
+	 * Only sets transient if a custom email template is configured - otherwise lets WordPress send the default email.
 	 *
 	 * @param int $user_id The user ID.
 	 */
 	public function track_automator_user_creation( $user_id ) {
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( $_SERVER['REQUEST_URI'] ) : '';
-		
-		// Check if this is coming from automation based on REQUEST_URI
-		$is_automation = false;
-		
-		// Uncanny Automator webhook pattern (from logs: /wp-json/uap/v2/uap-1584-1587)
-		if ( strpos( $request_uri, '/wp-json/uap/v2/' ) !== false ) {
-			$is_automation = true;
-		}
-		
-		// Thrive Automator webhook pattern (may need adjustment)
-		if ( strpos( $request_uri, '/wp-json/tap/' ) !== false ) {
-			$is_automation = true;
-		}
-		
-		if ( $is_automation ) {
-			set_transient( 'automator_pending_course_' . $user_id, true, 10 * MINUTE_IN_SECONDS );
+
+		// Check for automation webhook patterns in the request URI
+		$is_automation = strpos( $request_uri, '/wp-json/tap/' ) !== false  // Thrive Automator
+		              || strpos( $request_uri, '/wp-json/uap/v2/' ) !== false; // Uncanny Automator
+
+		// Only block the default email if we have a custom template configured
+		// If no template, let WordPress send its default email immediately
+		if ( $is_automation && $this->check_templates_for_trigger( 'wordpress' ) ) {
+			set_transient( 'tva_automator_user_' . $user_id, true, HOUR_IN_SECONDS );
 		}
 	}
 
 	/**
-	 * Send welcome email when course is assigned to automator-created user
+	 * Send welcome email when product access is granted to an automator-created user.
+	 * This is the ONLY place the welcome email should be sent for these users.
 	 *
-	 * @param WP_User $user       The user object.
-	 * @param int     $product_id The product ID.
+	 * @param WP_User     $user       The user object.
+	 * @param int|Product $product_id The product ID or Product object.
 	 */
 	public function send_automator_welcome_email( $user, $product_id ) {
-		$user_id = $user->ID;
-		$transient_key = 'automator_pending_course_' . $user_id;
-		
-		// Check if transient exists (user created by automation)
+		if ( ! $user instanceof \WP_User ) {
+			return;
+		}
+
+		// Per-request guard: prevent duplicate sends when multiple products are granted in one request
+		if ( isset( self::$_automator_welcome_sent_this_request[ $user->ID ] ) ) {
+			return;
+		}
+
+		$transient_key = 'tva_automator_user_' . $user->ID;
+
+		// Only proceed if this user was created via automation
 		if ( ! get_transient( $transient_key ) ) {
 			return;
 		}
-		
-		// Clean up transient
-		delete_transient( $transient_key );
-		
-		// Check if email template exists
+
+		// Check if email template is configured
 		$email_template = $this->check_templates_for_trigger( 'wordpress' );
 		if ( ! $email_template ) {
 			return;
 		}
-		
-		// Check if Product class exists to prevent fatal errors
-		if ( ! class_exists( 'TVA\Product' ) ) {
-			return;
+
+		// Set up product context for shortcodes
+		$resolved_product_id = is_object( $product_id ) && method_exists( $product_id, 'get_id' )
+			? $product_id->get_id()
+			: (int) $product_id;
+
+		if ( class_exists( 'TVA\Product' ) ) {
+			$product      = new \TVA\Product( $resolved_product_id );
+			$product_name = $product->get_name();
+			if ( ! empty( $product_name ) ) {
+				$this->_course  = $product_name;
+				$this->_product = $product;
+			}
 		}
-		
-		// Create product instance and validate
-		$product = new \TVA\Product( $product_id );
-		if ( ! $product || ! method_exists( $product, 'get_name' ) ) {
-			return;
-		}
-		
-		// Set product name for email template
-		$GLOBALS['tva_current_course_name'] = $product->get_name();
-		
-		// Send the welcome email
+
+		$this->_user = $user;
+
+		// Temporarily remove our blocking filter to allow this email through
+		remove_filter( 'wp_send_new_user_notification_to_user', array( $this, 'prevent_automator_user_notification' ), 10 );
+
+		// Mark as sent for this request
+		self::$_automator_welcome_sent_this_request[ $user->ID ] = true;
+
+		// Prepare and send the email
 		$this->trigger_process( $email_template );
-		wp_send_new_user_notifications( $user_id, 'user' );
+		wp_send_new_user_notifications( $user->ID, 'user' );
+
+		// Re-add the filter to continue blocking any other automatic emails
+		add_filter( 'wp_send_new_user_notification_to_user', array( $this, 'prevent_automator_user_notification' ), 10, 2 );
+	}
+
+	/**
+	 * Prevent WordPress from sending automatic user notification for automator-created users.
+	 * The email will be sent later via send_automator_welcome_email() when product access is granted.
+	 *
+	 * @param bool    $send Whether to send the notification email.
+	 * @param WP_User $user User object.
+	 *
+	 * @return bool
+	 */
+	public function prevent_automator_user_notification( $send, $user ) {
+		// Block email if this user was created via automation (transient exists)
+		if ( $user && get_transient( 'tva_automator_user_' . $user->ID ) ) {
+			return false;
+		}
+
+		return $send;
 	}
 
 	/**
@@ -1257,6 +1329,55 @@ class TVA_Email_Templates {
 	}
 
 	/**
+	 * Filter courses to only those eligible for welcome email.
+	 *
+	 * @param WP_User $user    The user object.
+	 * @param array   $courses Array of TVA_Course_V2 objects or term IDs.
+	 *
+	 * @return TVA_Course_V2[] Array of eligible course objects.
+	 */
+	private function filter_eligible_courses( $user, $courses ) {
+		$eligible = array();
+
+		if ( ! $user instanceof WP_User || ! $user->ID ) {
+			return $eligible;
+		}
+
+		$user_id = absint( $user->ID );
+
+		foreach ( $courses as $course ) {
+			if ( ! $course instanceof TVA_Course_V2 ) {
+				$course_id = absint( $course );
+				if ( ! $course_id ) {
+					continue;
+				}
+				$course = new TVA_Course_V2( $course_id );
+			}
+
+			$course_id = absint( $course->get_id() );
+			if ( ! $course_id ) {
+				continue;
+			}
+
+			if ( ! $course->is_published() ) {
+				continue;
+			}
+
+			if ( ! $course->get_send_welcome_email() ) {
+				continue;
+			}
+
+			if ( $this->has_user_received_course_welcome( $user_id, $course_id ) ) {
+				continue;
+			}
+
+			$eligible[] = $course;
+		}
+
+		return $eligible;
+	}
+
+	/**
 	 * Send course welcome email when user gains access to a course.
 	 *
 	 * @param WP_User $user       The user object.
@@ -1288,8 +1409,194 @@ class TVA_Email_Templates {
 			return;
 		}
 
-		foreach ( $courses as $course ) {
-			$this->maybe_send_course_welcome( $user, $course );
+		$eligible = $this->filter_eligible_courses( $user, $courses );
+		if ( empty( $eligible ) ) {
+			return;
+		}
+
+		if ( count( $eligible ) === 1 ) {
+			$this->maybe_send_course_welcome( $user, reset( $eligible ) );
+		} else {
+			$this->send_batched_course_welcome( $user, $eligible );
+		}
+	}
+
+	/**
+	 * Send a single batched welcome email for multiple courses.
+	 *
+	 * Instead of sending one email per course, this combines all eligible courses
+	 * into a single email with all course names and URLs listed.
+	 *
+	 * @param WP_User        $user    The user object.
+	 * @param TVA_Course_V2[] $courses Array of eligible course objects.
+	 *
+	 * @return void
+	 */
+	private function send_batched_course_welcome( $user, $courses ) {
+		$email_template = $this->check_templates_for_trigger( 'new_course_welcome' );
+		if ( ! $email_template ) {
+			return;
+		}
+
+		if ( empty( $email_template['subject'] ) || empty( $email_template['body'] ) ) {
+			return;
+		}
+
+		$course_names = array_values( array_filter( array_map( function ( $c ) {
+			return $c->name ?? '';
+		}, $courses ) ) );
+
+		$name_count = count( $course_names );
+
+		if ( $name_count === 0 ) {
+			$subject_name = '';
+		} elseif ( $name_count === 1 ) {
+			$subject_name = $course_names[0];
+		} elseif ( $name_count === 2 ) {
+			$subject_name = $course_names[0] . ' and ' . $course_names[1];
+		} else {
+			$remaining    = $name_count - 1;
+			$subject_name = $course_names[0] . ' and ' . $remaining . ' more course' . ( $remaining > 1 ? 's' : '' );
+		}
+
+		$email_template['user']   = $user;
+		$email_template['course'] = $subject_name;
+
+		do_action( 'tva_prepare_new_course_welcome_email_template', $email_template );
+
+		// For subject processing: $_course is set to the first course object so that [course_url]
+		// resolves to a deterministic URL if used in a customized subject. We manually replace
+		// [course_name] with the formatted subject name before do_shortcode() runs, since the
+		// shortcode would otherwise return only the first course's name from the object.
+		$this->_course = reset( $courses );
+		$subject_text  = str_replace( '[course_name]', $subject_name, $email_template['subject'] );
+		$subject       = do_shortcode( sanitize_text_field( $subject_text ) );
+
+		// Restore $_course to the formatted name string for body fallback.
+		$this->_course = $subject_name;
+
+		// Now set $_courses for the body — [course_name] will return comma-separated names,
+		// [course_url] will return multiple linked URLs
+		$this->_courses = $courses;
+
+		$body = wp_kses_post( $email_template['body'] );
+
+		// Strip any <a> wrapper around [course_url] in the template body.
+		// The default template has: <a target="_blank" href="[course_url]">[course_url]</a>
+		// In batched context, [course_url] returns full HTML links, so the wrapper must be removed
+		// to prevent nested/broken <a> tags. This also handles custom templates where
+		// [course_url] might be used with different link text (e.g., <a href="[course_url]">Click here</a>).
+		$body = preg_replace( '/<a\b[^>]*\[course_url\][^>]*>.*?\[course_url\].*?<\/a>/is', '[course_url]', $body );
+		$body = preg_replace( '/<a\b[^>]*\[course_url\][^>]*>(.*?)<\/a>/is', '$1 [course_url]', $body );
+
+		$message = do_shortcode( nl2br( $body ) );
+
+		$to = sanitize_email( $user->user_email );
+		if ( empty( $to ) ) {
+			$this->_courses = null;
+
+			return;
+		}
+
+		try {
+			$sent = wp_mail( $to, $subject, $message );
+		} catch ( \Exception $e ) {
+			error_log( 'TVA: wp_mail failed for batched course welcome, user ' . $user->ID . ': ' . $e->getMessage() );
+			$sent = false;
+		}
+
+		if ( $sent ) {
+			$user_id = absint( $user->ID );
+			foreach ( $courses as $course ) {
+				$this->mark_course_welcome_email_sent( $user_id, absint( $course->get_id() ) );
+			}
+		}
+
+		$this->_courses = null;
+	}
+
+	/**
+	 * Capture course IDs from a content set before it is updated.
+	 *
+	 * Stores the current course IDs so we can compare after the update
+	 * to detect which courses were added to the product.
+	 *
+	 * @param \TVD\Content_Sets\Set $set The content set being updated.
+	 *
+	 * @return void
+	 */
+	public function capture_content_set_courses_before_update( $set ) {
+		if ( ! isset( $this->_pre_update_set_courses[ $set->ID ] ) ) {
+			$this->_pre_update_set_courses[ $set->ID ] = $set->get_tva_courses_ids();
+		}
+	}
+
+	/**
+	 * Send welcome emails when published courses are added to a product's content set.
+	 *
+	 * Compares course IDs before and after the content set update to detect newly added
+	 * courses. For each added course that is published and has welcome email enabled,
+	 * sends welcome emails to existing users who have access to the product.
+	 *
+	 * Bails out if no pre-update snapshot exists for this set, to avoid treating all
+	 * current courses as "added" and triggering unintended email blasts.
+	 *
+	 * @param \TVD\Content_Sets\Set $set The content set that was updated.
+	 *
+	 * @return void
+	 */
+	public function send_welcome_emails_for_added_courses( $set ) {
+		if ( ! isset( $this->_pre_update_set_courses[ $set->ID ] ) ) {
+			return;
+		}
+
+		$old_course_ids = $this->_pre_update_set_courses[ $set->ID ];
+		$new_course_ids = $set->get_tva_courses_ids();
+
+		// Clean up snapshot so subsequent updates in the same request don't use stale data.
+		unset( $this->_pre_update_set_courses[ $set->ID ] );
+
+		$added_course_ids = array_diff( $new_course_ids, $old_course_ids );
+		if ( empty( $added_course_ids ) ) {
+			return;
+		}
+
+		foreach ( $added_course_ids as $course_id ) {
+			$course = new TVA_Course_V2( absint( $course_id ) );
+
+			if ( ! $course->get_id() || ! $course->is_published() || ! $course->get_send_welcome_email() ) {
+				continue;
+			}
+
+			$this->send_welcome_emails_for_published_course( $course );
+		}
+	}
+
+	/**
+	 * Send welcome emails when courses are added to a product via Product::update_sets().
+	 *
+	 * This handles the case where admin edits a product and changes its courses,
+	 * which goes through Product::update_sets() rather than Set::update().
+	 *
+	 * @param \TVA\Product $product           The product instance.
+	 * @param array        $added_course_ids   Course IDs added to the product.
+	 * @param array        $removed_course_ids Course IDs removed from the product (unused).
+	 *
+	 * @return void
+	 */
+	public function send_welcome_emails_for_product_courses_added( $product, $added_course_ids, $removed_course_ids ) {
+		if ( empty( $added_course_ids ) || ! is_array( $added_course_ids ) ) {
+			return;
+		}
+
+		foreach ( $added_course_ids as $course_id ) {
+			$course = new TVA_Course_V2( absint( $course_id ) );
+
+			if ( ! $course->get_id() || ! $course->is_published() || ! $course->get_send_welcome_email() ) {
+				continue;
+			}
+
+			$this->send_welcome_emails_for_published_course( $course );
 		}
 	}
 
@@ -1845,7 +2152,31 @@ class TVA_Email_Templates {
 
 		if ( $sent ) {
 			$this->mark_course_welcome_email_sent( $user_id, $course_id );
+			$this->_course_welcome_sent_in_request = true;
 		}
+	}
+
+	/**
+	 * Set the course context for the [course_name] shortcode resolution.
+	 *
+	 * @param string|TVA_Course_V2|null $course The course name, course object, or null to reset.
+	 */
+	public function set_course_context( $course ) {
+		$this->_course = $course;
+	}
+
+	/**
+	 * Returns whether a course welcome email was sent, then resets the flag.
+	 * Resetting prevents the flag from leaking across multiple insert_customer() calls
+	 * in the same request (e.g. bulk import).
+	 *
+	 * @return bool
+	 */
+	public function consume_course_welcome_sent_flag() {
+		$was_sent = $this->_course_welcome_sent_in_request;
+		$this->_course_welcome_sent_in_request = false;
+
+		return $was_sent;
 	}
 
 	/**
@@ -1896,7 +2227,12 @@ class TVA_Email_Templates {
 	/**
 	 * Get the course URL for use in email shortcodes.
 	 *
-	 * Attempts to find the course URL from various sources:
+	 * In batched context (when $_courses is set with 2+ courses), returns HTML with
+	 * multiple clickable <a> links separated by <br> tags. The calling code
+	 * (send_batched_course_welcome) strips any existing <a> wrapper from the template
+	 * body before shortcode processing to prevent nested HTML.
+	 *
+	 * In all other contexts, returns a plain escaped URL string from these sources:
 	 * 1. Instance $_course property (if TVA_Course_V2 object)
 	 * 2. User assessment context
 	 * 3. POST data (course_ids or course_id)
@@ -1905,9 +2241,26 @@ class TVA_Email_Templates {
 	 * Note: When $_course is a string (e.g., in certificate email context where only
 	 * course_name is passed), we cannot derive the URL and must fall back to other sources.
 	 *
-	 * @return string The escaped course URL, or empty string if unavailable.
+	 * @return string Escaped course URL, HTML links in batched context, or empty string.
 	 */
 	private function get_course_url_for_shortcode() {
+		// Batched context: return multiple course URLs as clickable links.
+		// The calling code (send_batched_course_welcome) strips the <a> wrapper from the
+		// template body before shortcode processing, so we output full HTML links here.
+		if ( ! empty( $this->_courses ) && is_array( $this->_courses ) && count( $this->_courses ) > 1 ) {
+			$links = array();
+			foreach ( $this->_courses as $course ) {
+				if ( $course instanceof TVA_Course_V2 ) {
+					$url = esc_url( $course->get_link( false ) );
+					if ( $url ) {
+						$links[] = '<a target="_blank" href="' . $url . '">' . esc_html( $url ) . '</a>';
+					}
+				}
+			}
+
+			return implode( '<br>' . "\n", $links );
+		}
+
 		// First, check if course object is available on the instance
 		if ( $this->_course instanceof TVA_Course_V2 ) {
 			return esc_url( $this->_course->get_link( false ) );

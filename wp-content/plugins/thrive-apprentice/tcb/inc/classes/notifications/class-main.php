@@ -124,8 +124,26 @@ class Main {
 				$post_content = str_replace( 'notifications-content-wrapper', 'notifications-content-wrapper tcb-permanently-hidden', $post_content );
 			}
 
-			/* Change the state to the desired one */
+			/*
+			 * Change the state to the desired one.
+			 *
+			 * $state can originate from the `notification-state` request param
+			 * (see inc/views/notifications/notifications-editor.php). Validate it
+			 * against the explicit allowlist of supported states so a crafted value
+			 * can neither break out of the data-state attribute (reflected XSS) nor
+			 * be interpreted as a preg_replace back-reference (e.g. "$1", "\1") — the
+			 * replacement is always one of the hardcoded literals below.
+			 *
+			 * An empty $state is the caller's "do not override" signal (e.g.
+			 * class-hooks.php passes ''), so it is left untouched. Any other
+			 * unsupported value falls back to the default 'success' state so the
+			 * toast never renders unstyled/blank (the stylesheet only styles
+			 * success/warning/error).
+			 */
 			if ( $state ) {
+				if ( ! in_array( $state, array( 'success', 'warning', 'error' ), true ) ) {
+					$state = 'success';
+				}
 				$post_content = preg_replace( '/data-state="[a-z]*"/', 'data-state="' . $state . '"', $post_content );
 			}
 

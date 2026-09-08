@@ -4,7 +4,9 @@
 $state      = 'success';
 $is_preview = isset( $_GET['notification-state'] );
 if ( $is_preview ) {
-	$state = $_GET['notification-state'];
+	/* Sanitize the requested state on input. The sink (Main::get_notification_content)
+	   restricts it further, but keep the request value clean here too. */
+	$state = sanitize_key( wp_unslash( $_GET['notification-state'] ) );
 }
 ?>
 <head>

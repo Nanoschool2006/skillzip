@@ -467,6 +467,7 @@ class TVA_Courses_Controller extends TVA_REST_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_courses_public' ),
+					'permission_callback' => '__return_true',
 					'args'                => array(),
 				),
 			)
@@ -479,6 +480,7 @@ class TVA_Courses_Controller extends TVA_REST_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_course_public' ),
+					'permission_callback' => '__return_true',
 					'args'                => array(
 						'id' => array(
 							'type'     => 'integer',
@@ -496,6 +498,7 @@ class TVA_Courses_Controller extends TVA_REST_Controller {
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_course_items_public' ),
+					'permission_callback' => '__return_true',
 					'args'                => array(
 						'id' => array(
 							'type'     => 'integer',

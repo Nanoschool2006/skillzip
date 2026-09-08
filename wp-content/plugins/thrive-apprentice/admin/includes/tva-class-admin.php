@@ -325,6 +325,7 @@ class TVA_Admin {
 				'slug_routes'        => tva_get_route_url( 'routes' ),
 				'stripe'             => tva_get_route_url( 'stripe' ),
 				'square'             => tva_get_route_url( 'square' ),
+				'paypal'             => tva_get_route_url( 'paypal' ),
 				'grade'              => tva_get_route_url( 'grade' ),
 				'data_cleanup'       => tva_get_route_url( 'data-cleanup' ),
 			),

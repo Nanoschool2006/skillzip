@@ -137,6 +137,42 @@ class Base {
 	}
 
 	/**
+	 * Returns the moment when the trigger will unlock the content for the active customer,
+	 * or null if no future unlock date is computable for this trigger type.
+	 *
+	 * Used by the drip unlock-date display shortcode. Only the three time-based triggers
+	 * produce a date; all event-based triggers return null via this default.
+	 *
+	 * @return \DateTimeInterface|null
+	 */
+	public function get_unlock_timestamp(): ?\DateTimeInterface {
+		if ( empty( $this->schedule ) ) {
+			return null;
+		}
+		if ( static::NAME === 'first-lesson' ) {
+			$customer = $this->get_customer();
+			$anchor   = $customer instanceof \TVA_Customer ? $customer->get_begin_course_timestamp( $this->campaign->get_course_id() ) : false;
+			$ts       = $anchor ? $this->schedule->get_next_occurrence( $anchor ) : null;
+			return ( $ts && $ts > current_datetime() ) ? $ts : null;
+		}
+		if ( static::NAME === 'datetime' ) {
+			$occurrence = property_exists( $this, 'occurrence' ) ? $this->occurrence : '';
+			return $occurrence === 'after' ? $this->schedule->get_next_occurrence() : null;
+		}
+		// Generic Base instance — produced by Campaign::compute_trigger() for lessons 2+ in a
+		// "specific datetime + recurring schedule" campaign (e.g., start May 1, then every week).
+		// The campaign's unlock_date is the anchor, the schedule carries an interval_number that
+		// has been multiplied by the lesson's content_index, so get_next_occurrence(anchor)
+		// returns "anchor + (content_index × interval) " — i.e., the right unlock moment per
+		// lesson position. Mirrors the logic of Base::is_valid() above.
+		if ( static::NAME === 'base' && ! empty( $this->datetime ) ) {
+			$ts = $this->schedule->get_next_occurrence( static::get_datetime( $this->datetime ) );
+			return ( $ts && $ts > current_datetime() ) ? $ts : null;
+		}
+		return null;
+	}
+
+	/**
 	 * Returns true if there is an event scheduled for the campaign parameters
 	 *
 	 * @param array $args

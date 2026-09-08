@@ -1,7 +1,13 @@
+<#
+	var __itemPostType = this.courseItem.get( 'post_type' );
+	var __parentId = this.model.get( 'inherit_from' );
+	var __parentItem = __parentId && this.course ? this.course.get( 'structure' ).findItem( __parentId ) : null;
+	var __parentIsChapter = !! ( __parentItem && __parentItem.get( 'post_type' ) === 'tva_chapter' );
+#>
 <div class="tvd-modal-content">
 	<h3 class="pl-30 tvd-modal-title"><?php echo __( 'Unlock options', 'thrive-apprentice' ); ?></h3>
 	<div class="tva-sequential-info-box hidden">
-		<p><?php tva_get_svg_icon( 'alt-sequential' ); ?><?php esc_html_e( 'This ', 'thrive-apprentice' ); ?> <#= this.courseItem.get( 'post_type' ).substring(4) #> <?php esc_html_e( ' is unlocked when all content before it is completed', 'thrive-apprentice' ); ?></p>
+		<p><?php tva_get_svg_icon( 'alt-sequential' ); ?><?php esc_html_e( 'This ', 'thrive-apprentice' ); ?> <#= __itemPostType.substring(4) #> <?php esc_html_e( ' is unlocked when all content before it is completed', 'thrive-apprentice' ); ?></p>
 		<div class="tva-trigger-sep mt-25">
 			<span class="tva-trigger-sep__line"></span>
 			<span class="tva-trigger-sep__and"><?php esc_html_e( 'and', 'thrive-apprentice' ); ?></span>
@@ -11,7 +17,13 @@
 	<div class="tva-inherited-sequential-info-box hidden">
 		<div class="tva-content-trigger-locked">
 			<?php tva_get_svg_icon( 'lock-alt_light' ); ?>
-			<?php esc_html_e( 'This lesson is unlocked when content before it is completed and when parent module is unlocked', 'thrive-apprentice' ); ?>
+			<# if ( __itemPostType === 'tva_module' && __parentIsChapter ) { #>
+				<?php esc_html_e( 'This module is unlocked when content before it is completed and when parent chapter is unlocked', 'thrive-apprentice' ); ?>
+			<# } else if ( __parentIsChapter ) { #>
+				<?php esc_html_e( 'This lesson is unlocked when content before it is completed and when parent chapter is unlocked', 'thrive-apprentice' ); ?>
+			<# } else { #>
+				<?php esc_html_e( 'This lesson is unlocked when content before it is completed and when parent module is unlocked', 'thrive-apprentice' ); ?>
+			<# } #>
 		</div>
 		<div class="tva-trigger-sep mt-25">
 			<span class="tva-trigger-sep__line"></span>
@@ -23,7 +35,13 @@
 		<div class="tva-inherited-info-box hidden">
 			<div class="tva-content-trigger-locked">
 				<?php tva_get_svg_icon( 'lock-alt_light' ); ?>
-				<?php esc_html_e( 'This lesson will be unlocked once the parent module has unlocked', 'thrive-apprentice' ); ?>
+				<# if ( __itemPostType === 'tva_module' && __parentIsChapter ) { #>
+					<?php esc_html_e( 'This module will be unlocked once the parent chapter has unlocked', 'thrive-apprentice' ); ?>
+				<# } else if ( __parentIsChapter ) { #>
+					<?php esc_html_e( 'This lesson will be unlocked once the parent chapter has unlocked', 'thrive-apprentice' ); ?>
+				<# } else { #>
+					<?php esc_html_e( 'This lesson will be unlocked once the parent module has unlocked', 'thrive-apprentice' ); ?>
+				<# } #>
 			</div>
 			<div class="tva-trigger-sep mt-15 mb-15">
 				<span class="tva-trigger-sep__line"></span>

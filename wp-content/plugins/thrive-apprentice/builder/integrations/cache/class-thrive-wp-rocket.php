@@ -171,7 +171,7 @@ class Thrive_Wp_Rocket implements Thrive_Plugin_Contract {
 			'active'     => is_plugin_active( static::FILE ),
 			'configured' => $this->is_configured(),
 			'premium'    => true,
-			'redirect'   => 'https://help.thrivethemes.com/en/articles/4741848-setting-up-and-using-wp-rocket-with-thrive-theme-builder',
+			'redirect'   => 'https://thrivethemes.com/docs/using-thrive-theme-builder-with-wp-rocket/',
 		];
 	}
 }

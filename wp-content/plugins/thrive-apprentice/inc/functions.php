@@ -10,6 +10,8 @@ use TVA\Assessments\TVA_User_Assessment;
 use TVA\Product;
 use TVA\Stripe\Hooks as Stripe_Hooks;
 use TVA\Square\Hooks as Square_Hooks;
+use TVA\PayPal\Hooks as PayPal_Hooks;
+use TVA\PayPal\Apple_Pay as PayPal_Apple_Pay;
 use TVA\TTB\Apprentice_Wizard;
 use TVA\TTB\Check as TTB_Check;
 use TVA\TTB\Main as TTB_Main;
@@ -335,23 +337,31 @@ function tva_load_dash_version() {
 /**
  * Called on template_redirect hook
  *
- * If the user views a lesson, it sends the start actions for lesson, module, course depending on the lesson status
- * Should only be executed on lesson pages
+ * If the user views a lesson or module, it sends the start actions for lesson, module, course depending on the status
+ * Should only be executed on lesson or module pages
  */
 function tva_hooks() {
 	/* 1. some general exclusions: */
 	$should_fire = ! is_admin() && ! Apprentice_Wizard::is_frontend() && ! tve_dash_is_crawler();
-	/* 2. ensure this is a lesson */
-	$should_fire = $should_fire && is_single() && get_post_type() === TVA_Const::LESSON_POST_TYPE;
+	/* 2. ensure this is a lesson or module */
+	$post_type   = get_post_type();
+	$is_lesson   = $post_type === TVA_Const::LESSON_POST_TYPE;
+	$is_module   = $post_type === TVA_Const::MODULE_POST_TYPE;
+	$should_fire = $should_fire && is_single() && ( $is_lesson || $is_module );
 	/* 3. make sure this is not a TAr editing page */
 	$should_fire = $should_fire && function_exists( 'is_editor_page' ) && ! is_editor_page();
 
 	if ( $should_fire ) {
 		if ( tva_access_manager()->has_access() ) {
-			tva_send_hooks( get_the_ID() );
+			if ( $is_lesson ) {
+				tva_send_hooks( get_the_ID() );
+			} elseif ( $is_module ) {
+				// For module pages, trigger course start hook directly
+				tva_send_hooks_for_module( get_the_ID() );
+			}
 		} else {
 			/**
-			 * This hook is triggered when a user tries to access a premium course, but they don’t have access to it. The hook can be fired multiple times per user, each time they try to access the restricted course.
+			 * This hook is triggered when a user tries to access a premium course, but they don't have access to it. The hook can be fired multiple times per user, each time they try to access the restricted course.
 			 * </br>
 			 * Example use case:- Send an email to let the user know how to login to the course
 			 *
@@ -362,6 +372,106 @@ function tva_hooks() {
 			 */
 			do_action( 'thrive_apprentice_restricted_course', tcb_tva_visual_builder()->get_active_course(), tvd_get_current_user_details() );
 		}
+	}
+}
+
+/**
+ * Sends TVA hooks when a user visits a module overview page
+ * 
+ * This is executed on module overview page load (not only on "Start Course" clicks) and
+ * triggers the course_start and module_start hooks if it's the user's first time accessing.
+ *
+ * @param int $module_id The module post ID
+ * 
+ * @return void
+ */
+function tva_send_hooks_for_module( $module_id ) {
+	$module = new TVA_Module( get_post( $module_id ) );
+
+	if ( ! $module || ! $module->get_course_v2() ) {
+		return;
+	}
+
+	$course_v2 = $module->get_course_v2();
+	$course_id = $course_v2->get_id();
+
+	if ( empty( $course_id ) ) {
+		return;
+	}
+
+	$user_id = get_current_user_id();
+
+	// Skip if user is the course author (consistent with tva_send_hooks)
+	if ( ! empty( $user_id ) ) {
+		$author = get_term_meta( $course_id, 'tva_author', true );
+		if ( isset( $author['ID'] ) && $user_id === (int) $author['ID'] ) {
+			return;
+		}
+	}
+
+	tva_update_progress_cookie();
+
+	// Use TVA_Course for consistency with tva_send_hooks() hook payloads
+	$course              = new TVA_Course( $course_v2->get_wp_term() );
+	$learned_lessons     = tva_get_learned_lessons();
+	$user_details        = tvd_get_current_user_details();
+	$course_cookie_name  = 'course_' . $course_id . '_started';
+	$course_found        = false;
+
+	// Check if course has already been started
+	if ( isset( $learned_lessons[ $course_id ] ) && ! empty( $learned_lessons[ $course_id ] ) ) {
+		$course_found = true;
+	}
+
+	// Also check cookie in case progress was cleared
+	if ( ! $course_found ) {
+		$course_found = ! empty( TVA_Cookie_Manager::get_cookie( $course_cookie_name ) );
+	}
+
+	// Fire course_start hook if this is a new course start
+	if ( ! $course_found ) {
+		$course_details = $course->get_details();
+
+		/**
+		 * This hook is triggered when a user starts a course for the first time (first interaction with the course content).
+		 * The hook will only be fired once per user per course.
+		 *
+		 * @param array Course Details
+		 * @param null|array User Details
+		 *
+		 * @api
+		 */
+		do_action( 'thrive_apprentice_course_start', $course_details, $user_details );
+
+		TVA_Cookie_Manager::set_cookie( $course_cookie_name, 1 );
+	}
+
+	// Handle module start hook
+	$module_cookie_name = 'module_' . $module_id . '_started';
+
+	if ( ! TVA_Cookie_Manager::get_cookie( $module_cookie_name ) ) {
+		// Build complete module details structure (consistent with get_module_details())
+		$module_details = array(
+			'module_id'          => $module->ID,
+			'module_title'       => $module->post_title,
+			'module_description' => $module->post_excerpt,
+			'module_image_url'   => (string) get_post_meta( $module->ID, 'tva_cover_image', true ),
+			'module_url'         => get_permalink( $module->ID ),
+			'course_id'          => $course_id,
+			'course_title'       => $course->name,
+		);
+
+		/**
+		 * This hook is triggered when a user views a module for the first time. Only fired once per module per user.
+		 *
+		 * @param array Module Details
+		 * @param null|array User Details
+		 *
+		 * @api
+		 */
+		do_action( 'thrive_apprentice_module_start', $module_details, $user_details );
+
+		TVA_Cookie_Manager::set_cookie( $module_cookie_name, 1 );
 	}
 }
 
@@ -440,6 +550,50 @@ function tva_get_lesson_module_status( $lesson_id, $course = null ) {
 }
 
 /**
+ * Fire the standardized course completion hook with deduplication.
+ *
+ * Uses a static array to ensure the hook fires at most once per
+ * user+course combination per request, preventing duplicate events
+ * when multiple legacy fire points trigger in the same request.
+ *
+ * @param int $course_id Apprentice course (term) ID.
+ * @param int $user_id   WordPress user ID.
+ */
+function tva_fire_course_completed_hook( $course_id, $user_id ) {
+	static $fired = array();
+
+	$key = $user_id . '_' . $course_id;
+
+	if ( isset( $fired[ $key ] ) ) {
+		return;
+	}
+
+	$fired[ $key ] = true;
+
+	/**
+	 * Fires when a user completes all items in an Apprentice course.
+	 *
+	 * This hook fires exactly once per user+course per request, even
+	 * when the legacy `thrive_apprentice_course_finish` fires multiple times.
+	 *
+	 * @param array $data {
+	 *     Hook payload.
+	 *
+	 *     @type int $user_id   WordPress user ID.
+	 *     @type int $course_id Apprentice course (term) ID.
+	 *     @type int $timestamp Unix timestamp.
+	 * }
+	 */
+	tve_debug_log( "Hook thrivethemes_apprentice_course_completed: user_id={$user_id}, course_id={$course_id}" );
+
+	do_action( 'thrivethemes_apprentice_course_completed', array(
+		'user_id'   => (int) $user_id,
+		'course_id' => (int) $course_id,
+		'timestamp' => (int) time(),
+	) );
+}
+
+/**
  * Main functionality for sending TVA Hooks in the admin
  *
  * @param               $lesson_id
@@ -512,6 +666,7 @@ function tva_send_hooks_for_item( $lesson_id, $state = 'start', $user_id = null 
 	} elseif ( $state === 'end' && $course_items_count === $completed_items_count ) {
 
 		do_action( 'thrive_apprentice_course_finish', $course_details, $user_details );
+		tva_fire_course_completed_hook( $course->get_id(), $user_id );
 	}
 }
 
@@ -762,6 +917,7 @@ function tva_send_hooks( $lesson_id, $state = 'start', $course_v2 = null ) {
 			 * @api
 			 */
 			do_action( 'thrive_apprentice_course_finish', $course_details, $user_details );
+			tva_fire_course_completed_hook( $course_details['course_id'], $user_details['user_id'] );
 		}
 	}
 }
@@ -860,6 +1016,11 @@ function tva_init() {
 			'taxonomies'         => [ TVA_Const::COURSE_TAXONOMY ],
 			'show_in_rest'       => true,
 			'_edit_link'         => 'post.php?post=%d',
+			'map_meta_cap'       => true,
+			'capabilities'       => [
+				'edit_others_posts'    => defined( 'TVE_DASH_EDIT_CPT_CAPABILITY' ) ? TVE_DASH_EDIT_CPT_CAPABILITY : 'tve-edit-cpt',
+				'edit_published_posts' => defined( 'TVE_DASH_EDIT_CPT_CAPABILITY' ) ? TVE_DASH_EDIT_CPT_CAPABILITY : 'tve-edit-cpt',
+			],
 		]
 	);
 
@@ -1055,6 +1216,8 @@ function tva_init() {
 
 	Stripe_Hooks::init();
 	Square_Hooks::init();
+	PayPal_Hooks::init();
+	PayPal_Apple_Pay::init();
 
 	/**
 	 * Flush permalinks
@@ -1199,6 +1362,7 @@ function tva_create_initial_rest_routes() {
 		'TVA_Campaigns_Controller',
 		'TVA_Stripe_Controller',
 		'TVA_Square_Controller',
+		'TVA_PayPal_Controller',
 		'TVA_Grade_Controller',
 		'TVA_Data_Cleanup_Controller',
 	);
@@ -1497,6 +1661,18 @@ function tva_get_courses_args( $arguments ) {
 
 	if ( isset( $arguments['s'] ) ) {
 		$args['search'] = $arguments['s'];
+	}
+
+	/**
+	 * Restrict the query to a known set of course term IDs.
+	 *
+	 * Callers that already know which courses they care about should pass this so we
+	 * don't build a TVA_Course (and run a get_posts() per course) for every course on
+	 * the site. An empty array is ignored by WP_Term_Query, so skip it: passing one
+	 * through would silently widen the query to all courses.
+	 */
+	if ( ! empty( $arguments['include'] ) ) {
+		$args['include'] = array_map( 'intval', (array) $arguments['include'] );
 	}
 
 	return $args;
@@ -2133,6 +2309,15 @@ function tva_frontend_enqueue_scripts() {
 			tva_enqueue_script( 'tva-frontend-js', TVA_Const::plugin_url( 'js/dist/frontend.min.js' ), array( 'jquery', 'underscore', 'wp-api-request' ), false, true );
 
 			wp_localize_script( 'tva-frontend-js', 'ThriveAppFront', tva_get_frontend_localization() );
+
+			// Hide the "Cancel subscription" dynamic link before paint when it did not resolve
+			// for the current user (empty href = ineligible / no course context), so it never
+			// flashes. Frontend-only: in the editor the same link resolves empty too, but this
+			// rule is not loaded there, so it stays visible for styling. Eligible links keep
+			// their real href and are unaffected.
+			wp_register_style( 'tva-cancel-subscription-fe', false );
+			wp_enqueue_style( 'tva-cancel-subscription-fe' );
+			wp_add_inline_style( 'tva-cancel-subscription-fe', 'a[data-dynamic-link="tva_paypal_cancel_url"][data-shortcode-id="cancel_subscription"][href=""],a[data-dynamic-link="tva_paypal_cancel_url"][data-shortcode-id="cancel_subscription"]:not([href]){display:none!important}' );
 		}
 	}
 	/**
@@ -2193,12 +2378,44 @@ function tva_get_frontend_localization() {
 		'collapse_chapters' => 0,
 	) );
 
+	// Login URL for the logged-out "Please log in to subscribe" notice. Only guests ever
+	// see that notice, so skip the work (and the get_permalink/option reads) for everyone
+	// else and leave it empty.
+	$login_url = '';
+	if ( ! is_user_logged_in() ) {
+		// Resolve the login page the same way the [login_link] shortcode does: the
+		// configured Login Page (Apprentice -> Display) when set, else WordPress' default.
+		// get_permalink() returns false for a trashed/deleted page, so fall back.
+		$login_page = tva_get_settings_manager()->get_setting( 'login_page' );
+		$login_url  = $login_page ? get_permalink( $login_page ) : '';
+		if ( ! $login_url ) {
+			$login_url = wp_login_url();
+		}
+
+		// "ret" target the login flow redirects to after sign-in. Honour an existing
+		// same-site ?ret (preserves a deeper redirect chain, mirroring [login_link]) but
+		// run it through wp_validate_redirect() so an off-site value can't turn this into
+		// an open redirect; otherwise return to the current course (or page).
+		$ret = '';
+		if ( ! empty( $_GET['ret'] ) ) {
+			$ret = wp_validate_redirect( rawurldecode( wp_unslash( $_GET['ret'] ) ), '' );
+		}
+		if ( ! $ret ) {
+			$ret = is_tax( TVA_Const::COURSE_TAXONOMY ) ? tva_course()->get_link() : get_permalink();
+		}
+		// add_query_arg() does not encode appended values, so rawurlencode() exactly once.
+		if ( $ret ) {
+			$login_url = add_query_arg( [ 'ret' => rawurlencode( $ret ) ], $login_url );
+		}
+	}
+
 	$data = array(
 		'post_id'            => $page_id,
 		'is_inner_frame'     => tva_is_inner_frame(),
 		'index_page'         => ! empty( $page_id ) && tva_get_settings_manager()->is_index_page( $page_id ),
 		'lesson_page'        => $lesson_id,
 		'is_user_logged_in'  => is_user_logged_in(),
+		'login_url'          => $login_url,
 		'is_admin'           => TVA_Product::has_access(),
 		'current_user'       => tva_get_current_user(),
 		'allowed'            => tva_access_manager()->has_access(),
@@ -2214,6 +2431,15 @@ function tva_get_frontend_localization() {
 			'frontend'    => tva_get_route_url( 'frontend' ),
 			'user'        => tva_get_route_url( 'user' ),
 			'square'      => tva_get_route_url( 'square' ),
+			'paypal'      => tva_get_route_url( 'paypal' ),
+		),
+		'cancel_subscription' => array(
+			'confirm'     => __( "Cancel subscription? You'll lose access to this course immediately.", 'thrive-apprentice' ),
+			'keep'        => __( 'Keep subscription', 'thrive-apprentice' ),
+			'confirm_btn' => __( 'Cancel subscription', 'thrive-apprentice' ),
+			'success'     => __( 'Your subscription is cancelled and access has ended.', 'thrive-apprentice' ),
+			'error'       => __( "We couldn't cancel this subscription. Please contact support.", 'thrive-apprentice' ),
+			'error_retry' => __( 'Something went wrong. Please try again.', 'thrive-apprentice' ),
 		),
 		'tva_register_page'  => tva_get_settings_manager()->is_register_page( $page_id ),
 		't'                  => include dirname( dirname( __FILE__ ) ) . '/i18n.php',
@@ -3431,7 +3657,8 @@ function tva_perform_auto_login( $user, $arguments = array() ) {
 
 		wp_signon( $credentials, false );
 	} else if ( isset( $_COOKIE['tva_lesson_to_redirect'] ) ) {
-		wp_redirect( $_COOKIE['tva_lesson_to_redirect'] );
+		wp_safe_redirect( $_COOKIE['tva_lesson_to_redirect'] );
+		exit;
 	}
 }
 
@@ -4976,7 +5203,7 @@ function tva_register_user() {
  */
 function tva_redirect_user() {
 	if ( isset( $_COOKIE['tva_lesson_to_redirect'] ) && ! wp_doing_ajax() ) {
-		wp_redirect( $_COOKIE['tva_lesson_to_redirect'] );
+		wp_safe_redirect( $_COOKIE['tva_lesson_to_redirect'] );
 		exit();
 	}
 }
@@ -5764,7 +5991,7 @@ function tva_ab_event_saved( $event ) {
 		if ( $test->goal_pages() === 'sendowl' ) {
 
 			$cookie_name  = 'top-ta-last-variation';
-			$cookie_value = maybe_serialize( $event->get_data() );
+			$cookie_value = wp_json_encode( $event->get_data() );
 
 			setcookie( $cookie_name, $cookie_value, time() + ( 30 * 24 * 3600 ), '/' );
 			$_COOKIE[ $cookie_name ] = $cookie_value;
@@ -5776,12 +6003,18 @@ function tva_filter_order_tag_data( $data ) {
 
 	if ( isset( $_COOKIE['top-ta-last-variation'] ) ) {
 
-		$event = maybe_unserialize( wp_unslash( $_COOKIE['top-ta-last-variation'] ) );
+		$raw   = wp_unslash( $_COOKIE['top-ta-last-variation'] );
+		$event = json_decode( $raw, true );
+
+		if ( ! is_array( $event ) && is_serialized( $raw ) ) {
+			$decoded = unserialize( $raw, array( 'allowed_classes' => false ) );
+			$event   = is_array( $decoded ) ? $decoded : null;
+		}
 	}
 
 	if ( isset( $event ) && is_array( $event ) && ! empty( $event['variation_id'] ) ) {
 
-		$data[] = $event['variation_id'];
+		$data[] = (int) $event['variation_id'];
 	}
 
 	return $data;

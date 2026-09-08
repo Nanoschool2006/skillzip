@@ -139,44 +139,64 @@ class TVA_Logger {
 	 */
 	public static function get_logs( $filters = array() ) {
 		self::instance();
-		$where = '';
-		$types = '';
-		$s     = '';
-		if ( ! isset( $filters['limit'] ) ) {
-			$limit = ' LIMIT %d';
-			$args  = array( 20 );
-		} else {
-			$lower = (int) $filters['limit'];
-			$upper = (int) $filters['limit'] + 20;
-			$limit = ' LIMIT %d, %d';
 
-			$args = array( $lower, $upper );
+		/*
+		 * $filters is the raw `settings` parameter of POST /tva/v1/logs/get_logs/, which declares no
+		 * args, so nothing validates it before it arrives here. Every clause below is therefore built
+		 * from placeholders and the values are bound - previously they were interpolated into
+		 * hand-written quotes, inside the string that is then handed to prepare() as its FORMAT
+		 * argument, so prepare() sanitized none of it.
+		 *
+		 * $placeholders is filled in the same order the clauses appear in the final query. That
+		 * ordering matters now in a way it did not before: the only placeholder used to be the LIMIT,
+		 * so its position at the head of the array happened to line up.
+		 *
+		 * Mirrors fetch_logs() below, which is the non-deprecated equivalent and was already correct.
+		 */
+		if ( ! is_array( $filters ) ) {
+			$filters = array();
 		}
 
-		if ( ! empty( $filters['types'] ) ) {
-			$i = 1;
+		$where        = '';
+		$placeholders = array();
+
+		if ( ! empty( $filters['types'] ) && is_array( $filters['types'] ) ) {
+			$where = ' WHERE type IN ( ' . implode( ', ', array_fill( 0, count( $filters['types'] ), '%s' ) ) . ' )';
+
 			foreach ( $filters['types'] as $type ) {
-				if ( 1 === $i && empty( $where ) ) {
-					$where = ' WHERE  type = ' . "'" . $type . "'";
-				} else {
-					$types .= ' OR type = ' . "'" . $type . "'";
-				}
+				$placeholders[] = $type;
 			}
 		}
 
-		if ( ! empty( $filters['s'] ) ) {
-			if ( empty( $where ) ) {
-				$where = ' WHERE  type LIKE ' . "'%" . $filters['s'] . "%' OR product LIKE " . "'%" . $filters['s'] . "%' OR date LIKE " . "'%" . $filters['s'] . "%'";
-			} else {
-				$s = 'AND ( product LIKE ' . "'%" . $filters['s'] . "%' OR date LIKE " . "'%" . $filters['s'] . "%')";
+		if ( ! empty( $filters['s'] ) && is_scalar( $filters['s'] ) ) {
+			/* esc_like() first, so a % or _ in the search term is matched literally rather than as a wildcard. */
+			$like = '%' . self::$wpdb->esc_like( (string) $filters['s'] ) . '%';
+
+			/* type is only searched when it is not already constrained above - same as fetch_logs(). */
+			$columns = empty( $where ) ? array( 'type', 'product', 'date' ) : array( 'product', 'date' );
+			$clause  = array();
+
+			foreach ( $columns as $column ) {
+				$clause[]       = "`$column` LIKE %s";
+				$placeholders[] = $like;
 			}
+
+			$where .= ( '' === $where ? ' WHERE ' : ' AND ' ) . '( ' . implode( ' OR ', $clause ) . ' )';
 		}
 
-		$logs = self::$wpdb->get_results(
-			self::$wpdb->prepare(
-				'SELECT * FROM ' . self::$debug_table_name . $where . $types . $s . ' ORDER BY date DESC' . $limit, $args
-			)
-		);
+		if ( ! isset( $filters['limit'] ) ) {
+			$limit          = ' LIMIT %d';
+			$placeholders[] = 20;
+		} else {
+			$limit          = ' LIMIT %d, %d';
+			$placeholders[] = (int) $filters['limit'];
+			$placeholders[] = (int) $filters['limit'] + 20;
+		}
+
+		$query = 'SELECT * FROM ' . self::$debug_table_name . $where . ' ORDER BY date DESC' . $limit;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $query is assembled from literals and placeholders only; every value is bound through $placeholders.
+		$logs = self::$wpdb->get_results( self::$wpdb->prepare( $query, $placeholders ) );
 
 		if ( is_array( $logs ) ) {
 			foreach ( $logs as $log ) {

@@ -52,7 +52,16 @@ class Thrive_Frontend_REST {
 
 			switch ( $option ) {
 				case 'sidebar_visibility':
+					/**
+					 * get_user_option() returns false when the option has never been saved.
+					 * Assigning an array offset on false is deprecated as of PHP 8.1 and is a
+					 * fatal error in PHP 9, so normalise to an array first.
+					 */
 					$sidebar_visibility = get_user_option( $option, $user_id );
+
+					if ( ! is_array( $sidebar_visibility ) ) {
+						$sidebar_visibility = array();
+					}
 
 					$sidebar_visibility[ $template_id ] = $value;
 

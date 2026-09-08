@@ -225,7 +225,7 @@ class TCB_Numberedlist_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'numbered_list',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425821-how-to-use-the-numbered-list-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-styled-list-and-numbered-list-elements-in-thrive-architect/',
 			],
 		];
 	}

@@ -186,12 +186,79 @@ class Order extends Base {
 		$course_ids = $product->get_published_courses( true );
 		$status     = $order_item->get_status() === 1 ? static::STATUS_ACCESS_ADDED : static::STATUS_ACCESS_REVOKED;
 
+		/**
+		 * PayPal-only: make a GRANT symmetric with the revoke path so a
+		 * grant -> revoke -> re-grant sequence does not leave net-zero [-1, +1] history
+		 * rows for the same (user, product, course). Those net to SUM(status) = 0, which
+		 * hides the member from the Members list / reporting even though access is active.
+		 *
+		 * Deliberately scoped to PayPal orders: every other gateway (Stripe, Square,
+		 * SendOwl, WooCommerce, manual) keeps the original plain-INSERT behavior untouched,
+		 * so this carries no cross-gateway regression risk. The same net-zero fix for the
+		 * other gateways is tracked separately.
+		 */
+		if ( static::STATUS_ACCESS_ADDED === $status && TVA_Const::PAYPAL_GATEWAY === $order->get_gateway() ) {
+			$this->commit_paypal_granted_data( $order, $product, $course_ids );
+			$this->toggle_access_expiry( $product, $order_item, $status );
+
+			return;
+		}
+
 		$data = [];
 		$this->build_course_data( $product, $order->get_user_id(), $status, $course_ids, $data, '', $key );
 
 		$this->commit_data( $data );
 
 		$this->toggle_access_expiry( $product, $order_item, $status );
+	}
+
+	/**
+	 * Grant PayPal product access, consolidating to one definitive history row per
+	 * (user, product, course).
+	 *
+	 * Removes any existing `order`-source rows for these courses (prior grants/revokes,
+	 * including legacy duplicates) and inserts a single fresh +1. Consolidating — rather
+	 * than flipping existing rows — guarantees one row per tuple, keeps the history table
+	 * clean, and self-heals duplicates left by earlier behavior (so a grant -> revoke ->
+	 * re-grant never accumulates net-zero [-1, +1] rows that hide the member from reports).
+	 *
+	 * Deliberately addresses review feedback: the DELETE is scoped by `source = 'order'`,
+	 * so it can never touch another integration's rows for the same tuple, and it uses a
+	 * prepared `$wpdb->query()` rather than the shared `dbDelta()` path for the removal.
+	 *
+	 * @param TVA_Order $order
+	 * @param Product   $product
+	 * @param int[]     $course_ids
+	 *
+	 * @return void
+	 */
+	protected function commit_paypal_granted_data( $order, $product, $course_ids ) {
+		global $wpdb;
+
+		$user_id       = (int) $order->get_user_id();
+		$product_id    = (int) $product->get_id();
+		$history_table = $wpdb->prefix . 'tva_' . History_Table::get_table_name();
+		$source        = static::KEY; // 'order' — what build_course_data() writes for these rows.
+
+		if ( count( $course_ids ) === 0 ) {
+			// No published courses -> a single course_id IS NULL row (a tuple match cannot use NULL).
+			$wpdb->query( $wpdb->prepare(
+				'DELETE FROM ' . $history_table . ' WHERE user_id = %d AND product_id = %d AND source = %s AND course_id IS NULL',
+				[ $user_id, $product_id, $source ]
+			) );
+		} else {
+			$course_ids   = array_map( 'intval', $course_ids );
+			$placeholders = implode( ', ', array_fill( 0, count( $course_ids ), '%d' ) );
+			$wpdb->query( $wpdb->prepare(
+				'DELETE FROM ' . $history_table . ' WHERE user_id = %d AND product_id = %d AND source = %s AND course_id IN (' . $placeholders . ')',
+				array_merge( [ $user_id, $product_id, $source ], $course_ids )
+			) );
+		}
+
+		// Insert a single +1 per course (or one NULL-course row when the product has none).
+		$data = [];
+		$this->build_course_data( $product, $user_id, static::STATUS_ACCESS_ADDED, $course_ids, $data, '', '' );
+		$this->commit_data( $data, false );
 	}
 
 	/**
@@ -279,7 +346,11 @@ class Order extends Base {
 	 * @return void
 	 */
 	public function log_order_item_change( $data, $types, $order_item ) {
-		if ( $order_item->get_status() === 0 ) {
+		// The tva_after_sendowl_order_item_db action is fired by both TVA_Order_Item::save()
+		// and TVA_Transaction::save() (which reuses the same action name). Only order items
+		// carry a cancellable status, so guard the type — otherwise a transaction save (e.g. a
+		// PayPal capture row) would call the undefined TVA_Transaction::get_status() and fatal.
+		if ( $order_item instanceof TVA_Order_Item && $order_item->get_status() === 0 ) {
 			$this->log_order_item_canceled( $order_item );
 		}
 	}

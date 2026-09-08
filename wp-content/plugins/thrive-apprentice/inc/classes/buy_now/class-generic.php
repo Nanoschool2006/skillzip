@@ -39,11 +39,13 @@ abstract class Generic {
 	 * @return array The list of available integrations.
 	 */
 	public static function get_integrations() {
-		return [
+		$integrations = [
 			'stripe'         => __( 'Stripe', 'thrive-apprentice' ),
 			'square'         => __( 'Square', 'thrive-apprentice' ),
 			'custom_payment' => __( 'Custom payment', 'thrive-apprentice' ),
 		];
+
+		return apply_filters( 'tva_buy_now_integrations', $integrations );
 	}
 
 	/**

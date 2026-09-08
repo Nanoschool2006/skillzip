@@ -558,7 +558,7 @@ class TVA_Square_Controller extends TVA_REST_Controller {
 
 		$site_state = $mode === 'test' ? Credentials::get_state() : Credentials::get_state_live();
 		if ( ! $state || ! $site_state || $state !== $site_state ) {
-			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid state ' . $state . '  #   ' . $site_state, 'thrive-apprentice' ) ], 400 );
+			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid state', 'thrive-apprentice' ) ], 400 );
 		}
 
 		// Save credentials
@@ -684,34 +684,37 @@ class TVA_Square_Controller extends TVA_REST_Controller {
 	}
 
 	/**
-	 * Check if the Square client is valid (not a WP_REST_Response error object).
+	 * Check if the Square client is valid (not null).
 	 *
-	 * @param mixed $client The client object to check.
+	 * @param SquareClient|null $client The client object to check.
 	 *
 	 * @return bool True if client is a valid SquareClient object.
 	 */
-	private function is_valid_square_client( $client ) {
-		return $client && ! ( $client instanceof WP_REST_Response );
+	private function is_valid_square_client( ?SquareClient $client ): bool {
+		return $client !== null;
 	}
 
 	/**
 	 * Retrieve the Square client.
 	 *
 	 * This method retrieves the Square client from the token stored in the credentials.
-	 * 
+	 *
 	 * @param string $mode The mode of the Square client.
 	 *
-	 * @return SquareClient|WP_REST_Response The Square client or a response object.
+	 * @return SquareClient|null The Square client or null if unable to create.
 	 */
-	public function get_square_client( string $mode ) {
-		if ( empty( $mode ) ) {
-			$mode = 'live'; // update this to live
-		}
+	public function get_square_client( string $mode ): ?SquareClient {
+		// Normalize mode to prevent log injection
+		$mode = in_array( $mode, [ 'live', 'test' ], true ) ? $mode : 'live';
 
 		$token = $mode === 'live' ? Credentials::get_token_live() : Credentials::get_token();
 
 		if ( empty( $token ) ) {
-			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'No token found', 'thrive-apprentice' ) ], 400 );
+			// Only log when debugging to avoid spam on sites without Square configured
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'Square API Error: No token found for mode: ' . $mode );
+			}
+			return null;
 		}
 
 		try {
@@ -724,7 +727,11 @@ class TVA_Square_Controller extends TVA_REST_Controller {
 			);
 			return $client;
 		} catch ( Exception $e ) {
-			return new WP_REST_Response( [ 'success' => false, 'message' => __( 'Invalid token', 'thrive-apprentice' ) ], 400 );
+			// Always log invalid token errors as they indicate a configuration problem
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'Square API Error: Invalid token for mode ' . $mode . ': ' . $e->getMessage() );
+			}
+			return null;
 		}
 	}
 
@@ -2240,8 +2247,12 @@ class TVA_Square_Controller extends TVA_REST_Controller {
 
 	/**
 	 * Add item-specific configuration based on item type
+	 *
+	 * @param array $config Configuration array to modify (passed by reference)
+	 * @param array $item_object_data Item object data containing type and object
+	 * @param SquareClient $client The Square client instance
 	 */
-	private function add_item_specific_config( &$config, $item_object_data, $client ) {
+	private function add_item_specific_config( array &$config, array $item_object_data, SquareClient $client ) {
 		$item_type = $item_object_data['type'];
 		$item_object = $item_object_data['object'];
 

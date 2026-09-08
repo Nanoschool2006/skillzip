@@ -19,7 +19,9 @@
 			</span>
 
 			<div class="td-rcnt">
-				<?php if ( ! $license->is_refunded() && ! empty( $license->get_expiration() ) ) : ?>
+				<?php if ( $license->is_lifetime() ) : ?>
+					<span><?php echo __( 'Lifetime', 'thrive-dash' ); ?></span>
+				<?php elseif ( ! $license->is_refunded() && ! empty( $license->get_expiration() ) ) : ?>
 					<span><?php echo __( 'Renewal date - ', 'thrive-dash' ) . $license->get_expiration(); ?></span>
 				<?php elseif ( ! empty( $license->get_refunded_date() ) ) : ?>
 					<span><?php echo __( 'Refund date - ', 'thrive-dash' ) . $license->get_refunded_date(); ?></span>

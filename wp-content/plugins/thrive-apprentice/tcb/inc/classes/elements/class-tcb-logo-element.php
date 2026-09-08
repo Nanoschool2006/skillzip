@@ -122,7 +122,7 @@ class TCB_Logo_Element extends TCB_Image_Element {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'logo',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425848-how-to-use-the-logo-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-icon-element-in-thrive-architect/',
 			],
 		];
 	}

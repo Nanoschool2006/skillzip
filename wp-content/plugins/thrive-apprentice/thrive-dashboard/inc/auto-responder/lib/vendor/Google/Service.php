@@ -174,16 +174,28 @@ class Thrive_Dash_Api_Google_Service {
 	/**
 	 * https://developers.google.com/drive/api/v3/reference/files/list
 	 *
+	 * `supportsAllDrives` and `includeItemsFromAllDrives` are required so that
+	 * files/folders on Shared Drives (Team Drives) are returned. Sending them on
+	 * regular Drive calls is a no-op, so this is backwards compatible.
+	 *
 	 * @param array $params
 	 *
 	 * @return array
 	 */
 	public function get_files( $params = array() ) {
-		return $this->get( static::BASE_URI . 'drive/v3/files', $params );
+		$url = add_query_arg( array_merge( array(
+			'supportsAllDrives'         => 'true',
+			'includeItemsFromAllDrives' => 'true',
+		), $params ), static::BASE_URI . 'drive/v3/files' );
+
+		return $this->get( $url );
 	}
 
 	/**
 	 * Perform a multipart file upload
+	 *
+	 * `supportsAllDrives=true` is required to upload into a Shared Drive folder;
+	 * without it the Drive API returns "File not found" for the parent folder.
 	 *
 	 * @param string $contents file contents
 	 * @param array  $meta     metadata about the file (name, originalName etc), see https://developers.google.com/drive/api/v3/reference/files/create#request-body
@@ -204,7 +216,12 @@ class Thrive_Dash_Api_Google_Service {
 		                "\r\n" . base64_encode( $contents ) . "\r\n" .
 		                "--$boundary--";
 
-		return $this->post( static::BASE_URI . 'upload/drive/v3/files?uploadType=multipart', $body, array(
+		$upload_url = add_query_arg( array(
+			'uploadType'        => 'multipart',
+			'supportsAllDrives' => 'true',
+		), static::BASE_URI . 'upload/drive/v3/files' );
+
+		return $this->post( $upload_url, $body, array(
 			'Content-Type'   => $content_type,
 			'Content-Length' => strlen( $body ),
 		) );
@@ -219,7 +236,9 @@ class Thrive_Dash_Api_Google_Service {
 	 * @return array
 	 */
 	public function update_file_metadata( $file_id, $metadata ) {
-		return $this->post( static::BASE_URI . 'drive/v3/files/' . $file_id, json_encode( $metadata ), array(
+		$url = add_query_arg( array( 'supportsAllDrives' => 'true' ), static::BASE_URI . 'drive/v3/files/' . rawurlencode( $file_id ) );
+
+		return $this->post( $url, json_encode( $metadata ), array(
 			'Content-type' => 'application/json',
 		), true, array(
 			'method' => 'PATCH',
@@ -234,7 +253,9 @@ class Thrive_Dash_Api_Google_Service {
 	 * @return array
 	 */
 	public function delete( $file_id ) {
-		return $this->post( static::BASE_URI . 'drive/v3/files/' . $file_id, '', array(), true, array(
+		$url = add_query_arg( array( 'supportsAllDrives' => 'true' ), static::BASE_URI . 'drive/v3/files/' . rawurlencode( $file_id ) );
+
+		return $this->post( $url, '', array(), true, array(
 			'method' => 'DELETE',
 		) );
 	}
@@ -248,6 +269,11 @@ class Thrive_Dash_Api_Google_Service {
 	 * @return array
 	 */
 	public function get_file( $file_id, $fields = 'webViewLink' ) {
-		return $this->get( static::BASE_URI . 'drive/v3/files/' . $file_id . '?fields=' . $fields );
+		$url = add_query_arg( array(
+			'fields'            => $fields,
+			'supportsAllDrives' => 'true',
+		), static::BASE_URI . 'drive/v3/files/' . rawurlencode( $file_id ) );
+
+		return $this->get( $url );
 	}
 }

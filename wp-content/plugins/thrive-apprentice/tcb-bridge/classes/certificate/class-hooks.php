@@ -82,6 +82,7 @@ class Hooks {
 		add_action( 'tva_settings_saved_certificate_verification', array( __CLASS__, 'on_setting_change' ) );
 
 		add_action( 'edited_' . TVA_Const::COURSE_TAXONOMY, [ __CLASS__, 'after_edit_course' ], 10, 2 );
+		add_action( 'tva_after_save_course', [ __CLASS__, 'after_save_course' ], 10, 2 );
 
 		add_action( 'profile_update', [ __CLASS__, 'after_profile_update' ] );
 
@@ -197,16 +198,76 @@ class Hooks {
 	 *
 	 * Example: change course name, change some course meta
 	 *
-	 * Clears all the certificates that was generated for the course.
-	 * This ensures the course name and course meta on the certificate is up to date
+	 * Side effects:
+	 * - Syncs the certificate post_title to match the current course name.
+	 * - Syncs the completed page post_title to match the current course name.
+	 * - Clears all the certificates that were generated for the course, so the
+	 *   course name and course meta on the regenerated certificate is up to date.
+	 *
+	 * Guarded against double execution per request because both the
+	 * `edited_{taxonomy}` WP core hook and the Apprentice `tva_after_save_course`
+	 * hook can fire for the same term in a single REST save.
 	 *
 	 * @return void
 	 */
 	public static function after_edit_course( $course_id, $taxonomy_id ) {
-		$course = new \TVA_Course_V2( (int) $course_id );
+		static $processed = [];
 
-		if ( $course->has_certificate() ) {
-			Main::remove_generated_certificates( $course->get_certificate()->ID );
+		$course_id = (int) $course_id;
+
+		if ( isset( $processed[ $course_id ] ) ) {
+			return;
+		}
+
+		$processed[ $course_id ] = true;
+
+		$course = new \TVA_Course_V2( $course_id );
+
+		$certificate_post = $course->has_certificate( false );
+
+		if ( $certificate_post instanceof \WP_Post ) {
+			$expected_title = $course->name . ' certificate';
+
+			if ( $certificate_post->post_title !== $expected_title ) {
+				wp_update_post( [
+					'ID'         => $certificate_post->ID,
+					'post_title' => $expected_title,
+				] );
+			}
+
+			Main::remove_generated_certificates( $certificate_post->ID );
+		}
+
+		$completed_post = $course->has_completed_post();
+
+		if ( $completed_post instanceof \WP_Post ) {
+			$expected_title = $course->name . ' completed page';
+
+			if ( $completed_post->post_title !== $expected_title ) {
+				wp_update_post( [
+					'ID'         => $completed_post->ID,
+					'post_title' => $expected_title,
+				] );
+			}
+		}
+	}
+
+	/**
+	 * Triggered via 'tva_after_save_course' which fires from the Apprentice REST API
+	 * after both creating and editing a course.
+	 *
+	 * The second argument to after_edit_course() is a taxonomy_id placeholder
+	 * required by the WP `edited_{taxonomy}` hook signature but unused in the
+	 * method body, so 0 is passed here.
+	 *
+	 * @param array            $result  Result from wp_insert_term or wp_update_term.
+	 * @param \WP_REST_Request $request The REST request.
+	 *
+	 * @return void
+	 */
+	public static function after_save_course( $result, $request ) {
+		if ( ! is_wp_error( $result ) && ! empty( $result['term_id'] ) ) {
+			static::after_edit_course( $result['term_id'], 0 );
 		}
 	}
 

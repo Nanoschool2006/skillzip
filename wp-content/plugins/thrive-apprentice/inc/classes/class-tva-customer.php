@@ -89,6 +89,7 @@ class TVA_Customer implements JsonSerializable {
 		'enrolled'                   => null,
 		'courses_count'              => 0,
 		'published_courses_count'    => 0,
+		'has_paypal_order'           => false,
 	);
 
 	/**
@@ -243,6 +244,7 @@ class TVA_Customer implements JsonSerializable {
 			'enrollment_dates'           => $this->enrollment_dates,
 			'activity'                   => $this->activity,
 			'courses_certificates'       => $this->courses_certificates,
+			'has_paypal_order'           => (bool) $this->has_paypal_order,
 		] );
 	}
 
@@ -520,14 +522,18 @@ class TVA_Customer implements JsonSerializable {
 		}
 
 		$completed_items = count( $this->get_course_learned_items( $course->get_id() ) ) + $this->get_user_assessments_completed( $course );
-		$items_number = $course->count_course_items( [ 'post_status' => 'publish' ] );
+		$items_number    = $course->count_course_items( [ 'post_status' => 'publish' ] );
 
-		if ( 0 === $items_number || 0 === $completed_items ) {
-			$status = TVA_Const::TVA_COURSE_PROGRESS_NOT_STARTED;
-		} elseif ( $completed_items >= $items_number ) {
+		if ( $completed_items >= $items_number && $items_number > 0 ) {
 			$status = TVA_Const::TVA_COURSE_PROGRESS_COMPLETED;
-		} else {
+		} elseif ( $completed_items > 0 ) {
+			// User has completed at least one item
 			$status = TVA_Const::TVA_COURSE_PROGRESS_IN_PROGRESS;
+		} elseif ( self::has_user_started_course( $course->get_id() ) ) {
+			// User has started but not completed any items yet (0% progress)
+			$status = TVA_Const::TVA_COURSE_PROGRESS_IN_PROGRESS;
+		} else {
+			$status = TVA_Const::TVA_COURSE_PROGRESS_NOT_STARTED;
 		}
 
 		return $status;
@@ -569,6 +575,20 @@ class TVA_Customer implements JsonSerializable {
 	 */
 	public static function remove_user_completed_meta( $user_id, $course_id ) {
 		delete_user_meta( $user_id, self::HAS_COMPLETED_COURSE . $course_id, true );
+	}
+
+	/**
+	 * Check if user has started a course by checking the course start cookie
+	 * Works for both logged-in users and guests
+	 *
+	 * @param int $course_id
+	 *
+	 * @return bool
+	 */
+	public static function has_user_started_course( $course_id ) {
+		$course_cookie_name = 'course_' . $course_id . '_started';
+
+		return ! empty( TVA_Cookie_Manager::get_cookie( $course_cookie_name ) );
 	}
 
 	/**
@@ -831,6 +851,39 @@ class TVA_Customer implements JsonSerializable {
 	public function trigger_product_received_access( $products ) {
 		foreach ( $products as $product ) {
 			do_action( 'tva_user_receives_product_access', $this->_user, $product );
+
+			$source     = 'manual';
+			$user_id    = (int) $this->_user->ID;
+			$product_id = is_object( $product ) && method_exists( $product, 'get_id' ) ? (int) $product->get_id() : (int) $product;
+
+			if ( class_exists( 'Thrive_Apprentice_API' ) && Thrive_Apprentice_API::$current_source ) {
+				$source  = Thrive_Apprentice_API::$current_source;
+				$user_id = (int) ( Thrive_Apprentice_API::$current_user_id ?: $user_id );
+			}
+
+			/**
+			 * Fires after a user is granted access to an Apprentice product.
+			 *
+			 * Fires for all access paths: API, WooCommerce, ThriveCart, Square,
+			 * manual enrollment, and Automator. The `source` field indicates origin.
+			 *
+			 * @param array $data {
+			 *     Hook payload.
+			 *
+			 *     @type int    $user_id    WordPress user ID.
+			 *     @type int    $product_id Apprentice product ID.
+			 *     @type string $source     Source identifier (e.g. 'api', 'manual').
+			 *     @type int    $timestamp  Unix timestamp.
+			 * }
+			 */
+			tve_debug_log( "Hook thrivethemes_apprentice_access_granted: user_id={$user_id}, product_id={$product_id}, source={$source}" );
+
+			do_action( 'thrivethemes_apprentice_access_granted', array(
+				'user_id'    => $user_id,
+				'product_id' => $product_id,
+				'source'     => $source,
+				'timestamp'  => (int) time(),
+			) );
 		}
 	}
 
@@ -1075,6 +1128,52 @@ class TVA_Customer implements JsonSerializable {
 			$has_access = tva_access_manager()->check_rules();
 		}
 
+		/* Re-check with full user context to confirm access was truly revoked */
+		$original_user_id = get_current_user_id();
+		wp_set_current_user( $user->ID );
+
+		tva_access_manager()
+			->set_tva_user( $user )
+			->set_user( $user )
+			->set_product( $product );
+
+		$still_has_access = tva_access_manager()->check_rules();
+		wp_set_current_user( $original_user_id );
+
+		if ( ! $still_has_access ) {
+			$source  = 'manual';
+			$uid     = (int) $user->ID;
+
+			if ( class_exists( 'Thrive_Apprentice_API' ) && Thrive_Apprentice_API::$current_source ) {
+				$source = Thrive_Apprentice_API::$current_source;
+				$uid    = (int) ( Thrive_Apprentice_API::$current_user_id ?: $uid );
+			}
+
+			/**
+			 * Fires after a user's access to an Apprentice product is revoked.
+			 *
+			 * Fires for all revocation paths: API, admin panel, payment refund.
+			 * Does not fire when access persists via WordPress role integration.
+			 *
+			 * @param array $data {
+			 *     Hook payload.
+			 *
+			 *     @type int    $user_id    WordPress user ID.
+			 *     @type int    $product_id Apprentice product ID.
+			 *     @type string $source     Source identifier (e.g. 'api', 'manual').
+			 *     @type int    $timestamp  Unix timestamp.
+			 * }
+			 */
+			tve_debug_log( "Hook thrivethemes_apprentice_access_revoked: user_id={$uid}, product_id=" . (int) $product->get_id() . ", source={$source}" );
+
+			do_action( 'thrivethemes_apprentice_access_revoked', array(
+				'user_id'    => $uid,
+				'product_id' => (int) $product->get_id(),
+				'source'     => $source,
+				'timestamp'  => (int) time(),
+			) );
+		}
+
 		return true;
 	}
 
@@ -1304,6 +1403,41 @@ class TVA_Customer implements JsonSerializable {
 		$this->get_enrollment_dates();
 		$this->get_activity();
 		$this->get_course_certificates();
+		$this->_data['has_paypal_order'] = $this->has_refundable_paypal_order();
+	}
+
+	/**
+	 * Whether this member has at least one completed, captured PayPal order — i.e. an order
+	 * that can be refunded from the admin. Drives the "Edit Access / Refund" vs "Edit access
+	 * rights" link label on the member detail screen.
+	 *
+	 * Computed only on the single-member detail path (prepare_courses_data), never for the
+	 * member list, so the list view pays no extra query.
+	 *
+	 * @return bool
+	 */
+	protected function has_refundable_paypal_order() {
+		global $wpdb;
+
+		$table = $wpdb->prefix . TVA_Const::DB_PREFIX . TVA_Const::ORDERS_TABLE_NAME;
+
+		$found = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT 1 FROM `$table` WHERE `user_id` = %d AND `gateway` = %s AND `status` IN ( %d, %d ) AND `payment_id` <> '' LIMIT 1",
+				$this->get_id(),
+				TVA_Const::PAYPAL_GATEWAY,
+				TVA_Const::STATUS_COMPLETED,
+				TVA_Const::STATUS_GRACE_PERIOD
+			)
+		);
+
+		// get_var() returns null both for "no row" and for a query error — distinguish them so a
+		// DB failure doesn't get read as "no refundable order" without a trace.
+		if ( $wpdb->last_error ) {
+			return false;
+		}
+
+		return ! empty( $found );
 	}
 
 	/**
@@ -1938,6 +2072,13 @@ class TVA_Customer implements JsonSerializable {
 
 		if ( $course instanceof TVA_Course_V2 ) {
 
+			$chapters = $course->get_published_chapters();
+			if ( ! empty( $chapters ) ) {
+				foreach ( $chapters as $chapter ) {
+					$locked_lessons[ $chapter->ID ]['chapter_locked'] = ! $campaign->should_unlock( $product->get_id(), $chapter->ID );
+				}
+			}
+
 			$modules = $course->get_published_modules();
 
 			if ( ! empty( $modules ) ) {
@@ -1947,6 +2088,22 @@ class TVA_Customer implements JsonSerializable {
 					foreach ( $module->get_published_lessons() as $lesson ) {
 						$locked_lessons[ $module->ID ]['locked_lessons'][ $lesson->ID ] = ! $campaign->should_unlock_after_module( $product->get_id(), $lesson->ID );
 					}
+				}
+
+				/* Lessons that are direct children of chapters (not nested inside any module) need a lock entry too —
+				 * the per-module loop above only covers module-nested lessons. We emit them at the top-level
+				 * `locked_lessons` map, which is what the JS LessonView falls back to when no module-scoped entry exists. */
+				$module_lesson_ids = [];
+				foreach ( $modules as $module ) {
+					foreach ( $module->get_published_lessons() as $lesson ) {
+						$module_lesson_ids[ $lesson->ID ] = true;
+					}
+				}
+				foreach ( $course->get_published_lessons() as $lesson ) {
+					if ( isset( $module_lesson_ids[ $lesson->ID ] ) ) {
+						continue;
+					}
+					$locked_lessons['locked_lessons'][ $lesson->ID ] = ! $campaign->should_unlock( $product->get_id(), $lesson->ID );
 				}
 			} else {
 				foreach ( $course->get_published_lessons() as $lesson ) {

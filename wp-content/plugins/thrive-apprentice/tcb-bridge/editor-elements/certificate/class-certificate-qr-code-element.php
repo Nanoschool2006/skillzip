@@ -144,7 +144,7 @@ class Certificate_Qr_Code_Element extends \TCB_Element_Abstract {
 			'instructions' => array(
 				'type' => 'help',
 				'url'  => 'certificate_qr',
-				'link' => 'https://help.thrivethemes.com/en/articles/6685758-how-to-use-the-verification-qr-code-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-issue-course-completion-certificates-in-thrive-apprentice/',
 			),
 		);
 	}

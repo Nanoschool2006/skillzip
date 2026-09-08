@@ -4,10 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
+class ComposerStaticInitee9e136f914e87e5898bb86986969247
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '662a729f963d39afe703c9d9b7ab4a8c' => __DIR__ . '/..' . '/symfony/polyfill-php83/bootstrap.php',
@@ -36,6 +37,7 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'S' =>
         array (
             'Symfony\\Polyfill\\Php83\\' => 23,
+            'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Symfony\\Component\\HttpFoundation\\' => 33,
             'Stripe\\' => 7,
@@ -72,6 +74,10 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'Symfony\\Polyfill\\Php83\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php83',
+        ),
+        'Symfony\\Polyfill\\Php80\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
         'Symfony\\Polyfill\\Mbstring\\' =>
         array (
@@ -135,6 +141,7 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
     );
 
     public static $classMap = array (
+        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DateError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
         'DateException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
@@ -146,7 +153,9 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'DateObjectError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateObjectError.php',
         'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
         'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'SQLite3Exception' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/SQLite3Exception.php',
+        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'TCB_Certificate_Download_Button_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/certificate/class-tcb-certificate-download-button-element.php',
         'TCB_Certificate_Form_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/certificate/class-tcb-certificate-form-element.php',
         'TCB_Certificate_Form_Input_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/certificate/class-tcb-certificate-form-input-element.php',
@@ -187,6 +196,7 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'TVA\\Architect\\Assessment\\TCB_Assessment_Type_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/assessment/class-tcb-assessment-type-element.php',
         'TVA\\Architect\\Assessment\\TCB_Assessment_Video_Preview_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/assessment/class-tcb-assessment-video-preview.php',
         'TVA\\Architect\\Buy_now\\Main' => __DIR__ . '/../..' . '/tcb-bridge/classes/buy-now/class-main.php',
+        'TVA\\Architect\\Cancel_Subscription\\Main' => __DIR__ . '/../..' . '/tcb-bridge/classes/cancel-subscription/class-main.php',
         'TVA\\Architect\\Certificate\\Certificate_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/certificate/class-certificate-element.php',
         'TVA\\Architect\\Certificate\\Certificate_Qr_Code_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/certificate/class-certificate-qr-code-element.php',
         'TVA\\Architect\\Certificate\\Certificate_Qr_Element' => __DIR__ . '/../..' . '/tcb-bridge/editor-elements/certificate/class-certificate-qr-element.php',
@@ -343,6 +353,7 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'TVA\\Automator\\User_Assessment_ID_Data_Field' => __DIR__ . '/../..' . '/inc/classes/managers/automator/fields/class-user-assessment-id-data-field.php',
         'TVA\\Buy_Now\\Custom_Payment' => __DIR__ . '/../..' . '/inc/classes/buy_now/class-custom-payment.php',
         'TVA\\Buy_Now\\Generic' => __DIR__ . '/../..' . '/inc/classes/buy_now/class-generic.php',
+        'TVA\\Buy_Now\\Paypal' => __DIR__ . '/../..' . '/inc/classes/buy_now/class-paypal.php',
         'TVA\\Buy_Now\\Stripe' => __DIR__ . '/../..' . '/inc/classes/buy_now/class-stripe.php',
         'TVA\\Course\\Structure\\Builder\\TVA_Course_Chapters_Structure_Builder' => __DIR__ . '/../..' . '/inc/classes/course/structure/builder/class-tva-course-chapters-structure-builder.php',
         'TVA\\Course\\Structure\\Builder\\TVA_Course_Level_Structure_Builder' => __DIR__ . '/../..' . '/inc/classes/course/structure/builder/class-tva-course-level-structure-builder.php',
@@ -366,6 +377,34 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'TVA\\Drip\\Trigger\\Time_After_First_Lesson' => __DIR__ . '/../..' . '/inc/drip/triggers/class-time-after-first-lesson.php',
         'TVA\\Drip\\Trigger\\Time_After_Purchase' => __DIR__ . '/../..' . '/inc/drip/triggers/class-time-after-purchase.php',
         'TVA\\Drip\\Trigger\\Video_Progress' => __DIR__ . '/../..' . '/inc/drip/triggers/class-video-progress.php',
+        'TVA\\PayPal\\Apple_Pay' => __DIR__ . '/../..' . '/inc/classes/paypal/class-apple-pay.php',
+        'TVA\\PayPal\\CLI' => __DIR__ . '/../..' . '/inc/classes/paypal/class-cli.php',
+        'TVA\\PayPal\\Checkout' => __DIR__ . '/../..' . '/inc/classes/paypal/class-checkout.php',
+        'TVA\\PayPal\\Connection' => __DIR__ . '/../..' . '/inc/classes/paypal/class-connection.php',
+        'TVA\\PayPal\\Credentials' => __DIR__ . '/../..' . '/inc/classes/paypal/class-credentials.php',
+        'TVA\\PayPal\\Events\\Checkout_Payment_Approval_Reversed' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-checkout-payment-approval-reversed.php',
+        'TVA\\PayPal\\Events\\Customer_Merchant_Integration_Capability_Updated' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-customer-merchant-integration-capability-updated.php',
+        'TVA\\PayPal\\Events\\Generic' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-generic.php',
+        'TVA\\PayPal\\Events\\Merchant_Onboarding_Completed' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-merchant-onboarding-completed.php',
+        'TVA\\PayPal\\Events\\Merchant_Partner_Consent_Revoked' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-merchant-partner-consent-revoked.php',
+        'TVA\\PayPal\\Events\\Payment_Authorization_Created' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-payment-authorization-created.php',
+        'TVA\\PayPal\\Events\\Payment_Authorization_Voided' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-payment-authorization-voided.php',
+        'TVA\\PayPal\\Events\\Payment_Capture_Completed' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-payment-capture-completed.php',
+        'TVA\\PayPal\\Events\\Payment_Capture_Denied' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-payment-capture-denied.php',
+        'TVA\\PayPal\\Events\\Payment_Capture_Refunded' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-payment-capture-refunded.php',
+        'TVA\\PayPal\\Events\\Thrive_Access_Revoke' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-thrive-access-revoke.php',
+        'TVA\\PayPal\\Events\\Vault_Payment_Token_Created' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-vault-payment-token-created.php',
+        'TVA\\PayPal\\Events\\Vault_Payment_Token_Deleted' => __DIR__ . '/../..' . '/inc/classes/paypal/events/class-vault-payment-token-deleted.php',
+        'TVA\\PayPal\\Grace_Period' => __DIR__ . '/../..' . '/inc/classes/paypal/class-grace-period.php',
+        'TVA\\PayPal\\Hooks' => __DIR__ . '/../..' . '/inc/classes/paypal/class-hooks.php',
+        'TVA\\PayPal\\Http\\Base_Client' => __DIR__ . '/../..' . '/inc/classes/paypal/http/class-base-client.php',
+        'TVA\\PayPal\\Http\\Onboarding_Client' => __DIR__ . '/../..' . '/inc/classes/paypal/http/class-onboarding-client.php',
+        'TVA\\PayPal\\Http\\Order_Client' => __DIR__ . '/../..' . '/inc/classes/paypal/http/class-order-client.php',
+        'TVA\\PayPal\\Http\\Vault_Client' => __DIR__ . '/../..' . '/inc/classes/paypal/http/class-vault-client.php',
+        'TVA\\PayPal\\Order_Payload' => __DIR__ . '/../..' . '/inc/classes/paypal/class-order-payload.php',
+        'TVA\\PayPal\\Request' => __DIR__ . '/../..' . '/inc/classes/paypal/class-request.php',
+        'TVA\\PayPal\\Settings' => __DIR__ . '/../..' . '/inc/classes/paypal/class-settings.php',
+        'TVA\\PayPal\\Subscription_Winddown' => __DIR__ . '/../..' . '/inc/classes/paypal/class-subscription-winddown.php',
         'TVA\\Product' => __DIR__ . '/../..' . '/inc/classes/products/class-product.php',
         'TVA\\Product_Migration' => __DIR__ . '/../..' . '/inc/classes/products/class-product-migration.php',
         'TVA\\Reporting\\EventFields\\Campaign_Id' => __DIR__ . '/../..' . '/inc/classes/reporting/event-fields/class-campaign-id.php',
@@ -558,6 +597,9 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'TVA_Orders_Controller' => __DIR__ . '/../..' . '/inc/classes/endpoints/class-tva-orders-controller.php',
         'TVA_Page_Setting' => __DIR__ . '/../..' . '/inc/classes/class-tva-page-setting.php',
         'TVA_Palette_Controller' => __DIR__ . '/../..' . '/inc/classes/endpoints/class-tva-palette-controller.php',
+        'TVA_PayPal_Controller' => __DIR__ . '/../..' . '/inc/classes/endpoints/class-tva-paypal-controller.php',
+        'TVA_PayPal_Integration' => __DIR__ . '/../..' . '/inc/classes/integrations/class-tva-paypal-integration.php',
+        'TVA_PayPal_Payment_Gateway' => __DIR__ . '/../..' . '/inc/classes/paypal/class-payment-gateway.php',
         'TVA_Payment_Gateway_Abstract' => __DIR__ . '/../..' . '/inc/classes/payment_gateways/abstract/class-tva-abstract-payment-gateway.php',
         'TVA_Post' => __DIR__ . '/../..' . '/inc/classes/class-tva-post.php',
         'TVA_Privacy' => __DIR__ . '/../..' . '/inc/classes/class-tva-privacy.php',
@@ -618,15 +660,18 @@ class ComposerStaticInit2bab49b1924f3da0702c1c883970b590
         'TVA_Wizard_Controller' => __DIR__ . '/../..' . '/inc/classes/endpoints/class-tva-wizard-controller.php',
         'TVA_Woocommerce_Integration' => __DIR__ . '/../..' . '/inc/classes/integrations/class-tva-woocommerce-integration.php',
         'TVA_Woocommerce_Order' => __DIR__ . '/../..' . '/inc/classes/integrations/class-tva-woocommerce-order.php',
+        'Thrive_Apprentice_API' => __DIR__ . '/../..' . '/inc/classes/class-thrive-apprentice-api.php',
+        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2bab49b1924f3da0702c1c883970b590::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2bab49b1924f3da0702c1c883970b590::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit2bab49b1924f3da0702c1c883970b590::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit2bab49b1924f3da0702c1c883970b590::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitee9e136f914e87e5898bb86986969247::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitee9e136f914e87e5898bb86986969247::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitee9e136f914e87e5898bb86986969247::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitee9e136f914e87e5898bb86986969247::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -628,10 +628,10 @@ class TVA_User_Controller extends TVA_REST_Controller {
 
 		$data = array(
 			'type' => $type,
-			'id'   => $id,
+			'id'   => (int) $id,
 		);
 
-		setcookie( TVA_Const::TVA_SENDOWL_COOKIE_NAME, maybe_serialize( $data ), time() + 3600, '/' );
+		setcookie( TVA_Const::TVA_SENDOWL_COOKIE_NAME, wp_json_encode( $data ), time() + 3600, '/' );
 
 		if ( $result ) {
 			$user_data = get_userdata( $this->user_id );

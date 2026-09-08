@@ -1093,6 +1093,8 @@ class Product implements JsonSerializable {
 		if ( ! empty( $this->_term ) ) {
 			$original_campaigns = $this->get_drip_campaigns();
 
+			$old_course_ids = $this->get_courses( true );
+
 			foreach ( $this->get_content_sets() as $set ) {
 				wp_remove_object_terms( $set->ID, $this->_term->term_id, static::TAXONOMY_NAME );
 			}
@@ -1107,6 +1109,23 @@ class Product implements JsonSerializable {
 					wp_set_object_terms( $set['ID'], $this->_term->term_id, static::TAXONOMY_NAME, true );
 				}
 			}
+
+			$new_course_ids = $this->get_courses( true );
+
+			$added_course_ids   = array_diff( $new_course_ids, $old_course_ids );
+			$removed_course_ids = array_diff( $old_course_ids, $new_course_ids );
+
+			if ( ! empty( $added_course_ids ) || ! empty( $removed_course_ids ) ) {
+				/**
+				 * Fired when product content sets are updated and courses change.
+				 *
+				 * @param Product $product           The product instance.
+				 * @param array   $added_course_ids   Course IDs added to the product.
+				 * @param array   $removed_course_ids Course IDs removed from the product.
+				 */
+				do_action( 'tva_product_sets_courses_changed', $this, $added_course_ids, $removed_course_ids );
+			}
+
 			$new_campaigns = $this->get_drip_campaigns();
 
 			/* for each drip campaign that has been added or removed, reschedule its cron events */
@@ -1525,6 +1544,48 @@ class Product implements JsonSerializable {
 			$access_restriction = $this->get_access_restrictions();
 			$settings           = $access_restriction->get_applicable_settings( 'action_button_display' );
 			$provider           = isset( $settings['buy_action']['provider'] ) ? $settings['buy_action']['provider'] : '';
+		}
+
+		/**
+		 * PayPal purchases route the buy button to an interstitial on the CURRENT
+		 * page URL instead of calling get_url() (which would create a PayPal order
+		 * via the API on every render). js/frontend.js intercepts the buy click;
+		 * if JS doesn't intercept, the param is harmless and the page just reloads.
+		 *
+		 * One-time purchases use the embedded JS-SDK checkout modal (?pp=paypal,
+		 * mirroring Square's ?tvasquare=1) — the buyer stays on the same course page.
+		 * Subscriptions use the redirect-based vault flow (?pp=paypal_sub): the
+		 * frontend shows the RBM consent modal, POSTs to
+		 * /paypal/subscriptions/checkout, then redirects to PayPal.
+		 */
+		if ( $provider === 'paypal' ) {
+			$rule = \TVA\PayPal\Settings::get_product_rule( $this->get_id() );
+
+			$base    = '';
+			$queried = get_queried_object();
+			if ( $queried instanceof WP_Term ) {
+				$link = get_term_link( $queried );
+				$base = is_wp_error( $link ) ? '' : $link;
+			} elseif ( $queried instanceof WP_Post ) {
+				$base = (string) get_permalink( $queried );
+			}
+			if ( empty( $base ) ) {
+				$base = home_url( '/' );
+			}
+
+			if ( empty( $rule['is_subscription'] ) ) {
+				// One-time: embedded JS-SDK modal (?pp=paypal). No API call here.
+				return add_query_arg( array(
+					'pp'  => 'paypal',
+					'pid' => $this->get_id(),
+				), $base );
+			}
+
+			// Subscription: redirect-based vault flow (?pp=paypal_sub). No API call here.
+			return add_query_arg( array(
+				'pp'  => 'paypal_sub',
+				'pid' => $this->get_id(),
+			), $base );
 		}
 
 		if ( $provider ) {

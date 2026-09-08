@@ -1,11 +1,52 @@
-<div class="tva-access-item">
-	<span class="tva-items-flex-one"><#= model.get('name') #></span>
+<div class="tva-access-item<# if ( model.get('charges') ) { #> tva-access-item-has-sub<# } #>">
+	<span class="tva-items-flex-one<# if ( model.get('charges') ) { #> tva-sub-toggle click<# } #>"<# if ( model.get('charges') ) { #> data-fn="toggleSubscriptionCharges" role="button" tabindex="0" aria-expanded="false"<# } #>>
+		<# if ( model.get('charges') ) { #><span class="tva-sub-caret"></span> <# } #>
+		<#- model.get('name') #>
+		<# if ( model.get('subscription_status') === 'in_trial' ) { #>
+		<span class="tva-access-badge tva-access-badge-trial"><?php esc_html_e( 'Trial', 'thrive-apprentice' ); ?></span>
+		<# } else if ( model.get('is_subscription') ) { #>
+		<span class="tva-access-badge tva-access-badge-sub"><?php esc_html_e( 'Subscription', 'thrive-apprentice' ); ?></span>
+		<# } #>
+		<# if ( ! model.get('charges') && ( model.get('transaction_id') || model.get('debug_id') ) ) { #>
+		<span class="tva-access-item-paypal-meta tva-color-grey">
+			<# if ( model.get('transaction_id') ) { #><?php esc_html_e( 'Txn', 'thrive-apprentice' ); ?>: <code><#- model.get('transaction_id') #></code> <# } #>
+			<# if ( model.get('debug_id') ) { #><?php esc_html_e( 'Debug ID', 'thrive-apprentice' ); ?>: <code><#- model.get('debug_id') #></code><# } #>
+		</span>
+		<# } #>
+	</span>
 	<span class="tva-items-flex-two tva-access-icon tva-icon-<#= model.get('icon') #>"><#= model.get('type') #></span>
 	<span class="tva-items-flex-three"><#= model.get('source') #></span>
 	<span class="tva-items-flex-four tva-flex tva-align-center tva-space-between">
-		<#= model.get('date') #>
+		<#- model.get('date') #>
 		<# if ( ! model.get('source').includes('role') ) { #>
-		<a href="javascript:void(0)" class="tva-item-del click" data-fn="deleteAccessItem" data-id="<#= model.get('id') #>"><?php tva_get_svg_icon( 'trash-1' ); ?></a>
+		<span class="tva-access-item-actions">
+			<a href="javascript:void(0)" class="tva-access-item-menu-toggle click" data-fn="toggleAccessItemMenu"><?php tva_get_svg_icon( 'adm-lesson-dots' ); ?></a>
+			<span class="tva-access-item-menu">
+				<# if ( model.get('refundable') ) { #>
+				<a href="javascript:void(0)" class="tva-access-item-menu-option click" data-fn="refundAccessItem" data-id="<#= model.get('id') #>" data-order-id="<#= model.get('refund_order_id') || model.get('order_id') #>"><?php echo esc_html__( 'Refund', 'thrive-apprentice' ); ?></a>
+				<# } #>
+				<a href="javascript:void(0)" class="tva-access-item-menu-option click" data-fn="deleteAccessItem" data-id="<#= model.get('id') #>"><?php echo esc_html__( 'Delete', 'thrive-apprentice' ); ?></a>
+			</span>
+		</span>
 		<# } #>
 	</span>
 </div>
+<# if ( model.get('charges') ) { #>
+<div class="tva-access-charges">
+	<# model.get('charges').forEach( function ( charge ) { #>
+	<div class="tva-access-charge">
+		<span class="tva-items-flex-one tva-access-charge-label">
+			<# if ( ! charge.refundable ) { #><?php esc_html_e( 'Trial start', 'thrive-apprentice' ); ?><# } else if ( charge.kind === 'renewal' ) { #><?php esc_html_e( 'Renewal', 'thrive-apprentice' ); ?><# } else { #><?php esc_html_e( 'Initial charge', 'thrive-apprentice' ); ?><# } #>
+			<# if ( charge.transaction_id ) { #>
+			<span class="tva-access-item-paypal-meta tva-color-grey"><?php esc_html_e( 'Txn', 'thrive-apprentice' ); ?>: <code><#- charge.transaction_id #></code></span>
+			<# } #>
+		</span>
+		<span class="tva-items-flex-two"><# if ( charge.refundable ) { #><#- charge.amount #><# } else { #>&mdash;<# } #></span>
+		<span class="tva-items-flex-three"></span>
+		<span class="tva-items-flex-four">
+			<#- charge.date #>
+		</span>
+	</div>
+	<# } ); #>
+</div>
+<# } #>

@@ -441,15 +441,15 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: ../admin/includes/templates/assessments/dashboard.phtml:31, ../admin/includes/templates/assessments/dashboard.phtml:31, ../i18n.php:536, ../inc/classes/assessments/class-tva-assessment-settings.php:168
+#: ../admin/includes/templates/assessments/dashboard.phtml:31, ../admin/includes/templates/assessments/dashboard.phtml:31, ../i18n.php:542, ../inc/classes/assessments/class-tva-assessment-settings.php:168
 msgid "Pending"
 msgstr ""
 
-#: ../admin/includes/templates/assessments/dashboard.phtml:32, ../admin/includes/templates/assessments/dashboard.phtml:32, ../i18n.php:538, ../inc/classes/class-tva-dynamic-labels.php:264, ../inc/classes/assessments/class-tva-assessment-settings.php:169
+#: ../admin/includes/templates/assessments/dashboard.phtml:32, ../admin/includes/templates/assessments/dashboard.phtml:32, ../i18n.php:544, ../inc/classes/class-tva-dynamic-labels.php:264, ../inc/classes/assessments/class-tva-assessment-settings.php:169
 msgid "Passed"
 msgstr ""
 
-#: ../admin/includes/templates/assessments/dashboard.phtml:33, ../admin/includes/templates/assessments/dashboard.phtml:33, ../i18n.php:537, ../inc/classes/class-tva-dynamic-labels.php:267, ../inc/classes/assessments/class-tva-assessment-settings.php:170
+#: ../admin/includes/templates/assessments/dashboard.phtml:33, ../admin/includes/templates/assessments/dashboard.phtml:33, ../i18n.php:543, ../inc/classes/class-tva-dynamic-labels.php:267, ../inc/classes/assessments/class-tva-assessment-settings.php:170
 msgid "Failed"
 msgstr ""
 
@@ -461,7 +461,7 @@ msgstr ""
 msgid "Currently there aren’t any submitted assessments"
 msgstr ""
 
-#: ../admin/includes/templates/assessments/grade-button.phtml:1, ../admin/includes/templates/assessments/grade-button.phtml:1, ../admin/includes/templates/courses/form.phtml:28, ../admin/includes/templates/courses/form.phtml:28, ../admin/includes/templates/modals/add-customer.phtml:27, ../admin/includes/templates/modals/add-customer.phtml:27, ../admin/includes/templates/modals/api-key.phtml:41, ../admin/includes/templates/modals/api-key.phtml:41, ../admin/includes/templates/modals/assessment-item.phtml:464, ../admin/includes/templates/modals/assessment-item.phtml:464, ../admin/includes/templates/modals/course-access-restriction.phtml:6, ../admin/includes/templates/modals/course-access-restriction.phtml:6, ../admin/includes/templates/modals/course-item.phtml:52, ../admin/includes/templates/modals/course-item.phtml:52, ../admin/includes/templates/modals/edit-ranges.phtml:174, ../admin/includes/templates/modals/edit-ranges.phtml:174, ../admin/includes/templates/modals/import-customer.phtml:98, ../admin/includes/templates/modals/import-customer.phtml:98, ../admin/includes/templates/modals/schedule.phtml:37, ../admin/includes/templates/modals/schedule.phtml:37, ../admin/includes/templates/settings/assessment-settings.phtml:87, ../admin/includes/templates/settings/assessment-settings.phtml:87, ../admin/includes/templates/courses/grouping/chapter.phtml:43, ../admin/includes/templates/courses/grouping/chapter.phtml:43, ../admin/includes/templates/courses/grouping/module.phtml:43, ../admin/includes/templates/courses/grouping/module.phtml:43, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:155, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:155, ../admin/includes/templates/modals/courses/content.phtml:45, ../admin/includes/templates/modals/courses/content.phtml:45, ../admin/includes/templates/modals/courses/resources.phtml:17, ../admin/includes/templates/modals/courses/resources.phtml:17, ../admin/includes/templates/modals/customer/edit.phtml:56, ../admin/includes/templates/modals/customer/edit.phtml:56, ../admin/includes/templates/modals/products/access-rules.phtml:36, ../admin/includes/templates/modals/products/access-rules.phtml:52, ../admin/includes/templates/modals/products/access-rules.phtml:36, ../admin/includes/templates/modals/products/access-rules.phtml:52, ../admin/includes/templates/modals/protected-files/add.phtml:45, ../admin/includes/templates/modals/protected-files/add.phtml:45, ../admin/includes/templates/modals/square/price.phtml:76, ../admin/includes/templates/modals/square/price.phtml:76, ../admin/includes/templates/modals/stripe/price.phtml:60, ../admin/includes/templates/modals/stripe/price.phtml:60, ../admin/includes/templates/products/single/access-expiry.phtml:71, ../admin/includes/templates/products/single/access-expiry.phtml:71, ../admin/includes/templates/products/single/rules.phtml:66, ../admin/includes/templates/products/single/rules.phtml:66
+#: ../admin/includes/templates/assessments/grade-button.phtml:1, ../admin/includes/templates/assessments/grade-button.phtml:1, ../admin/includes/templates/courses/form.phtml:28, ../admin/includes/templates/courses/form.phtml:28, ../admin/includes/templates/modals/add-customer.phtml:27, ../admin/includes/templates/modals/add-customer.phtml:27, ../admin/includes/templates/modals/api-key.phtml:41, ../admin/includes/templates/modals/api-key.phtml:41, ../admin/includes/templates/modals/assessment-item.phtml:464, ../admin/includes/templates/modals/assessment-item.phtml:464, ../admin/includes/templates/modals/course-access-restriction.phtml:6, ../admin/includes/templates/modals/course-access-restriction.phtml:6, ../admin/includes/templates/modals/course-item.phtml:52, ../admin/includes/templates/modals/course-item.phtml:52, ../admin/includes/templates/modals/edit-ranges.phtml:174, ../admin/includes/templates/modals/edit-ranges.phtml:174, ../admin/includes/templates/modals/import-customer.phtml:98, ../admin/includes/templates/modals/import-customer.phtml:98, ../admin/includes/templates/modals/schedule.phtml:37, ../admin/includes/templates/modals/schedule.phtml:37, ../admin/includes/templates/settings/assessment-settings.phtml:87, ../admin/includes/templates/settings/assessment-settings.phtml:87, ../admin/includes/templates/courses/grouping/chapter.phtml:43, ../admin/includes/templates/courses/grouping/chapter.phtml:43, ../admin/includes/templates/courses/grouping/module.phtml:43, ../admin/includes/templates/courses/grouping/module.phtml:43, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:173, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:173, ../admin/includes/templates/modals/courses/content.phtml:45, ../admin/includes/templates/modals/courses/content.phtml:45, ../admin/includes/templates/modals/courses/resources.phtml:17, ../admin/includes/templates/modals/courses/resources.phtml:17, ../admin/includes/templates/modals/customer/edit.phtml:56, ../admin/includes/templates/modals/customer/edit.phtml:56, ../admin/includes/templates/modals/paypal/price.phtml:51, ../admin/includes/templates/modals/paypal/price.phtml:51, ../admin/includes/templates/modals/products/access-rules.phtml:36, ../admin/includes/templates/modals/products/access-rules.phtml:52, ../admin/includes/templates/modals/products/access-rules.phtml:36, ../admin/includes/templates/modals/products/access-rules.phtml:52, ../admin/includes/templates/modals/protected-files/add.phtml:45, ../admin/includes/templates/modals/protected-files/add.phtml:45, ../admin/includes/templates/modals/square/price.phtml:76, ../admin/includes/templates/modals/square/price.phtml:76, ../admin/includes/templates/modals/stripe/price.phtml:60, ../admin/includes/templates/modals/stripe/price.phtml:60, ../admin/includes/templates/products/single/access-expiry.phtml:71, ../admin/includes/templates/products/single/access-expiry.phtml:71, ../admin/includes/templates/products/single/rules.phtml:66, ../admin/includes/templates/products/single/rules.phtml:66
 msgid "Save"
 msgstr ""
 
@@ -597,7 +597,7 @@ msgstr ""
 msgid "Duplicate"
 msgstr ""
 
-#: ../admin/includes/templates/courses/assessment.phtml:77, ../admin/includes/templates/courses/assessment.phtml:77, ../admin/includes/templates/courses/delete-course.phtml:3, ../admin/includes/templates/courses/delete-course.phtml:3, ../admin/includes/templates/courses/delete-lesson.phtml:3, ../admin/includes/templates/courses/delete-lesson.phtml:3, ../admin/includes/templates/courses/items-tab.phtml:41, ../admin/includes/templates/courses/items-tab.phtml:41, ../admin/includes/templates/settings/api-key-item.phtml:33, ../admin/includes/templates/settings/api-key-item.phtml:33, ../admin/includes/templates/settings/data-cleanup.phtml:50, ../admin/includes/templates/settings/data-cleanup.phtml:50, ../admin/includes/templates/design/new/dashboard.phtml:109, ../admin/includes/templates/design/new/dashboard.phtml:109, ../admin/includes/templates/design/new/options-tooltip.phtml:26, ../admin/includes/templates/design/new/options-tooltip.phtml:26, ../admin/includes/templates/products/single/restricted-content.phtml:94, ../admin/includes/templates/products/single/restricted-content.phtml:94, ../i18n.php:165
+#: ../admin/includes/templates/courses/assessment.phtml:77, ../admin/includes/templates/courses/assessment.phtml:77, ../admin/includes/templates/courses/delete-course.phtml:3, ../admin/includes/templates/courses/delete-course.phtml:3, ../admin/includes/templates/courses/delete-lesson.phtml:3, ../admin/includes/templates/courses/delete-lesson.phtml:3, ../admin/includes/templates/courses/items-tab.phtml:41, ../admin/includes/templates/courses/items-tab.phtml:41, ../admin/includes/templates/customers/access-item.phtml:28, ../admin/includes/templates/customers/access-item.phtml:28, ../admin/includes/templates/settings/api-key-item.phtml:33, ../admin/includes/templates/settings/api-key-item.phtml:33, ../admin/includes/templates/settings/data-cleanup.phtml:50, ../admin/includes/templates/settings/data-cleanup.phtml:50, ../admin/includes/templates/design/new/dashboard.phtml:109, ../admin/includes/templates/design/new/dashboard.phtml:109, ../admin/includes/templates/design/new/options-tooltip.phtml:26, ../admin/includes/templates/design/new/options-tooltip.phtml:26, ../admin/includes/templates/products/single/restricted-content.phtml:94, ../admin/includes/templates/products/single/restricted-content.phtml:94, ../i18n.php:165
 msgid "Delete"
 msgstr ""
 
@@ -609,7 +609,7 @@ msgstr ""
 msgid "Scheduled"
 msgstr ""
 
-#: ../admin/includes/templates/courses/assessment.phtml:100, ../admin/includes/templates/courses/assessment.phtml:119, ../admin/includes/templates/courses/assessment.phtml:100, ../admin/includes/templates/courses/assessment.phtml:119, ../admin/includes/templates/courses/items-tab.phtml:13, ../admin/includes/templates/courses/items-tab.phtml:13, ../admin/includes/templates/courses/lesson.phtml:97, ../admin/includes/templates/courses/lesson.phtml:116, ../admin/includes/templates/courses/lesson.phtml:97, ../admin/includes/templates/courses/lesson.phtml:116, ../admin/includes/templates/design/new/dashboard.phtml:98, ../admin/includes/templates/design/new/dashboard.phtml:98, ../i18n.php:158, ../i18n.php:164, ../i18n.php:398
+#: ../admin/includes/templates/courses/assessment.phtml:100, ../admin/includes/templates/courses/assessment.phtml:119, ../admin/includes/templates/courses/assessment.phtml:100, ../admin/includes/templates/courses/assessment.phtml:119, ../admin/includes/templates/courses/items-tab.phtml:13, ../admin/includes/templates/courses/items-tab.phtml:13, ../admin/includes/templates/courses/lesson.phtml:97, ../admin/includes/templates/courses/lesson.phtml:116, ../admin/includes/templates/courses/lesson.phtml:97, ../admin/includes/templates/courses/lesson.phtml:116, ../admin/includes/templates/design/new/dashboard.phtml:98, ../admin/includes/templates/design/new/dashboard.phtml:98, ../i18n.php:158, ../i18n.php:164, ../i18n.php:403
 msgid "Publish"
 msgstr ""
 
@@ -625,7 +625,7 @@ msgstr ""
 msgid "Schedule"
 msgstr ""
 
-#: ../admin/includes/templates/courses/chapter.phtml:10, ../admin/includes/templates/courses/chapter.phtml:10, ../i18n.php:8, ../inc/classes/class-tva-dynamic-labels.php:219, ../tcb-bridge/editor-elements/course/sub-elements/chapter/class-chapter.php:29
+#: ../admin/includes/templates/courses/chapter.phtml:10, ../admin/includes/templates/courses/chapter.phtml:10, ../admin/includes/templates/customers/overview/chapter.phtml:7, ../admin/includes/templates/customers/overview/chapter.phtml:7, ../admin/includes/templates/drip/campaign/overview/chapter.phtml:5, ../admin/includes/templates/drip/campaign/overview/chapter.phtml:5, ../i18n.php:8, ../inc/classes/class-tva-dynamic-labels.php:219, ../tcb-bridge/editor-elements/course/sub-elements/chapter/class-chapter.php:29
 msgid "Chapter"
 msgstr ""
 
@@ -737,7 +737,7 @@ msgstr ""
 msgid "Review your license "
 msgstr ""
 
-#: ../admin/includes/templates/courses/completion-tab.phtml:143, ../admin/includes/templates/courses/completion-tab.phtml:143, ../admin/includes/templates/courses/integration-square.phtml:89, ../admin/includes/templates/courses/integration-square.phtml:89, ../admin/includes/templates/courses/integration-stripe.phtml:86, ../admin/includes/templates/courses/integration-stripe.phtml:86, ../admin/includes/templates/products/access-expiry/after-purchase-condition.phtml:7, ../admin/includes/templates/products/access-expiry/after-purchase-condition.phtml:7
+#: ../admin/includes/templates/courses/completion-tab.phtml:143, ../admin/includes/templates/courses/completion-tab.phtml:143, ../admin/includes/templates/courses/integration-paypal.phtml:53, ../admin/includes/templates/courses/integration-paypal.phtml:53, ../admin/includes/templates/courses/integration-square.phtml:89, ../admin/includes/templates/courses/integration-square.phtml:89, ../admin/includes/templates/courses/integration-stripe.phtml:86, ../admin/includes/templates/courses/integration-stripe.phtml:86, ../admin/includes/templates/products/access-expiry/after-purchase-condition.phtml:7, ../admin/includes/templates/products/access-expiry/after-purchase-condition.phtml:7
 msgid "here"
 msgstr ""
 
@@ -761,7 +761,7 @@ msgstr ""
 msgid "Are you sure you want to delete this course?"
 msgstr ""
 
-#: ../admin/includes/templates/courses/delete-course.phtml:2, ../admin/includes/templates/courses/delete-course.phtml:2, ../admin/includes/templates/courses/delete-lesson.phtml:2, ../admin/includes/templates/courses/delete-lesson.phtml:2, ../admin/includes/templates/courses/integration-square.phtml:163, ../admin/includes/templates/courses/integration-square.phtml:191, ../admin/includes/templates/courses/integration-square.phtml:163, ../admin/includes/templates/courses/integration-square.phtml:191, ../admin/includes/templates/courses/integration-stripe.phtml:189, ../admin/includes/templates/courses/integration-stripe.phtml:212, ../admin/includes/templates/courses/integration-stripe.phtml:189, ../admin/includes/templates/courses/integration-stripe.phtml:212, ../admin/includes/templates/courses/move.phtml:58, ../admin/includes/templates/courses/move.phtml:58, ../admin/includes/templates/modals/archive-this-course.phtml:10, ../admin/includes/templates/modals/archive-this-course.phtml:10, ../admin/includes/templates/modals/assessment-item.phtml:92, ../admin/includes/templates/modals/assessment-item.phtml:92, ../admin/includes/templates/modals/bulk-complete.phtml:12, ../admin/includes/templates/modals/bulk-complete.phtml:12, ../admin/includes/templates/modals/bulk-reset.phtml:10, ../admin/includes/templates/modals/bulk-reset.phtml:10, ../admin/includes/templates/modals/bulk-unlock.phtml:10, ../admin/includes/templates/modals/bulk-unlock.phtml:10, ../admin/includes/templates/modals/course-access-restriction.phtml:5, ../admin/includes/templates/modals/course-access-restriction.phtml:5, ../admin/includes/templates/modals/course-archived.phtml:8, ../admin/includes/templates/modals/course-archived.phtml:8, ../admin/includes/templates/modals/course-draft.phtml:8, ../admin/includes/templates/modals/course-draft.phtml:8, ../admin/includes/templates/modals/course-hidden.phtml:8, ../admin/includes/templates/modals/course-hidden.phtml:8, ../admin/includes/templates/modals/course-item.phtml:29, ../admin/includes/templates/modals/course-item.phtml:29, ../admin/includes/templates/modals/edit-ranges.phtml:171, ../admin/includes/templates/modals/edit-ranges.phtml:171, ../admin/includes/templates/modals/icons.phtml:22, ../admin/includes/templates/modals/icons.phtml:22, ../admin/includes/templates/modals/lesson-unlock.phtml:11, ../admin/includes/templates/modals/lesson-unlock.phtml:11, ../admin/includes/templates/modals/send-certificate.phtml:8, ../admin/includes/templates/modals/send-certificate.phtml:8, ../admin/includes/templates/access-restriction/states/create.phtml:25, ../admin/includes/templates/access-restriction/states/create.phtml:25, ../admin/includes/templates/courses/grouping/chapter.phtml:8, ../admin/includes/templates/courses/grouping/chapter.phtml:25, ../admin/includes/templates/courses/grouping/chapter.phtml:42, ../admin/includes/templates/courses/grouping/chapter.phtml:8, ../admin/includes/templates/courses/grouping/chapter.phtml:25, ../admin/includes/templates/courses/grouping/chapter.phtml:42, ../admin/includes/templates/courses/grouping/module.phtml:8, ../admin/includes/templates/courses/grouping/module.phtml:25, ../admin/includes/templates/courses/grouping/module.phtml:42, ../admin/includes/templates/courses/grouping/module.phtml:8, ../admin/includes/templates/courses/grouping/module.phtml:25, ../admin/includes/templates/courses/grouping/module.phtml:42, ../admin/includes/templates/drip/modals/campaign-settings.phtml:25, ../admin/includes/templates/drip/modals/campaign-settings.phtml:25, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:154, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:154, ../admin/includes/templates/modals/courses/content.phtml:22, ../admin/includes/templates/modals/courses/content.phtml:22, ../admin/includes/templates/modals/labels/confirm-delete.phtml:8, ../admin/includes/templates/modals/labels/confirm-delete.phtml:8, ../admin/includes/templates/modals/products/access-rules.phtml:34, ../admin/includes/templates/modals/products/access-rules.phtml:51, ../admin/includes/templates/modals/products/access-rules.phtml:34, ../admin/includes/templates/modals/products/access-rules.phtml:51, ../admin/includes/templates/modals/square/price.phtml:75, ../admin/includes/templates/modals/square/price.phtml:75, ../admin/includes/templates/modals/stripe/price.phtml:59, ../admin/includes/templates/modals/stripe/price.phtml:59, ../admin/includes/templates/modals/topics/confirm-delete.phtml:8, ../admin/includes/templates/modals/topics/confirm-delete.phtml:8, ../i18n.php:397, ../i18n.php:439, ../i18n.php:485, ../inc/classes/stripe/templates/stripe-template.php:25, ../tcb-bridge/editor-layouts/modals/course-list-query.php:72
+#: ../admin/includes/templates/courses/delete-course.phtml:2, ../admin/includes/templates/courses/delete-course.phtml:2, ../admin/includes/templates/courses/delete-lesson.phtml:2, ../admin/includes/templates/courses/delete-lesson.phtml:2, ../admin/includes/templates/courses/integration-paypal.phtml:167, ../admin/includes/templates/courses/integration-paypal.phtml:190, ../admin/includes/templates/courses/integration-paypal.phtml:167, ../admin/includes/templates/courses/integration-paypal.phtml:190, ../admin/includes/templates/courses/integration-square.phtml:163, ../admin/includes/templates/courses/integration-square.phtml:191, ../admin/includes/templates/courses/integration-square.phtml:163, ../admin/includes/templates/courses/integration-square.phtml:191, ../admin/includes/templates/courses/integration-stripe.phtml:189, ../admin/includes/templates/courses/integration-stripe.phtml:212, ../admin/includes/templates/courses/integration-stripe.phtml:189, ../admin/includes/templates/courses/integration-stripe.phtml:212, ../admin/includes/templates/courses/move.phtml:58, ../admin/includes/templates/courses/move.phtml:58, ../admin/includes/templates/modals/archive-this-course.phtml:10, ../admin/includes/templates/modals/archive-this-course.phtml:10, ../admin/includes/templates/modals/assessment-item.phtml:92, ../admin/includes/templates/modals/assessment-item.phtml:92, ../admin/includes/templates/modals/bulk-complete.phtml:12, ../admin/includes/templates/modals/bulk-complete.phtml:12, ../admin/includes/templates/modals/bulk-reset.phtml:10, ../admin/includes/templates/modals/bulk-reset.phtml:10, ../admin/includes/templates/modals/bulk-unlock.phtml:10, ../admin/includes/templates/modals/bulk-unlock.phtml:10, ../admin/includes/templates/modals/course-access-restriction.phtml:5, ../admin/includes/templates/modals/course-access-restriction.phtml:5, ../admin/includes/templates/modals/course-archived.phtml:8, ../admin/includes/templates/modals/course-archived.phtml:8, ../admin/includes/templates/modals/course-draft.phtml:8, ../admin/includes/templates/modals/course-draft.phtml:8, ../admin/includes/templates/modals/course-hidden.phtml:8, ../admin/includes/templates/modals/course-hidden.phtml:8, ../admin/includes/templates/modals/course-item.phtml:29, ../admin/includes/templates/modals/course-item.phtml:29, ../admin/includes/templates/modals/edit-ranges.phtml:171, ../admin/includes/templates/modals/edit-ranges.phtml:171, ../admin/includes/templates/modals/icons.phtml:22, ../admin/includes/templates/modals/icons.phtml:22, ../admin/includes/templates/modals/lesson-unlock.phtml:11, ../admin/includes/templates/modals/lesson-unlock.phtml:11, ../admin/includes/templates/modals/send-certificate.phtml:8, ../admin/includes/templates/modals/send-certificate.phtml:8, ../admin/includes/templates/access-restriction/states/create.phtml:25, ../admin/includes/templates/access-restriction/states/create.phtml:25, ../admin/includes/templates/courses/grouping/chapter.phtml:8, ../admin/includes/templates/courses/grouping/chapter.phtml:25, ../admin/includes/templates/courses/grouping/chapter.phtml:42, ../admin/includes/templates/courses/grouping/chapter.phtml:8, ../admin/includes/templates/courses/grouping/chapter.phtml:25, ../admin/includes/templates/courses/grouping/chapter.phtml:42, ../admin/includes/templates/courses/grouping/module.phtml:8, ../admin/includes/templates/courses/grouping/module.phtml:25, ../admin/includes/templates/courses/grouping/module.phtml:42, ../admin/includes/templates/courses/grouping/module.phtml:8, ../admin/includes/templates/courses/grouping/module.phtml:25, ../admin/includes/templates/courses/grouping/module.phtml:42, ../admin/includes/templates/drip/modals/campaign-settings.phtml:25, ../admin/includes/templates/drip/modals/campaign-settings.phtml:25, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:172, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:172, ../admin/includes/templates/modals/courses/content.phtml:22, ../admin/includes/templates/modals/courses/content.phtml:22, ../admin/includes/templates/modals/labels/confirm-delete.phtml:8, ../admin/includes/templates/modals/labels/confirm-delete.phtml:8, ../admin/includes/templates/modals/paypal/price.phtml:50, ../admin/includes/templates/modals/paypal/price.phtml:50, ../admin/includes/templates/modals/products/access-rules.phtml:34, ../admin/includes/templates/modals/products/access-rules.phtml:51, ../admin/includes/templates/modals/products/access-rules.phtml:34, ../admin/includes/templates/modals/products/access-rules.phtml:51, ../admin/includes/templates/modals/square/price.phtml:75, ../admin/includes/templates/modals/square/price.phtml:75, ../admin/includes/templates/modals/stripe/price.phtml:59, ../admin/includes/templates/modals/stripe/price.phtml:59, ../admin/includes/templates/modals/topics/confirm-delete.phtml:8, ../admin/includes/templates/modals/topics/confirm-delete.phtml:8, ../i18n.php:402, ../i18n.php:444, ../i18n.php:491, ../inc/classes/stripe/templates/stripe-template.php:25, ../tcb-bridge/editor-layouts/modals/course-list-query.php:72
 msgid "Cancel"
 msgstr ""
 
@@ -773,7 +773,7 @@ msgstr ""
 msgid "Course overview"
 msgstr ""
 
-#: ../admin/includes/templates/courses/details-tab.phtml:27, ../admin/includes/templates/courses/details-tab.phtml:27, ../tcb-bridge/classes/certificate/class-hooks.php:538, ../tcb-bridge/classes/course-list/class-hooks.php:208, ../tcb-bridge/editor-elements/course-list/sub-elements/class-course-list-item-description.php:32
+#: ../admin/includes/templates/courses/details-tab.phtml:27, ../admin/includes/templates/courses/details-tab.phtml:27, ../tcb-bridge/classes/certificate/class-hooks.php:599, ../tcb-bridge/classes/course-list/class-hooks.php:208, ../tcb-bridge/editor-elements/course-list/sub-elements/class-course-list-item-description.php:32
 msgid "Course summary"
 msgstr ""
 
@@ -837,7 +837,7 @@ msgstr ""
 msgid "View reports"
 msgstr ""
 
-#: ../admin/includes/templates/courses/header.phtml:6, ../admin/includes/templates/courses/header.phtml:6, ../admin/includes/templates/design/advanced.phtml:23, ../admin/includes/templates/design/advanced.phtml:23, ../admin/includes/templates/products/single/drip.phtml:21, ../admin/includes/templates/products/single/drip.phtml:21, ../tcb-bridge/classes/certificate/class-hooks.php:534
+#: ../admin/includes/templates/courses/header.phtml:6, ../admin/includes/templates/courses/header.phtml:6, ../admin/includes/templates/design/advanced.phtml:23, ../admin/includes/templates/design/advanced.phtml:23, ../admin/includes/templates/products/single/drip.phtml:21, ../admin/includes/templates/products/single/drip.phtml:21, ../tcb-bridge/classes/certificate/class-hooks.php:595
 msgid "Course name"
 msgstr ""
 
@@ -865,16 +865,138 @@ msgstr ""
 msgid "Payment URL"
 msgstr ""
 
-#: ../admin/includes/templates/courses/integration-custom-payment.phtml:16, ../admin/includes/templates/courses/integration-custom-payment.phtml:16, ../admin/includes/templates/courses/integration-square.phtml:152, ../admin/includes/templates/courses/integration-square.phtml:180, ../admin/includes/templates/courses/integration-square.phtml:152, ../admin/includes/templates/courses/integration-square.phtml:180, ../admin/includes/templates/courses/integration-stripe.phtml:178, ../admin/includes/templates/courses/integration-stripe.phtml:201, ../admin/includes/templates/courses/integration-stripe.phtml:178, ../admin/includes/templates/courses/integration-stripe.phtml:201
+#: ../admin/includes/templates/courses/integration-custom-payment.phtml:16, ../admin/includes/templates/courses/integration-custom-payment.phtml:16, ../admin/includes/templates/courses/integration-paypal.phtml:156, ../admin/includes/templates/courses/integration-paypal.phtml:179, ../admin/includes/templates/courses/integration-paypal.phtml:156, ../admin/includes/templates/courses/integration-paypal.phtml:179, ../admin/includes/templates/courses/integration-square.phtml:152, ../admin/includes/templates/courses/integration-square.phtml:180, ../admin/includes/templates/courses/integration-square.phtml:152, ../admin/includes/templates/courses/integration-square.phtml:180, ../admin/includes/templates/courses/integration-stripe.phtml:178, ../admin/includes/templates/courses/integration-stripe.phtml:201, ../admin/includes/templates/courses/integration-stripe.phtml:178, ../admin/includes/templates/courses/integration-stripe.phtml:201
 msgid "You need to add a valid URL link"
 msgstr ""
 
-#: ../admin/includes/templates/courses/integration-square.phtml:47, ../admin/includes/templates/courses/integration-square.phtml:47, ../admin/includes/templates/courses/integration-stripe.phtml:28, ../admin/includes/templates/courses/integration-stripe.phtml:43, ../admin/includes/templates/courses/integration-stripe.phtml:28, ../admin/includes/templates/courses/integration-stripe.phtml:43, ../admin/includes/templates/settings/square.phtml:18, ../admin/includes/templates/settings/square.phtml:18, ../admin/includes/templates/settings/stripe.phtml:21, ../admin/includes/templates/settings/stripe.phtml:21
+#: ../admin/includes/templates/courses/integration-paypal.phtml:17, ../admin/includes/templates/courses/integration-paypal.phtml:17
+msgid "Connect PayPal"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:22, ../admin/includes/templates/courses/integration-paypal.phtml:22, ../admin/includes/templates/courses/integration-square.phtml:47, ../admin/includes/templates/courses/integration-square.phtml:47, ../admin/includes/templates/courses/integration-stripe.phtml:28, ../admin/includes/templates/courses/integration-stripe.phtml:43, ../admin/includes/templates/courses/integration-stripe.phtml:28, ../admin/includes/templates/courses/integration-stripe.phtml:43, ../admin/includes/templates/settings/paypal.phtml:16, ../admin/includes/templates/settings/paypal.phtml:16, ../admin/includes/templates/settings/square.phtml:18, ../admin/includes/templates/settings/square.phtml:18, ../admin/includes/templates/settings/stripe.phtml:21, ../admin/includes/templates/settings/stripe.phtml:21
 msgid "Connected"
 msgstr ""
 
-#: ../admin/includes/templates/courses/integration-square.phtml:57, ../admin/includes/templates/courses/integration-square.phtml:57
+#: ../admin/includes/templates/courses/integration-paypal.phtml:24, ../admin/includes/templates/courses/integration-paypal.phtml:24, ../admin/includes/templates/courses/integration-stripe.phtml:31, ../admin/includes/templates/courses/integration-stripe.phtml:46, ../admin/includes/templates/courses/integration-stripe.phtml:31, ../admin/includes/templates/courses/integration-stripe.phtml:46, ../i18n.php:397
+msgid "Product Price Set"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:25, ../admin/includes/templates/courses/integration-paypal.phtml:25, ../admin/includes/templates/courses/integration-stripe.phtml:47, ../admin/includes/templates/courses/integration-stripe.phtml:47
+msgid "LIVE"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:25, ../admin/includes/templates/courses/integration-paypal.phtml:25, ../admin/includes/templates/courses/integration-square.phtml:57, ../admin/includes/templates/courses/integration-square.phtml:57
 msgid "SANDBOX"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:36, ../admin/includes/templates/courses/integration-paypal.phtml:36, ../admin/includes/templates/courses/integration-square.phtml:72, ../admin/includes/templates/courses/integration-square.phtml:72, ../admin/includes/templates/courses/integration-stripe.phtml:58, ../admin/includes/templates/courses/integration-stripe.phtml:58
+msgid "Environment"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:40, ../admin/includes/templates/courses/integration-paypal.phtml:40
+msgid "The test environment lets you simulate a purchase without taking real payment. Switch to the live environment when you are ready to sell."
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:45, ../admin/includes/templates/courses/integration-paypal.phtml:45, ../admin/includes/templates/courses/integration-square.phtml:81, ../admin/includes/templates/courses/integration-square.phtml:81
+msgid "Sandbox"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:46, ../admin/includes/templates/courses/integration-paypal.phtml:46, ../admin/includes/templates/courses/integration-stripe.phtml:68, ../admin/includes/templates/courses/integration-stripe.phtml:68, ../admin/includes/templates/design/base.phtml:25, ../admin/includes/templates/design/base.phtml:25
+msgid "Live"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:53, ../admin/includes/templates/courses/integration-paypal.phtml:53
+msgid "To display the buy now button for this product you must change the action button display settings to “Buy now” > “PayPal” "
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:57, ../admin/includes/templates/courses/integration-paypal.phtml:57, ../admin/includes/templates/courses/integration-square.phtml:93, ../admin/includes/templates/courses/integration-square.phtml:93, ../admin/includes/templates/courses/integration-stripe.phtml:90, ../admin/includes/templates/courses/integration-stripe.phtml:90
+msgid "Product Pricing"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:65, ../admin/includes/templates/courses/integration-paypal.phtml:65, ../admin/includes/templates/courses/integration-square.phtml:116, ../admin/includes/templates/courses/integration-square.phtml:116, ../admin/includes/templates/courses/integration-stripe.phtml:97, ../admin/includes/templates/courses/integration-stripe.phtml:110, ../admin/includes/templates/courses/integration-stripe.phtml:97, ../admin/includes/templates/courses/integration-stripe.phtml:110, ../admin/includes/templates/courses/integration.phtml:18, ../admin/includes/templates/courses/integration.phtml:18
+msgid "Clear selection"
+msgstr ""
+
+#. translators: %s: dynamic-link picker path, kept as one bold string
+#. translators: %s: dynamic-link picker path, kept as one bold string
+#: ../admin/includes/templates/courses/integration-paypal.phtml:75, ../admin/includes/templates/courses/integration-paypal.phtml:75
+msgid "To allow subscribers to cancel their subscription — add a “Cancel subscription” button/link to the course template and set %s."
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:76, ../admin/includes/templates/courses/integration-paypal.phtml:76
+msgid "Dynamic Link → PayPal → Cancel subscription"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:83, ../admin/includes/templates/courses/integration-paypal.phtml:83, ../admin/includes/templates/courses/integration-square.phtml:121, ../admin/includes/templates/courses/integration-square.phtml:121, ../admin/includes/templates/courses/integration-stripe.phtml:115, ../admin/includes/templates/courses/integration-stripe.phtml:115
+msgid "Product pricing"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:86, ../admin/includes/templates/courses/integration-paypal.phtml:86, ../admin/includes/templates/courses/integration-square.phtml:124, ../admin/includes/templates/courses/integration-square.phtml:124, ../admin/includes/templates/courses/integration-stripe.phtml:118, ../admin/includes/templates/courses/integration-stripe.phtml:118
+msgid "Add Price"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:92, ../admin/includes/templates/courses/integration-paypal.phtml:92, ../admin/includes/templates/courses/integration-square.phtml:130, ../admin/includes/templates/courses/integration-square.phtml:130, ../admin/includes/templates/courses/integration-stripe.phtml:124, ../admin/includes/templates/courses/integration-stripe.phtml:124, ../admin/includes/templates/design/template.phtml:96, ../admin/includes/templates/design/template.phtml:96, ../admin/includes/templates/drip/campaign/form-general.phtml:85, ../admin/includes/templates/drip/campaign/form-general.phtml:85, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:124, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:124
+msgid "Advanced settings"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:101, ../admin/includes/templates/courses/integration-paypal.phtml:101, ../admin/includes/templates/courses/integration-stripe.phtml:133, ../admin/includes/templates/courses/integration-stripe.phtml:133, ../admin/includes/templates/modals/square/price.phtml:54, ../admin/includes/templates/modals/square/price.phtml:54
+msgid "Product includes a free trial"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:105, ../admin/includes/templates/courses/integration-paypal.phtml:105
+msgid "When enabled, buyers get free access for the number of days you set here before their first payment is taken."
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:113, ../admin/includes/templates/courses/integration-paypal.phtml:113, ../admin/includes/templates/modals/square/price.phtml:69, ../admin/includes/templates/modals/square/price.phtml:69
+msgid "Days"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:121, ../admin/includes/templates/courses/integration-paypal.phtml:121, ../admin/includes/templates/courses/integration-stripe.phtml:143, ../admin/includes/templates/courses/integration-stripe.phtml:143
+msgid "Pass a client reference to checkout"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:125, ../admin/includes/templates/courses/integration-paypal.phtml:125
+msgid "When enabled, the chosen identifier (User ID or User name) is sent to PayPal as the order invoice ID so you can match the payment back to this user. Guests have no account yet at checkout, so their email is sent instead. Note: if your PayPal account blocks multiple payments per invoice ID, leave this off."
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:132, ../admin/includes/templates/courses/integration-paypal.phtml:132
+msgid "User ID"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:133, ../admin/includes/templates/courses/integration-paypal.phtml:133
+msgid "User name"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:140, ../admin/includes/templates/courses/integration-paypal.phtml:140, ../admin/includes/templates/courses/integration-square.phtml:138, ../admin/includes/templates/courses/integration-square.phtml:138, ../admin/includes/templates/courses/integration-stripe.phtml:155, ../admin/includes/templates/courses/integration-stripe.phtml:155
+msgid "Pre-populate email at checkout when user is logged in"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:144, ../admin/includes/templates/courses/integration-paypal.phtml:144
+msgid "When enabled, the buyer's email is pre-filled at checkout for logged-in users."
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:154, ../admin/includes/templates/courses/integration-paypal.phtml:154, ../admin/includes/templates/courses/integration-square.phtml:145, ../admin/includes/templates/courses/integration-square.phtml:145, ../admin/includes/templates/courses/integration-stripe.phtml:176, ../admin/includes/templates/courses/integration-stripe.phtml:176
+msgid "Success"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:155, ../admin/includes/templates/courses/integration-paypal.phtml:178, ../admin/includes/templates/courses/integration-paypal.phtml:155, ../admin/includes/templates/courses/integration-paypal.phtml:178, ../admin/includes/templates/courses/integration-square.phtml:150, ../admin/includes/templates/courses/integration-square.phtml:178, ../admin/includes/templates/courses/integration-square.phtml:150, ../admin/includes/templates/courses/integration-square.phtml:178, ../admin/includes/templates/courses/integration-stripe.phtml:177, ../admin/includes/templates/courses/integration-stripe.phtml:200, ../admin/includes/templates/courses/integration-stripe.phtml:177, ../admin/includes/templates/courses/integration-stripe.phtml:200
+msgid "https://"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:160, ../admin/includes/templates/courses/integration-paypal.phtml:183, ../admin/includes/templates/courses/integration-paypal.phtml:160, ../admin/includes/templates/courses/integration-paypal.phtml:183, ../admin/includes/templates/courses/integration-square.phtml:156, ../admin/includes/templates/courses/integration-square.phtml:184, ../admin/includes/templates/courses/integration-square.phtml:156, ../admin/includes/templates/courses/integration-square.phtml:184, ../admin/includes/templates/courses/integration-stripe.phtml:182, ../admin/includes/templates/courses/integration-stripe.phtml:205, ../admin/includes/templates/courses/integration-stripe.phtml:182, ../admin/includes/templates/courses/integration-stripe.phtml:205, ../admin/includes/templates/access-restriction/states/create.phtml:17, ../admin/includes/templates/access-restriction/states/create.phtml:17, ../admin/includes/templates/access-restriction/states/search.phtml:22, ../admin/includes/templates/access-restriction/states/search.phtml:22
+msgid "Create new page"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:163, ../admin/includes/templates/courses/integration-paypal.phtml:186, ../admin/includes/templates/courses/integration-paypal.phtml:163, ../admin/includes/templates/courses/integration-paypal.phtml:186, ../admin/includes/templates/courses/integration-square.phtml:159, ../admin/includes/templates/courses/integration-square.phtml:187, ../admin/includes/templates/courses/integration-square.phtml:159, ../admin/includes/templates/courses/integration-square.phtml:187, ../admin/includes/templates/courses/integration-stripe.phtml:185, ../admin/includes/templates/courses/integration-stripe.phtml:208, ../admin/includes/templates/courses/integration-stripe.phtml:185, ../admin/includes/templates/courses/integration-stripe.phtml:208, ../admin/includes/templates/access-restriction/states/create.phtml:21, ../admin/includes/templates/access-restriction/states/create.phtml:21, ../admin/includes/templates/courses/completion/settings.phtml:1, ../admin/includes/templates/courses/completion/settings.phtml:1, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:17, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:17
+msgid "Page title"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:171, ../admin/includes/templates/courses/integration-paypal.phtml:194, ../admin/includes/templates/courses/integration-paypal.phtml:171, ../admin/includes/templates/courses/integration-paypal.phtml:194, ../admin/includes/templates/courses/integration-square.phtml:167, ../admin/includes/templates/courses/integration-square.phtml:195, ../admin/includes/templates/courses/integration-square.phtml:167, ../admin/includes/templates/courses/integration-square.phtml:195, ../admin/includes/templates/courses/integration-stripe.phtml:193, ../admin/includes/templates/courses/integration-stripe.phtml:216, ../admin/includes/templates/courses/integration-stripe.phtml:193, ../admin/includes/templates/courses/integration-stripe.phtml:216, ../admin/includes/templates/access-restriction/states/create.phtml:28, ../admin/includes/templates/access-restriction/states/create.phtml:28, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:20, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:20
+msgid "Add page"
+msgstr ""
+
+#: ../admin/includes/templates/courses/integration-paypal.phtml:177, ../admin/includes/templates/courses/integration-paypal.phtml:177, ../admin/includes/templates/courses/integration-square.phtml:173, ../admin/includes/templates/courses/integration-square.phtml:173, ../admin/includes/templates/courses/integration-stripe.phtml:199, ../admin/includes/templates/courses/integration-stripe.phtml:199
+msgid "Cancel/failure"
 msgstr ""
 
 #: ../admin/includes/templates/courses/integration-square.phtml:55, ../admin/includes/templates/courses/integration-square.phtml:55
@@ -885,16 +1007,8 @@ msgstr ""
 msgid "Connect Square"
 msgstr ""
 
-#: ../admin/includes/templates/courses/integration-square.phtml:72, ../admin/includes/templates/courses/integration-square.phtml:72, ../admin/includes/templates/courses/integration-stripe.phtml:58, ../admin/includes/templates/courses/integration-stripe.phtml:58
-msgid "Environment"
-msgstr ""
-
 #: ../admin/includes/templates/courses/integration-square.phtml:76, ../admin/includes/templates/courses/integration-square.phtml:76
 msgid "The <b>SANDBOX environment</b> allows you to simulate transactions. Learn more about the <a href='https://developer.squareup.com/docs/devtools/sandbox/overview' target='_blank' rel='noopener'>sandbox environment</a>. Switch to the PRODUCTION environment and create real products when you are ready to sell them."
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:81, ../admin/includes/templates/courses/integration-square.phtml:81
-msgid "Sandbox"
 msgstr ""
 
 #: ../admin/includes/templates/courses/integration-square.phtml:82, ../admin/includes/templates/courses/integration-square.phtml:82
@@ -903,54 +1017,6 @@ msgstr ""
 
 #: ../admin/includes/templates/courses/integration-square.phtml:89, ../admin/includes/templates/courses/integration-square.phtml:89
 msgid "To display the buy now button for this product you must change the action button display settings to “Buy now” > “Square” "
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:93, ../admin/includes/templates/courses/integration-square.phtml:93, ../admin/includes/templates/courses/integration-stripe.phtml:90, ../admin/includes/templates/courses/integration-stripe.phtml:90
-msgid "Product Pricing"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:116, ../admin/includes/templates/courses/integration-square.phtml:116, ../admin/includes/templates/courses/integration-stripe.phtml:97, ../admin/includes/templates/courses/integration-stripe.phtml:110, ../admin/includes/templates/courses/integration-stripe.phtml:97, ../admin/includes/templates/courses/integration-stripe.phtml:110, ../admin/includes/templates/courses/integration.phtml:18, ../admin/includes/templates/courses/integration.phtml:18
-msgid "Clear selection"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:121, ../admin/includes/templates/courses/integration-square.phtml:121, ../admin/includes/templates/courses/integration-stripe.phtml:115, ../admin/includes/templates/courses/integration-stripe.phtml:115
-msgid "Product pricing"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:124, ../admin/includes/templates/courses/integration-square.phtml:124, ../admin/includes/templates/courses/integration-stripe.phtml:118, ../admin/includes/templates/courses/integration-stripe.phtml:118
-msgid "Add Price"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:130, ../admin/includes/templates/courses/integration-square.phtml:130, ../admin/includes/templates/courses/integration-stripe.phtml:124, ../admin/includes/templates/courses/integration-stripe.phtml:124, ../admin/includes/templates/design/template.phtml:96, ../admin/includes/templates/design/template.phtml:96, ../admin/includes/templates/drip/campaign/form-general.phtml:84, ../admin/includes/templates/drip/campaign/form-general.phtml:84, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:106, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:106
-msgid "Advanced settings"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:138, ../admin/includes/templates/courses/integration-square.phtml:138, ../admin/includes/templates/courses/integration-stripe.phtml:155, ../admin/includes/templates/courses/integration-stripe.phtml:155
-msgid "Pre-populate email at checkout when user is logged in"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:145, ../admin/includes/templates/courses/integration-square.phtml:145, ../admin/includes/templates/courses/integration-stripe.phtml:176, ../admin/includes/templates/courses/integration-stripe.phtml:176
-msgid "Success"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:150, ../admin/includes/templates/courses/integration-square.phtml:178, ../admin/includes/templates/courses/integration-square.phtml:150, ../admin/includes/templates/courses/integration-square.phtml:178, ../admin/includes/templates/courses/integration-stripe.phtml:177, ../admin/includes/templates/courses/integration-stripe.phtml:200, ../admin/includes/templates/courses/integration-stripe.phtml:177, ../admin/includes/templates/courses/integration-stripe.phtml:200
-msgid "https://"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:156, ../admin/includes/templates/courses/integration-square.phtml:184, ../admin/includes/templates/courses/integration-square.phtml:156, ../admin/includes/templates/courses/integration-square.phtml:184, ../admin/includes/templates/courses/integration-stripe.phtml:182, ../admin/includes/templates/courses/integration-stripe.phtml:205, ../admin/includes/templates/courses/integration-stripe.phtml:182, ../admin/includes/templates/courses/integration-stripe.phtml:205, ../admin/includes/templates/access-restriction/states/create.phtml:17, ../admin/includes/templates/access-restriction/states/create.phtml:17, ../admin/includes/templates/access-restriction/states/search.phtml:22, ../admin/includes/templates/access-restriction/states/search.phtml:22
-msgid "Create new page"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:159, ../admin/includes/templates/courses/integration-square.phtml:187, ../admin/includes/templates/courses/integration-square.phtml:159, ../admin/includes/templates/courses/integration-square.phtml:187, ../admin/includes/templates/courses/integration-stripe.phtml:185, ../admin/includes/templates/courses/integration-stripe.phtml:208, ../admin/includes/templates/courses/integration-stripe.phtml:185, ../admin/includes/templates/courses/integration-stripe.phtml:208, ../admin/includes/templates/access-restriction/states/create.phtml:21, ../admin/includes/templates/access-restriction/states/create.phtml:21, ../admin/includes/templates/courses/completion/settings.phtml:1, ../admin/includes/templates/courses/completion/settings.phtml:1, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:17, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:17
-msgid "Page title"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:167, ../admin/includes/templates/courses/integration-square.phtml:195, ../admin/includes/templates/courses/integration-square.phtml:167, ../admin/includes/templates/courses/integration-square.phtml:195, ../admin/includes/templates/courses/integration-stripe.phtml:193, ../admin/includes/templates/courses/integration-stripe.phtml:216, ../admin/includes/templates/courses/integration-stripe.phtml:193, ../admin/includes/templates/courses/integration-stripe.phtml:216, ../admin/includes/templates/access-restriction/states/create.phtml:28, ../admin/includes/templates/access-restriction/states/create.phtml:28, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:20, ../admin/includes/templates/access-restriction/states/wizard/create.phtml:20
-msgid "Add page"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-square.phtml:173, ../admin/includes/templates/courses/integration-square.phtml:173, ../admin/includes/templates/courses/integration-stripe.phtml:199, ../admin/includes/templates/courses/integration-stripe.phtml:199
-msgid "Cancel/failure"
 msgstr ""
 
 #: ../admin/includes/templates/courses/integration-stripe.phtml:15, ../admin/includes/templates/courses/integration-stripe.phtml:15
@@ -969,16 +1035,8 @@ msgstr ""
 msgid "Reconnection Needed"
 msgstr ""
 
-#: ../admin/includes/templates/courses/integration-stripe.phtml:31, ../admin/includes/templates/courses/integration-stripe.phtml:46, ../admin/includes/templates/courses/integration-stripe.phtml:31, ../admin/includes/templates/courses/integration-stripe.phtml:46, ../i18n.php:392
-msgid "Product Price Set"
-msgstr ""
-
 #: ../admin/includes/templates/courses/integration-stripe.phtml:32, ../admin/includes/templates/courses/integration-stripe.phtml:32
 msgid "TEST"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-stripe.phtml:47, ../admin/includes/templates/courses/integration-stripe.phtml:47
-msgid "LIVE"
 msgstr ""
 
 #: ../admin/includes/templates/courses/integration-stripe.phtml:62, ../admin/includes/templates/courses/integration-stripe.phtml:62
@@ -987,10 +1045,6 @@ msgstr ""
 
 #: ../admin/includes/templates/courses/integration-stripe.phtml:67, ../admin/includes/templates/courses/integration-stripe.phtml:67
 msgid "Test"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-stripe.phtml:68, ../admin/includes/templates/courses/integration-stripe.phtml:68, ../admin/includes/templates/design/base.phtml:25, ../admin/includes/templates/design/base.phtml:25
-msgid "Live"
 msgstr ""
 
 #: ../admin/includes/templates/courses/integration-stripe.phtml:76, ../admin/includes/templates/courses/integration-stripe.phtml:76
@@ -1007,14 +1061,6 @@ msgstr ""
 
 #: ../admin/includes/templates/courses/integration-stripe.phtml:101, ../admin/includes/templates/courses/integration-stripe.phtml:101
 msgid "Stripe product"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-stripe.phtml:133, ../admin/includes/templates/courses/integration-stripe.phtml:133, ../admin/includes/templates/modals/square/price.phtml:54, ../admin/includes/templates/modals/square/price.phtml:54
-msgid "Product includes a free trial"
-msgstr ""
-
-#: ../admin/includes/templates/courses/integration-stripe.phtml:143, ../admin/includes/templates/courses/integration-stripe.phtml:143
-msgid "Pass a client reference to checkout"
 msgstr ""
 
 #: ../admin/includes/templates/courses/integration-stripe.phtml:159, ../admin/includes/templates/courses/integration-stripe.phtml:159
@@ -1105,11 +1151,11 @@ msgstr ""
 msgid "lesson"
 msgstr ""
 
-#: ../admin/includes/templates/courses/lesson.phtml:59, ../admin/includes/templates/courses/lesson.phtml:59, ../i18n.php:370
+#: ../admin/includes/templates/courses/lesson.phtml:59, ../admin/includes/templates/courses/lesson.phtml:59, ../i18n.php:375
 msgid "Edit resources"
 msgstr ""
 
-#: ../admin/includes/templates/courses/lesson.phtml:61, ../admin/includes/templates/courses/lesson.phtml:61, ../i18n.php:369
+#: ../admin/includes/templates/courses/lesson.phtml:61, ../admin/includes/templates/courses/lesson.phtml:61, ../i18n.php:374
 msgid "Add resources"
 msgstr ""
 
@@ -1141,7 +1187,7 @@ msgstr ""
 msgid "We will move all your existing lessons inside the newly created chapter. None of your lessons content will be lost."
 msgstr ""
 
-#: ../admin/includes/templates/courses/merge-warning.phtml:3, ../admin/includes/templates/courses/merge-warning.phtml:3, ../admin/includes/templates/modals/access-expiry.phtml:2, ../admin/includes/templates/modals/access-expiry.phtml:2, ../admin/includes/templates/modals/course-item.phtml:60, ../admin/includes/templates/modals/course-item.phtml:60, ../admin/includes/templates/square/disconnect.phtml:2, ../admin/includes/templates/square/disconnect.phtml:2, ../admin/includes/templates/stripe/disconnect.phtml:2, ../admin/includes/templates/stripe/disconnect.phtml:2
+#: ../admin/includes/templates/courses/merge-warning.phtml:3, ../admin/includes/templates/courses/merge-warning.phtml:3, ../admin/includes/templates/modals/access-expiry.phtml:2, ../admin/includes/templates/modals/access-expiry.phtml:2, ../admin/includes/templates/modals/course-item.phtml:60, ../admin/includes/templates/modals/course-item.phtml:60, ../admin/includes/templates/paypal/disconnect.phtml:2, ../admin/includes/templates/paypal/disconnect.phtml:2, ../admin/includes/templates/square/disconnect.phtml:2, ../admin/includes/templates/square/disconnect.phtml:2, ../admin/includes/templates/stripe/disconnect.phtml:2, ../admin/includes/templates/stripe/disconnect.phtml:2
 msgid "Are you sure you want to proceed?"
 msgstr ""
 
@@ -1221,6 +1267,38 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+#: ../admin/includes/templates/customers/access-item.phtml:6, ../admin/includes/templates/customers/access-item.phtml:6
+msgid "Trial"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:8, ../admin/includes/templates/customers/access-item.phtml:8
+msgid "Subscription"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:12, ../admin/includes/templates/customers/access-item.phtml:41, ../admin/includes/templates/customers/access-item.phtml:12, ../admin/includes/templates/customers/access-item.phtml:41
+msgid "Txn"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:13, ../admin/includes/templates/customers/access-item.phtml:13
+msgid "Debug ID"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:26, ../admin/includes/templates/customers/access-item.phtml:26
+msgid "Refund"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:39, ../admin/includes/templates/customers/access-item.phtml:39
+msgid "Trial start"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:39, ../admin/includes/templates/customers/access-item.phtml:39
+msgid "Renewal"
+msgstr ""
+
+#: ../admin/includes/templates/customers/access-item.phtml:39, ../admin/includes/templates/customers/access-item.phtml:39
+msgid "Initial charge"
+msgstr ""
+
 #: ../admin/includes/templates/customers/base-student.phtml:8, ../admin/includes/templates/customers/base-student.phtml:8
 msgid "online "
 msgstr ""
@@ -1233,23 +1311,27 @@ msgstr ""
 msgid "View WordPress user"
 msgstr ""
 
-#: ../admin/includes/templates/customers/base-student.phtml:27, ../admin/includes/templates/customers/base-student.phtml:27
+#: ../admin/includes/templates/customers/base-student.phtml:28, ../admin/includes/templates/customers/base-student.phtml:28
+msgid "Edit Access / Refund"
+msgstr ""
+
+#: ../admin/includes/templates/customers/base-student.phtml:30, ../admin/includes/templates/customers/base-student.phtml:30
 msgid "Edit access rights"
 msgstr ""
 
-#: ../admin/includes/templates/customers/base-student.phtml:32, ../admin/includes/templates/customers/base-student.phtml:32
+#: ../admin/includes/templates/customers/base-student.phtml:36, ../admin/includes/templates/customers/base-student.phtml:36
 msgid "Log in as this user"
 msgstr ""
 
-#: ../admin/includes/templates/customers/base-student.phtml:36, ../admin/includes/templates/customers/base-student.phtml:36
+#: ../admin/includes/templates/customers/base-student.phtml:40, ../admin/includes/templates/customers/base-student.phtml:40
 msgid "View member report"
 msgstr ""
 
-#: ../admin/includes/templates/customers/base-student.phtml:40, ../admin/includes/templates/customers/base-student.phtml:40
+#: ../admin/includes/templates/customers/base-student.phtml:44, ../admin/includes/templates/customers/base-student.phtml:44
 msgid "Back to members dashboard"
 msgstr ""
 
-#: ../admin/includes/templates/customers/base-student.phtml:41, ../admin/includes/templates/customers/base-student.phtml:41
+#: ../admin/includes/templates/customers/base-student.phtml:45, ../admin/includes/templates/customers/base-student.phtml:45
 msgid "Back to member courses list"
 msgstr ""
 
@@ -1293,7 +1375,7 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: ../admin/includes/templates/customers/course-structure.phtml:68, ../admin/includes/templates/customers/course-structure.phtml:68, ../admin/includes/templates/customers/courses.phtml:13, ../admin/includes/templates/customers/courses.phtml:13, ../admin/includes/templates/settings/api-keys.phtml:26, ../admin/includes/templates/settings/api-keys.phtml:26, ../inc/classes/reporting/report-types/class-course-enrollments.php:140, ../tcb-bridge/classes/course/class-hooks.php:130
+#: ../admin/includes/templates/customers/course-structure.phtml:68, ../admin/includes/templates/customers/course-structure.phtml:68, ../admin/includes/templates/customers/courses.phtml:13, ../admin/includes/templates/customers/courses.phtml:13, ../inc/classes/reporting/report-types/class-course-enrollments.php:140, ../tcb-bridge/classes/course/class-hooks.php:130
 msgid "Status"
 msgstr ""
 
@@ -1309,7 +1391,7 @@ msgstr ""
 msgid "(Draft)"
 msgstr ""
 
-#: ../admin/includes/templates/customers/courses-item.phtml:24, ../admin/includes/templates/customers/courses-item.phtml:24, ../admin/includes/templates/customers/overview/lesson.phtml:16, ../admin/includes/templates/customers/overview/lesson.phtml:23, ../admin/includes/templates/customers/overview/lesson.phtml:16, ../admin/includes/templates/customers/overview/lesson.phtml:23, ../admin/includes/templates/customers/overview/module.phtml:17, ../admin/includes/templates/customers/overview/module.phtml:24, ../admin/includes/templates/customers/overview/module.phtml:17, ../admin/includes/templates/customers/overview/module.phtml:24
+#: ../admin/includes/templates/customers/courses-item.phtml:24, ../admin/includes/templates/customers/courses-item.phtml:24, ../admin/includes/templates/customers/overview/chapter.phtml:16, ../admin/includes/templates/customers/overview/chapter.phtml:23, ../admin/includes/templates/customers/overview/chapter.phtml:16, ../admin/includes/templates/customers/overview/chapter.phtml:23, ../admin/includes/templates/customers/overview/lesson.phtml:16, ../admin/includes/templates/customers/overview/lesson.phtml:23, ../admin/includes/templates/customers/overview/lesson.phtml:16, ../admin/includes/templates/customers/overview/lesson.phtml:23, ../admin/includes/templates/customers/overview/module.phtml:17, ../admin/includes/templates/customers/overview/module.phtml:24, ../admin/includes/templates/customers/overview/module.phtml:17, ../admin/includes/templates/customers/overview/module.phtml:24
 msgid "Locked"
 msgstr ""
 
@@ -1325,7 +1407,7 @@ msgstr ""
 msgid "Started"
 msgstr ""
 
-#: ../admin/includes/templates/customers/courses-item.phtml:34, ../admin/includes/templates/customers/courses-item.phtml:34, ../admin/includes/templates/customers/overview/lesson.phtml:47, ../admin/includes/templates/customers/overview/lesson.phtml:47, ../admin/includes/templates/customers/overview/module.phtml:38, ../admin/includes/templates/customers/overview/module.phtml:38, ../i18n.php:442, ../i18n.php:510
+#: ../admin/includes/templates/customers/courses-item.phtml:34, ../admin/includes/templates/customers/courses-item.phtml:34, ../admin/includes/templates/customers/overview/chapter.phtml:32, ../admin/includes/templates/customers/overview/chapter.phtml:32, ../admin/includes/templates/customers/overview/lesson.phtml:47, ../admin/includes/templates/customers/overview/lesson.phtml:47, ../admin/includes/templates/customers/overview/module.phtml:38, ../admin/includes/templates/customers/overview/module.phtml:38, ../i18n.php:447, ../i18n.php:516
 msgid "Unlocked"
 msgstr ""
 
@@ -1349,7 +1431,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: ../admin/includes/templates/customers/courses-item.phtml:74, ../admin/includes/templates/customers/courses-item.phtml:74, ../i18n.php:390
+#: ../admin/includes/templates/customers/courses-item.phtml:74, ../admin/includes/templates/customers/courses-item.phtml:74, ../i18n.php:395
 msgid "Not set"
 msgstr ""
 
@@ -1369,7 +1451,7 @@ msgstr ""
 msgid "Are you sure you want to delete access?"
 msgstr ""
 
-#: ../admin/includes/templates/customers/delete-purchased-item.phtml:2, ../admin/includes/templates/customers/delete-purchased-item.phtml:2, ../admin/includes/templates/protected-files/item-delete-confirmation.phtml:18, ../admin/includes/templates/protected-files/item-delete-confirmation.phtml:18, ../admin/includes/templates/courses/resources/item.phtml:74, ../admin/includes/templates/courses/resources/item.phtml:74, ../admin/includes/templates/modals/products/delete-no-customers.phtml:21, ../admin/includes/templates/modals/products/delete-no-customers.phtml:21, ../admin/includes/templates/modals/products/delete-with-customers.phtml:36, ../admin/includes/templates/modals/products/delete-with-customers.phtml:36, ../admin/includes/templates/products/content-sets/delete-rule-condition.phtml:13, ../admin/includes/templates/products/content-sets/delete-rule-condition.phtml:13, ../admin/includes/templates/products/content-sets/delete.phtml:13, ../admin/includes/templates/products/content-sets/delete.phtml:13, ../admin/includes/templates/products/partials/delete-rule.phtml:6, ../admin/includes/templates/products/partials/delete-rule.phtml:6, ../admin/includes/templates/products/partials/remove-rule.phtml:6, ../admin/includes/templates/products/partials/remove-rule.phtml:6
+#: ../admin/includes/templates/customers/delete-purchased-item.phtml:2, ../admin/includes/templates/customers/delete-purchased-item.phtml:2, ../admin/includes/templates/customers/refund-purchased-item.phtml:2, ../admin/includes/templates/customers/refund-purchased-item.phtml:2, ../admin/includes/templates/protected-files/item-delete-confirmation.phtml:18, ../admin/includes/templates/protected-files/item-delete-confirmation.phtml:18, ../admin/includes/templates/courses/resources/item.phtml:74, ../admin/includes/templates/courses/resources/item.phtml:74, ../admin/includes/templates/modals/products/delete-no-customers.phtml:21, ../admin/includes/templates/modals/products/delete-no-customers.phtml:21, ../admin/includes/templates/modals/products/delete-with-customers.phtml:36, ../admin/includes/templates/modals/products/delete-with-customers.phtml:36, ../admin/includes/templates/products/content-sets/delete-rule-condition.phtml:13, ../admin/includes/templates/products/content-sets/delete-rule-condition.phtml:13, ../admin/includes/templates/products/content-sets/delete.phtml:13, ../admin/includes/templates/products/content-sets/delete.phtml:13, ../admin/includes/templates/products/partials/delete-rule.phtml:6, ../admin/includes/templates/products/partials/delete-rule.phtml:6, ../admin/includes/templates/products/partials/remove-rule.phtml:6, ../admin/includes/templates/products/partials/remove-rule.phtml:6
 msgid "No, cancel"
 msgstr ""
 
@@ -1421,7 +1503,7 @@ msgstr ""
 msgid "doesn't currently have any access rights"
 msgstr ""
 
-#: ../admin/includes/templates/customers/no-access-item.phtml:9, ../admin/includes/templates/customers/no-access-item.phtml:9, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:100, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:100
+#: ../admin/includes/templates/customers/no-access-item.phtml:9, ../admin/includes/templates/customers/no-access-item.phtml:9, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:118, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:118
 msgid "Add"
 msgstr ""
 
@@ -1441,6 +1523,14 @@ msgstr ""
 
 #: ../admin/includes/templates/customers/no-courses.phtml:6, ../admin/includes/templates/customers/no-courses.phtml:6
 msgid "Completion data is only available when a member has course access."
+msgstr ""
+
+#: ../admin/includes/templates/customers/refund-purchased-item.phtml:1, ../admin/includes/templates/customers/refund-purchased-item.phtml:1
+msgid "Refund this PayPal payment and remove access? This cannot be undone."
+msgstr ""
+
+#: ../admin/includes/templates/customers/refund-purchased-item.phtml:3, ../admin/includes/templates/customers/refund-purchased-item.phtml:3
+msgid "Yes, refund"
 msgstr ""
 
 #: ../admin/includes/templates/design/advanced.phtml:30, ../admin/includes/templates/design/advanced.phtml:63, ../admin/includes/templates/design/advanced.phtml:92, ../admin/includes/templates/design/advanced.phtml:30, ../admin/includes/templates/design/advanced.phtml:63, ../admin/includes/templates/design/advanced.phtml:92
@@ -1655,11 +1745,11 @@ msgstr ""
 msgid "Updating this expiry will affect all users who have already purchased it."
 msgstr ""
 
-#: ../admin/includes/templates/modals/access-expiry.phtml:8, ../admin/includes/templates/modals/access-expiry.phtml:8, ../admin/includes/templates/modals/assessment-item.phtml:332, ../admin/includes/templates/modals/assessment-item.phtml:428, ../admin/includes/templates/modals/assessment-item.phtml:332, ../admin/includes/templates/modals/assessment-item.phtml:428, ../admin/includes/templates/modals/delete-chapter.phtml:10, ../admin/includes/templates/modals/delete-chapter.phtml:10, ../admin/includes/templates/modals/delete-module.phtml:10, ../admin/includes/templates/modals/delete-module.phtml:10, ../admin/includes/templates/settings/api-key-item.phtml:43, ../admin/includes/templates/settings/api-key-item.phtml:43, ../admin/includes/templates/square/disconnect.phtml:9, ../admin/includes/templates/square/disconnect.phtml:9, ../admin/includes/templates/stripe/disconnect.phtml:9, ../admin/includes/templates/stripe/disconnect.phtml:9, ../admin/includes/templates/courses/forms/assessment.phtml:59, ../admin/includes/templates/courses/forms/assessment.phtml:59, ../admin/includes/templates/courses/forms/lesson.phtml:59, ../admin/includes/templates/courses/forms/lesson.phtml:59, ../admin/includes/templates/courses/forms/module.phtml:52, ../admin/includes/templates/courses/forms/module.phtml:52, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:131, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:131, ../admin/includes/templates/modals/square/product-migration.phtml:7, ../admin/includes/templates/modals/square/product-migration.phtml:7, ../admin/includes/templates/modals/stripe/product-migration.phtml:7, ../admin/includes/templates/modals/stripe/product-migration.phtml:7
+#: ../admin/includes/templates/modals/access-expiry.phtml:8, ../admin/includes/templates/modals/access-expiry.phtml:8, ../admin/includes/templates/modals/assessment-item.phtml:332, ../admin/includes/templates/modals/assessment-item.phtml:428, ../admin/includes/templates/modals/assessment-item.phtml:332, ../admin/includes/templates/modals/assessment-item.phtml:428, ../admin/includes/templates/modals/delete-chapter.phtml:10, ../admin/includes/templates/modals/delete-chapter.phtml:10, ../admin/includes/templates/modals/delete-module.phtml:10, ../admin/includes/templates/modals/delete-module.phtml:10, ../admin/includes/templates/paypal/disconnect.phtml:7, ../admin/includes/templates/paypal/disconnect.phtml:7, ../admin/includes/templates/settings/api-key-item.phtml:43, ../admin/includes/templates/settings/api-key-item.phtml:43, ../admin/includes/templates/square/disconnect.phtml:9, ../admin/includes/templates/square/disconnect.phtml:9, ../admin/includes/templates/stripe/disconnect.phtml:9, ../admin/includes/templates/stripe/disconnect.phtml:9, ../admin/includes/templates/courses/forms/assessment.phtml:59, ../admin/includes/templates/courses/forms/assessment.phtml:59, ../admin/includes/templates/courses/forms/lesson.phtml:59, ../admin/includes/templates/courses/forms/lesson.phtml:59, ../admin/includes/templates/courses/forms/module.phtml:52, ../admin/includes/templates/courses/forms/module.phtml:52, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:149, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:149, ../admin/includes/templates/modals/square/product-migration.phtml:7, ../admin/includes/templates/modals/square/product-migration.phtml:7, ../admin/includes/templates/modals/stripe/product-migration.phtml:7, ../admin/includes/templates/modals/stripe/product-migration.phtml:7
 msgid "No"
 msgstr ""
 
-#: ../admin/includes/templates/modals/access-expiry.phtml:9, ../admin/includes/templates/modals/access-expiry.phtml:9, ../admin/includes/templates/modals/assessment-item.phtml:333, ../admin/includes/templates/modals/assessment-item.phtml:429, ../admin/includes/templates/modals/assessment-item.phtml:333, ../admin/includes/templates/modals/assessment-item.phtml:429, ../admin/includes/templates/modals/delete-chapter.phtml:11, ../admin/includes/templates/modals/delete-chapter.phtml:11, ../admin/includes/templates/modals/delete-module.phtml:11, ../admin/includes/templates/modals/delete-module.phtml:11, ../admin/includes/templates/settings/api-key-item.phtml:42, ../admin/includes/templates/settings/api-key-item.phtml:42, ../admin/includes/templates/square/disconnect.phtml:10, ../admin/includes/templates/square/disconnect.phtml:10, ../admin/includes/templates/stripe/disconnect.phtml:10, ../admin/includes/templates/stripe/disconnect.phtml:10, ../admin/includes/templates/courses/forms/assessment.phtml:60, ../admin/includes/templates/courses/forms/assessment.phtml:60, ../admin/includes/templates/courses/forms/lesson.phtml:60, ../admin/includes/templates/courses/forms/lesson.phtml:60, ../admin/includes/templates/courses/forms/module.phtml:53, ../admin/includes/templates/courses/forms/module.phtml:53, ../admin/includes/templates/drip/modals/campaign-settings.phtml:46, ../admin/includes/templates/drip/modals/campaign-settings.phtml:46, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:130, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:130, ../admin/includes/templates/modals/square/product-migration.phtml:8, ../admin/includes/templates/modals/square/product-migration.phtml:8, ../admin/includes/templates/modals/stripe/product-migration.phtml:8, ../admin/includes/templates/modals/stripe/product-migration.phtml:8
+#: ../admin/includes/templates/modals/access-expiry.phtml:9, ../admin/includes/templates/modals/access-expiry.phtml:9, ../admin/includes/templates/modals/assessment-item.phtml:333, ../admin/includes/templates/modals/assessment-item.phtml:429, ../admin/includes/templates/modals/assessment-item.phtml:333, ../admin/includes/templates/modals/assessment-item.phtml:429, ../admin/includes/templates/modals/delete-chapter.phtml:11, ../admin/includes/templates/modals/delete-chapter.phtml:11, ../admin/includes/templates/modals/delete-module.phtml:11, ../admin/includes/templates/modals/delete-module.phtml:11, ../admin/includes/templates/paypal/disconnect.phtml:8, ../admin/includes/templates/paypal/disconnect.phtml:8, ../admin/includes/templates/settings/api-key-item.phtml:42, ../admin/includes/templates/settings/api-key-item.phtml:42, ../admin/includes/templates/square/disconnect.phtml:10, ../admin/includes/templates/square/disconnect.phtml:10, ../admin/includes/templates/stripe/disconnect.phtml:10, ../admin/includes/templates/stripe/disconnect.phtml:10, ../admin/includes/templates/courses/forms/assessment.phtml:60, ../admin/includes/templates/courses/forms/assessment.phtml:60, ../admin/includes/templates/courses/forms/lesson.phtml:60, ../admin/includes/templates/courses/forms/lesson.phtml:60, ../admin/includes/templates/courses/forms/module.phtml:53, ../admin/includes/templates/courses/forms/module.phtml:53, ../admin/includes/templates/drip/modals/campaign-settings.phtml:46, ../admin/includes/templates/drip/modals/campaign-settings.phtml:46, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:148, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:148, ../admin/includes/templates/modals/square/product-migration.phtml:8, ../admin/includes/templates/modals/square/product-migration.phtml:8, ../admin/includes/templates/modals/stripe/product-migration.phtml:8, ../admin/includes/templates/modals/stripe/product-migration.phtml:8
 msgid "Yes"
 msgstr ""
 
@@ -1699,7 +1789,7 @@ msgstr ""
 msgid "Add new member"
 msgstr ""
 
-#: ../admin/includes/templates/modals/add-customer.phtml:13, ../admin/includes/templates/modals/add-customer.phtml:14, ../admin/includes/templates/modals/add-customer.phtml:13, ../admin/includes/templates/modals/add-customer.phtml:14, ../admin/includes/templates/modals/api-key.phtml:16, ../admin/includes/templates/modals/api-key.phtml:16, ../admin/includes/templates/settings/api-keys.phtml:24, ../admin/includes/templates/settings/api-keys.phtml:24, ../templates/comments.php:35, ../templates/email-template.php:7
+#: ../admin/includes/templates/modals/add-customer.phtml:13, ../admin/includes/templates/modals/add-customer.phtml:14, ../admin/includes/templates/modals/add-customer.phtml:13, ../admin/includes/templates/modals/add-customer.phtml:14, ../admin/includes/templates/modals/api-key.phtml:16, ../admin/includes/templates/modals/api-key.phtml:16, ../templates/comments.php:35, ../templates/email-template.php:7
 msgid "Name"
 msgstr ""
 
@@ -1719,11 +1809,11 @@ msgstr ""
 msgid "Give your API key a name"
 msgstr ""
 
-#: ../admin/includes/templates/modals/api-key.phtml:24, ../admin/includes/templates/modals/api-key.phtml:24, ../admin/includes/templates/settings/api-keys.phtml:25, ../admin/includes/templates/settings/api-keys.phtml:25
+#: ../admin/includes/templates/modals/api-key.phtml:24, ../admin/includes/templates/modals/api-key.phtml:24
 msgid "Key"
 msgstr ""
 
-#: ../admin/includes/templates/modals/api-key.phtml:35, ../admin/includes/templates/modals/api-key.phtml:35, ../i18n.php:575
+#: ../admin/includes/templates/modals/api-key.phtml:35, ../admin/includes/templates/modals/api-key.phtml:35, ../i18n.php:581
 msgid "Active"
 msgstr ""
 
@@ -1743,7 +1833,7 @@ msgstr ""
 msgid "Add course content"
 msgstr ""
 
-#: ../admin/includes/templates/modals/assessment-item.phtml:30, ../admin/includes/templates/modals/assessment-item.phtml:462, ../admin/includes/templates/modals/assessment-item.phtml:30, ../admin/includes/templates/modals/assessment-item.phtml:462, ../admin/includes/templates/modals/course-item.phtml:41, ../admin/includes/templates/modals/course-item.phtml:51, ../admin/includes/templates/modals/course-item.phtml:63, ../admin/includes/templates/modals/course-item.phtml:41, ../admin/includes/templates/modals/course-item.phtml:51, ../admin/includes/templates/modals/course-item.phtml:63, ../admin/includes/templates/modals/schedule.phtml:36, ../admin/includes/templates/modals/schedule.phtml:36, ../admin/includes/templates/modals/courses/resources.phtml:16, ../admin/includes/templates/modals/courses/resources.phtml:16, ../admin/includes/templates/modals/customer/edit.phtml:36, ../admin/includes/templates/modals/customer/edit.phtml:36
+#: ../admin/includes/templates/modals/assessment-item.phtml:30, ../admin/includes/templates/modals/assessment-item.phtml:462, ../admin/includes/templates/modals/assessment-item.phtml:30, ../admin/includes/templates/modals/assessment-item.phtml:462, ../admin/includes/templates/modals/course-item.phtml:41, ../admin/includes/templates/modals/course-item.phtml:51, ../admin/includes/templates/modals/course-item.phtml:63, ../admin/includes/templates/modals/course-item.phtml:41, ../admin/includes/templates/modals/course-item.phtml:51, ../admin/includes/templates/modals/course-item.phtml:63, ../admin/includes/templates/modals/schedule.phtml:36, ../admin/includes/templates/modals/schedule.phtml:36, ../admin/includes/templates/modals/courses/resources.phtml:16, ../admin/includes/templates/modals/courses/resources.phtml:16, ../admin/includes/templates/modals/customer/edit.phtml:36, ../admin/includes/templates/modals/customer/edit.phtml:36, ../i18n.php:357
 msgid "Close"
 msgstr ""
 
@@ -2212,7 +2302,7 @@ msgstr ""
 msgid "You are about to delete the selected items and all content contained inside."
 msgstr ""
 
-#: ../admin/includes/templates/modals/delete-confirmation.phtml:10, ../admin/includes/templates/modals/delete-confirmation.phtml:10, ../i18n.php:403, ../i18n.php:409, ../i18n.php:415, ../i18n.php:428
+#: ../admin/includes/templates/modals/delete-confirmation.phtml:10, ../admin/includes/templates/modals/delete-confirmation.phtml:10, ../i18n.php:408, ../i18n.php:414, ../i18n.php:420, ../i18n.php:433
 msgid "No, take me back"
 msgstr ""
 
@@ -2398,6 +2488,26 @@ msgstr ""
 
 #: ../admin/includes/templates/modals/send-certificate.phtml:9, ../admin/includes/templates/modals/send-certificate.phtml:9
 msgid "Yes, send to student"
+msgstr ""
+
+#: ../admin/includes/templates/paypal/disconnect.phtml:4, ../admin/includes/templates/paypal/disconnect.phtml:4
+msgid "By disconnecting PayPal, your configured products will be unable to be purchased until you reconnect."
+msgstr ""
+
+#. translators: %d: number of active subscriptions.
+#. translators: %d: number of active subscriptions.
+#: ../admin/includes/templates/paypal/disconnect.phtml:21, ../admin/includes/templates/paypal/disconnect.phtml:21
+msgid "Active subscription (%d):"
+msgid_plural "Active subscriptions (%d):"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../admin/includes/templates/paypal/disconnect.phtml:24, ../admin/includes/templates/paypal/disconnect.phtml:24
+msgid "Active subscriptions:"
+msgstr ""
+
+#: ../admin/includes/templates/paypal/disconnect.phtml:28, ../admin/includes/templates/paypal/disconnect.phtml:28
+msgid "Disconnecting cancels each active subscription at the end of its current billing period."
 msgstr ""
 
 #: ../admin/includes/templates/products/course-tab-no-items.phtml:3, ../admin/includes/templates/products/course-tab-no-items.phtml:3
@@ -2612,16 +2722,16 @@ msgstr ""
 msgid "Are you sure you want to delete"
 msgstr ""
 
-#: ../admin/includes/templates/settings/api-keys.phtml:13, ../admin/includes/templates/settings/api-keys.phtml:13
-msgid "API Keys"
+#: ../admin/includes/templates/settings/api-keys.phtml:73, ../admin/includes/templates/settings/api-keys.phtml:73
+msgid "API Keys have moved"
 msgstr ""
 
-#: ../admin/includes/templates/settings/api-keys.phtml:17, ../admin/includes/templates/settings/api-keys.phtml:17
-msgid "Add API"
+#: ../admin/includes/templates/settings/api-keys.phtml:74, ../admin/includes/templates/settings/api-keys.phtml:74
+msgid "API Keys are now managed in Thrive Dashboard under API Connections for centralized management across all Thrive products."
 msgstr ""
 
-#: ../admin/includes/templates/settings/api-keys.phtml:32, ../admin/includes/templates/settings/api-keys.phtml:32
-msgid "You have no API keys"
+#: ../admin/includes/templates/settings/api-keys.phtml:76, ../admin/includes/templates/settings/api-keys.phtml:76
+msgid "GO TO API CONNECTIONS"
 msgstr ""
 
 #: ../admin/includes/templates/settings/assessment-settings.phtml:13, ../admin/includes/templates/settings/assessment-settings.phtml:13
@@ -2712,7 +2822,7 @@ msgstr ""
 msgid "Use this tool to permanently delete older non-crucial data and free up space. This action cannot be undone."
 msgstr ""
 
-#: ../admin/includes/templates/settings/data-cleanup.phtml:18, ../admin/includes/templates/settings/data-cleanup.phtml:18, ../i18n.php:584
+#: ../admin/includes/templates/settings/data-cleanup.phtml:18, ../admin/includes/templates/settings/data-cleanup.phtml:18, ../i18n.php:590
 msgid "Delete Older Data"
 msgstr ""
 
@@ -2940,6 +3050,10 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
+#: ../admin/includes/templates/settings/paypal.phtml:14, ../admin/includes/templates/settings/paypal.phtml:14, ../admin/includes/templates/settings/square.phtml:16, ../admin/includes/templates/settings/square.phtml:16, ../admin/includes/templates/settings/stripe.phtml:19, ../admin/includes/templates/settings/stripe.phtml:19
+msgid "Not Connected"
+msgstr ""
+
 #: ../admin/includes/templates/settings/sendowl.phtml:15, ../admin/includes/templates/settings/sendowl.phtml:15
 msgid "Start Here"
 msgstr ""
@@ -2986,10 +3100,6 @@ msgstr ""
 
 #: ../admin/includes/templates/settings/sendowl.phtml:44, ../admin/includes/templates/settings/sendowl.phtml:44
 msgid "SendOwl settings"
-msgstr ""
-
-#: ../admin/includes/templates/settings/square.phtml:16, ../admin/includes/templates/settings/square.phtml:16, ../admin/includes/templates/settings/stripe.phtml:19, ../admin/includes/templates/settings/stripe.phtml:19
-msgid "Not Connected"
 msgstr ""
 
 #: ../admin/includes/templates/settings/square.phtml:35, ../admin/includes/templates/settings/square.phtml:35
@@ -3088,11 +3198,11 @@ msgstr ""
 msgid "Stripe Portal access for your members "
 msgstr ""
 
-#: ../admin/includes/templates/settings/stripe.phtml:81, ../admin/includes/templates/settings/stripe.phtml:67, ../admin/includes/templates/settings/stripe.phtml:81, ../admin/includes/templates/settings/stripe.phtml:67, ../i18n.php:574
+#: ../admin/includes/templates/settings/stripe.phtml:81, ../admin/includes/templates/settings/stripe.phtml:67, ../admin/includes/templates/settings/stripe.phtml:81, ../admin/includes/templates/settings/stripe.phtml:67, ../i18n.php:580
 msgid "Inactive"
 msgstr ""
 
-#: ../admin/includes/templates/settings/stripe.phtml:85, ../admin/includes/templates/settings/stripe.phtml:72, ../admin/includes/templates/settings/stripe.phtml:85, ../admin/includes/templates/settings/stripe.phtml:72, ../i18n.php:577
+#: ../admin/includes/templates/settings/stripe.phtml:85, ../admin/includes/templates/settings/stripe.phtml:72, ../admin/includes/templates/settings/stripe.phtml:85, ../admin/includes/templates/settings/stripe.phtml:72, ../i18n.php:583
 msgid "Activate Customer Portal"
 msgstr ""
 
@@ -3580,7 +3690,7 @@ msgstr ""
 msgid "Description of resource (optional)..."
 msgstr ""
 
-#: ../admin/includes/templates/courses/resources/item.phtml:72, ../admin/includes/templates/courses/resources/item.phtml:72, ../i18n.php:354
+#: ../admin/includes/templates/courses/resources/item.phtml:72, ../admin/includes/templates/courses/resources/item.phtml:72, ../i18n.php:359
 msgid "Are you sure you want to delete %s?"
 msgstr ""
 
@@ -3600,7 +3710,7 @@ msgstr ""
 msgid "WooCommerce is not currently installed on your site"
 msgstr ""
 
-#: ../admin/includes/templates/customers/overview/lesson.phtml:18, ../admin/includes/templates/customers/overview/lesson.phtml:18, ../admin/includes/templates/customers/overview/module.phtml:19, ../admin/includes/templates/customers/overview/module.phtml:19
+#: ../admin/includes/templates/customers/overview/chapter.phtml:18, ../admin/includes/templates/customers/overview/chapter.phtml:18, ../admin/includes/templates/customers/overview/lesson.phtml:18, ../admin/includes/templates/customers/overview/lesson.phtml:18, ../admin/includes/templates/customers/overview/module.phtml:19, ../admin/includes/templates/customers/overview/module.phtml:19
 msgid "Courses locked with a drip campaign starting in the future<br>cannot be unlocked manually. Once the start date<br>is met, you can edit their access here."
 msgstr ""
 
@@ -3935,11 +4045,11 @@ msgstr ""
 msgid "Triggered by"
 msgstr ""
 
-#: ../admin/includes/templates/drip/campaign/display.phtml:80, ../admin/includes/templates/drip/campaign/display.phtml:80, ../admin/includes/templates/drip/campaign/form-general.phtml:95, ../admin/includes/templates/drip/campaign/form-general.phtml:95
+#: ../admin/includes/templates/drip/campaign/display.phtml:80, ../admin/includes/templates/drip/campaign/display.phtml:80, ../admin/includes/templates/drip/campaign/form-general.phtml:96, ../admin/includes/templates/drip/campaign/form-general.phtml:96
 msgid "Force users to complete course in order"
 msgstr ""
 
-#: ../admin/includes/templates/drip/campaign/display.phtml:90, ../admin/includes/templates/drip/campaign/display.phtml:90, ../admin/includes/templates/drip/campaign/form-general.phtml:105, ../admin/includes/templates/drip/campaign/form-general.phtml:105
+#: ../admin/includes/templates/drip/campaign/display.phtml:90, ../admin/includes/templates/drip/campaign/display.phtml:90, ../admin/includes/templates/drip/campaign/form-general.phtml:106, ../admin/includes/templates/drip/campaign/form-general.phtml:106
 msgid "Show locked content in lesson lists"
 msgstr ""
 
@@ -3967,7 +4077,7 @@ msgstr ""
 msgid "Campaign schedule"
 msgstr ""
 
-#: ../admin/includes/templates/drip/campaign/display.phtml:137, ../admin/includes/templates/drip/campaign/display.phtml:137, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:2, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:2
+#: ../admin/includes/templates/drip/campaign/display.phtml:137, ../admin/includes/templates/drip/campaign/display.phtml:137, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:8, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:8
 msgid "Unlock options"
 msgstr ""
 
@@ -4019,7 +4129,7 @@ msgstr ""
 msgid "Specific time and date"
 msgstr ""
 
-#: ../admin/includes/templates/drip/campaign/form-general.phtml:35, ../admin/includes/templates/drip/campaign/form-general.phtml:35, ../i18n.php:477
+#: ../admin/includes/templates/drip/campaign/form-general.phtml:35, ../admin/includes/templates/drip/campaign/form-general.phtml:35, ../i18n.php:483
 msgid "Custom unlock conditions"
 msgstr ""
 
@@ -4051,7 +4161,11 @@ msgstr ""
 msgid "Modules"
 msgstr ""
 
-#: ../admin/includes/templates/drip/campaign/form-general.phtml:73, ../admin/includes/templates/drip/campaign/form-general.phtml:73
+#: ../admin/includes/templates/drip/campaign/form-general.phtml:66, ../admin/includes/templates/drip/campaign/form-general.phtml:66, ../inc/classes/class-tva-dynamic-labels.php:220, ../tcb-bridge/editor-elements/course/class-tcb-course-element.php:214
+msgid "Chapters"
+msgstr ""
+
+#: ../admin/includes/templates/drip/campaign/form-general.phtml:74, ../admin/includes/templates/drip/campaign/form-general.phtml:74
 msgid "Starting after..."
 msgstr ""
 
@@ -4075,103 +4189,119 @@ msgstr ""
 msgid "No, keep existing rules"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:4, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:4
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:10, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:10
 msgid "This "
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:4, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:4
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:10, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:10
 msgid " is unlocked when all content before it is completed"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:7, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:18, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:30, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:7, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:18, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:30, ../admin/includes/templates/products/access-rules/access-rule-condition.phtml:2, ../admin/includes/templates/products/access-rules/access-rule-condition.phtml:2
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:13, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:30, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:48, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:13, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:30, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:48, ../admin/includes/templates/products/access-rules/access-rule-condition.phtml:2, ../admin/includes/templates/products/access-rules/access-rule-condition.phtml:2
 msgid "and"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:14, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:14
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:21, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:21
+msgid "This module is unlocked when content before it is completed and when parent chapter is unlocked"
+msgstr ""
+
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:23, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:23
+msgid "This lesson is unlocked when content before it is completed and when parent chapter is unlocked"
+msgstr ""
+
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:25, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:25
 msgid "This lesson is unlocked when content before it is completed and when parent module is unlocked"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:26, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:26
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:39, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:39
+msgid "This module will be unlocked once the parent chapter has unlocked"
+msgstr ""
+
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:41, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:41
+msgid "This lesson will be unlocked once the parent chapter has unlocked"
+msgstr ""
+
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:43, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:43
 msgid "This lesson will be unlocked once the parent module has unlocked"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:35, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:35
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:53, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:53
 msgid "Unlock content if"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:37, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:37
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:55, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:55
 msgid "all"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:38, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:38
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:56, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:56
 msgid "any"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:40, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:40
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:58, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:58
 msgid "of the following conditions are met"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:64, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:64
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:82, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:82
 msgid "This is a campaign condition, it can only be changed from campaign settings"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:67, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:67
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:85, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:85
 msgid "This is a campaign condition, it can only be removed from campaign settings"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:73, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:73
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:91, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:91
 msgid "No rules added"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:77, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:77
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:95, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:95
 msgid "Add new rule"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:82, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:82
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:100, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:100
 msgid "Unlock condition"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:86, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:86
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:104, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:104
 msgid "Select a new condition"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:115, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:115
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:133, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:133
 msgid "This setting is disabled for the first "
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:115, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:115
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:133, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:133
 msgid " of the course."
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:121, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:121
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:139, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:139
 msgid "Users must complete all previous content to unlock"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:126, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:126
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:144, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:144
 msgid "Inherited (Yes)"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:128, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:128
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:146, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:146
 msgid "Inherited (No)"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:137, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:137
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:155, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:155
 msgid " visibility in lesson list when content is locked"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:142, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:142
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:160, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:160
 msgid "Inherited (Displayed)"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:144, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:144
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:162, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:162
 msgid "Inherited (Hidden)"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:146, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:146, ../i18n.php:154
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:164, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:164, ../i18n.php:154
 msgid "Hidden"
 msgstr ""
 
-#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:147, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:147
+#: ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:165, ../admin/includes/templates/drip/modals/content-unlock-settings.phtml:165
 msgid "Displayed as locked"
 msgstr ""
 
@@ -4337,6 +4467,42 @@ msgstr ""
 
 #: ../admin/includes/templates/modals/labels/confirm-delete.phtml:12, ../admin/includes/templates/modals/labels/confirm-delete.phtml:12
 msgid "Delete Label"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:14, ../admin/includes/templates/modals/paypal/price.phtml:14, ../admin/includes/templates/modals/square/price.phtml:17, ../admin/includes/templates/modals/square/price.phtml:17, ../admin/includes/templates/modals/stripe/price.phtml:10, ../admin/includes/templates/modals/stripe/price.phtml:10
+msgid "Add Product Price"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:18, ../admin/includes/templates/modals/paypal/price.phtml:18, ../admin/includes/templates/modals/square/price.phtml:21, ../admin/includes/templates/modals/square/price.phtml:21, ../admin/includes/templates/modals/stripe/price.phtml:14, ../admin/includes/templates/modals/stripe/price.phtml:14
+msgid "Select Payment mode"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:21, ../admin/includes/templates/modals/paypal/price.phtml:21, ../admin/includes/templates/modals/square/price.phtml:24, ../admin/includes/templates/modals/square/price.phtml:24, ../admin/includes/templates/modals/stripe/price.phtml:17, ../admin/includes/templates/modals/stripe/price.phtml:17
+msgid "Recurring"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:24, ../admin/includes/templates/modals/paypal/price.phtml:24, ../admin/includes/templates/modals/square/price.phtml:27, ../admin/includes/templates/modals/square/price.phtml:27, ../admin/includes/templates/modals/stripe/price.phtml:20, ../admin/includes/templates/modals/stripe/price.phtml:20
+msgid "One Time"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:29, ../admin/includes/templates/modals/paypal/price.phtml:29, ../admin/includes/templates/modals/square/price.phtml:32, ../admin/includes/templates/modals/square/price.phtml:32, ../admin/includes/templates/modals/stripe/price.phtml:25, ../admin/includes/templates/modals/stripe/price.phtml:25
+msgid "Amount"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:31, ../admin/includes/templates/modals/paypal/price.phtml:31, ../admin/includes/templates/modals/square/price.phtml:34, ../admin/includes/templates/modals/square/price.phtml:34, ../admin/includes/templates/modals/stripe/price.phtml:27, ../admin/includes/templates/modals/stripe/price.phtml:27
+msgid "Enter amount"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:40, ../admin/includes/templates/modals/paypal/price.phtml:40, ../admin/includes/templates/modals/square/price.phtml:39, ../admin/includes/templates/modals/square/price.phtml:39, ../admin/includes/templates/modals/stripe/price.phtml:36, ../admin/includes/templates/modals/stripe/price.phtml:36
+msgid "Billing Period"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:42, ../admin/includes/templates/modals/paypal/price.phtml:42, ../admin/includes/templates/modals/square/price.phtml:44, ../admin/includes/templates/modals/square/price.phtml:44, ../admin/includes/templates/modals/stripe/price.phtml:40, ../admin/includes/templates/modals/stripe/price.phtml:40
+msgid "Monthly"
+msgstr ""
+
+#: ../admin/includes/templates/modals/paypal/price.phtml:43, ../admin/includes/templates/modals/paypal/price.phtml:43, ../admin/includes/templates/modals/square/price.phtml:46, ../admin/includes/templates/modals/square/price.phtml:46, ../admin/includes/templates/modals/stripe/price.phtml:41, ../admin/includes/templates/modals/stripe/price.phtml:41
+msgid "Yearly"
 msgstr ""
 
 #: ../admin/includes/templates/modals/products/access-rules.phtml:17, ../admin/includes/templates/modals/products/access-rules.phtml:17
@@ -4642,34 +4808,6 @@ msgstr ""
 msgid "Got it!"
 msgstr ""
 
-#: ../admin/includes/templates/modals/square/price.phtml:17, ../admin/includes/templates/modals/square/price.phtml:17, ../admin/includes/templates/modals/stripe/price.phtml:10, ../admin/includes/templates/modals/stripe/price.phtml:10
-msgid "Add Product Price"
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:21, ../admin/includes/templates/modals/square/price.phtml:21, ../admin/includes/templates/modals/stripe/price.phtml:14, ../admin/includes/templates/modals/stripe/price.phtml:14
-msgid "Select Payment mode"
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:24, ../admin/includes/templates/modals/square/price.phtml:24, ../admin/includes/templates/modals/stripe/price.phtml:17, ../admin/includes/templates/modals/stripe/price.phtml:17
-msgid "Recurring"
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:27, ../admin/includes/templates/modals/square/price.phtml:27, ../admin/includes/templates/modals/stripe/price.phtml:20, ../admin/includes/templates/modals/stripe/price.phtml:20
-msgid "One Time"
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:32, ../admin/includes/templates/modals/square/price.phtml:32, ../admin/includes/templates/modals/stripe/price.phtml:25, ../admin/includes/templates/modals/stripe/price.phtml:25
-msgid "Amount"
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:34, ../admin/includes/templates/modals/square/price.phtml:34, ../admin/includes/templates/modals/stripe/price.phtml:27, ../admin/includes/templates/modals/stripe/price.phtml:27
-msgid "Enter amount"
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:39, ../admin/includes/templates/modals/square/price.phtml:39, ../admin/includes/templates/modals/stripe/price.phtml:36, ../admin/includes/templates/modals/stripe/price.phtml:36
-msgid "Billing Period"
-msgstr ""
-
 #: ../admin/includes/templates/modals/square/price.phtml:41, ../admin/includes/templates/modals/square/price.phtml:41, ../admin/includes/templates/modals/stripe/price.phtml:38, ../admin/includes/templates/modals/stripe/price.phtml:38
 msgid "Daily"
 msgstr ""
@@ -4682,24 +4820,12 @@ msgstr ""
 msgid "Every 2 weeks"
 msgstr ""
 
-#: ../admin/includes/templates/modals/square/price.phtml:44, ../admin/includes/templates/modals/square/price.phtml:44, ../admin/includes/templates/modals/stripe/price.phtml:40, ../admin/includes/templates/modals/stripe/price.phtml:40
-msgid "Monthly"
-msgstr ""
-
 #: ../admin/includes/templates/modals/square/price.phtml:45, ../admin/includes/templates/modals/square/price.phtml:45
 msgid "Quarterly"
 msgstr ""
 
-#: ../admin/includes/templates/modals/square/price.phtml:46, ../admin/includes/templates/modals/square/price.phtml:46, ../admin/includes/templates/modals/stripe/price.phtml:41, ../admin/includes/templates/modals/stripe/price.phtml:41
-msgid "Yearly"
-msgstr ""
-
 #: ../admin/includes/templates/modals/square/price.phtml:60, ../admin/includes/templates/modals/square/price.phtml:60
 msgid "Once enabled, the free trial option cannot be changed later."
-msgstr ""
-
-#: ../admin/includes/templates/modals/square/price.phtml:69, ../admin/includes/templates/modals/square/price.phtml:69
-msgid "Days"
 msgstr ""
 
 #: ../admin/includes/templates/modals/square/product-migration.phtml:2, ../admin/includes/templates/modals/square/product-migration.phtml:2, ../admin/includes/templates/modals/stripe/product-migration.phtml:2, ../admin/includes/templates/modals/stripe/product-migration.phtml:2
@@ -4714,15 +4840,15 @@ msgstr ""
 msgid "Interval count"
 msgstr ""
 
-#: ../admin/includes/templates/modals/stripe/price.phtml:49, ../admin/includes/templates/modals/stripe/price.phtml:49, ../i18n.php:445
+#: ../admin/includes/templates/modals/stripe/price.phtml:49, ../admin/includes/templates/modals/stripe/price.phtml:49, ../i18n.php:450
 msgid "days"
 msgstr ""
 
-#: ../admin/includes/templates/modals/stripe/price.phtml:50, ../admin/includes/templates/modals/stripe/price.phtml:50, ../i18n.php:447
+#: ../admin/includes/templates/modals/stripe/price.phtml:50, ../admin/includes/templates/modals/stripe/price.phtml:50, ../i18n.php:452
 msgid "weeks"
 msgstr ""
 
-#: ../admin/includes/templates/modals/stripe/price.phtml:51, ../admin/includes/templates/modals/stripe/price.phtml:51, ../i18n.php:449
+#: ../admin/includes/templates/modals/stripe/price.phtml:51, ../admin/includes/templates/modals/stripe/price.phtml:51, ../i18n.php:454
 msgid "months"
 msgstr ""
 
@@ -4882,7 +5008,7 @@ msgstr ""
 msgid "Expire product"
 msgstr ""
 
-#: ../admin/includes/templates/products/single/access-expiry.phtml:26, ../admin/includes/templates/products/single/access-expiry.phtml:26, ../i18n.php:473
+#: ../admin/includes/templates/products/single/access-expiry.phtml:26, ../admin/includes/templates/products/single/access-expiry.phtml:26, ../i18n.php:479
 msgid "after"
 msgstr ""
 
@@ -4982,7 +5108,7 @@ msgstr ""
 msgid "Standard contexts"
 msgstr ""
 
-#: ../admin/includes/templates/products/single/restricted-content.phtml:19, ../admin/includes/templates/products/single/restricted-content.phtml:19, ../i18n.php:492
+#: ../admin/includes/templates/products/single/restricted-content.phtml:19, ../admin/includes/templates/products/single/restricted-content.phtml:19, ../i18n.php:498
 msgid "User not logged in"
 msgstr ""
 
@@ -5426,7 +5552,7 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
-#: ../admin/includes/templates/settings/sendowl/links.phtml:23, ../admin/includes/templates/settings/sendowl/links.phtml:23, ../inc/classes/class-tva-email-templates.php:786, ../inc/classes/reporting/event-fields/class-product-id.php:24, ../inc/classes/reporting/event-fields/class-product-id.php:32
+#: ../admin/includes/templates/settings/sendowl/links.phtml:23, ../admin/includes/templates/settings/sendowl/links.phtml:23, ../inc/classes/class-tva-email-templates.php:828, ../inc/classes/reporting/event-fields/class-product-id.php:24, ../inc/classes/reporting/event-fields/class-product-id.php:32
 msgid "Product"
 msgstr ""
 
@@ -5642,20 +5768,20 @@ msgstr ""
 msgid "Selected"
 msgstr ""
 
+#: ../admin/includes/templates/drip/campaign/overview/chapter.phtml:12, ../admin/includes/templates/drip/campaign/overview/chapter.phtml:12, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:24, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:24, ../admin/includes/templates/drip/campaign/overview/module.phtml:25, ../admin/includes/templates/drip/campaign/overview/module.phtml:25
+msgid "INHERIT"
+msgstr ""
+
+#: ../admin/includes/templates/drip/campaign/overview/chapter.phtml:14, ../admin/includes/templates/drip/campaign/overview/chapter.phtml:14, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:26, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:26, ../admin/includes/templates/drip/campaign/overview/module.phtml:27, ../admin/includes/templates/drip/campaign/overview/module.phtml:27
+msgid "This feature is coming soon"
+msgstr ""
+
 #: ../admin/includes/templates/drip/campaign/overview/lesson.phtml:11, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:11, ../admin/includes/templates/drip/campaign/overview/module.phtml:12, ../admin/includes/templates/drip/campaign/overview/module.phtml:12
 msgid "Free"
 msgstr ""
 
 #: ../admin/includes/templates/drip/campaign/overview/lesson.phtml:14, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:14
 msgid "This lesson is set as a free preview lesson in the course details tab, and cannot be locked."
-msgstr ""
-
-#: ../admin/includes/templates/drip/campaign/overview/lesson.phtml:24, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:24, ../admin/includes/templates/drip/campaign/overview/module.phtml:25, ../admin/includes/templates/drip/campaign/overview/module.phtml:25
-msgid "INHERIT"
-msgstr ""
-
-#: ../admin/includes/templates/drip/campaign/overview/lesson.phtml:26, ../admin/includes/templates/drip/campaign/overview/lesson.phtml:26, ../admin/includes/templates/drip/campaign/overview/module.phtml:27, ../admin/includes/templates/drip/campaign/overview/module.phtml:27
-msgid "This feature is coming soon"
 msgstr ""
 
 #: ../admin/includes/templates/drip/campaign/overview/module.phtml:15, ../admin/includes/templates/drip/campaign/overview/module.phtml:15
@@ -6472,7 +6598,7 @@ msgstr ""
 msgid "All Bundles"
 msgstr ""
 
-#: ../i18n.php:271, ../i18n.php:435, ../inc/classes/reporting/report-apps/class-drip.php:14
+#: ../i18n.php:271, ../i18n.php:440, ../inc/classes/reporting/report-apps/class-drip.php:14
 msgid "Drip"
 msgstr ""
 
@@ -6713,671 +6839,715 @@ msgid "New access saved."
 msgstr ""
 
 #: ../i18n.php:353
-msgid "Please select a product!"
+msgid "Refunding..."
+msgstr ""
+
+#: ../i18n.php:354
+msgid "Payment refunded and access removed."
 msgstr ""
 
 #: ../i18n.php:355
-msgid "No course defined"
+msgid "The refund could not be processed."
 msgstr ""
 
 #: ../i18n.php:356
-msgid "Edit Bundle"
-msgstr ""
-
-#: ../i18n.php:357
-msgid "Display message"
+msgid "PayPal Resolution Center"
 msgstr ""
 
 #: ../i18n.php:358
-msgid "What should happen if an unknown visitor tries to access content in this product?"
-msgstr ""
-
-#: ../i18n.php:359
-msgid "If a logged-in user tries to access content in this product that they do not have access to"
+msgid "Please select a product!"
 msgstr ""
 
 #: ../i18n.php:360
-msgid "If a user has access to this product but visits content that is not yet available according to the drip schedule conditions"
+msgid "No course defined"
 msgstr ""
 
 #: ../i18n.php:361
-msgid "What should happen if a logged-in user tries to access product content in this context?"
+msgid "Edit Bundle"
 msgstr ""
 
 #: ../i18n.php:362
-msgid "If a logged-in user browses a course overview or course list but has not purchased the product"
+msgid "Display message"
 msgstr ""
 
 #: ../i18n.php:363
-msgid "Please select a page to redirect to"
+msgid "What should happen if an unknown visitor tries to access content in this product?"
+msgstr ""
+
+#: ../i18n.php:364
+msgid "If a logged-in user tries to access content in this product that they do not have access to"
 msgstr ""
 
 #: ../i18n.php:365
-msgid "This content is only available for logged in users."
+msgid "If a user has access to this product but visits content that is not yet available according to the drip schedule conditions"
 msgstr ""
 
 #: ../i18n.php:366
-msgid "This content is for customers only."
+msgid "What should happen if a logged-in user tries to access product content in this context?"
+msgstr ""
+
+#: ../i18n.php:367
+msgid "If a logged-in user browses a course overview or course list but has not purchased the product"
+msgstr ""
+
+#: ../i18n.php:368
+msgid "Please select a page to redirect to"
+msgstr ""
+
+#: ../i18n.php:370
+msgid "This content is only available for logged in users."
 msgstr ""
 
 #: ../i18n.php:371
-msgid "URL is missing. Enter a valid URL"
-msgstr ""
-
-#: ../i18n.php:372
-msgid "File is missing. Select or upload a file"
-msgstr ""
-
-#: ../i18n.php:373
-msgid "Content missing. Search for a post / page"
-msgstr ""
-
-#: ../i18n.php:374
-msgid "Content missing. Search for a protected file"
-msgstr ""
-
-#: ../i18n.php:375
-msgid "Please fix all the marked errors and try again"
+msgid "This content is for customers only."
 msgstr ""
 
 #: ../i18n.php:376
-msgid "Resources saved successfully"
+msgid "URL is missing. Enter a valid URL"
 msgstr ""
 
 #: ../i18n.php:377
-msgid "Type or paste an external link below"
+msgid "File is missing. Select or upload a file"
 msgstr ""
 
 #: ../i18n.php:378
-msgid "Select a file"
+msgid "Content missing. Search for a post / page"
 msgstr ""
 
 #: ../i18n.php:379
-msgid "Select a post/page from your site"
+msgid "Content missing. Search for a protected file"
 msgstr ""
 
 #: ../i18n.php:380
-msgid "External {ext} file"
+msgid "Please fix all the marked errors and try again"
 msgstr ""
 
 #: ../i18n.php:381
-msgid "External file"
+msgid "Resources saved successfully"
 msgstr ""
 
 #: ../i18n.php:382
-msgid "Uploaded {ext} file"
+msgid "Type or paste an external link below"
 msgstr ""
 
 #: ../i18n.php:383
-msgid "Uploaded file"
+msgid "Select a file"
 msgstr ""
 
 #: ../i18n.php:384
-msgid "{type} on this website"
+msgid "Select a post/page from your site"
 msgstr ""
 
 #: ../i18n.php:385
-msgid "External link"
+msgid "External {ext} file"
 msgstr ""
 
 #: ../i18n.php:386
-msgid "External video"
+msgid "External file"
+msgstr ""
+
+#: ../i18n.php:387
+msgid "Uploaded {ext} file"
 msgstr ""
 
 #: ../i18n.php:388
-msgid "resource"
+msgid "Uploaded file"
 msgstr ""
 
 #: ../i18n.php:389
-msgid "resources"
+msgid "{type} on this website"
+msgstr ""
+
+#: ../i18n.php:390
+msgid "External link"
 msgstr ""
 
 #: ../i18n.php:391
-msgid "Price Not Set"
+msgid "External video"
 msgstr ""
 
 #: ../i18n.php:393
-msgid "Permalink updated successfully!"
+msgid "resource"
 msgstr ""
 
-#: ../i18n.php:395
-msgid "Are you sure you want to publish {title}?"
+#: ../i18n.php:394
+msgid "resources"
 msgstr ""
 
 #: ../i18n.php:396
-msgid "Publishing means that the front end of your web site will display the templates included in the design."
+msgid "Price Not Set"
+msgstr ""
+
+#: ../i18n.php:398
+msgid "Permalink updated successfully!"
+msgstr ""
+
+#: ../i18n.php:400
+msgid "Are you sure you want to publish {title}?"
 msgstr ""
 
 #: ../i18n.php:401
+msgid "Publishing means that the front end of your web site will display the templates included in the design."
+msgstr ""
+
+#: ../i18n.php:406
 msgid "Are you sure you want to delete this design?"
 msgstr ""
 
-#: ../i18n.php:402
+#: ../i18n.php:407
 msgid "Deleted designs cannot be restored."
 msgstr ""
 
-#: ../i18n.php:404, ../i18n.php:410
+#: ../i18n.php:409, ../i18n.php:415
 msgid "Yes, delete it"
 msgstr ""
 
-#: ../i18n.php:407
+#: ../i18n.php:412
 msgid "Delete Template"
 msgstr ""
 
-#: ../i18n.php:408
+#: ../i18n.php:413
 msgid "Are you sure you want to delete the template? This cannot be undone."
 msgstr ""
 
-#: ../i18n.php:413
+#: ../i18n.php:418
 msgid "Reset Template"
 msgstr ""
 
-#: ../i18n.php:414
+#: ../i18n.php:419
 msgid "Are you sure you want to reset the template? You will lose any customizations made to it."
 msgstr ""
 
-#: ../i18n.php:416, ../i18n.php:429
+#: ../i18n.php:421, ../i18n.php:434
 msgid "Yes, reset it"
 msgstr ""
 
-#: ../i18n.php:418
+#: ../i18n.php:423
 msgid "{name} has been published"
 msgstr ""
 
-#: ../i18n.php:419
+#: ../i18n.php:424
 msgid "{name} has been deleted"
 msgstr ""
 
-#: ../i18n.php:420
+#: ../i18n.php:425
 msgid "Successfully duplicated {name}"
 msgstr ""
 
-#: ../i18n.php:421
+#: ../i18n.php:426
 msgid "{name} has been imported"
 msgstr ""
 
-#: ../i18n.php:422
+#: ../i18n.php:427
 msgid "A skin having the same name {name} already exists!"
 msgstr ""
 
-#: ../i18n.php:423
+#: ../i18n.php:428
 msgid "A product having the same name {name} already exists!"
 msgstr ""
 
-#: ../i18n.php:424
+#: ../i18n.php:429
 msgid "Typography has been reset to default"
 msgstr ""
 
-#: ../i18n.php:426
+#: ../i18n.php:431
 msgid "Are you sure?"
 msgstr ""
 
-#: ../i18n.php:427
+#: ../i18n.php:432
 msgid "This will reset the typography settings to their default values. This action cannot be undone."
 msgstr ""
 
-#: ../i18n.php:431
+#: ../i18n.php:436
 msgid "Choose a design for your school"
 msgstr ""
 
-#: ../i18n.php:432
+#: ../i18n.php:437
 msgid "Add a new design from Thrive Cloud"
 msgstr ""
 
-#: ../i18n.php:433
+#: ../i18n.php:438
 msgid "FREE for everyone"
 msgstr ""
 
-#: ../i18n.php:434
+#: ../i18n.php:439
 msgid "FREE for logged in users"
 msgstr ""
 
-#: ../i18n.php:436
+#: ../i18n.php:441
 msgid "Drip campaign deleted"
 msgstr ""
 
-#: ../i18n.php:438
+#: ../i18n.php:443
 msgid "Are you sure you want to delete {title}?"
 msgstr ""
 
-#: ../i18n.php:440
+#: ../i18n.php:445
 msgid "Delete it"
 msgstr ""
 
-#: ../i18n.php:443
+#: ../i18n.php:448
 msgid "hours"
 msgstr ""
 
-#: ../i18n.php:444
+#: ../i18n.php:449
 msgid "hour"
 msgstr ""
 
-#: ../i18n.php:446
+#: ../i18n.php:451
 msgid "day"
 msgstr ""
 
-#: ../i18n.php:448
+#: ../i18n.php:453
 msgid "week"
 msgstr ""
 
-#: ../i18n.php:450
+#: ../i18n.php:455
 msgid "month"
 msgstr ""
 
-#: ../i18n.php:451
+#: ../i18n.php:456
 msgid "weekdays"
 msgstr ""
 
-#: ../i18n.php:452
+#: ../i18n.php:457
 msgid "weekday"
 msgstr ""
 
-#: ../i18n.php:453
+#: ../i18n.php:458
 msgid "weekends"
 msgstr ""
 
-#: ../i18n.php:454
+#: ../i18n.php:459
 msgid "weekend"
 msgstr ""
 
-#: ../i18n.php:455
+#: ../i18n.php:460
 msgid "Drip campaign saved"
 msgstr ""
 
-#: ../i18n.php:456
+#: ../i18n.php:461
 msgid "Action completed successfully!"
 msgstr ""
 
-#: ../i18n.php:457
+#: ../i18n.php:462
 msgid "after user purchased the associated product"
 msgstr ""
 
-#: ../i18n.php:458
+#: ../i18n.php:463
 msgid "after campaign trigger"
 msgstr ""
 
-#: ../i18n.php:459
+#: ../i18n.php:464
 msgid "after user starts the course"
 msgstr ""
 
-#: ../i18n.php:460
-msgid "Date/time is %1$s %2$s"
-msgstr ""
-
-#: ../i18n.php:461
-msgid "Choose lesson"
-msgstr ""
-
-#: ../i18n.php:462
-msgid "Choose module"
-msgstr ""
-
-#: ../i18n.php:464
-msgid "Content unlocked"
-msgstr ""
-
 #: ../i18n.php:465
-msgid "Content unlocked on"
+msgid "Date/time is %s %s"
 msgstr ""
 
 #: ../i18n.php:466
-msgid "Content unlocked at the time of purchase"
+msgid "Choose lesson"
 msgstr ""
 
 #: ../i18n.php:467
-msgid "Content unlocked when first accessing the course"
+msgid "Choose module"
 msgstr ""
 
 #: ../i18n.php:468
-msgid "every"
-msgstr ""
-
-#: ../i18n.php:469
-msgid "at"
+msgid "Choose chapter"
 msgstr ""
 
 #: ../i18n.php:470
-msgid "Content unlocked at custom intervals"
+msgid "Content unlocked"
 msgstr ""
 
 #: ../i18n.php:471
-msgid "only on weekdays"
+msgid "Content unlocked on"
 msgstr ""
 
 #: ../i18n.php:472
-msgid "over the weekends"
+msgid "Content unlocked at the time of purchase"
+msgstr ""
+
+#: ../i18n.php:473
+msgid "Content unlocked when first accessing the course"
 msgstr ""
 
 #: ../i18n.php:474
-msgid "on a"
+msgid "every"
 msgstr ""
 
 #: ../i18n.php:475
-msgid "user purchases course"
+msgid "at"
 msgstr ""
 
 #: ../i18n.php:476
-msgid "user starts the course"
+msgid "Content unlocked at custom intervals"
+msgstr ""
+
+#: ../i18n.php:477
+msgid "only on weekdays"
 msgstr ""
 
 #: ../i18n.php:478
-msgid "Unlock"
+msgid "over the weekends"
 msgstr ""
 
-#: ../i18n.php:479
-msgid "Automator unlock"
+#: ../i18n.php:480
+msgid "on a"
 msgstr ""
 
 #: ../i18n.php:481
-msgid "You have to be logged in to download the certificate!"
+msgid "user purchases course"
 msgstr ""
 
 #: ../i18n.php:482
-msgid "Are you sure you want to log in as this user?"
+msgid "user starts the course"
 msgstr ""
 
-#: ../i18n.php:483
-msgid "You will be logged out of your account if you continue."
+#: ../i18n.php:484
+msgid "Unlock"
 msgstr ""
 
-#: ../i18n.php:484, ../tcb-bridge/editor-layouts/elements/checkout.php:60
-msgid "Log in"
-msgstr ""
-
-#: ../i18n.php:486
-msgid "drip campaign"
+#: ../i18n.php:485
+msgid "Automator unlock"
 msgstr ""
 
 #: ../i18n.php:487
-msgid "According to your new settings the campaign type is now %s"
+msgid "You have to be logged in to download the certificate!"
 msgstr ""
 
 #: ../i18n.php:488
-msgid "Search an existing page"
+msgid "Are you sure you want to log in as this user?"
 msgstr ""
 
 #: ../i18n.php:489
-msgid "Search an existing page or an off-site URL"
+msgid "You will be logged out of your account if you continue."
 msgstr ""
 
-#: ../i18n.php:490
-msgid "e.g. Not logged in"
+#: ../i18n.php:490, ../tcb-bridge/editor-layouts/elements/checkout.php:60
+msgid "Log in"
+msgstr ""
+
+#: ../i18n.php:492
+msgid "drip campaign"
 msgstr ""
 
 #: ../i18n.php:493
-msgid "Not yet purchased"
+msgid "According to your new settings the campaign type is now %s"
 msgstr ""
 
 #: ../i18n.php:494
-msgid "Content is locked (drip feed protection)"
+msgid "Search an existing page"
+msgstr ""
+
+#: ../i18n.php:495
+msgid "Search an existing page or an off-site URL"
 msgstr ""
 
 #: ../i18n.php:496
-msgid "User has purchased another product"
+msgid "e.g. Not logged in"
 msgstr ""
 
-#: ../i18n.php:497
-msgid "User has the WordPress role"
+#: ../i18n.php:499
+msgid "Not yet purchased"
 msgstr ""
 
 #: ../i18n.php:500
-msgid "You must set at least one condition!"
-msgstr ""
-
-#: ../i18n.php:501
-msgid "Conditions are invalid, please check them."
+msgid "Content is locked (drip feed protection)"
 msgstr ""
 
 #: ../i18n.php:502
-msgid "Edit custom access restriction"
+msgid "User has purchased another product"
 msgstr ""
 
 #: ../i18n.php:503
-msgid "Edit rule behaviour"
-msgstr ""
-
-#: ../i18n.php:504
-msgid "Edit access rule"
-msgstr ""
-
-#: ../i18n.php:505
-msgid "Edit rule conditions"
+msgid "User has the WordPress role"
 msgstr ""
 
 #: ../i18n.php:506
-msgid "An access rule having the same title already exists!"
+msgid "You must set at least one condition!"
 msgstr ""
 
 #: ../i18n.php:507
-msgid "Access rule {name} added!"
+msgid "Conditions are invalid, please check them."
 msgstr ""
 
 #: ../i18n.php:508
-msgid "Access rule {name} edited successfully!"
+msgid "Edit custom access restriction"
 msgstr ""
 
 #: ../i18n.php:509
-msgid "Add access rule"
+msgid "Edit rule behaviour"
+msgstr ""
+
+#: ../i18n.php:510
+msgid "Edit access rule"
 msgstr ""
 
 #: ../i18n.php:511
-msgid "Day zero"
+msgid "Edit rule conditions"
 msgstr ""
 
-#: ../i18n.php:516
-msgid "Click here to see and edit all of your drip rules for this piece of content."
+#: ../i18n.php:512
+msgid "An access rule having the same title already exists!"
+msgstr ""
+
+#: ../i18n.php:513
+msgid "Access rule {name} added!"
+msgstr ""
+
+#: ../i18n.php:514
+msgid "Access rule {name} edited successfully!"
+msgstr ""
+
+#: ../i18n.php:515
+msgid "Add access rule"
 msgstr ""
 
 #: ../i18n.php:517
-msgid "Campaign name is already used"
-msgstr ""
-
-#: ../i18n.php:518
-msgid "Clear certificate cache"
-msgstr ""
-
-#: ../i18n.php:519
-msgid "active"
-msgstr ""
-
-#: ../i18n.php:520
-msgid "Invalid input provided, check if the product count is positive, interval inputs are between 0 and 100 or if you provided a valid interval"
-msgstr ""
-
-#: ../i18n.php:521
-msgid "Invalid input provided, check if the member count is positive, interval inputs are between 0 and 100 or if you provided a valid interval"
+msgid "Day zero"
 msgstr ""
 
 #: ../i18n.php:522
-msgid "Invalid input provided, check if the course count is positive and the intervals inputs are between 0 and 100 or if you provided valid intervals"
+msgid "Click here to see and edit all of your drip rules for this piece of content."
 msgstr ""
 
 #: ../i18n.php:523
-msgid "Invalid input provided, check if the intervals inputs are between 0 and 100 or if you provided valid intervals"
+msgid "Campaign name is already used"
 msgstr ""
 
 #: ../i18n.php:524
-msgid "Something went wrong, if this error persists please seek support"
+msgid "Clear certificate cache"
 msgstr ""
 
 #: ../i18n.php:525
-msgid "PDF ready to download"
+msgid "active"
 msgstr ""
 
 #: ../i18n.php:526
-msgid "File %1$s of %2$s"
+msgid "Invalid input provided, check if the product count is positive, interval inputs are between 0 and 100 or if you provided a valid interval"
+msgstr ""
+
+#: ../i18n.php:527
+msgid "Invalid input provided, check if the member count is positive, interval inputs are between 0 and 100 or if you provided a valid interval"
+msgstr ""
+
+#: ../i18n.php:528
+msgid "Invalid input provided, check if the course count is positive and the intervals inputs are between 0 and 100 or if you provided valid intervals"
+msgstr ""
+
+#: ../i18n.php:529
+msgid "Invalid input provided, check if the intervals inputs are between 0 and 100 or if you provided valid intervals"
 msgstr ""
 
 #: ../i18n.php:530
-msgid "Currently there are not any pending assessments"
+msgid "Something went wrong, if this error persists please seek support"
 msgstr ""
 
 #: ../i18n.php:531
-msgid "Currently there are not any failed assessments"
+msgid "PDF ready to download"
 msgstr ""
 
 #: ../i18n.php:532
+msgid "File %1$s of %2$s"
+msgstr ""
+
+#: ../i18n.php:536
+msgid "Currently there are not any pending assessments"
+msgstr ""
+
+#: ../i18n.php:537
+msgid "Currently there are not any failed assessments"
+msgstr ""
+
+#: ../i18n.php:538
 msgid "Currently there are not any passed assessments"
 msgstr ""
 
-#: ../i18n.php:533
+#: ../i18n.php:539
 msgid "Currently there are not any assessments"
 msgstr ""
 
-#: ../i18n.php:539, ../inc/classes/assessments/class-tva-assessment-settings.php:171
+#: ../i18n.php:545, ../inc/classes/assessments/class-tva-assessment-settings.php:171
 msgid "Replaced"
 msgstr ""
 
-#: ../i18n.php:541
+#: ../i18n.php:547
 msgid "Assessment graded successfully"
 msgstr ""
 
-#: ../i18n.php:543
+#: ../i18n.php:549
 msgid "Simple grades"
 msgstr ""
 
-#: ../i18n.php:544
+#: ../i18n.php:550
 msgid "Grades"
 msgstr ""
 
-#: ../i18n.php:545
+#: ../i18n.php:551
 msgid "Academic grades"
 msgstr ""
 
-#: ../i18n.php:548
+#: ../i18n.php:554
 msgid "Select a quiz"
 msgstr ""
 
-#: ../i18n.php:549
+#: ../i18n.php:555
 msgid "Quiz not selected!"
 msgstr ""
 
-#: ../i18n.php:550
+#: ../i18n.php:556
 msgid "Invalid file size"
 msgstr ""
 
-#: ../i18n.php:551
+#: ../i18n.php:557
 msgid "Invalid max files"
 msgstr ""
 
-#: ../i18n.php:552
+#: ../i18n.php:558
 msgid "Invalid percentage"
 msgstr ""
 
-#: ../i18n.php:553
+#: ../i18n.php:559
 msgid "Invalid score"
 msgstr ""
 
-#: ../i18n.php:554
+#: ../i18n.php:560
 msgid "Invalid maximum score"
 msgstr ""
 
-#: ../i18n.php:555
+#: ../i18n.php:561
 msgid "No file types selected"
 msgstr ""
 
-#: ../i18n.php:556
+#: ../i18n.php:562
 msgid "Passing grades categories"
 msgstr ""
 
-#: ../i18n.php:557
+#: ../i18n.php:563
 msgid "Failing grades categories"
 msgstr ""
 
-#: ../i18n.php:558
+#: ../i18n.php:564
 msgid "New Grade"
 msgstr ""
 
-#: ../i18n.php:559
+#: ../i18n.php:565
 msgid "Add a grade"
 msgstr ""
 
-#: ../i18n.php:560
+#: ../i18n.php:566
 msgid "No %s grade yet"
 msgstr ""
 
-#: ../i18n.php:561
+#: ../i18n.php:567
 msgid "Open link in a new tab"
 msgstr ""
 
-#: ../i18n.php:562
+#: ../i18n.php:568
 msgid "You need to add some categories"
 msgstr ""
 
-#: ../i18n.php:563
+#: ../i18n.php:569
 msgid "You need to add some passing categories"
 msgstr ""
 
-#: ../i18n.php:564
+#: ../i18n.php:570
 msgid "You need to add some failing categories"
 msgstr ""
 
-#: ../i18n.php:565
+#: ../i18n.php:571
 msgid "The passing grade for this assessment has been set to:"
 msgstr ""
 
-#: ../i18n.php:566
+#: ../i18n.php:572
 msgid "The maximum grade for this assessment has been set to:"
 msgstr ""
 
-#: ../i18n.php:567
+#: ../i18n.php:573
 msgid "Invalid grade"
 msgstr ""
 
-#: ../i18n.php:568
+#: ../i18n.php:574
 msgid "No custom file types"
 msgstr ""
 
-#: ../i18n.php:569
+#: ../i18n.php:575
 msgid "Route successfully changed"
 msgstr ""
 
-#: ../i18n.php:570
+#: ../i18n.php:576
 msgid "Select pricing"
 msgstr ""
 
-#: ../i18n.php:571
+#: ../i18n.php:577
 msgid "Add New Price"
 msgstr ""
 
-#: ../i18n.php:572
+#: ../i18n.php:578
 msgid "Select provider"
 msgstr ""
 
-#: ../i18n.php:573
+#: ../i18n.php:579
 msgid "Currently there are not any video lessons"
 msgstr ""
 
-#: ../i18n.php:576
+#: ../i18n.php:582
 msgid "Activating"
 msgstr ""
 
-#: ../i18n.php:578
+#: ../i18n.php:584
 msgid "You need to reconnect Thrive Apprentice to your Stripe Account to enable this feature."
 msgstr ""
 
-#: ../i18n.php:579
+#: ../i18n.php:585
 msgid "Price amount is required."
 msgstr ""
 
-#: ../i18n.php:580
+#: ../i18n.php:586
 msgid "Billing period is required."
 msgstr ""
 
-#: ../i18n.php:581
+#: ../i18n.php:587
 msgid "Invalid price amount. The value must be a number greater than or equal to 0."
 msgstr ""
 
-#: ../i18n.php:582
+#: ../i18n.php:588
 msgid "An error occurred during cleanup. Please try again."
 msgstr ""
 
-#: ../i18n.php:583
+#: ../i18n.php:589
 msgid "Cleanup complete. We have removed %1$d records older than %2$d days and kept all important records."
 msgstr ""
 
-#: ../i18n.php:585
+#: ../i18n.php:591
 msgid "Are you sure you want to permanently delete data older than {days} days? This action cannot be undone."
+msgstr ""
+
+#: ../inc/classes/class-thrive-apprentice-api.php:67, ../inc/classes/class-thrive-apprentice-api.php:89, ../inc/classes/class-thrive-apprentice-api.php:165, ../inc/classes/class-thrive-apprentice-api.php:187
+msgid "Product does not exist."
+msgstr ""
+
+#: ../inc/classes/class-thrive-apprentice-api.php:78, ../inc/classes/class-thrive-apprentice-api.php:176
+msgid "User does not exist."
+msgstr ""
+
+#: ../inc/classes/class-thrive-apprentice-api.php:106
+msgid "User already has access to this product."
+msgstr ""
+
+#: ../inc/classes/class-thrive-apprentice-api.php:131
+msgid "Failed to grant access."
+msgstr ""
+
+#: ../inc/classes/class-thrive-apprentice-api.php:204
+msgid "User does not have access to this product."
+msgstr ""
+
+#: ../inc/classes/class-thrive-apprentice-api.php:229
+msgid "Access could not be fully revoked. This can happen when access is granted via WordPress role integration or another non-revocable source."
 msgstr ""
 
 #: ../inc/classes/class-tva-access-restriction.php:72
@@ -7412,11 +7582,11 @@ msgstr ""
 msgid "Invalid data to update the course bundle"
 msgstr ""
 
-#: ../inc/classes/class-tva-course-v2.php:1140
+#: ../inc/classes/class-tva-course-v2.php:1146
 msgid "Label not available"
 msgstr ""
 
-#: ../inc/classes/class-tva-course-v2.php:2516
+#: ../inc/classes/class-tva-course-v2.php:2522
 msgid "Undefined type"
 msgstr ""
 
@@ -7684,10 +7854,6 @@ msgstr ""
 msgid "When an assessment has been failed"
 msgstr ""
 
-#: ../inc/classes/class-tva-dynamic-labels.php:220, ../tcb-bridge/editor-elements/course/class-tcb-course-element.php:214
-msgid "Chapters"
-msgstr ""
-
 #: ../inc/classes/class-tva-dynamic-labels.php:227
 msgid "Resources"
 msgstr ""
@@ -7764,79 +7930,79 @@ msgstr ""
 msgid "You must complete all requirements for this lesson in order to mark it as complete"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:489, ../inc/classes/class-tva-email-templates.php:508
+#: ../inc/classes/class-tva-email-templates.php:536, ../inc/classes/class-tva-email-templates.php:550
 msgid "Reset your password: "
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:512, ../inc/classes/class-tva-email-templates.php:744
+#: ../inc/classes/class-tva-email-templates.php:554, ../inc/classes/class-tva-email-templates.php:786
 msgid "Set your password"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:661
+#: ../inc/classes/class-tva-email-templates.php:703
 msgid "Stripe - new account created after purchase"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:666
+#: ../inc/classes/class-tva-email-templates.php:708
 msgid "Square - new account created after purchase"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:671
+#: ../inc/classes/class-tva-email-templates.php:713
 msgid "SendOwl - new account created on registration page (during purchase flow)"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:676
+#: ../inc/classes/class-tva-email-templates.php:718
 msgid "ThriveCart - new account created after purchase"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:681
+#: ../inc/classes/class-tva-email-templates.php:723
 msgid "When a user registers to create a new free account"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:690
+#: ../inc/classes/class-tva-email-templates.php:732
 msgid "Assessment Passed"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:695
+#: ../inc/classes/class-tva-email-templates.php:737
 msgid "Assessment Failed"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:700
+#: ../inc/classes/class-tva-email-templates.php:742
 msgid "Course Welcome - when a user gains access to a course"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:738, ../inc/classes/class-tva-email-templates.php:750
+#: ../inc/classes/class-tva-email-templates.php:780, ../inc/classes/class-tva-email-templates.php:792
 msgid "Log into your account"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:762
+#: ../inc/classes/class-tva-email-templates.php:804
 msgid "Access your assessment"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:792, ../tcb-bridge/classes/course-list/class-hooks.php:278, ../tcb-bridge/classes/course-list/class-hooks.php:279
+#: ../inc/classes/class-tva-email-templates.php:834, ../tcb-bridge/classes/course-list/class-hooks.php:278, ../tcb-bridge/classes/course-list/class-hooks.php:279
 msgid "Course URL"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:849
+#: ../inc/classes/class-tva-email-templates.php:891
 msgid "Welcome to [course_name]! Get Started Now"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1013
+#: ../inc/classes/class-tva-email-templates.php:1055
 msgid "New Account Created"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1021
+#: ../inc/classes/class-tva-email-templates.php:1063
 msgid "Certificate manually issued"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1029
+#: ../inc/classes/class-tva-email-templates.php:1071
 msgid "Assessment Marked"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1037
+#: ../inc/classes/class-tva-email-templates.php:1079
 msgid "Product access is expiring"
 msgstr ""
 
-#: ../inc/classes/class-tva-email-templates.php:1045
+#: ../inc/classes/class-tva-email-templates.php:1087
 msgid "New Course Welcome"
 msgstr ""
 
@@ -7892,11 +8058,11 @@ msgstr ""
 msgid "message"
 msgstr ""
 
-#: ../inc/classes/class-tva-rest-controller.php:459, ../inc/classes/endpoints/class-tva-orders-controller.php:694
+#: ../inc/classes/class-tva-rest-controller.php:459, ../inc/classes/endpoints/class-tva-orders-controller.php:692
 msgid "Authentication failed due to invalid authentication credentials."
 msgstr ""
 
-#: ../inc/classes/class-tva-rest-controller.php:486, ../inc/classes/endpoints/class-tva-orders-controller.php:719
+#: ../inc/classes/class-tva-rest-controller.php:486, ../inc/classes/endpoints/class-tva-orders-controller.php:717
 msgid "Authorization failed due to insufficient permissions."
 msgstr ""
 
@@ -7924,18 +8090,6 @@ msgstr ""
 msgid "Members Only"
 msgstr ""
 
-#: ../inc/classes/class-tva-token.php:93
-msgid "Token could not be added into DB"
-msgstr ""
-
-#: ../inc/classes/class-tva-token.php:114
-msgid "Token could not be saved"
-msgstr ""
-
-#: ../inc/classes/class-tva-token.php:289
-msgid "Token could not be deleted"
-msgstr ""
-
 #: ../inc/classes/tva-class-bundle.php:112
 msgid "Missing bundle id to be updated"
 msgstr ""
@@ -7944,16 +8098,29 @@ msgstr ""
 msgid "No bundle found with number %s"
 msgstr ""
 
-#: ../inc/classes/buy_now/class-generic.php:43, ../inc/classes/integrations/class-tva-integrations-manager.php:180
+#: ../inc/classes/buy_now/class-generic.php:43, ../inc/classes/integrations/class-tva-integrations-manager.php:181
 msgid "Stripe"
 msgstr ""
 
-#: ../inc/classes/buy_now/class-generic.php:44, ../inc/classes/integrations/class-tva-integrations-manager.php:184
+#: ../inc/classes/buy_now/class-generic.php:44, ../inc/classes/integrations/class-tva-integrations-manager.php:185
 msgid "Square"
 msgstr ""
 
 #: ../inc/classes/buy_now/class-generic.php:45
 msgid "Custom payment"
+msgstr ""
+
+#: ../inc/classes/buy_now/class-paypal.php:153, ../inc/classes/endpoints/class-tva-paypal-controller.php:1739
+msgid "One-time purchase"
+msgstr ""
+
+#. translators: %s: recurring price phrase e.g. "USD 2.00 every 1 month".
+#: ../inc/classes/buy_now/class-paypal.php:293
+msgid "Subscription — %s"
+msgstr ""
+
+#: ../inc/classes/buy_now/class-paypal.php:290
+msgid "Subscription — %1$d-day free trial, then %2$s"
 msgstr ""
 
 #: ../inc/classes/endpoints/class-tva-assessments-controller.php:287
@@ -7988,39 +8155,39 @@ msgstr ""
 msgid "Failed to delete Chapter. Please try again later!"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:725
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:728
 msgid "Bad error data received"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:970
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:973
 msgid "Something went wrong, the course was not created"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:1111, ../inc/classes/endpoints/class-tva-courses-controller.php:1195
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:1114, ../inc/classes/endpoints/class-tva-courses-controller.php:1198
 msgid "No course was deleted!"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:1247
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:1250
 msgid "A course with this name already exists"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:1266
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:1269
 msgid "Something went wrong, the course could not be edited"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:1963
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:1966
 msgid "Unique identifier of Thrive Apprentice Course"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:1969
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:1972
 msgid "Title of Thrive Apprentice Course"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:1999, ../inc/classes/endpoints/class-tva-courses-controller.php:2133
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:2002, ../inc/classes/endpoints/class-tva-courses-controller.php:2136
 msgid "Another course with the same name already exist!"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-courses-controller.php:2326, ../inc/classes/endpoints/class-tva-courses-controller.php:2339
+#: ../inc/classes/endpoints/class-tva-courses-controller.php:2329, ../inc/classes/endpoints/class-tva-courses-controller.php:2342
 msgid "There is no course with this ID"
 msgstr ""
 
@@ -8044,7 +8211,7 @@ msgstr ""
 msgid "users have been added"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-customer-controller.php:869
+#: ../inc/classes/endpoints/class-tva-customer-controller.php:1038
 msgid "Removing access was not possible"
 msgstr ""
 
@@ -8058,7 +8225,7 @@ msgstr ""
 msgid "Days must be at least %d to prevent accidental deletion of recent data."
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-frontend-controller.php:460, ../inc/classes/endpoints/class-tva-orders-controller.php:497
+#: ../inc/classes/endpoints/class-tva-frontend-controller.php:486, ../inc/classes/endpoints/class-tva-orders-controller.php:495
 msgid "Invalid param currency"
 msgstr ""
 
@@ -8086,116 +8253,260 @@ msgstr ""
 msgid "Failed to delete module. Please try again later!"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:190
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:188
 msgid "Internal Server Error. Order could not be saved!"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:289
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:287
 msgid "ThriveCart order ID. The order ID associated with the purchase."
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:326
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:324
 msgid "Description of where the request has come from. Example: ThriveCart"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:334
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:332
 msgid "First name of the customer that made the purchase"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:342
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:340
 msgid "Last name of the customer that made the purchase"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:350
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:348
 msgid "The email address of the customer that’s made the purchase.This should be the email address to which course access will be given"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:359
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:357
 msgid "The customer ID associated with the purchase generated by the vendor"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:364
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:362
 msgid "The order object"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:372
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:370
 msgid "Unique order identifier"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:379
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:377
 msgid "The total amount paid by the customer"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:387
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:385
 msgid "The currency paid by the customer"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:394
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:392
 msgid "Label for the payment processor used to make the payment"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:400
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:398
 msgid "A list of charges/order items that make up an order"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:406
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:404
 msgid "Order item"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:411
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:409
 msgid "Used to determine whether this is a single purchase or a recurring purchase"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:418
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:416
 msgid "An array of Thrive Apprentice course ID's or Course Bundles that the customer should receive access to."
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:424
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:422
 msgid "Human readable name for item/product.  Example: \"Active Growth Membership ($100/month)"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:432
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:430
 msgid "Line item reference"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:436
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:434
 msgid "Line item ID"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:441
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:439
 msgid "Total paid for the line item"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:448
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:446
 msgid "Unique ID for the transaction from vendor"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:452
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:450
 msgid "Unique ID for the subscription"
 msgstr ""
 
 #. translators: %s param name
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:476
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:474
 msgid "%1$s cannot be empty"
 msgstr ""
 
 #. translators: %s param name
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:481
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:479
 msgid "%1$s invalid type"
 msgstr ""
 
 #. translators: 1: Parameter
 #. translators: 1: Parameter
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:514, ../inc/classes/endpoints/class-tva-orders-controller.php:643
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:512, ../inc/classes/endpoints/class-tva-orders-controller.php:641
 msgid "Missing parameter(s): %1$s"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:612
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:610
 msgid "Charges for an order cannot be empty"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-orders-controller.php:629
+#: ../inc/classes/endpoints/class-tva-orders-controller.php:627
 msgid "Invalid product name for a charge"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:542
+msgid "PayPal checkout is not available for this product."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:617, ../inc/classes/endpoints/class-tva-paypal-controller.php:644, ../inc/classes/endpoints/class-tva-paypal-controller.php:678, ../inc/classes/endpoints/class-tva-paypal-controller.php:786
+msgid "Invalid product"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:800
+msgid "Invalid price"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:806
+msgid "Unsupported currency"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:846, ../inc/classes/endpoints/class-tva-square-controller.php:1451, ../inc/classes/endpoints/class-tva-stripe-controller.php:462
+msgid "Error creating page"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:870
+msgid "Could not generate secure secret."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:901
+msgid "Could not start PayPal onboarding."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1196
+msgid "This endpoint is no longer active."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1335, ../inc/classes/endpoints/class-tva-square-controller.php:793, ../inc/classes/endpoints/class-tva-stripe-controller.php:254
+msgid "Invalid setting"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1361
+msgid "Invalid payment method"
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1568
+msgid "Please log in to subscribe."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1573
+msgid "Invalid product."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1578
+msgid "This product has no PayPal subscription price."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1587
+msgid "Subscriptions are no longer available for this product."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1603
+msgid "Could not start the subscription. Please try again."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1813
+msgid "We could not start the PayPal checkout. Please try again."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1872
+msgid "We could not verify this order. If you were charged, your access will be granted shortly."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1907
+msgid "This order can no longer be completed."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1958
+msgid "Your payment was declined. Please try a different payment method."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1968
+msgid "PayPal could not process this payment."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:1984
+msgid "We could not confirm your payment. If you were charged, your access will be granted shortly."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2006
+msgid "This payment could not be completed because 3D Secure authentication was not confirmed. Please try again."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2300
+msgid "Invalid order."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2306
+msgid "Order not found."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2314
+msgid "Order does not belong to this member."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2318
+msgid "This order was not paid through PayPal and cannot be refunded here."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2322
+msgid "This order has already been refunded."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2330
+msgid "No PayPal payment was captured for this order, so there is nothing to refund."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2396
+msgid "This transaction can no longer be refunded — it may be too old or already settled in a way that blocks refunds."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2397
+msgid "The refund could not be completed because there are insufficient funds in the PayPal account."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2398
+msgid "Refunds are not allowed for this payment."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2399
+msgid "The refund limit for this PayPal account has been exceeded."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2400
+msgid "This transaction has already been refunded."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2401
+msgid "Refunds are not permitted for this account or transaction."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2402
+msgid "The PayPal account is currently restricted and cannot process refunds."
+msgstr ""
+
+#: ../inc/classes/endpoints/class-tva-paypal-controller.php:2442
+msgid "The refund could not be processed by PayPal. Please try again or review the transaction in the PayPal Resolution Center."
 msgstr ""
 
 #: ../inc/classes/endpoints/class-tva-sendowl-settings-controller.php:521
@@ -8238,63 +8549,51 @@ msgstr ""
 msgid "Cannot duplicate legacy design"
 msgstr ""
 
+#: ../inc/classes/endpoints/class-tva-square-controller.php:561, ../inc/classes/endpoints/class-tva-stripe-controller.php:224
+msgid "Invalid state"
+msgstr ""
+
 #: ../inc/classes/endpoints/class-tva-square-controller.php:683
 msgid "Not connected to live or test account"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:714
-msgid "No token found"
-msgstr ""
-
-#: ../inc/classes/endpoints/class-tva-square-controller.php:727
-msgid "Invalid token"
-msgstr ""
-
-#: ../inc/classes/endpoints/class-tva-square-controller.php:753
+#: ../inc/classes/endpoints/class-tva-square-controller.php:760
 msgid "No refresh token found"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:786, ../inc/classes/endpoints/class-tva-stripe-controller.php:254
-msgid "Invalid setting"
-msgstr ""
-
-#: ../inc/classes/endpoints/class-tva-square-controller.php:826, ../inc/classes/endpoints/class-tva-square-controller.php:977
+#: ../inc/classes/endpoints/class-tva-square-controller.php:833, ../inc/classes/endpoints/class-tva-square-controller.php:984
 msgid "Square client not available"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:879
+#: ../inc/classes/endpoints/class-tva-square-controller.php:886
 msgid "Invalid product id or mode"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:902
+#: ../inc/classes/endpoints/class-tva-square-controller.php:909
 msgid "No location data"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:920
+#: ../inc/classes/endpoints/class-tva-square-controller.php:927
 msgid "API error"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:915
+#: ../inc/classes/endpoints/class-tva-square-controller.php:922
 msgid "Invalid credentials"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:970
+#: ../inc/classes/endpoints/class-tva-square-controller.php:977
 msgid "Unable to retrieve Square location data"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:1331, ../inc/classes/endpoints/class-tva-square-controller.php:1352, ../inc/classes/endpoints/class-tva-square-controller.php:1374, ../inc/classes/endpoints/class-tva-square-controller.php:1395, ../inc/classes/endpoints/class-tva-square-controller.php:1416, ../inc/classes/endpoints/class-tva-square-controller.php:1463, ../inc/classes/endpoints/class-tva-square-controller.php:1486
+#: ../inc/classes/endpoints/class-tva-square-controller.php:1338, ../inc/classes/endpoints/class-tva-square-controller.php:1359, ../inc/classes/endpoints/class-tva-square-controller.php:1381, ../inc/classes/endpoints/class-tva-square-controller.php:1402, ../inc/classes/endpoints/class-tva-square-controller.php:1423, ../inc/classes/endpoints/class-tva-square-controller.php:1470, ../inc/classes/endpoints/class-tva-square-controller.php:1493
 msgid "Invalid product id"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:1444, ../inc/classes/endpoints/class-tva-stripe-controller.php:462
-msgid "Error creating page"
-msgstr ""
-
-#: ../inc/classes/endpoints/class-tva-square-controller.php:1558
+#: ../inc/classes/endpoints/class-tva-square-controller.php:1565
 msgid "Invalid Apprentice product id"
 msgstr ""
 
-#: ../inc/classes/endpoints/class-tva-square-controller.php:1569
+#: ../inc/classes/endpoints/class-tva-square-controller.php:1576
 msgid "Invalid Square client"
 msgstr ""
 
@@ -8390,51 +8689,55 @@ msgstr ""
 msgid "Manually added"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:84
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:85
 msgid "WordPress Role"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:92, ../inc/classes/integrations/class-tva-integrations-manager.php:94
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:93, ../inc/classes/integrations/class-tva-integrations-manager.php:95
 msgid "WishList Member"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:105
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:106
 msgid "SendOwl Product"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:112
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:113
 msgid "WooCommerce Product"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:122
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:123
 msgid "SendOwl Bundle"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:132
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:133
 msgid "MemberPress Membership"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:140
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:141
 msgid "Manual"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:150
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:151
 msgid "MemberMouse Membership"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:160
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:161
 msgid "MemberMouse Bundle"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:168
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:169
 msgid "ThriveCart Product"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:176
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:177
 msgid "Course Bundle"
 msgstr ""
 
-#: ../inc/classes/integrations/class-tva-integrations-manager.php:188
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:189, ../inc/classes/paypal/class-hooks.php:387, ../inc/classes/paypal/class-hooks.php:393
+msgid "PayPal"
+msgstr ""
+
+#: ../inc/classes/integrations/class-tva-integrations-manager.php:193
 msgid "Custom payment link"
 msgstr ""
 
@@ -8469,6 +8772,34 @@ msgstr ""
 
 #: ../inc/classes/payment_gateways/class-tva-order.php:1337
 msgid "Purchased"
+msgstr ""
+
+#: ../inc/classes/paypal/class-apple-pay.php:480
+msgid "PayPal Apple Pay:"
+msgstr ""
+
+#: ../inc/classes/paypal/class-apple-pay.php:481
+msgid "Apple Pay domain registration did not complete, so the Apple Pay button will not render at checkout until this is resolved."
+msgstr ""
+
+#: ../inc/classes/paypal/class-apple-pay.php:484
+msgid "Retry from the Apprentice PayPal settings, or contact your host if the server root is not writable."
+msgstr ""
+
+#: ../inc/classes/paypal/class-hooks.php:428
+msgid "Could not start the PayPal connection. Please try again."
+msgstr ""
+
+#: ../inc/classes/paypal/class-hooks.php:429
+msgid "Could not disconnect PayPal. Please try again."
+msgstr ""
+
+#: ../inc/classes/paypal/class-hooks.php:430
+msgid "Could not save the setting. Please try again."
+msgstr ""
+
+#: ../inc/classes/paypal/class-hooks.php:431
+msgid "Could not update the payment method. Please try again."
 msgstr ""
 
 #: ../inc/classes/products/class-product-migration.php:295
@@ -9147,35 +9478,39 @@ msgstr ""
 msgid "Customer portal"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:144, ../tcb-bridge/classes/visual-builder/class-hooks.php:623
+#: ../tcb-bridge/classes/cancel-subscription/class-main.php:83, ../tcb-bridge/classes/cancel-subscription/class-main.php:84
+msgid "Cancel subscription"
+msgstr ""
+
+#: ../tcb-bridge/classes/certificate/class-hooks.php:145, ../tcb-bridge/classes/visual-builder/class-hooks.php:623
 msgid "Edit Apprentice Template"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:542, ../tcb-bridge/classes/course-list/class-hooks.php:212, ../tcb-bridge/classes/visual-builder/class-hooks.php:433
+#: ../tcb-bridge/classes/certificate/class-hooks.php:603, ../tcb-bridge/classes/course-list/class-hooks.php:212, ../tcb-bridge/classes/visual-builder/class-hooks.php:433
 msgid "Course author name"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:546, ../tcb-bridge/classes/visual-builder/class-hooks.php:449
+#: ../tcb-bridge/classes/certificate/class-hooks.php:607, ../tcb-bridge/classes/visual-builder/class-hooks.php:449
 msgid "Course grade"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:550, ../tcb-bridge/classes/visual-builder/class-hooks.php:453
+#: ../tcb-bridge/classes/certificate/class-hooks.php:611, ../tcb-bridge/classes/visual-builder/class-hooks.php:453
 msgid "Course numerical result"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:556, ../tcb-bridge/editor-elements/certificate/class-certificate-element.php:69
+#: ../tcb-bridge/classes/certificate/class-hooks.php:617, ../tcb-bridge/editor-elements/certificate/class-certificate-element.php:69
 msgid "Certificate title"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:560, ../tcb-bridge/classes/certificate/class-hooks.php:588
+#: ../tcb-bridge/classes/certificate/class-hooks.php:621, ../tcb-bridge/classes/certificate/class-hooks.php:649
 msgid "Certificate number"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:564, ../tcb-bridge/classes/certificate/class-hooks.php:592
+#: ../tcb-bridge/classes/certificate/class-hooks.php:625, ../tcb-bridge/classes/certificate/class-hooks.php:653
 msgid "Certificate recipient"
 msgstr ""
 
-#: ../tcb-bridge/classes/certificate/class-hooks.php:596
+#: ../tcb-bridge/classes/certificate/class-hooks.php:657
 msgid "Certificate course name"
 msgstr ""
 
@@ -10440,10 +10775,10 @@ msgstr ""
 msgid "Invalid username or password"
 msgstr ""
 
-#: ../templates/access-restriction/locked/template.php:4
+#: ../templates/access-restriction/locked/template.php:14
 msgid "You do not have access to this content yet"
 msgstr ""
 
-#: ../templates/access-restriction/locked/template.php:4
+#: ../templates/access-restriction/locked/template.php:14
 msgid "This content will be made available to you based on conditions set by the course creator"
 msgstr ""

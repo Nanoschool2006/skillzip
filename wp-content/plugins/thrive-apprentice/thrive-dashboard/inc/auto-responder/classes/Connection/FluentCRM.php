@@ -512,7 +512,8 @@ class Thrive_Dash_List_Connection_FluentCRM extends Thrive_Dash_List_Connection_
 	}
 
 	/**
-	 * Get mapped field IDs for automator compatibility.
+	 * Get mapped field IDs: the parent's dynamic list (built from the
+	 * tve_dash_mapped_custom_fields filter) extended with FluentCRM-specific ids.
 	 *
 	 * @return array
 	 */
@@ -522,12 +523,15 @@ class Thrive_Dash_List_Connection_FluentCRM extends Thrive_Dash_List_Connection_
 			return array( 'mapping_text', 'mapping_url', 'mapping_phone', 'mapping_hidden' );
 		}
 		
-		// For TAR and enhanced functionality, use extended field list
-		return array( 
-			'mapping_text', 'mapping_url', 'mapping_phone', 'mapping_hidden', 'mapping_checkbox', 'mapping_select', 'mapping_date', 'mapping_number',
-			'date', 'number',  // Support for direct date and number fields (date_xxx, number_xxx)
-			'country', 'state', 'city', 'address_line_1', 'address_line_2', 'postal_code', 'date_of_birth'
-		);
+		// Extend the dynamic list built from the tve_dash_mapped_custom_fields filter,
+		// so fields registered by other plugins (e.g. TQB's mapping_quiz_result) are not dropped.
+		return array_unique( array_merge(
+			parent::get_mapped_field_ids(),
+			array(
+				'mapping_phone', 'mapping_date', 'mapping_number',
+				'city', 'address_line_1', 'address_line_2', 'postal_code', 'date_of_birth',
+			)
+		) );
 	}
 
 	/**

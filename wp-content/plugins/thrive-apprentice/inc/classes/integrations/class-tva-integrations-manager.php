@@ -21,6 +21,7 @@ class TVA_Integrations_Manager {
 	private $_integrations_names
 		= array(
 			'stripe',
+			'paypal',
 			'square',
 			'sendowl_product',
 			'sendowl_bundle',
@@ -182,6 +183,10 @@ class TVA_Integrations_Manager {
 
 	private function _init_square() {
 		return new TVA_Square_Integration( 'square', esc_html__( 'Square', 'thrive-apprentice' ) );
+	}
+
+	private function _init_paypal() {
+		return new TVA_PayPal_Integration( 'paypal', esc_html__( 'PayPal', 'thrive-apprentice' ) );
 	}
 
 	private function _init_custom_payment() {

@@ -256,7 +256,10 @@ function tva_filter_endpoints_for_thrive_cart( $routes ) {
 }
 
 /**
- * Authenticate user by tva token
+ * Authenticate user by tva token.
+ *
+ * @deprecated Token authentication is now handled by Thrive Dashboard.
+ * @see \TVE\Dashboard\Public_API\Main::filter_authenticate()
  *
  * @param null|WP_User $user
  * @param string       $username
@@ -266,8 +269,8 @@ function tva_filter_endpoints_for_thrive_cart( $routes ) {
  */
 function tva_filter_authenticate( $user, $username, $password ) {
 
-	if ( TVA_Token::auth( $username, $password ) ) {
-		$user = get_user_by( 'ID', 1 );
+	if ( class_exists( '\TVE\Dashboard\Public_API\TD_API_Token' ) ) {
+		return \TVE\Dashboard\Public_API\Main::filter_authenticate( $user, $username, $password );
 	}
 
 	return $user;

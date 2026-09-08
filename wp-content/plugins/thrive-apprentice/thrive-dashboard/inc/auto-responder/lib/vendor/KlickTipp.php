@@ -275,7 +275,11 @@ class Thrive_Dash_Api_KlickTipp {
 			$result->error = $request->get_error_message();
 		}
 
-		$result->data = maybe_unserialize( wp_remote_retrieve_body( $request ) );
+		$body         = wp_remote_retrieve_body( $request );
+		// The KlickTipp API returns PHP-serialized stdClass payloads (e.g. ->data->sessid), so we must
+		// allow stdClass here. thrive_safe_unserialize() forbids all classes, which turned the response
+		// into __PHP_Incomplete_Class and fatally broke login(). Response is from the authenticated API, not request input.
+		$result->data = is_serialized( $body ) ? unserialize( $body, array( 'allowed_classes' => array( 'stdClass' ) ) ) : $body;
 
 		return $result;
 	}

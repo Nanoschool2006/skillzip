@@ -274,7 +274,7 @@ class TCB_Course_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => array(
 				'type' => 'help',
 				'url'  => 'apprentice_lesson_list',
-				'link' => 'https://help.thrivethemes.com/en/articles/4794728-how-to-use-the-apprentice-lesson-list-element',
+				'link' => 'https://thrivethemes.com/docs/using-the-lesson-list-element-in-thrive-architect/',
 			),
 		);
 	}

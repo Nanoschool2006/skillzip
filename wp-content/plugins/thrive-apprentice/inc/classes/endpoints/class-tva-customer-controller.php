@@ -713,6 +713,10 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 		$user_id             = (int) $request->get_param( 'ID' );
 		$stripe_items        = [];
 		$items               = [];
+		// PayPal subscription orders are grouped into one parent entry per subscription_id, with
+		// each charge (initial + renewals) nested under it — so a multi-cycle subscription shows
+		// as a single row on the Edit Member screen instead of one row per charge.
+		$paypal_subs         = [];
 		$tva_user            = new TVA_User( $user_id );
 		$sendowl_product_ids = TVA_SendOwl::get_products_ids();
 
@@ -736,7 +740,49 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 					}
 				}
 			} else {
-				$check_product_availability = strtolower( $order->get_gateway() ) !== strtolower( TVA_Const::SENDOWL_GATEWAY );
+				$order_gateway_lc           = strtolower( $order->get_gateway() );
+				$check_product_availability = $order_gateway_lc !== strtolower( TVA_Const::SENDOWL_GATEWAY );
+
+				// PayPal transaction details (capture id + debug id) for support. Per-order,
+				// resolved once; empty for non-PayPal orders.
+				$paypal_transaction_id = '';
+				$paypal_debug_id       = '';
+				// PayPal subscription/trial identification for the admin UI.
+				$paypal_is_subscription = false;
+				$paypal_sub_status      = ''; // 'in_trial' | 'active' | ''
+				$paypal_charge_kind     = ''; // 'initial' | 'renewal' | ''
+				$paypal_has_capture     = false;
+				$paypal_subscription_id = '';
+				if ( $order_gateway_lc === strtolower( TVA_Const::PAYPAL_GATEWAY ) ) {
+					$paypal_txn = TVA_Transaction::get_completed_for_order( $order->get_id() );
+					if ( $paypal_txn instanceof TVA_Transaction ) {
+						$paypal_transaction_id = (string) $paypal_txn->get_transaction_id();
+						$paypal_debug_id       = (string) $paypal_txn->get_debug_id();
+					}
+
+					// A captured payment exists only when payment_id is a real capture id. The
+					// TVA_Order default for an uncharged order is the string '0', so treat both
+					// '' and '0' as "no capture" (a trial placeholder is never charged).
+					$payment_id         = (string) $order->get_payment_id();
+					$paypal_has_capture = '' !== $payment_id && '0' !== $payment_id;
+
+					// A subscription order carries a subscription_id on its vault option; renewal
+					// orders additionally carry an original_order_id back-reference. A subscription
+					// with no capture yet is on a free trial (the placeholder completed by
+					// fulfill_trial_activation()); once the first charge stamps a capture it is active.
+					// Perf note: these vault options use a dynamic key and are not autoloaded, so each
+					// PayPal order here costs one extra query (N+1). Acceptable for this admin-only,
+					// manually-loaded screen at typical cycle counts; revisit (batch-load) if it's ever
+					// used on high-churn accounts with many renewals.
+					$vault = get_option( 'tva_paypal_vault_' . $order->get_id(), [] );
+					$vault = is_array( $vault ) ? $vault : [];
+					if ( ! empty( $vault['subscription_id'] ) ) {
+						$paypal_is_subscription = true;
+						$paypal_subscription_id = (string) $vault['subscription_id'];
+						$paypal_sub_status      = $paypal_has_capture ? 'active' : 'in_trial';
+						$paypal_charge_kind     = ! empty( $vault['original_order_id'] ) ? 'renewal' : 'initial';
+					}
+				}
 
 				/** @var TVA_Order_Item $order_item */
 				foreach ( $order->get_order_items() as $order_item ) {
@@ -768,19 +814,104 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 					}
 
 					$access_type = $order_item->get_access_type( $order, $sendowl_product_ids, $wc_product );
+					$gateway     = $order->get_gateway();
+					$created_ts  = (int) strtotime( $order_item->get_created_at() );
+					$date_fmt    = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $created_ts );
+
+					// PayPal subscriptions: accumulate each charge under one parent keyed by
+					// subscription_id (built into a single grouped row after the loop). Everything
+					// else (one-time PayPal, SendOwl, manual, WooCommerce…) stays a flat row.
+					if ( $paypal_is_subscription && '' !== $paypal_subscription_id ) {
+						if ( ! isset( $paypal_subs[ $paypal_subscription_id ] ) ) {
+							$paypal_subs[ $paypal_subscription_id ] = $this->make_subscription_parent( $order, $order_item, $name, $access_type, $gateway, $paypal_subscription_id, $date_fmt );
+						}
+
+						// Any captured charge in the group means the subscription is paying (active).
+						if ( $paypal_has_capture ) {
+							$paypal_subs[ $paypal_subscription_id ]['subscription_status'] = 'active';
+						}
+
+						// The anchor (initial charge, no original_order_id) supplies the parent row's
+						// name/order_id and the "started" date.
+						if ( 'initial' === $paypal_charge_kind && $created_ts < $paypal_subs[ $paypal_subscription_id ]['_anchor_ts'] ) {
+							$paypal_subs[ $paypal_subscription_id ]['_anchor_ts'] = $created_ts;
+							$paypal_subs[ $paypal_subscription_id ]['id']         = $order_item->get_ID();
+							$paypal_subs[ $paypal_subscription_id ]['order_id']   = $order->get_id();
+							$paypal_subs[ $paypal_subscription_id ]['name']       = $name;
+							$paypal_subs[ $paypal_subscription_id ]['date']       = $date_fmt;
+						}
+
+						$paypal_subs[ $paypal_subscription_id ]['charges'][] = array(
+							'id'             => $order_item->get_ID(),
+							'order_id'       => $order->get_id(),
+							'kind'           => $paypal_charge_kind,
+							'date'           => $date_fmt,
+							'_ts'            => $created_ts,
+							'amount'         => $order->get_currency() . ' ' . number_format( (float) $order->get_price(), 2 ),
+							'transaction_id' => $paypal_transaction_id,
+							'debug_id'       => $paypal_debug_id,
+							'refundable'     => $paypal_has_capture,
+						);
+						continue;
+					}
 
 					$items[] = array(
-						'id'         => $order_item->get_ID(),
-						'order_id'   => $order->get_id(),
-						'product_id' => $order_item->get_product_id(),
-						'name'       => $name,
-						'type'       => $access_type,
-						'source'     => TVA_Order::source( $order ),
-						'icon'       => $order_item->get_access_type_slug( $access_type ),
-						'date'       => date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $order_item->get_created_at() ) ),
+						'id'             => $order_item->get_ID(),
+						'order_id'       => $order->get_id(),
+						'product_id'     => $order_item->get_product_id(),
+						'name'           => $name,
+						'type'           => $access_type,
+						'source'         => TVA_Order::source( $order ),
+						'icon'           => $order_item->get_access_type_slug( $access_type ),
+						'date'           => $date_fmt,
+						'transaction_id' => $paypal_transaction_id,
+						'debug_id'       => $paypal_debug_id,
+						'gateway'        => $gateway,
+						// PayPal subscription/trial identification for the admin UI.
+						'is_subscription'     => $paypal_is_subscription,
+						'subscription_status' => $paypal_sub_status,
+						'charge_kind'         => $paypal_charge_kind,
+						// Only PayPal orders with a real captured payment can be refunded from the
+						// admin. A trial placeholder has payment_id '0' (never charged) — not refundable.
+						'refundable'     => $gateway === TVA_Const::PAYPAL_GATEWAY && $paypal_has_capture,
 					);
 				}
 			}
+		}
+
+		// Finalise grouped PayPal subscriptions: sort each subscription's charges oldest-first
+		// (initial, then renewals chronologically), drop internal sort keys, and append as one row.
+		foreach ( $paypal_subs as $sub ) {
+			usort( $sub['charges'], static function ( $a, $b ) {
+				return $a['_ts'] <=> $b['_ts'];
+			} );
+			// Single pass over the oldest-first charges to (a) drop the internal sort key,
+			// (b) label each by capture position — uncaptured placeholder = 'trial', the first
+			// captured charge = 'initial', any later captured charge = 'renewal' (so a trial sub
+			// reads "Trial start" then "Initial charge", not "Renewal") — and (c) track the refund
+			// target: the most recent CAPTURED charge. Refund never targets the uncaptured trial
+			// anchor; refunding the latest charge cancels the whole subscription + revokes access
+			// via the refund webhook.
+			$seen_captured   = false;
+			$refund_order_id = 0;
+			foreach ( $sub['charges'] as &$charge ) {
+				unset( $charge['_ts'] );
+				if ( empty( $charge['refundable'] ) ) {
+					$charge['kind'] = 'trial';
+				} elseif ( ! $seen_captured ) {
+					$charge['kind'] = 'initial';
+					$seen_captured   = true;
+					$refund_order_id = (int) $charge['order_id'];
+				} else {
+					$charge['kind']  = 'renewal';
+					$refund_order_id = (int) $charge['order_id'];
+				}
+			}
+			unset( $charge );
+			unset( $sub['_anchor_ts'] );
+			$sub['refundable']      = $refund_order_id > 0;
+			$sub['refund_order_id'] = $refund_order_id;
+			$items[]                = $sub;
 		}
 
 		/**
@@ -818,6 +949,43 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 		}
 
 		return rest_ensure_response( $items );
+	}
+
+	/**
+	 * Build the parent row for a grouped PayPal subscription in get_purchased_items().
+	 *
+	 * Extracted so the accumulation loop stays shallow. Status starts as 'in_trial' and is
+	 * promoted to 'active' as captured charges are added; the anchor (initial) charge later
+	 * supplies the final name/order_id/date. `_anchor_ts` is an internal sort key dropped before
+	 * the row is returned.
+	 *
+	 * @param TVA_Order      $order
+	 * @param TVA_Order_Item $order_item
+	 * @param string         $name            Resolved product/bundle name.
+	 * @param string         $access_type
+	 * @param string         $gateway
+	 * @param string         $subscription_id
+	 * @param string         $date_fmt        Pre-formatted order date.
+	 *
+	 * @return array
+	 */
+	private function make_subscription_parent( $order, $order_item, $name, $access_type, $gateway, $subscription_id, $date_fmt ) {
+		return array(
+			'id'                  => $order_item->get_ID(),
+			'order_id'            => $order->get_id(),
+			'product_id'          => $order_item->get_product_id(),
+			'name'                => $name,
+			'type'                => $access_type,
+			'source'              => TVA_Order::source( $order ),
+			'icon'                => $order_item->get_access_type_slug( $access_type ),
+			'date'                => $date_fmt,
+			'gateway'             => $gateway,
+			'is_subscription'     => true,
+			'subscription_status' => 'in_trial',
+			'subscription_id'     => $subscription_id,
+			'charges'             => array(),
+			'_anchor_ts'          => PHP_INT_MAX,
+		);
 	}
 
 	/**
@@ -863,7 +1031,8 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 		$item_id = (int) $request->get_param( 'item_id' );
 		$item    = new TVA_Order_Item( $item_id );
 
-		$saved = $item->set_status( 0 )->save();
+		$product_id = (int) $item->get_product_id();
+		$saved      = $item->set_status( 0 )->save();
 
 		if ( ! $saved ) {
 			return new WP_Error( 'order_item_not_saved', esc_html__( 'Removing access was not possible', 'thrive-apprentice' ) );
@@ -872,8 +1041,8 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 		$order          = new TVA_Order( $item->get_order_id() );
 		$disabled_items = 0;
 
-		foreach ( $order->get_order_items() as $item ) {
-			if ( ! $item->get_status() ) {
+		foreach ( $order->get_order_items() as $order_item ) {
+			if ( ! $order_item->get_status() ) {
 				$disabled_items ++;
 			}
 		}
@@ -881,6 +1050,53 @@ class TVA_Customer_Controller extends TVA_REST_Controller {
 		if ( count( $order->get_order_items() ) <= $disabled_items ) {
 			$order->set_status( TVA_Const::STATUS_EMPTY );
 			$order->save( false );
+		}
+
+		$user_id = (int) $order->get_user_id();
+
+		if ( $product_id && $user_id ) {
+			$product = new Product( $product_id );
+			$user    = get_userdata( $user_id );
+
+			/* Switch to the affected user's context so check_rules() evaluates correctly */
+			$previous_user_id = get_current_user_id();
+			wp_set_current_user( $user_id );
+
+			tva_access_manager()
+				->set_tva_user( $user )
+				->set_user( $user )
+				->set_product( $product );
+
+			$still_has_access = tva_access_manager()->check_rules();
+
+			wp_set_current_user( $previous_user_id );
+
+			if ( ! $still_has_access ) {
+				/**
+				 * Fires after a user's access to an Apprentice product is revoked
+				 * via the admin dashboard (disable order item).
+				 *
+				 * Only fires when access is genuinely removed — not when the user
+				 * retains access through other grants or WordPress role integration.
+				 *
+				 * @param array $data {
+				 *     Hook payload.
+				 *
+				 *     @type int    $user_id    WordPress user ID.
+				 *     @type int    $product_id Apprentice product ID.
+				 *     @type string $source     Source identifier ('manual').
+				 *     @type int    $timestamp  Unix timestamp.
+				 * }
+				 */
+				tve_debug_log( "Hook thrivethemes_apprentice_access_revoked: user_id={$user_id}, product_id={$product_id}, source=manual" );
+
+				do_action( 'thrivethemes_apprentice_access_revoked', array(
+					'user_id'    => $user_id,
+					'product_id' => $product_id,
+					'source'     => 'manual',
+					'timestamp'  => (int) time(),
+				) );
+			}
 		}
 
 		return true;

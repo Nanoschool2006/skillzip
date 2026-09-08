@@ -1,0 +1,26 @@
+<?php
+
+use TVA\PayPal\Credentials;
+
+$live_connected = Credentials::is_mode_enabled( 'live' );
+$test_connected = Credentials::is_mode_enabled( 'test' );
+$connected      = $live_connected || $test_connected;
+$pending_mode   = \TVA_PayPal_Controller::pending_onboarding_mode();
+?>
+
+<div class="tva-paypal-settings-header">
+	<h1 class="tva-main-heading">PayPal</h1>
+	<?php if ( ! $connected ) : ?>
+		<p class="tva-paypal-tag m-0 tva-paypal-tag-not-connected"><?php esc_html_e( 'Not Connected', 'thrive-apprentice' ); ?></p>
+	<?php else : ?>
+		<p class="tva-paypal-tag m-0 tva-paypal-tag-connected"><?php esc_html_e( 'Connected', 'thrive-apprentice' ); ?></p>
+	<?php endif; ?>
+</div>
+
+<?php if ( '' !== $pending_mode && ! $connected ) : ?>
+	<?php include __DIR__ . '/../paypal/admin-finalizing.php'; ?>
+<?php elseif ( ! $connected ) : ?>
+	<?php include __DIR__ . '/../paypal/admin-connect.php'; ?>
+<?php else : ?>
+	<?php include __DIR__ . '/../paypal/admin-status.php'; ?>
+<?php endif; ?>

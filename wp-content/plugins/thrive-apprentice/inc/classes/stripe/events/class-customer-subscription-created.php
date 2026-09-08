@@ -24,7 +24,6 @@ class Customer_Subscription_Created extends Generic {
 		parent::build_data();
 		$this->fetch_line_items();
 		$this->data->subscription_items = $this->subscription_items;
-		error_log( 'krle create new subscription' );
 		$order = new Subscription( $this->data, $this->order_status );
 		$order->save();
 	}

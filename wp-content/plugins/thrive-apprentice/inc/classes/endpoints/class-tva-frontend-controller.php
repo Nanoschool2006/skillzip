@@ -279,7 +279,13 @@ class TVA_Frontend_Controller extends TVA_REST_Controller {
 			'parent__not_in' => array( 0 ),
 		);
 
-		$all_children = get_comments( $children_query );
+		/**
+		 * Index the children by parent ID once, up front. Previously every lookup scanned the
+		 * full child list, and each child was scanned twice (once here, once again when
+		 * return_children() recursed into it), which made a busy thread O(n^2).
+		 */
+		$all_children = $this->index_children_by_parent( get_comments( $children_query ) );
+
 		foreach ( $comments as $comment ) {
 			if ( $comment->comment_approved == 1 ) {
 				$this->comment_count ++;
@@ -298,21 +304,33 @@ class TVA_Frontend_Controller extends TVA_REST_Controller {
 	}
 
 	/**
-	 * @param $comment
-	 * @param $all_children
-	 * Get comment's childrens
+	 * Group comments by their parent ID so children can be looked up in constant time.
+	 *
+	 * @param WP_Comment[] $children Flat list of child comments.
+	 *
+	 * @return array<int, WP_Comment[]> Keyed by parent comment ID.
+	 */
+	public function index_children_by_parent( $children ) {
+		$indexed = array();
+
+		foreach ( $children as $child ) {
+			$indexed[ $child->comment_parent ][] = $child;
+		}
+
+		return $indexed;
+	}
+
+	/**
+	 * Get a comment's direct children.
+	 *
+	 * @param WP_Comment                $comment      Parent comment.
+	 * @param array<int, WP_Comment[]>  $all_children Children indexed by parent ID,
+	 *                                                as built by index_children_by_parent().
 	 *
 	 * @return array
 	 */
 	public function tva_get_children( $comment, $all_children ) {
-		$children = array();
-		foreach ( $all_children as $child ) {
-			if ( $comment->comment_ID === $child->comment_parent ) {
-				$children[] = $child;
-			}
-		}
-
-		return $children;
+		return isset( $all_children[ $comment->comment_ID ] ) ? $all_children[ $comment->comment_ID ] : array();
 	}
 
 	/**
@@ -411,8 +429,7 @@ class TVA_Frontend_Controller extends TVA_REST_Controller {
 		$time                = strtotime( date( 'Y-m-d', time() ) . ' + 365 day' );
 		setcookie( 'tva_conversions', json_encode( $conversion_cookie ), $time, '/' );
 
-		$conversions = get_option( 'tva_conversions', array() );
-		$logged_in   = (int) get_term_meta( $course_id, 'tva_logged_in', true );
+		$logged_in = (int) get_term_meta( $course_id, 'tva_logged_in', true );
 
 		if ( $logged_in && is_user_logged_in() ) {
 			$enrolled_users = get_option( 'tva_enrolled_users', array() );
@@ -425,18 +442,27 @@ class TVA_Frontend_Controller extends TVA_REST_Controller {
 			}
 
 			update_option( 'tva_enrolled_users', $enrolled_users );
-
-			// Clear course cache to update enrollment statistics immediately
-			TVA_Course_V2::clear_courses_cache();
-		} elseif ( array_key_exists( $course_id, $conversions ) ) {
-			$conversions[ $course_id ] ++;
 		} else {
-			$conversions[ $course_id ] = 1;
+			/* Only the anonymous path needs the conversions option, so read it here. */
+			$conversions = get_option( 'tva_conversions', array() );
+
+			if ( array_key_exists( $course_id, $conversions ) ) {
+				$conversions[ $course_id ] ++;
+			} else {
+				$conversions[ $course_id ] = 1;
+			}
+
+			/**
+			 * Only written when it actually changed. The logged-in branch above never touches
+			 * $conversions, so writing it there just re-serialized the same value.
+			 */
+			update_option( 'tva_conversions', $conversions );
 		}
 
-		update_option( 'tva_conversions', $conversions );
-
-		// Clear course cache to update statistics immediately
+		/**
+		 * Clear the course cache once, so enrollment and conversion statistics update
+		 * immediately. This used to run twice per request on the logged-in path.
+		 */
 		TVA_Course_V2::clear_courses_cache();
 
 		return new WP_REST_Response( 'conversion', 200 );
@@ -518,8 +544,24 @@ class TVA_Frontend_Controller extends TVA_REST_Controller {
 
 			/**
 			 * Check if any course has all lessons viewed and mark it as completed if so
+			 *
+			 * Only courses the user already has progress in can satisfy the check below, so
+			 * restrict the query to those term IDs. Loading every published course here costs
+			 * one unbounded get_posts() per course (TVA_Term::set_content()), which is the main
+			 * reason this endpoint got slow on sites with many courses.
+			 *
+			 * The active course is excluded too: the loop below always rejects it, and building
+			 * it would cost another get_posts() for nothing.
 			 */
-			$courses = tva_get_courses( array( 'published' => true ) );
+			$progress_course_ids = is_array( $learned_lessons ) ? array_map( 'intval', array_keys( $learned_lessons ) ) : array();
+			$progress_course_ids = array_values( array_diff( $progress_course_ids, array( (int) $course_id ) ) );
+
+			$courses = empty( $progress_course_ids ) ? array() : tva_get_courses(
+				array(
+					'published' => true,
+					'include'   => $progress_course_ids,
+				)
+			);
 
 			foreach ( $courses as $course ) {
 				if ( $course->term_id != $course_id && isset( $learned_lessons[ $course->term_id ] ) && count( $course->lessons ) == count( $learned_lessons[ $course->term_id ] ) ) {
@@ -578,6 +620,7 @@ class TVA_Frontend_Controller extends TVA_REST_Controller {
 
 			// Trigger course finish action.
 			do_action( 'thrive_apprentice_course_finish', $course->get_details(), tvd_get_current_user_details( $user_id ) );
+			tva_fire_course_completed_hook( $course_id, $user_id );
 		}
 
 		/** @var TVA_Shortcodes */

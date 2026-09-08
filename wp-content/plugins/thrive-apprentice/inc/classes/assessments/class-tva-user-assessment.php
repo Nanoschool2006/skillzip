@@ -702,6 +702,7 @@ class TVA_User_Assessment implements JsonSerializable {
 			// Trigger course finish action.
 			$course = new TVA_Course_V2( $course_id );
 			do_action( 'thrive_apprentice_course_finish', $course->get_details(), tvd_get_current_user_details( $this->post_author ) );
+			tva_fire_course_completed_hook( $course_id, $this->post_author );
 		}
 	}
 }
