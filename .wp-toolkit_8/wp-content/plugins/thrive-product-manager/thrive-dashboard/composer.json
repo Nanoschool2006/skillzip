@@ -1,0 +1,12 @@
+{
+    "name": "thrive-themes/thrive-dashboard",
+    "description": "The thrive dashboard",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Thrive_Dashboard\\Font_Library\\": "inc/font-library/classes/",
+            "Thrive_Dashboard\\Font_Library\\Interfaces\\": "inc/font-library/interfaces/"
+        }
+    },
+    "require": {}
+}

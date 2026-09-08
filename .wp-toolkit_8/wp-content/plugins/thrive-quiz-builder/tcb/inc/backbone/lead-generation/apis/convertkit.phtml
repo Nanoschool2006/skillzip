@@ -1,0 +1,71 @@
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Choose your mailing list', 'thrive-cb' ); ?>
+	</div>
+
+	<div class="control-grid">
+		<select class="api-list change" data-fn="setupChange" data-name="list">
+			<# if ( api.get('lists').length == 0 ) { #>
+			<#= TVE.tpl( 'util/option', {value:0, selected: true, text: '<?php echo __( 'No lists found', 'thrive-cb' ); ?>'}) #>
+			<# } #>
+
+			<# _.each(api.get('lists'), function(item) { #>
+			<#= TVE.tpl( 'util/option', {value:item.id, selected: (api.getConfig('list')==item.id), text: item.name}) #>
+			<# } ) #>
+		</select>
+
+		<span class="click tve-refresh-api-list" data-fn="forceGet" data-tooltip="<?php echo __( 'Refresh', 'thrive-cb' ); ?>" data-side="top"> <?php tcb_icon( 'redo-regular' ) ?></span>
+	</div>
+</div>
+<# if ( api.get('supports_tags') ) { #>
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Tags', 'thrive-cb' ); ?>
+	</div>
+	<div class="tvd-select2-dropdown-parent"></div>
+	<div class="tvd-input-field">
+		<select id="tve-lg-select-tags" multiple name="tags" tabindex="-1" class="select2-hidden-accessible tve-api-extra">
+			<#
+			// Get all available tags from API
+			var availableTags = api.get('tags') || [];
+			var tagsConfig = api.getConfig('tags');
+			var selectedTags = [];
+
+			// Parse currently selected tags
+			if ( tagsConfig ) {
+				selectedTags = typeof tagsConfig === 'string' ? tagsConfig.split(',').map(function(tag) { return tag.trim(); }) : [tagsConfig];
+			}
+
+			// Sort available tags alphabetically by tag name
+			var sortedTags = availableTags.slice().sort(function(a, b) {
+				return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+			});
+
+			// Display all available tags as options (sorted alphabetically)
+			_.each( sortedTags, function( tag ) {
+				var isSelected = selectedTags.indexOf(tag.name) !== -1;
+			#>
+			<option value="<#=tag.name#>"<# if (isSelected) { #> selected="selected"<# } #>><#=tag.name#></option>
+			<#
+			}, this );
+
+			// Also add any selected tags that might not be in the available tags list (custom tags)
+			_.each( selectedTags, function( tag ) {
+				var cleanTag = String(tag).trim();
+				if ( cleanTag && !_.findWhere(availableTags, {name: cleanTag}) ) {
+			#>
+			<option value="<#=cleanTag#>" selected="selected"><#=cleanTag#></option>
+			<#
+				}
+			}, this );
+			#>
+		</select>
+	</div>
+</div>
+<# } else { #>
+<div class="api-field">
+	<div class="field-description">
+		<span><?php echo __( 'Add your', 'thrive-cb' ); ?> <a href="<?php echo admin_url( 'admin.php?page=tve_dash_api_connect' ); ?>" target="_blank" rel="noopener" style="color: #4bb35e;"><?php echo __( 'Secret API Key', 'thrive-cb' ); ?></a> <?php echo __( 'to securely sync and manage your subscriber tags right from here', 'thrive-cb' ); ?></span>
+	</div>
+</div>
+<# } #>

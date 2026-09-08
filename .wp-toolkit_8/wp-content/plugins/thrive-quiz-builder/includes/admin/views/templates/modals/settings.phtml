@@ -1,0 +1,153 @@
+<div class="tvd-modal-header">
+	<h3 class="tvd-title">
+		<?php echo __( 'Settings', 'thrive-quiz-builder' ); ?>
+	</h3>
+</div>
+
+<div class="tvd-modal-content">
+	<!-- General Section -->
+	<div class="tqb-settings-section">
+		<h4 class="tqb-settings-section-title"><?php echo __( 'General', 'thrive-quiz-builder' ); ?></h4>
+		<div class="tvd-row tvd-collapse">
+			<div class="tvd-col tvd-s9">
+				<span><?php echo __( 'Display "Powered by Quiz Builder"', 'thrive-quiz-builder' ); ?></span>
+			</div>
+			<div class="tvd-col tvd-s3">
+				<div class="tvd-switch">
+					<label for="tqb_promotion_badge">
+						<?php echo __( 'Off', 'thrive-quiz-builder' ); ?>
+						<input type="checkbox" class="tqb-setting-checkbox"
+							   id="tqb_promotion_badge"
+							   value="1"
+							   data-key="tqb_promotion_badge" <# if(model.get('tqb_promotion_badge') == 1) {#> checked="checked" <# }#>>
+						<span class="tvd-lever"></span>
+						<?php echo __( 'On', 'thrive-quiz-builder' ); ?>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="tvd-row tvd-collapse">
+			<div class="tvd-col tvd-s9">
+				<span><?php echo __( 'Send quiz answers one at a time.', 'thrive-quiz-builder' ); ?></span>
+				<span class="tqb-settings-tooltip">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+						<path fill="#91A0AD" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
+					</svg>
+					<span class="tqb-settings-tooltip-info">
+						<?php
+							echo sprintf( __(
+								'%s Toggle OFF %s (default): Answers are sent immediately without waiting, making the quiz faster.
+								This is the new default behavior, but you can toggle it if you encounter issues with the faster mode.',
+								'thrive-quiz-builder'
+							), '<strong>', '</strong>' );
+						?>
+						<br><br>
+						<?php
+							echo sprintf( __(
+								'%s Toggle ON %s: Answers are processed one by one by the server which may slow down the quiz.',
+								'thrive-quiz-builder'
+							), '<strong>', '</strong>' );
+						?>
+					</span>
+				</span>
+			</div>
+			<div class="tvd-col tvd-s3">
+				<div class="tvd-switch">
+					<label for="tqb_answer_submission_mode">
+						<?php echo __( 'Off', 'thrive-quiz-builder' ); ?>
+						<input type="checkbox" class="tqb-setting-checkbox"
+							   id="tqb_answer_submission_mode"
+							   value="1"
+							   data-key="tqb_answer_submission_mode" <# if(model.get('tqb_answer_submission_mode') == 1) {#> checked="checked" <# }#>>
+						<span class="tvd-lever"></span>
+						<?php echo __( 'On', 'thrive-quiz-builder' ); ?>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Quiz Stats and Data Section -->
+	<div class="tqb-settings-section">
+		<h4 class="tqb-settings-section-title"><?php echo __( 'Quiz Stats and Data', 'thrive-quiz-builder' ); ?></h4>
+		<p class="tqb-settings-section-description"><?php echo __( 'These settings are global and apply to all quizzes. They cannot be overridden on a per-quiz basis.', 'thrive-quiz-builder' ); ?></p>
+
+		<div class="tvd-row tvd-collapse">
+			<div class="tvd-col tvd-s9">
+				<span><?php echo __( 'Enable stats tracking for all quizzes', 'thrive-quiz-builder' ); ?></span>
+				<span class="tqb-settings-tooltip">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+						<path fill="#91A0AD" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
+					</svg>
+					<span class="tqb-settings-tooltip-info">
+						<?php echo __( 'When this is on, we store quiz related stats so you can see reports. Turn it off if you do not need reports/new data.', 'thrive-quiz-builder' ); ?>
+					</span>
+				</span>
+			</div>
+			<div class="tvd-col tvd-s3">
+				<div class="tvd-switch">
+					<label for="tqb_enable_stats_tracking">
+						<?php echo __( 'Off', 'thrive-quiz-builder' ); ?>
+						<input type="checkbox" class="tqb-setting-checkbox"
+							   id="tqb_enable_stats_tracking"
+							   value="1"
+							   data-key="tqb_enable_stats_tracking" <# if(model.get('tqb_enable_stats_tracking') !== 0 && model.get('tqb_enable_stats_tracking') !== '0') {#> checked="checked" <# }#>>
+						<span class="tvd-lever"></span>
+						<?php echo __( 'On', 'thrive-quiz-builder' ); ?>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="tvd-row tvd-collapse">
+			<div class="tvd-col tvd-s9">
+				<span><?php echo __( 'Automatically clear old stats', 'thrive-quiz-builder' ); ?></span>
+				<span class="tqb-settings-tooltip">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+						<path fill="#91A0AD" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336l24 0 0-64-24 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0c13.3 0 24 10.7 24 24l0 88 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-80 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/>
+					</svg>
+					<span class="tqb-settings-tooltip-info">
+						<?php echo __( 'When this is on, we regularly delete older stats. Only stats newer than this period are kept. Anything older is removed permanently during cleanup.', 'thrive-quiz-builder' ); ?>
+					</span>
+				</span>
+			</div>
+			<div class="tvd-col tvd-s3">
+				<div class="tvd-switch">
+					<label for="tqb_auto_clear_stats">
+						<?php echo __( 'Off', 'thrive-quiz-builder' ); ?>
+						<input type="checkbox" class="tqb-setting-checkbox tqb-auto-clear-toggle"
+							   id="tqb_auto_clear_stats"
+							   value="1"
+							   data-key="tqb_auto_clear_stats" <# if(model.get('tqb_auto_clear_stats') == 1) {#> checked="checked" <# }#>>
+						<span class="tvd-lever"></span>
+						<?php echo __( 'On', 'thrive-quiz-builder' ); ?>
+					</label>
+				</div>
+			</div>
+		</div>
+
+		<div class="tvd-row tvd-collapse tqb-stats-duration-row">
+			<div class="tvd-col tvd-s12">
+				<div class="tqb-stats-duration-wrapper">
+					<label class="tqb-stats-duration-label"><?php echo __( 'Delete stats older than', 'thrive-quiz-builder' ); ?></label>
+					<input type="number" class="tqb-stats-duration-input" id="tqb_stats_duration" value="<#= model.get('tqb_stats_duration') || 90 #>" min="30">
+					<select class="tqb-stats-duration-select" id="tqb_stats_duration_unit">
+						<option value="days" <# if((model.get('tqb_stats_duration_unit') || 'days') == 'days') {#> selected <# }#>><?php echo __( 'days', 'thrive-quiz-builder' ); ?></option>
+						<option value="weeks" <# if(model.get('tqb_stats_duration_unit') == 'weeks') {#> selected <# }#>><?php echo __( 'weeks', 'thrive-quiz-builder' ); ?></option>
+						<option value="months" <# if(model.get('tqb_stats_duration_unit') == 'months') {#> selected <# }#>><?php echo __( 'months', 'thrive-quiz-builder' ); ?></option>
+					</select>
+				</div>
+				<p class="tqb-stats-duration-note">
+					<span class="tqb-min-duration-text"></span><?php echo __( 'Stats older than the selected period will be automatically removed', 'thrive-quiz-builder' ); ?>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="tvd-modal-footer">
+	<div class="tvd-row">
+		<div class="tvd-col tvd-s12">
+			<a href="javascript:void(0);" class="tvd-waves-effect tvd-modal-submit tvd-waves-light tvd-btn tvd-btn-green tvd-right"><?php echo __( 'Save', 'thrive-quiz-builder' ); ?></a>
+		</div>
+	</div>
+</div>

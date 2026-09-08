@@ -1,0 +1,63 @@
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Choose your mailing list', 'thrive-cb' ); ?>
+	</div>
+
+	<div class="control-grid">
+		<select class="api-list change" data-fn="setupChange" data-name="list">
+			<# _.each(api.get('lists'), function(item) { #>
+			<#= TVE.tpl( 'util/option', {value:item.id, selected: (api.getConfig('list')==item.id), text: item.name}) #>
+			<# } ) #>
+		</select>
+
+		<span class="click tve-refresh-api-list" data-fn="forceGet" data-tooltip="<?php echo __( 'Refresh', 'thrive-cb' ); ?>" data-side="top"> <?php tcb_icon( 'redo-regular' ) ?></span>
+	</div>
+</div>
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Tags', 'thrive-cb' ); ?>
+	</div>
+	<div class="tvd-select2-dropdown-parent"></div>
+	<div class="tvd-input-field">
+		<select id="tve-lg-select-tags" multiple name="tags" tabindex="-1" class="select2-hidden-accessible tve-api-extra" aria-hidden="true">
+			<#
+			// Get all available tags from API
+			var availableTags = api.get('extra_settings') && api.get('extra_settings').tags ? api.get('extra_settings').tags : {};
+			var tagsConfig = api.getConfig('tags');
+			var selectedTags = [];
+
+			// Parse currently selected tags
+			if ( tagsConfig ) {
+				selectedTags = typeof tagsConfig === 'string' ? tagsConfig.split(',').map(function(tag) { return tag.trim(); }) : [tagsConfig];
+			}
+
+			// Convert availableTags object to array and sort alphabetically by tag name
+			var sortedTags = [];
+			_.each( availableTags, function( tagName, tagId ) {
+				sortedTags.push({ id: tagId, name: tagName });
+			});
+			sortedTags.sort(function(a, b) {
+				return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+			});
+
+			// Display all available tags as options (sorted alphabetically)
+			_.each( sortedTags, function( tag ) {
+				var isSelected = selectedTags.indexOf(tag.name) !== -1;
+			#>
+			<option value="<#=tag.name#>"<# if (isSelected) { #> selected="selected"<# } #>><#=tag.name#></option>
+			<#
+			}, this );
+
+			// Also add any selected tags that might not be in the available tags list (custom tags)
+			_.each( selectedTags, function( tag ) {
+				var cleanTag = String(tag).trim();
+				if ( cleanTag && !_.contains(_.values(availableTags), cleanTag) ) {
+			#>
+			<option value="<#=cleanTag#>" selected="selected"><#=cleanTag#></option>
+			<#
+				}
+			}, this );
+			#>
+		</select>
+	</div>
+</div>

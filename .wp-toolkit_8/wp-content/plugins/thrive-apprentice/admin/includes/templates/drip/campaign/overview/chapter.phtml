@@ -1,0 +1,24 @@
+<div class="tva-drip-module tva-drip-chapter">
+	<div class="tva-module-header">
+		<div class="tva-col-names">
+			<div class="tva-drip-module-title"><#- chapter.get( 'post_title' ) #></div>
+			<span class="tva-drip-module-item"><?php esc_html_e( 'Chapter', 'thrive-apprentice' ); ?> <#- currentChapterIndex #></span>
+		</div>
+		<div class="tva-col-conditions">
+			<#= view.renderUnlockSummary( chapter.get( 'ID' ) ) #>
+		</div>
+		<div class="tva-col-restriction">
+			<div class="tva-drip-label mr-10 tva-tooltip-parent">
+				<?php esc_html_e( 'INHERIT', 'thrive-apprentice' ); ?>
+				<span class="tva-custom-tooltip">
+					<?php esc_html_e( 'This feature is coming soon', 'thrive-apprentice' ); ?>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="tva-module-content">
+		<# _.each( chapter.get( 'children' ) || [], function( child ) { #>
+		<#= view.renderCourseItem( child ) #>
+		<# }, this ) #>
+	</div>
+</div>

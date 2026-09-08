@@ -1,0 +1,34 @@
+<div class="tqb-header">
+	<nav id="tqb-nav">
+		<div class="tvd-left">
+			<a href="<?php echo admin_url( 'admin.php?page=tqb_admin_dashboard' ) ?>" title="<?php echo __( 'Thrive Quiz Builder Home', 'thrive-quiz-builder' ) ?>">
+				<img src="<?php echo tqb()->plugin_url( 'assets/images/thrive-logo.png' ); ?>"/>
+				<p><span>Thrive</span> Quiz Builder</p>
+			</a>
+		</div>
+		<ul class="tvd-right">
+			<li>
+				<a href="#reports">
+					<i class="tqd-icons-graph"></i>
+					<?php echo __( 'Reports', 'thrive-quiz-builder' ) ?>
+				</a>
+			</li>
+			<li>
+				<a href="javascript:void(0)" class="tqb-toggle-settings">
+					<i class="tvd-icon-settings"></i>
+					<?php echo __( 'Settings', 'thrive-quiz-builder' ) ?>
+				</a>
+			</li>
+			<?php do_action( 'tvd_notification_inbox' ); ?>
+		</ul>
+	</nav>
+</div>
+<div class="td-app-notification-overlay overlay close"></div>
+<div class="td-app-notification-drawer">
+    <div class="td-app-notification-holder">
+        <div class="td-app-notification-header notification-header-notify-tqb"></div>
+        <div class="td-app-notification-wrapper notification-wrapper-notify-tqb"></div>
+        <div class="notification-footer notification-footer-notify-tqb"></div>
+    </div>
+</div>
+<?php include TVE_DASH_PATH . '/templates/share.phtml'; ?>

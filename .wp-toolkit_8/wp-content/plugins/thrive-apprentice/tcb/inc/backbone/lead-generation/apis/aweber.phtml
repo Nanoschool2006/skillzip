@@ -1,0 +1,71 @@
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Choose your mailing list', 'thrive-cb' ); ?>
+	</div>
+	<div class="control-grid">
+		<select class="api-list change" data-fn="setupChange" data-name="list">
+			<# _.each(api.get('lists'), function(item) { #>
+			<#= TVE.tpl( 'util/option', {value:item.id, selected: (api.getConfig('list')==item.id), text: item.name}) #>
+			<# } ) #>
+		</select>
+
+		<span class="click tve-refresh-api-list" data-fn="forceGet" data-tooltip="<?php echo __( 'Refresh', 'thrive-cb' ); ?>" data-side="top"> <?php tcb_icon( 'redo-regular' ) ?></span>
+	</div>
+</div>
+
+<div class="api-field">
+	<div class="field-description">
+		<?php echo __( 'Tags', 'thrive-cb' ); ?>
+	</div>
+	<div class="tvd-select2-dropdown-parent"></div>
+	<div class="tvd-input-field">
+		<select id="tve-lg-select-tags" multiple name="aweber_tags" tabindex="-1" class="tve-api-extra"<# if ( ! api.get('supports_tags') ) { #> disabled<# } #>>
+			<#
+			// Get all available tags from AWeber API
+			var availableTags = api.get('tags') || [];
+			// Check both new format (aweber_tags) and old format (tags) for backward compatibility
+			var tagsConfig = api.getConfig('aweber_tags') || api.getConfig('tags');
+			var selectedTags = [];
+
+			// Parse currently selected tags - handle both array and string formats
+			if ( tagsConfig ) {
+				if ( Array.isArray(tagsConfig) ) {
+					// Already an array - just trim each value
+					selectedTags = tagsConfig.map(function(tag) { return String(tag).trim(); });
+				} else {
+					// String format - split by comma
+					selectedTags = String(tagsConfig).split(',').map(function(tag) { return tag.trim(); });
+				}
+			}
+
+			// Sort available tags alphabetically by tag name
+			var sortedTags = availableTags.slice().sort(function(a, b) {
+				return a.text.toLowerCase().localeCompare(b.text.toLowerCase());
+			});
+
+			// Display all available tags as options (sorted alphabetically)
+			_.each( sortedTags, function( tag ) {
+				var isSelected = selectedTags.indexOf(tag.text) !== -1;
+			#>
+			<option value="<#=tag.text#>"<# if (isSelected) { #> selected="selected"<# } #>><#=tag.text#></option>
+			<#
+			}, this );
+
+			// Also add any selected tags that might not be in the available tags list (custom tags)
+			_.each( selectedTags, function( tag ) {
+				var cleanTag = String(tag).trim();
+				if ( cleanTag && !_.findWhere(availableTags, {text: cleanTag}) ) {
+			#>
+			<option value="<#-cleanTag#>" selected="selected"><#-cleanTag#></option>
+			<#
+				}
+			}, this );
+			#>
+		</select>
+	</div>
+	<# if ( ! api.get('supports_tags') ) { #>
+	<div class="field-description" style="margin-top: 10px;">
+		<span><?php echo __( 'Upgrade to', 'thrive-cb' ); ?> <a href="<?php echo admin_url( 'admin.php?page=tve_dash_api_connect' ); ?>" target="_blank" rel="noopener" style="color: #4bb35e;"><?php echo __( 'OAuth 2.0', 'thrive-cb' ); ?></a> <?php echo __( 'to see the full list of tags', 'thrive-cb' ); ?></span>
+	</div>
+	<# } #>
+</div>

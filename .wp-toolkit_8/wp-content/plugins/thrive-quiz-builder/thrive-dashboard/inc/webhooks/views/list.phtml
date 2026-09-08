@@ -1,0 +1,40 @@
+<?php
+/** @var array $items */
+$edit_url = function( $id ) { return add_query_arg( [ 'page' => 'td_webhooks', 'tab' => 'edit', 'id' => $id ], admin_url( 'admin.php' ) ); };
+$logs_url = function( $id ) { return add_query_arg( [ 'page' => 'td_webhooks', 'tab' => 'logs', 'id' => $id ], admin_url( 'admin.php' ) ); };
+?>
+<table class="widefat fixed striped">
+    <thead>
+    <tr>
+        <th><?php echo esc_html__( 'Name', 'thrive-dash' ); ?></th>
+        <th><?php echo esc_html__( 'URL', 'thrive-dash' ); ?></th>
+        <th><?php echo esc_html__( 'Enabled', 'thrive-dash' ); ?></th>
+        <th><?php echo esc_html__( 'Actions', 'thrive-dash' ); ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php if ( empty( $items ) ) : ?>
+        <tr><td colspan="4"><?php echo esc_html__( 'No webhooks found.', 'thrive-dash' ); ?></td></tr>
+    <?php else : foreach ( $items as $it ) : ?>
+        <?php $enabled_text = ! empty( $it['enabled'] ) ? __( 'Yes', 'thrive-dash' ) : __( 'No', 'thrive-dash' ); ?>
+        <tr>
+            <td><?php echo esc_html( $it['name'] ?? '' ); ?></td>
+            <td><?php echo esc_html( $it['url'] ?? '' ); ?></td>
+            <td><?php echo esc_html( $enabled_text ); ?></td>
+            <td>
+                <a class="button" href="<?php echo esc_url( $edit_url( $it['id'] ) ); ?>"><?php echo esc_html__( 'Edit', 'thrive-dash' ); ?></a>
+                <a class="button" href="<?php echo esc_url( $logs_url( $it['id'] ) ); ?>"><?php echo esc_html__( 'Logs', 'thrive-dash' ); ?></a>
+                <?php $delete_nonce = wp_create_nonce( 'td_webhooks_delete' ); ?>
+                <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;margin-left:6px;" onsubmit="return confirm('<?php echo esc_js( __( 'Are you sure?', 'thrive-dash' ) ); ?>');">
+                    <input type="hidden" name="action" value="td_webhooks_delete" />
+                    <input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $delete_nonce ); ?>" />
+                    <input type="hidden" name="id" value="<?php echo esc_attr( (string) $it['id'] ); ?>" />
+                    <button type="submit" class="button delete"><?php echo esc_html__( 'Delete', 'thrive-dash' ); ?></button>
+                </form>
+            </td>
+        </tr>
+    <?php endforeach; endif; ?>
+    </tbody>
+</table>
+
+

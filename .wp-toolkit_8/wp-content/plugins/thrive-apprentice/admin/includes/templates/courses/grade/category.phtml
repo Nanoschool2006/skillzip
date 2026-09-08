@@ -1,0 +1,68 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Silence is golden!
+}
+
+?>
+
+<div id="tva-grade-category" class="tvd-switch">
+
+    <label class="tva-d-block eq-ranges">
+        <div class="tva-equal-ranges">
+            <?php echo __( 'Equal ranges', 'thrive-apprentice' ); ?>
+            <input id="tva-equal-ranges" 
+                type="checkbox" 
+                class="click" 
+                data-fn="hasEqualRanges" <#= this.model.get( 'equal_ranges' )  ? 'checked="checked"' : '' #>>
+            <span class="tvd-lever"></span>	
+        </div>
+    </label>
+
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <?php echo __( 'Range', 'thrive-apprentice' ); ?>
+                    <div class="tva-tooltip-parent">
+						<div class="ml-5 tva-flex tva-align-center"><?php tva_get_svg_icon( 'info-solid' ); ?>
+							<div class="tva-custom-tooltip tva-certificates-tooltip">
+								<?php esc_html_e( "Editing the scores range will automatically adjust the other score ranges. One range cannot overlap with other range", 'thrive-apprentice' ); ?>
+							</div>
+						</div>
+					</div>
+                </th>
+                <th>
+                    <?php echo __( 'Label', 'thrive-apprentice' ); ?>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="tva-disabled">
+            <tr class="tva-included">
+                <td class="category-range-container">
+                    <input type="text" class="tva-interval-from" value="0"> - <input type="text" class="tva-interval-to" value="49"> 
+                </td>
+                <td class="category-label-container">
+                    <input type="text" value="Failed">
+                </td>
+            </tr>
+            <tr class="tva-included">
+                <td class="category-range-container">
+                    <input type="text" class="tva-interval-from" value="50"> - <input type="text" class="tva-interval-to tva" value="100"> 
+                </td>
+                <td class="category-label-container">
+                    <input type="text" value="Passed">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="hidden" id="category-data-container" class="change" data-fn="categoryData" />
+    <button class="tva-add-category click" data-fn="editGradeRanges">
+        <?php 
+            tva_get_svg_icon( 'edit-blue' ); 
+            echo __( 'Edit ranges', 'thrive-apprentice' ); 
+        ?>
+    </button>
+</div>
+
+

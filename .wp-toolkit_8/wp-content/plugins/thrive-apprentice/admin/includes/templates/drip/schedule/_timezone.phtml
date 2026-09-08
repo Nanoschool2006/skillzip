@@ -1,0 +1,8 @@
+<div class="tva-drip-value tva-drip-timezone">
+	<a class="tva-drip-timezone-link" href="<?php echo esc_url( network_admin_url( 'options-general.php#timezone_string' ) ); ?>" target="_blank">
+		<?php echo esc_html( 'UTC' . format_gmt_offset() ); ?>
+	</a>
+	<div class="tva-custom-tooltip <#= this.model.get( 'monthly_type' ) === 'day' || this.model.get( 'interval' ) === 'days' ? 'tooltip-right-edge' : '' #>">
+		<?php esc_html_e( 'This is the timezone set in your website general settings. You can click on the UTC indicator to adjust it.' ); ?>
+	</div>
+</div>

@@ -1,0 +1,67 @@
+<?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
+/**
+ * @since 3.0
+ */
+class FrmFieldCreditCard extends FrmFieldType {
+
+	/**
+	 * @var string
+	 *
+	 * @since 3.0
+	 */
+	protected $type = 'credit_card';
+
+	/**
+	 * @var bool
+	 *
+	 * @since 3.0
+	 */
+	protected $has_for_label = false;
+
+	/**
+	 * @return array
+	 */
+	protected function field_settings_for_type() {
+		return array(
+			'clear_on_focus' => false,
+			'description'    => false,
+			'default'        => false,
+			'required'       => false,
+		);
+	}
+
+	protected function include_form_builder_file() {
+		return FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-credit-card.php';
+	}
+
+	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
+	 * @return string
+	 */
+	public function front_field_input( $args, $shortcode_atts ) {
+		$pass_args = array(
+			'errors'   => $args['errors'],
+			'html_id'  => $args['html_id'],
+			'field_id' => $args['field_id'],
+		);
+
+		ob_start();
+
+		if ( FrmAppHelper::is_style_editor_page() || FrmFormsHelper::is_block_or_page_builder_preview() ) {
+			// Payment gateway scripts are unavailable in preview contexts, use the builder placeholder.
+			$field = $this->field;
+			include $this->include_form_builder_file();
+		} else {
+			FrmStrpLiteActionsController::show_card( $this->field, $args['field_name'], $pass_args );
+		}
+
+		return ob_get_clean();
+	}
+}
