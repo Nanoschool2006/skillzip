@@ -8,6 +8,8 @@
  */
 class TPM_Admin {
 
+	const LICENSE_REFRESH_FLAG = 'tpm_license_refresh_10_9_1_1_done';
+
 	private static $instance;
 
 	private function __construct() {
@@ -18,6 +20,8 @@ class TPM_Admin {
 		add_action(
 			'admin_init',
 			function () {
+
+				$this->maybe_run_license_refresh_10_9_1_1();
 
 				/**
 				 * On each TPM update clear cache
@@ -92,6 +96,23 @@ class TPM_Admin {
 	}
 
 	/**
+	 * One-shot migration: on upgrade to TPM 10.9.1.1, actively refetch the TTW license list.
+	 * Fires once per site, then never again. Failure (network, /tpm/proxy block) is accepted silently.
+	 */
+	public function maybe_run_license_refresh_10_9_1_1() {
+
+		if ( get_option( self::LICENSE_REFRESH_FLAG ) ) {
+			return;
+		}
+
+		update_option( self::LICENSE_REFRESH_FLAG, '1' );
+
+		$manager = TPM_License_Manager::get_instance();
+		$manager->clear_cache();
+		$manager->get_ttw_license_instances();
+	}
+
+	/**
 	 * Callback when TPM is deactivated
 	 * @see register_deactivation_hook()
 	 */
@@ -100,6 +121,7 @@ class TPM_Admin {
 		TPM_License_Manager::get_instance()->clear_cache();
 		TPM_License_Manager::get_instance()->deactivate_all_licenses();
 		$this->delete_tpm_version();
+		delete_option( self::LICENSE_REFRESH_FLAG );
 		delete_option( 'tpm_bk_connection' );
 	}
 }

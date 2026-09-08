@@ -259,6 +259,11 @@ class TPM_Connection {
 		update_option( self::NAME, $data );
 		delete_option( 'tpm_bk_connection' );
 
+		/* Clear any deactivation notice shown on the Connect screen - the site is connected again. */
+		if ( class_exists( 'TPM_License_Manager' ) ) {
+			TPM_License_Manager::get_instance()->clear_disconnect_notice();
+		}
+
 		tpm_cron()->log( '_save_connection()' );
 
 		if ( ! tpm_cron()->schedule( $this->ttw_expiration ) ) {
@@ -318,6 +323,12 @@ class TPM_Connection {
 		TPM_License_Manager::get_instance()->clear_cache();
 
 		tpm_cron()->unschedule();
+
+		/* Reset the locally-enabled license set so a fresh reconnect re-binds a valid license
+		   instead of inheriting a stale (possibly deactivated) one. */
+		if ( class_exists( 'TPM_License' ) ) {
+			delete_option( TPM_License::NAME );
+		}
 
 		//save the connection data to be used at TPM deactivation plugin
 		update_option( 'tpm_bk_connection', $this->_data );

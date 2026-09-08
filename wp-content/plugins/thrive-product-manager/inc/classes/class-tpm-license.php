@@ -51,6 +51,16 @@ class TPM_License {
 		return $this->id;
 	}
 
+	/**
+	 * Tags (product slugs) this license covers. An 'all' tag covers every product.
+	 *
+	 * @return array
+	 */
+	public function get_tags() {
+
+		return is_array( $this->tags ) ? $this->tags : array();
+	}
+
 	public function get_max() {
 
 		return (int) $this->max;

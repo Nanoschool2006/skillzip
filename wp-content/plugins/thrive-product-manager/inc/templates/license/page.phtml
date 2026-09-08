@@ -1,0 +1,161 @@
+<?php
+/**
+ * Hidden License Manager page body.
+ *
+ * @var TPM_License_Page $this
+ *
+ * @package thrive-product-manager
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+$notice    = $this->get_notice();
+$rows      = $this->get_license_rows();
+$T         = Thrive_Product_Manager::T;
+?>
+<div class="wrap tpm-license-manager">
+
+	<h1><?php echo esc_html__( 'Thrive License Manager', $T ); ?></h1>
+	<p class="description">
+		<?php echo esc_html__( 'Support / diagnostics tool. Inspect what Thrive Themes knows about this connected account, switch which licenses this site uses, and clear or refresh the license cache.', $T ); ?>
+	</p>
+
+	<?php if ( $notice ) : ?>
+		<?php $notice_color = 'error' === $notice['type'] ? '#d63638' : '#00a32a'; ?>
+		<div class="tpm-license-notice" style="margin:14px 0;padding:10px 14px;background:#fff;border:1px solid #c3c4c7;border-left:4px solid <?php echo esc_attr( $notice_color ); ?>;box-shadow:0 1px 1px rgba(0,0,0,.04);">
+			<p style="margin:.5em 0;"><?php echo esc_html( $notice['message'] ); ?></p>
+		</div>
+	<?php endif; ?>
+
+	<h2 style="margin-top:2.5em;"><?php echo esc_html__( 'Cache actions', $T ); ?></h2>
+	<p>
+		<a class="button button-primary" href="<?php echo esc_url( $this->action_url( 'refresh', array(), 'tpm_license_refresh' ) ); ?>">
+			<?php echo esc_html__( 'Refresh from Thrive Themes', $T ); ?>
+		</a>
+		<a class="button" href="<?php echo esc_url( $this->action_url( 'clear', array(), 'tpm_license_clear' ) ); ?>">
+			<?php echo esc_html__( 'Clear license cache', $T ); ?>
+		</a>
+	</p>
+	<p class="description">
+		<strong><?php echo esc_html__( 'Refresh from Thrive Themes', $T ); ?></strong>
+		<?php echo esc_html__( '— clears the cache and immediately fetches the latest license data from Thrive Themes. Use it after changing your account (for example, reactivating a license). It also confirms the site can reach our servers and reports a connection error on failure.', $T ); ?>
+		<br />
+		<strong><?php echo esc_html__( 'Clear license cache', $T ); ?></strong>
+		<?php echo esc_html__( '— only empties the locally cached license data. It makes no call to Thrive Themes; the data is re-fetched the next time it is needed.', $T ); ?>
+	</p>
+
+	<?php
+	/*
+	 * Legacy license override (thrive_license). This additive option is set by the old dashboard
+	 * key-activation flow and is never shrunk on sync, so a stale ['all'] from a long-expired
+	 * all-access membership keeps over-granting EVERY product regardless of the real entitlement or
+	 * the License Manager selection. "Clear license cache" and connect/disconnect do NOT touch it.
+	 * Surface it (with its value) and offer a one-click purge only when it is actually set.
+	 */
+	$legacy_override = get_option( 'thrive_license', array() );
+	$legacy_override = is_array( $legacy_override ) ? $legacy_override : (array) $legacy_override;
+	?>
+	<?php if ( ! empty( $legacy_override ) ) : ?>
+		<h2 style="margin-top:2.5em;"><?php echo esc_html__( 'Legacy license override', $T ); ?></h2>
+		<div style="margin:10px 0;padding:10px 14px;background:#fff;border:1px solid #c3c4c7;border-left:4px solid #dba617;box-shadow:0 1px 1px rgba(0,0,0,.04);">
+			<p style="margin:.5em 0;">
+				<?php echo esc_html__( 'A legacy all-access override is set on this site and is granting product access on top of the License Manager selection:', $T ); ?>
+				<code><?php echo esc_html( 'thrive_license = [' . implode( ', ', array_map( 'strval', $legacy_override ) ) . ']' ); ?></code>
+			</p>
+			<p style="margin:.5em 0;">
+				<?php echo esc_html__( 'If this account is no longer an all-access member, clear it so product access follows the real entitlement (and the License Manager selection above).', $T ); ?>
+			</p>
+			<?php $legacy_confirm = __( 'Clear the legacy license override (thrive_license) on this site? Product access will then follow this account\'s real entitlement.', $T ); ?>
+			<p style="margin:.5em 0;">
+				<a class="button" href="<?php echo esc_url( $this->action_url( 'clear_legacy', array(), 'tpm_license_clear_legacy' ) ); ?>" onclick="return confirm(<?php echo esc_attr( wp_json_encode( $legacy_confirm ) ); ?>);">
+					<?php echo esc_html__( 'Clear legacy license override', $T ); ?>
+				</a>
+			</p>
+		</div>
+	<?php endif; ?>
+
+	<h2 style="margin-top:2.5em;"><?php echo esc_html__( 'Licenses on this account', $T ); ?></h2>
+
+	<p class="description"><?php echo esc_html__( 'Tick the licenses this website should use, then "Save enabled licenses". The Product Manager shows the combined products of every enabled license. At least one license must be selected.', $T ); ?></p>
+
+	<?php if ( empty( $rows ) ) : ?>
+		<p><em><?php echo esc_html__( 'No licenses found for the connected account (or not connected). Try "Refresh from Thrive Themes" above, then check the diagnostic dump below.', $T ); ?></em></p>
+	<?php else : ?>
+
+		<form method="post" action="<?php echo esc_url( $this->get_admin_url() ); ?>">
+			<?php wp_nonce_field( 'tpm_license_set_active' ); ?>
+			<input type="hidden" name="tpm_action" value="set_active" />
+
+			<table class="widefat striped">
+				<thead>
+					<tr>
+						<th><?php echo esc_html__( 'Active', $T ); ?></th>
+						<th><?php echo esc_html__( 'License', $T ); ?></th>
+						<th><?php echo esc_html__( 'Status', $T ); ?></th>
+						<th><?php echo esc_html__( 'Expiration', $T ); ?></th>
+						<th><?php echo esc_html__( 'Active sites', $T ); ?></th>
+						<th><?php echo esc_html__( 'Enabled on this site', $T ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+				<?php foreach ( $rows as $row ) : ?>
+					<tr>
+						<td>
+							<input type="checkbox" name="license_id[]" value="<?php echo esc_attr( $row['id'] ); ?>" <?php checked( ! empty( $row['enabled'] ) && empty( $row['deactivated'] ) ); ?> <?php disabled( ! empty( $row['deactivated'] ) ); ?> />
+						</td>
+						<td>
+							<strong><?php echo esc_html( $row['name'] ); ?></strong><br />
+							<small>#<?php echo esc_html( $row['id'] ); ?></small>
+						</td>
+						<td>
+							<?php
+							/* Show the raw account-area status (matches the customer's My Licenses page);
+							   fall back to the entitlement label only when the field is absent. */
+							if ( ! empty( $row['account_status'] ) ) {
+								echo esc_html( ucfirst( str_replace( '_', ' ', $row['account_status'] ) ) );
+							} else {
+								echo esc_html( $this->status_label( $row['status'] ) );
+							}
+							?>
+						</td>
+						<td><?php echo esc_html( $row['expiration'] ? preg_replace( '/\s.*$/', '', (string) $row['expiration'] ) : '—' ); ?></td>
+						<td>
+							<?php
+							$used  = (int) $row['used'];
+							$limit = $row['limit']; // null = unknown (old cache / server not deployed); 0 = unlimited
+							if ( null === $limit ) {
+								echo esc_html( (string) $used );
+							} elseif ( 0 === (int) $limit ) {
+								echo esc_html( $used . ' / ' ) . esc_html__( 'unlimited', $T );
+							} else {
+								echo esc_html( $used . ' / ' . (int) $limit );
+							}
+							?>
+						</td>
+						<td>
+							<?php if ( ! empty( $row['deactivated'] ) ) : ?>
+								<span style="font-weight:600;color:#b32d2e;"><?php echo esc_html__( 'Deactivated (account)', $T ); ?></span>
+							<?php endif; ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+
+			<?php $apply_confirm = __( 'Update which licenses this website uses?', $T ); ?>
+			<p>
+				<button type="submit" class="button button-primary" onclick="return confirm(<?php echo esc_attr( wp_json_encode( $apply_confirm ) ); ?>);">
+					<?php echo esc_html__( 'Save enabled licenses', $T ); ?>
+				</button>
+			</p>
+		</form>
+
+	<?php endif; ?>
+
+	<h2 style="margin-top:2.5em;"><?php echo esc_html__( 'Diagnostic dump', $T ); ?></h2>
+	<p class="description"><?php echo esc_html__( 'Everything we know about this account in our EDD. Secrets are masked.', $T ); ?></p>
+	<pre style="background:#fff;border:1px solid #ccd0d4;padding:12px;overflow:auto;max-height:560px;"><?php echo $this->pretty( $this->get_diagnostic_dump() ); ?></pre>
+
+</div>

@@ -241,7 +241,7 @@ class TD_REST_Hook_Controller extends TD_REST_Controller {
 			if ( ! empty( $results ) ) {
 				// Handle regular forms (existing logic).
 				foreach ( $results as $row ) {
-					$meta_value = unserialize( $row['meta_value'] ) ?? [];
+					$meta_value = thrive_safe_unserialize( $row['meta_value'] ) ?? [];
 					$inputs     = $meta_value['inputs'] ?? [];
 
 					// Format/Rename all the fields.

@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Product Manager
  * Plugin URI: https://thrivethemes.com
  * Description: Connect this site with Thrive Themes account to install and activate Thrive product.
- * Version: 10.8.9.1
+ * Version: 10.9.3.3
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-product-manager
@@ -11,7 +11,7 @@
  */
 class Thrive_Product_Manager {
 
-	const V = '10.8.9.1';
+	const V = '10.9.3.3';
 	const T = 'thrive_product_manager';
 
 	protected static $_instance;
@@ -106,6 +106,7 @@ class Thrive_Product_Manager {
 		require_once __DIR__ . '/inc/classes/class-tpm-product-theme-builder.php';
 		require_once __DIR__ . '/inc/classes/class-tpm-product-skin.php';
 		require_once __DIR__ . '/inc/classes/class-tpm-license-manager.php';
+		require_once __DIR__ . '/inc/classes/class-tpm-license-page.php';
 		require_once __DIR__ . '/inc/classes/class-tpm-cron.php';
 		require_once __DIR__ . '/inc/classes/class-tpm-dashboard.php';
 	}

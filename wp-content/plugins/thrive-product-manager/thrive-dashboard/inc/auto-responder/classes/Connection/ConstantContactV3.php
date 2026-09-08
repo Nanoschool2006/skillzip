@@ -468,12 +468,12 @@ class Thrive_Dash_List_Connection_ConstantContactV3 extends Thrive_Dash_List_Con
 	private function _generateMappingFields( $args = array() ) {
 		$mapping_fields = array();
 
-		if ( empty( $args['tve_mapping'] ) || ! is_string( $args['tve_mapping'] ) ) {
+		if ( empty( $args['tve_mapping'] ) || ! is_string( $args['tve_mapping'] ) || ! tve_dash_is_bas64_encoded( $args['tve_mapping'] ) || ! is_serialized( base64_decode( $args['tve_mapping'] ) ) ) {
 			return $mapping_fields;
 		}
 
-		$decoded     = base64_decode( $args['tve_mapping'], true );
-		$tve_mapping = false !== $decoded ? @unserialize( $decoded ) : false;
+		/* use the safe unserializer (allowed_classes => false) to prevent PHP object injection from attacker-controlled tve_mapping */
+		$tve_mapping = thrive_safe_unserialize( base64_decode( $args['tve_mapping'] ) );
 
 		if ( ! is_array( $tve_mapping ) || 0 === count( $tve_mapping ) ) {
 			return $mapping_fields;

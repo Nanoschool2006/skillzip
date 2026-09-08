@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-26 14:08+0000\n"
+"POT-Creation-Date: 2026-08-25 11:31+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -14,60 +14,77 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../classes/AjaxController.php:287, ../inc/notification-inbox/includes/admin/class-td-ni-ajax-controller.php:52, ../inc/notification-inbox/includes/admin/class-td-ni-ajax-controller.php:151, ../inc/notification-manager/includes/admin/class-td-nm-admin-ajax-controller.php:66
-msgid "Invalid request"
-msgstr ""
-
-#: ../classes/AjaxController.php:313
-msgid "Error in communication with Thrive Themes"
-msgstr ""
-
-#: ../classes/AjaxController.php:370
-msgid "An error occurred, please try again"
-msgstr ""
-
-#: ../classes/AjaxController.php:406
-msgid "Token is not deleted"
-msgstr ""
-
-#: ../classes/AjaxController.php:404
-msgid "Token has been deleted"
-msgstr ""
-
-#: ../classes/AjaxController.php:412
-msgid "There is no token to delete"
-msgstr ""
-
-#: ../classes/AjaxController.php:526
+#: ../classes/AjaxController.php:289
 msgid "You do not have this capability"
 msgstr ""
 
-#: ../classes/AjaxController.php:519
+#: ../classes/AjaxController.php:282
 msgid "This role does not exist anymore"
 msgstr ""
 
-#: ../classes/AjaxController.php:513
+#: ../classes/AjaxController.php:276
 msgid "Capability changed successfully"
 msgstr ""
 
-#: ../classes/AjaxController.php:513
+#: ../classes/AjaxController.php:276
 msgid "Changing capability failed"
 msgstr ""
 
-#: ../classes/AjaxController.php:493, ../inc/hooks.php:500
+#: ../classes/AjaxController.php:256, ../inc/hooks.php:497
 msgid "You are not allowed to remove this capability!"
 msgstr ""
 
-#: ../classes/AjaxController.php:553
+#: ../classes/AjaxController.php:316
 msgid "Functionality changed successfully"
 msgstr ""
 
-#: ../classes/AjaxController.php:553, ../classes/AjaxController.php:601
+#: ../classes/AjaxController.php:316, ../classes/AjaxController.php:364
 msgid "Changing functionality failed"
 msgstr ""
 
-#: ../classes/AjaxController.php:601
+#: ../classes/AjaxController.php:364
 msgid "Default values were set successfully"
+msgstr ""
+
+#. translators: %1$s: tag name, %2$s: source name
+#: ../classes/class-thrive-user-tags.php:68
+msgid "Tag \"%1$s\" already exists for source \"%2$s\"."
+msgstr ""
+
+#. translators: %1$s: source name, %2$s: list of allowed sources
+#: ../classes/class-thrive-user-tags.php:143, ../classes/class-thrive-user-tags.php:339
+msgid "Invalid source \"%1$s\". Allowed: %2$s."
+msgstr ""
+
+#. translators: %1$s: tag name, %2$s: optional source context
+#: ../classes/class-thrive-user-tags.php:191
+msgid "Tag \"%1$s\" not found%2$s."
+msgstr ""
+
+#: ../classes/class-thrive-user-tags.php:331
+msgid "Source must not be empty."
+msgstr ""
+
+#: ../classes/class-thrive-user-tags.php:372
+msgid "Tag name must not be empty."
+msgstr ""
+
+#. translators: %d: maximum character count
+#: ../classes/class-thrive-user-tags.php:380
+msgid "Tag name must not exceed %d characters."
+msgstr ""
+
+#: ../classes/class-thrive-user-tags.php:388
+msgid "Tag name contains invalid characters. Allowed: a-z, 0-9, hyphens, underscores, spaces."
+msgstr ""
+
+#: ../classes/class-thrive-user-tags.php:403
+msgid "User ID must be greater than zero."
+msgstr ""
+
+#. translators: %d: user ID
+#: ../classes/class-thrive-user-tags.php:411
+msgid "User with ID %d does not exist."
 msgstr ""
 
 #: ../classes/Product/LicenseManager.php:192
@@ -131,7 +148,7 @@ msgid "API Connections"
 msgstr ""
 
 #: ../inc/functions.php:236
-msgid "Connect to your email marketing system, reCaptcha, email delivery services & more."
+msgid "Manage connections to your email marketing, reCaptcha, delivery services & API keys that let external tools talk to your Thrive products."
 msgstr ""
 
 #: ../inc/functions.php:238
@@ -174,7 +191,7 @@ msgstr ""
 msgid "Manage Icons"
 msgstr ""
 
-#: ../inc/functions.php:263, ../inc/hooks.php:192, ../templates/settings/general_settings.phtml:37
+#: ../inc/functions.php:263, ../inc/hooks.php:192, ../templates/settings/general_settings.phtml:58
 msgid "General Settings"
 msgstr ""
 
@@ -222,7 +239,7 @@ msgstr ""
 msgid "Custom fields"
 msgstr ""
 
-#: ../inc/functions.php:578, ../inc/automator/action-fields/class-api-fields.php:50, ../inc/font-import-manager/views/main.php:48, ../inc/webhooks/views/edit.phtml:65, ../inc/webhooks/views/list.phtml:9, ../inc/auto-responder/classes/Connection/Abstract.php:726, ../inc/auto-responder/classes/Connection/Abstract.php:1046, ../inc/auto-responder/classes/Connection/Email.php:491, ../inc/auto-responder/lib/vendor/Html/Renderer.php:34
+#: ../inc/functions.php:578, ../inc/automator/action-fields/class-api-fields.php:50, ../inc/font-import-manager/views/main.php:48, ../inc/public-api/views/api-keys.phtml:66, ../inc/webhooks/views/edit.phtml:65, ../inc/webhooks/views/list.phtml:9, ../inc/auto-responder/classes/Connection/Abstract.php:726, ../inc/auto-responder/classes/Connection/Abstract.php:1046, ../inc/auto-responder/classes/Connection/Email.php:491, ../inc/auto-responder/lib/vendor/Html/Renderer.php:34
 msgid "Name"
 msgstr ""
 
@@ -274,63 +291,63 @@ msgstr ""
 msgid "Switch to stable version"
 msgstr ""
 
-#: ../inc/hooks.php:493
+#: ../inc/hooks.php:490
 msgid "Unknown error"
 msgstr ""
 
-#: ../inc/hooks.php:494
+#: ../inc/hooks.php:491
 msgid "Deleting..."
 msgstr ""
 
-#: ../inc/hooks.php:495
+#: ../inc/hooks.php:492
 msgid "Testing..."
 msgstr ""
 
-#: ../inc/hooks.php:496
+#: ../inc/hooks.php:493
 msgid "Loading..."
 msgstr ""
 
-#: ../inc/hooks.php:497
+#: ../inc/hooks.php:494
 msgid "Connection works!"
 msgstr ""
 
-#: ../inc/hooks.php:498
+#: ../inc/hooks.php:495
 msgid "Connection failed!"
 msgstr ""
 
-#: ../inc/hooks.php:499
+#: ../inc/hooks.php:496
 msgid "Unlimited"
 msgstr ""
 
-#: ../inc/hooks.php:503
+#: ../inc/hooks.php:500
 msgid "Kit successfully imported"
 msgstr ""
 
-#: ../inc/hooks.php:504
+#: ../inc/hooks.php:501
 msgid "Kit removed"
 msgstr ""
 
-#: ../inc/hooks.php:513
+#: ../inc/hooks.php:510
 msgid "Individual product"
 msgstr ""
 
-#: ../inc/hooks.php:514
+#: ../inc/hooks.php:511
 msgid "Full membership"
 msgstr ""
 
-#: ../inc/hooks.php:1209, ../inc/coming-soon/views/admin.php:20, ../inc/font-library/templates/font-library.php:38, ../inc/login-editor/views/admin.php:36, ../inc/auto-responder/views/setup/awsses.php:74, ../inc/auto-responder/views/setup/hubspot.php:36, ../inc/auto-responder/views/setup/mailchimp.php:48, ../inc/auto-responder/views/setup/mailgun.php:41, ../inc/auto-responder/views/setup/mandrill.php:46, ../inc/auto-responder/views/setup/postmark.php:36, ../inc/auto-responder/views/setup/sendinblueemail.php:19, ../inc/auto-responder/views/setup/sparkpost.php:36, ../inc/ttw-account/templates/licences/multiple-message.phtml:15, ../inc/ttw-account/templates/licences/suite-message.phtml:16, ../templates/backbone/license-modal.phtml:33, ../templates/settings/general_settings.phtml:77
+#: ../inc/hooks.php:1192, ../inc/coming-soon/views/admin.php:20, ../inc/font-library/templates/font-library.php:38, ../inc/login-editor/views/admin.php:36, ../inc/auto-responder/views/setup/awsses.php:74, ../inc/auto-responder/views/setup/hubspot.php:36, ../inc/auto-responder/views/setup/mailchimp.php:48, ../inc/auto-responder/views/setup/mailgun.php:41, ../inc/auto-responder/views/setup/mandrill.php:46, ../inc/auto-responder/views/setup/postmark.php:36, ../inc/auto-responder/views/setup/sendinblueemail.php:19, ../inc/auto-responder/views/setup/sparkpost.php:36, ../inc/ttw-account/templates/licences/multiple-message.phtml:15, ../inc/ttw-account/templates/licences/suite-message.phtml:16, ../templates/backbone/license-modal.phtml:33, ../templates/settings/general_settings.phtml:98
 msgid "Learn more"
 msgstr ""
 
-#: ../inc/hooks.php:1210, ../inc/ttw-account/templates/licences/multiple-message.phtml:17, ../inc/ttw-account/templates/licences/suite-message.phtml:18, ../templates/backbone/license-modal.phtml:35
+#: ../inc/hooks.php:1193, ../inc/ttw-account/templates/licences/multiple-message.phtml:17, ../inc/ttw-account/templates/licences/suite-message.phtml:18, ../templates/backbone/license-modal.phtml:35
 msgid "Renew now"
 msgstr ""
 
-#: ../inc/hooks.php:1212, ../inc/ttw-account/templates/licences/multiple-message.phtml:10, ../inc/ttw-account/templates/licences/suite-message.phtml:10, ../templates/backbone/license-modal.phtml:26
+#: ../inc/hooks.php:1195, ../inc/ttw-account/templates/licences/multiple-message.phtml:10, ../inc/ttw-account/templates/licences/suite-message.phtml:10, ../templates/backbone/license-modal.phtml:26
 msgid "Click here to refresh your license now."
 msgstr ""
 
-#: ../inc/hooks.php:1292
+#: ../inc/hooks.php:1275
 msgid "Manage plugins"
 msgstr ""
 
@@ -382,7 +399,7 @@ msgstr ""
 msgid "Connection established"
 msgstr ""
 
-#: ../inc/auto-responder/admin.php:187, ../inc/auto-responder/classes/Connection/ConstantContactV3.php:124, ../inc/auto-responder/classes/Connection/FileUpload/Dropbox.php:93, ../inc/auto-responder/classes/Connection/FileUpload/GoogleDrive.php:94
+#: ../inc/auto-responder/admin.php:187, ../inc/auto-responder/classes/Connection/ConstantContactV3.php:124, ../inc/auto-responder/classes/Connection/FileUpload/Dropbox.php:93, ../inc/auto-responder/classes/Connection/FileUpload/GoogleDrive.php:98
 msgid "Connection works"
 msgstr ""
 
@@ -891,6 +908,126 @@ msgstr ""
 msgid "Remove all transients"
 msgstr ""
 
+#: ../inc/public-api/class-rest-controller.php:186, ../inc/public-api/class-rest-controller.php:196
+msgid "Authentication failed due to invalid authentication credentials."
+msgstr ""
+
+#: ../inc/public-api/class-rest-controller.php:211
+msgid "Authorization failed due to insufficient permissions."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:53
+msgid "Are you sure you want to delete this API key?"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:54
+msgid "Please enter a name for the API key."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:55, ../inc/public-api/class-td-api-tokens-controller.php:116, ../inc/public-api/class-td-api-tokens-controller.php:177
+msgid "Token name can only contain letters, numbers, spaces, hyphens, underscores, dots, commas, ampersands, and parentheses."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:56
+msgid "Copied!"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:57, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:15, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:34, ../inc/notification-manager/includes/admin/views/backbone/messages/shortcodes/item.phtml:10, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/custom-script.phtml:21, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/wordpress-notification.phtml:21
+msgid "Copy"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:58
+msgid "Save this key now. It will be partially hidden once you leave this page."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:59
+msgid "Active"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:60
+msgid "Inactive"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:61
+msgid "Unnamed Key"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:62
+msgid "Created"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:63
+msgid "Copy key"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:64
+msgid "Enable"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:65
+msgid "Disable"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:66, ../inc/auto-responder/views/admin-list.php:98, ../inc/auto-responder/views/error-log-entry.php:33, ../inc/webhooks/views/edit.phtml:169, ../inc/webhooks/views/list.phtml:32, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:14
+msgid "Delete"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:67, ../inc/public-api/views/api-keys.phtml:75
+msgid "Generate & Save"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:68
+msgid "API Key Copied"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:69
+msgid "Failed to create API key."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:70
+msgid "Failed to update API key."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:71
+msgid "Failed to delete API key."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-admin.php:72
+msgid "Failed to load API keys."
+msgstr ""
+
+#: ../inc/public-api/class-td-api-token.php:133
+msgid "Token could not be added into DB"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-token.php:153
+msgid "Token could not be saved"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-token.php:326
+msgid "Token could not be deleted"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-tokens-controller.php:127
+msgid "Token could not be created"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-tokens-controller.php:143, ../inc/public-api/class-td-api-tokens-controller.php:168
+msgid "Token not found"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-tokens-controller.php:152
+msgid "Token item could not be deleted"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-tokens-controller.php:201
+msgid "Token could not be updated"
+msgstr ""
+
+#: ../inc/public-api/class-td-api-tokens-controller.php:231
+msgid "You cannot view the resource."
+msgstr ""
+
 #: ../inc/smart-site/i18n.php:14, ../inc/smart-site/classes/class-tvd-smart-site.php:131, ../inc/smart-site/classes/class-tvd-smart-site.php:131, ../inc/smart-site/views/admin/templates/header.phtml:15
 msgid "Smart Site"
 msgstr ""
@@ -1055,7 +1192,7 @@ msgstr ""
 msgid "Page doesn't exist"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-error-logs.php:80, ../templates/backbone/support-token.phtml:27
+#: ../inc/auto-responder/views/admin-error-logs.php:80
 msgid "Go"
 msgstr ""
 
@@ -1071,99 +1208,103 @@ msgstr ""
 msgid "Back to API Connections"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:26
+#: ../inc/auto-responder/views/admin-list.php:27, ../inc/auto-responder/views/admin-list.php:32
 msgid "Active Connections"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:30
+#: ../inc/auto-responder/views/admin-list.php:28, ../templates/settings/general_settings.phtml:112
+msgid "API Keys"
+msgstr ""
+
+#: ../inc/auto-responder/views/admin-list.php:28
+msgid "NEW"
+msgstr ""
+
+#: ../inc/auto-responder/views/admin-list.php:36
 msgid "Third Party Connections"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:44, ../inc/coming-soon/views/admin.php:39, ../inc/font-manager/views/admin-font-manager.php:59, ../inc/icon-manager/views/main.php:47, ../inc/login-editor/views/admin.php:63, ../inc/access-manager/includes/templates/views/container.phtml:40, ../inc/smart-site/views/admin/templates/menu.phtml:33, ../inc/script-manager/includes/admin/views/templates/dashboard.phtml:34, ../templates/settings/general_settings.phtml:91
+#: ../inc/auto-responder/views/admin-list.php:50, ../inc/coming-soon/views/admin.php:39, ../inc/font-manager/views/admin-font-manager.php:59, ../inc/icon-manager/views/main.php:47, ../inc/login-editor/views/admin.php:63, ../inc/public-api/views/api-keys.phtml:53, ../inc/access-manager/includes/templates/views/container.phtml:40, ../inc/smart-site/views/admin/templates/menu.phtml:33, ../inc/script-manager/includes/admin/views/templates/dashboard.phtml:34, ../templates/settings/general_settings.phtml:122
 msgid "Back To Dashboard"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:50
+#: ../inc/auto-responder/views/admin-list.php:56
 msgid "View Error Logs"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:75
+#: ../inc/auto-responder/views/admin-list.php:86
 msgid "Test"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:81, ../inc/webhooks/views/list.phtml:25
+#: ../inc/auto-responder/views/admin-list.php:92, ../inc/webhooks/views/list.phtml:25
 msgid "Edit"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:87, ../inc/auto-responder/views/error-log-entry.php:33, ../inc/webhooks/views/edit.phtml:169, ../inc/webhooks/views/list.phtml:32, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:14
-msgid "Delete"
-msgstr ""
-
-#: ../inc/auto-responder/views/admin-list.php:102
+#: ../inc/auto-responder/views/admin-list.php:113
 msgid "Add new Connection"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:116
+#: ../inc/auto-responder/views/admin-list.php:127
 msgid "- Select an app -"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:138
+#: ../inc/auto-responder/views/admin-list.php:149
 msgid "The connection didn't work."
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:140
+#: ../inc/auto-responder/views/admin-list.php:151
 msgid "Error message:"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:147, ../inc/coming-soon/views/create.php:13, ../inc/login-editor/views/reset-login-design-modal.php:22, ../inc/auto-responder/views/editor/add-api.php:14, ../inc/auto-responder/views/editor/autoresponder-code-fields.php:16, ../inc/auto-responder/views/editor/dashboard-api.php:194, ../inc/auto-responder/views/setup/activecampaign.php:21, ../inc/auto-responder/views/setup/aweber.php:272, ../inc/auto-responder/views/setup/awsses.php:81, ../inc/auto-responder/views/setup/campaignmonitor.php:60, ../inc/auto-responder/views/setup/campaignmonitoremail.php:36, ../inc/auto-responder/views/setup/constant-contact-v3.php:27, ../inc/auto-responder/views/setup/constant-contact.php:57, ../inc/auto-responder/views/setup/convertkit.php:22, ../inc/auto-responder/views/setup/drip.php:21, ../inc/auto-responder/views/setup/dropbox.php:21, ../inc/auto-responder/views/setup/everwebinar.php:19, ../inc/auto-responder/views/setup/facebook.php:23, ../inc/auto-responder/views/setup/facebookpixel.php:25, ../inc/auto-responder/views/setup/fluentcrm.php:32, ../inc/auto-responder/views/setup/fluentcrm.php:18, ../inc/auto-responder/views/setup/get-response.php:44, ../inc/auto-responder/views/setup/google-drive.php:21, ../inc/auto-responder/views/setup/google.php:28, ../inc/auto-responder/views/setup/gotowebinar.php:58, ../inc/auto-responder/views/setup/hubspot.php:44, ../inc/auto-responder/views/setup/iContact.php:26, ../inc/auto-responder/views/setup/infusionsoft.php:22, ../inc/auto-responder/views/setup/klicktipp.php:21, ../inc/auto-responder/views/setup/madmimi.php:21, ../inc/auto-responder/views/setup/mailchimp.php:58, ../inc/auto-responder/views/setup/mailerlite.php:35, ../inc/auto-responder/views/setup/mailgun.php:48, ../inc/auto-responder/views/setup/mailpoet.php:64, ../inc/auto-responder/views/setup/mailrelay.php:39, ../inc/auto-responder/views/setup/mailrelayemail.php:30, ../inc/auto-responder/views/setup/mailster.php:35, ../inc/auto-responder/views/setup/mailster.php:17, ../inc/auto-responder/views/setup/mandrill.php:53, ../inc/auto-responder/views/setup/ontraport.php:21, ../inc/auto-responder/views/setup/ovation.php:29, ../inc/auto-responder/views/setup/ovation.php:15, ../inc/auto-responder/views/setup/postmark.php:43, ../inc/auto-responder/views/setup/recaptcha.php:63, ../inc/auto-responder/views/setup/sendfox.php:16, ../inc/auto-responder/views/setup/sendgrid.php:52, ../inc/auto-responder/views/setup/sendgridemail.php:21, ../inc/auto-responder/views/setup/sendinblue-v3.php:45, ../inc/auto-responder/views/setup/sendinblue.php:45, ../inc/auto-responder/views/setup/sendinblueemail.php:38, ../inc/auto-responder/views/setup/sendlane.php:26, ../inc/auto-responder/views/setup/sendlayer.php:34, ../inc/auto-responder/views/setup/sendowl.php:26, ../inc/auto-responder/views/setup/sendy.php:75, ../inc/auto-responder/views/setup/sg-autorepondeur.php:24, ../inc/auto-responder/views/setup/slack.php:24, ../inc/auto-responder/views/setup/sparkpost.php:43, ../inc/auto-responder/views/setup/turnstile.php:80, ../inc/auto-responder/views/setup/twitter.php:33, ../inc/auto-responder/views/setup/webinarjamstudio.php:51, ../inc/auto-responder/views/setup/zapier.php:79, ../inc/auto-responder/views/setup/zoho.php:41, ../inc/notification-manager/includes/admin/views/backbone/modals/add-action.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/create-notification.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-action.phtml:12, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-trigger.phtml:11, ../inc/notification-manager/includes/admin/views/backbone/modals/email-services.phtml:47, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:25, ../inc/smart-site/views/admin/templates/global-fields/modals/edit-group.phtml:34, ../inc/smart-site/views/admin/templates/global-fields/modals/field.phtml:83, ../templates/product/inactive.phtml:51, ../templates/product/inactive.phtml:87
+#: ../inc/auto-responder/views/admin-list.php:158, ../inc/coming-soon/views/create.php:13, ../inc/login-editor/views/reset-login-design-modal.php:22, ../inc/public-api/views/api-keys.phtml:76, ../inc/auto-responder/views/editor/add-api.php:14, ../inc/auto-responder/views/editor/autoresponder-code-fields.php:16, ../inc/auto-responder/views/editor/dashboard-api.php:194, ../inc/auto-responder/views/setup/activecampaign.php:21, ../inc/auto-responder/views/setup/aweber.php:272, ../inc/auto-responder/views/setup/awsses.php:81, ../inc/auto-responder/views/setup/campaignmonitor.php:60, ../inc/auto-responder/views/setup/campaignmonitoremail.php:36, ../inc/auto-responder/views/setup/constant-contact-v3.php:27, ../inc/auto-responder/views/setup/constant-contact.php:57, ../inc/auto-responder/views/setup/convertkit.php:22, ../inc/auto-responder/views/setup/drip.php:21, ../inc/auto-responder/views/setup/dropbox.php:21, ../inc/auto-responder/views/setup/everwebinar.php:19, ../inc/auto-responder/views/setup/facebook.php:23, ../inc/auto-responder/views/setup/facebookpixel.php:25, ../inc/auto-responder/views/setup/fluentcrm.php:32, ../inc/auto-responder/views/setup/fluentcrm.php:18, ../inc/auto-responder/views/setup/get-response.php:44, ../inc/auto-responder/views/setup/google-drive.php:21, ../inc/auto-responder/views/setup/google.php:28, ../inc/auto-responder/views/setup/gotowebinar.php:58, ../inc/auto-responder/views/setup/hubspot.php:44, ../inc/auto-responder/views/setup/iContact.php:26, ../inc/auto-responder/views/setup/infusionsoft.php:22, ../inc/auto-responder/views/setup/klicktipp.php:21, ../inc/auto-responder/views/setup/madmimi.php:21, ../inc/auto-responder/views/setup/mailchimp.php:58, ../inc/auto-responder/views/setup/mailerlite.php:35, ../inc/auto-responder/views/setup/mailgun.php:48, ../inc/auto-responder/views/setup/mailpoet.php:64, ../inc/auto-responder/views/setup/mailrelay.php:39, ../inc/auto-responder/views/setup/mailrelayemail.php:30, ../inc/auto-responder/views/setup/mailster.php:35, ../inc/auto-responder/views/setup/mailster.php:17, ../inc/auto-responder/views/setup/mandrill.php:53, ../inc/auto-responder/views/setup/ontraport.php:21, ../inc/auto-responder/views/setup/ovation.php:29, ../inc/auto-responder/views/setup/ovation.php:15, ../inc/auto-responder/views/setup/postmark.php:43, ../inc/auto-responder/views/setup/recaptcha.php:63, ../inc/auto-responder/views/setup/sendfox.php:16, ../inc/auto-responder/views/setup/sendgrid.php:52, ../inc/auto-responder/views/setup/sendgridemail.php:21, ../inc/auto-responder/views/setup/sendinblue-v3.php:45, ../inc/auto-responder/views/setup/sendinblue.php:45, ../inc/auto-responder/views/setup/sendinblueemail.php:38, ../inc/auto-responder/views/setup/sendlane.php:26, ../inc/auto-responder/views/setup/sendlayer.php:34, ../inc/auto-responder/views/setup/sendowl.php:26, ../inc/auto-responder/views/setup/sendy.php:75, ../inc/auto-responder/views/setup/sg-autorepondeur.php:24, ../inc/auto-responder/views/setup/slack.php:24, ../inc/auto-responder/views/setup/sparkpost.php:43, ../inc/auto-responder/views/setup/turnstile.php:80, ../inc/auto-responder/views/setup/twitter.php:33, ../inc/auto-responder/views/setup/webinarjamstudio.php:51, ../inc/auto-responder/views/setup/zapier.php:79, ../inc/auto-responder/views/setup/zoho.php:41, ../inc/notification-manager/includes/admin/views/backbone/modals/add-action.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/create-notification.phtml:13, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-action.phtml:12, ../inc/notification-manager/includes/admin/views/backbone/modals/edit-trigger.phtml:11, ../inc/notification-manager/includes/admin/views/backbone/modals/email-services.phtml:47, ../inc/smart-site/views/admin/templates/global-fields/modals/delete.phtml:25, ../inc/smart-site/views/admin/templates/global-fields/modals/edit-group.phtml:34, ../inc/smart-site/views/admin/templates/global-fields/modals/field.phtml:83, ../templates/product/inactive.phtml:51, ../templates/product/inactive.phtml:87
 msgid "Cancel"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:150, ../inc/auto-responder/views/error-log-entry.php:27, ../templates/product/inactive.phtml:92, ../templates/sections/license_manager.phtml:54
+#: ../inc/auto-responder/views/admin-list.php:161, ../inc/auto-responder/views/error-log-entry.php:27, ../templates/product/inactive.phtml:92, ../templates/sections/license_manager.phtml:54
 msgid "Retry"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:163
+#: ../inc/auto-responder/views/admin-list.php:174
 msgid "Connection Ready!"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:169
+#: ../inc/auto-responder/views/admin-list.php:180
 msgid "You can now connect Thrive Apprentice to "
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:171
+#: ../inc/auto-responder/views/admin-list.php:182
 msgid "Click here to discover the Quick Start Guide."
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:173
+#: ../inc/auto-responder/views/admin-list.php:184
 msgid "You can now connect your opt-in forms to "
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:178, ../inc/auto-responder/views/admin-list.php:182
+#: ../inc/auto-responder/views/admin-list.php:189, ../inc/auto-responder/views/admin-list.php:193
 msgid "See how it's done."
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:193
+#: ../inc/auto-responder/views/admin-list.php:204
 msgid "Done"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:239
+#: ../inc/auto-responder/views/admin-list.php:250
 msgid "The connection failed."
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:244
+#: ../inc/auto-responder/views/admin-list.php:255
 msgid "Edit settings"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:254
+#: ../inc/auto-responder/views/admin-list.php:265
 msgid "Are you sure you want to delete this connection?"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:262, ../inc/smart-site/views/admin/content-sets-templates/item-delete-confirmation.phtml:18, ../inc/smart-site/views/admin/content-sets-templates/rule-delete-confirmation.phtml:16, ../templates/backbone/support-token.phtml:134
+#: ../inc/auto-responder/views/admin-list.php:273, ../inc/smart-site/views/admin/content-sets-templates/item-delete-confirmation.phtml:18, ../inc/smart-site/views/admin/content-sets-templates/rule-delete-confirmation.phtml:16
 msgid "Yes, delete"
 msgstr ""
 
-#: ../inc/auto-responder/views/admin-list.php:267, ../templates/backbone/support-token.phtml:139
+#: ../inc/auto-responder/views/admin-list.php:278
 msgid "No, keep it"
 msgstr ""
 
@@ -1567,6 +1708,14 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+#: ../inc/growth-tools/classes/Growth_Tools_Controller.php:75
+msgid "You are not allowed to view growth tools."
+msgstr ""
+
+#: ../inc/growth-tools/classes/Growth_Tools_Controller.php:100
+msgid "You are not allowed to manage growth tools."
+msgstr ""
+
 #: ../inc/icon-manager/classes/Tve_Dash_Thrive_Icon_Manager.php:123
 msgid "IcoMoon Font Pack has been removed. "
 msgstr ""
@@ -1681,6 +1830,46 @@ msgstr ""
 
 #: ../inc/login-editor/views/sidebar.php:18, ../inc/login-editor/views/sidebar.php:20
 msgid "Cloud Templates"
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:18
+msgid "Generate API keys that allow external services like Zapier, Make, or custom integrations to securely communicate with your Thrive products."
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:20, ../inc/public-api/views/api-keys.phtml:35
+msgid "Create API Key"
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:32
+msgid "No API keys yet"
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:33
+msgid "Create your first API key to start connecting external services like Zapier or Make with your Thrive products."
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:42
+msgid "API keys provide full access to your Thrive products' REST API. Keep them secure and never share them publicly. Each key can be disabled without deleting it."
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:42
+msgid "API Documentation"
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:47
+msgid "Loading API keys..."
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:61
+msgid "Close"
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:64
+msgid "Create New API Key"
+msgstr ""
+
+#: ../inc/public-api/views/api-keys.phtml:68
+msgid "e.g. Zapier - Course Enrollment"
 msgstr ""
 
 #: ../inc/script-manager/includes/i18n.php:13, ../inc/script-manager/includes/admin/classes/class-tvd-sm-admin.php:89
@@ -2419,15 +2608,15 @@ msgstr ""
 msgid "An error occurred while adding the subscriber. Please try again later."
 msgstr ""
 
-#: ../inc/auto-responder/classes/Connection/ConstantContactV3.php:701, ../inc/auto-responder/classes/Connection/ConvertKit.php:656, ../inc/auto-responder/classes/Connection/FluentCRM.php:709, ../inc/auto-responder/classes/Connection/GetResponse.php:337, ../inc/auto-responder/classes/Connection/Infusionsoft.php:706, ../inc/auto-responder/classes/Connection/KlickTipp.php:877, ../inc/auto-responder/classes/Connection/Mailchimp.php:1225, ../inc/auto-responder/classes/Connection/Ontraport.php:381, ../inc/auto-responder/classes/Connection/Sendlane.php:294, ../inc/auto-responder/classes/Connection/Zoho.php:926
+#: ../inc/auto-responder/classes/Connection/ConstantContactV3.php:701, ../inc/auto-responder/classes/Connection/ConvertKit.php:656, ../inc/auto-responder/classes/Connection/FluentCRM.php:713, ../inc/auto-responder/classes/Connection/GetResponse.php:337, ../inc/auto-responder/classes/Connection/Infusionsoft.php:706, ../inc/auto-responder/classes/Connection/KlickTipp.php:877, ../inc/auto-responder/classes/Connection/Mailchimp.php:1225, ../inc/auto-responder/classes/Connection/Ontraport.php:381, ../inc/auto-responder/classes/Connection/Sendlane.php:294, ../inc/auto-responder/classes/Connection/Zoho.php:926
 msgid "No tags to create"
 msgstr ""
 
-#: ../inc/auto-responder/classes/Connection/ConstantContactV3.php:727, ../inc/auto-responder/classes/Connection/ConvertKit.php:682, ../inc/auto-responder/classes/Connection/FluentCRM.php:735, ../inc/auto-responder/classes/Connection/GetResponse.php:366, ../inc/auto-responder/classes/Connection/Infusionsoft.php:732, ../inc/auto-responder/classes/Connection/KlickTipp.php:907, ../inc/auto-responder/classes/Connection/Mailchimp.php:1266, ../inc/auto-responder/classes/Connection/Sendlane.php:320, ../inc/auto-responder/classes/Connection/Zoho.php:952
+#: ../inc/auto-responder/classes/Connection/ConstantContactV3.php:727, ../inc/auto-responder/classes/Connection/ConvertKit.php:682, ../inc/auto-responder/classes/Connection/FluentCRM.php:739, ../inc/auto-responder/classes/Connection/GetResponse.php:366, ../inc/auto-responder/classes/Connection/Infusionsoft.php:732, ../inc/auto-responder/classes/Connection/KlickTipp.php:907, ../inc/auto-responder/classes/Connection/Mailchimp.php:1266, ../inc/auto-responder/classes/Connection/Sendlane.php:320, ../inc/auto-responder/classes/Connection/Zoho.php:952
 msgid "All tags already exist"
 msgstr ""
 
-#: ../inc/auto-responder/classes/Connection/ConstantContactV3.php:745, ../inc/auto-responder/classes/Connection/ConvertKit.php:713, ../inc/auto-responder/classes/Connection/FluentCRM.php:756, ../inc/auto-responder/classes/Connection/GetResponse.php:394, ../inc/auto-responder/classes/Connection/Infusionsoft.php:760, ../inc/auto-responder/classes/Connection/KlickTipp.php:925, ../inc/auto-responder/classes/Connection/Mailchimp.php:1298, ../inc/auto-responder/classes/Connection/Sendlane.php:349, ../inc/auto-responder/classes/Connection/Zoho.php:970
+#: ../inc/auto-responder/classes/Connection/ConstantContactV3.php:745, ../inc/auto-responder/classes/Connection/ConvertKit.php:713, ../inc/auto-responder/classes/Connection/FluentCRM.php:760, ../inc/auto-responder/classes/Connection/GetResponse.php:394, ../inc/auto-responder/classes/Connection/Infusionsoft.php:760, ../inc/auto-responder/classes/Connection/KlickTipp.php:925, ../inc/auto-responder/classes/Connection/Mailchimp.php:1298, ../inc/auto-responder/classes/Connection/Sendlane.php:349, ../inc/auto-responder/classes/Connection/Zoho.php:970
 msgid "%d tag created successfully"
 msgid_plural "%d tags created successfully"
 msgstr[0] ""
@@ -2537,11 +2726,11 @@ msgstr ""
 msgid "FluentCRM plugin is not installed / activated"
 msgstr ""
 
-#: ../inc/auto-responder/classes/Connection/FluentCRM.php:551, ../inc/auto-responder/classes/Connection/FluentCRM.php:619
+#: ../inc/auto-responder/classes/Connection/FluentCRM.php:555, ../inc/auto-responder/classes/Connection/FluentCRM.php:623
 msgid "FluentCRM plugin could not be found."
 msgstr ""
 
-#: ../inc/auto-responder/classes/Connection/FluentCRM.php:691
+#: ../inc/auto-responder/classes/Connection/FluentCRM.php:695
 msgid "FluentCRM plugin not found"
 msgstr ""
 
@@ -3612,7 +3801,7 @@ msgstr ""
 msgid "Register a new account %s"
 msgstr ""
 
-#: ../inc/auto-responder/views/setup/constant-contact.php:24, ../templates/backbone/support-token.phtml:108
+#: ../inc/auto-responder/views/setup/constant-contact.php:24
 msgid "here"
 msgstr ""
 
@@ -4176,6 +4365,10 @@ msgstr ""
 msgid "Password Button"
 msgstr ""
 
+#: ../inc/notification-inbox/includes/admin/class-td-ni-ajax-controller.php:52, ../inc/notification-inbox/includes/admin/class-td-ni-ajax-controller.php:151, ../inc/notification-manager/includes/admin/class-td-nm-admin-ajax-controller.php:66
+msgid "Invalid request"
+msgstr ""
+
 #: ../inc/notification-inbox/includes/admin/class-td-ni-ajax-controller.php:60, ../inc/notification-manager/includes/admin/class-td-nm-admin-ajax-controller.php:75
 msgid "Method %s not implemented"
 msgstr ""
@@ -4360,15 +4553,19 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
-#: ../inc/ttw-account/templates/licences/list.phtml:25
+#: ../inc/ttw-account/templates/licences/list.phtml:27
 msgid "Refund date - "
 msgstr ""
 
-#: ../inc/ttw-account/templates/licences/list.phtml:23
+#: ../inc/ttw-account/templates/licences/list.phtml:25
 msgid "Renewal date - "
 msgstr ""
 
-#: ../inc/ttw-account/templates/licences/list.phtml:32
+#: ../inc/ttw-account/templates/licences/list.phtml:23
+msgid "Lifetime"
+msgstr ""
+
+#: ../inc/ttw-account/templates/licences/list.phtml:34
 msgid "Renew license"
 msgstr ""
 
@@ -4500,6 +4697,10 @@ msgstr ""
 msgid "Are you sure you want to remove this login redirect page?"
 msgstr ""
 
+#: ../inc/auto-responder/classes/Connection/FileUpload/GoogleDrive.php:133
+msgid "If this folder is on a Shared Drive or was created manually in Google Drive, please disconnect and reconnect Google Drive in Thrive Dashboard to grant the required access."
+msgstr ""
+
 #: ../inc/auto-responder/classes/Connection/v2/GoToWebinar.php:203
 msgid "GoToWebinar connected successfully"
 msgstr ""
@@ -4599,10 +4800,6 @@ msgstr ""
 
 #: ../inc/auto-responder/views/editor/partials/api-shortcodes.php:2
 msgid "Available Shortcodes"
-msgstr ""
-
-#: ../inc/auto-responder/views/editor/partials/api-shortcodes.php:15, ../inc/auto-responder/views/editor/partials/api-shortcodes.php:34, ../inc/notification-manager/includes/admin/views/backbone/messages/shortcodes/item.phtml:10, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/custom-script.phtml:21, ../inc/notification-manager/includes/admin/views/backbone/summaries/items/actions/wordpress-notification.phtml:21
-msgid "Copy"
 msgstr ""
 
 #: ../inc/auto-responder/views/editor/partials/api-shortcodes.php:20
@@ -5298,7 +5495,7 @@ msgid "Invalid Hook URL"
 msgstr ""
 
 #: ../templates/header.phtml:19
-msgid "Support login"
+msgid "Contact Support"
 msgstr ""
 
 #: ../templates/share.phtml:13
@@ -5385,7 +5582,7 @@ msgstr ""
 msgid "You may close this lightbox and continue using your software during your grace period for another %s."
 msgstr ""
 
-#: ../templates/backbone/license-modal.phtml:16, ../templates/backbone/support-token.phtml:22
+#: ../templates/backbone/license-modal.phtml:16
 msgid "days"
 msgstr ""
 
@@ -5395,70 +5592,6 @@ msgstr ""
 
 #: ../templates/backbone/no-icons.phtml:4
 msgid "Try adjusting your search to find what you are looking for"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:3
-msgid "Give Our Team Access to Your Site Temporarily"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:5
-msgid "You can safely and securely give our team access to your site in order to debug problems that you're having."
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:7
-msgid "How does this work?"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:14
-msgid "Give access for"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:38
-msgid "The token is curently not active."
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:39
-msgid "Please generate a new token, or choose a new date until the token will be active."
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:43
-msgid "Here is your Access Token"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:44
-msgid "Copy this code and send it to our support team"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:53
-msgid "Token"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:61
-msgid "Valid until"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:73
-msgid "Remove access"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:92
-msgid "Copy & Close"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:105
-msgid "Something went wrong."
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:106
-msgid "It seems that there's a connection problem and the token cannot be generated, if you would like to add your site details manually please click "
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:117
-msgid "Close"
-msgstr ""
-
-#: ../templates/backbone/support-token.phtml:127
-msgid "Are you sure you want to delete the access token?"
 msgstr ""
 
 #: ../templates/product/inactive.phtml:16, ../templates/sections/license_manager.phtml:25
@@ -5549,8 +5682,16 @@ msgstr ""
 msgid "Active:"
 msgstr ""
 
-#: ../templates/settings/general_settings.phtml:21
+#: ../templates/settings/general_settings.phtml:42
 msgid "Thrive Links"
+msgstr ""
+
+#: ../templates/settings/general_settings.phtml:113
+msgid "Create and manage API keys for external service integrations."
+msgstr ""
+
+#: ../templates/settings/general_settings.phtml:116
+msgid "Manage"
 msgstr ""
 
 #: ../templates/settings/text_setting_row.phtml:19

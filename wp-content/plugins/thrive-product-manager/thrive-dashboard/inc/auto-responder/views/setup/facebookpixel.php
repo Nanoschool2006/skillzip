@@ -15,7 +15,7 @@
 			<label for="tvd-rc-api-access-token"><?php echo esc_html__( 'Access token', 'thrive-dash' ) ?></label>
 		</div>
 		<p class="tve-form-description tvd-note-text">
-			<a href="https://help.thrivethemes.com/en/articles/7793479-how-to-use-facebook-events-with-thrive-automator" target="_blank"><?php echo esc_html__( 'I need help with this', 'thrive-dash' ) ?></a>
+			<a href="https://thrivethemes.com/docs/automation-recipe-book-3rd-party-integrations/" target="_blank"><?php echo esc_html__( 'I need help with this', 'thrive-dash' ) ?></a>
 		</p>
 	</form>
 </div>

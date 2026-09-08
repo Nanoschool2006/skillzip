@@ -15,6 +15,8 @@ class TPM_License_Manager {
 
 	const CACHE_LIFE_TIME = 28800; //8 hours
 
+	const DISCONNECT_NOTICE = 'tpm_disconnect_notice';
+
 	/**
 	 * @var TPM_License_Manager
 	 */
@@ -61,20 +63,14 @@ class TPM_License_Manager {
 	 */
 	public function is_licensed( TPM_Product $product ) {
 
-		$exists = false;
-
-		/**
-		 * @var  $license_id int
-		 * @var  $license    TPM_License
-		 */
-		foreach ( TPM_License::get_saved_licenses() as $license_id => $license ) {
+		/** @var TPM_License $license */
+		foreach ( $this->get_usable_licenses() as $license ) {
 			if ( $license->has_tag( $product->get_tag() ) ) {
-				$exists = true;
-				break;
+				return true;
 			}
 		}
 
-		return $exists;
+		return false;
 	}
 
 	/**
@@ -86,19 +82,23 @@ class TPM_License_Manager {
 	 */
 	public function is_purchased( TPM_Product $product ) {
 
-		//check old licenses
-		$thrive_license = get_option( 'thrive_license', array() );
-		$thrive_license = is_array( $thrive_license ) ? $thrive_license : array();
-		if ( in_array( 'all', $thrive_license, false ) || in_array( $product->get_tag(), $thrive_license, false ) ) {
-			return true;
-		}
-
-		/** @var $license TPM_License */
-		foreach ( $this->get_ttw_license_instances() as $id => $license ) {
+		/*
+		 * Offer a product only when a license the site can ACTUALLY use covers it. "Usable" excludes
+		 * licenses this url is deactivated on and is scoped to the active license when there is one -
+		 * so with every owned suite deactivated, only the remaining valid license's products show,
+		 * and the catalog can never offer something no non-deactivated license could license.
+		 */
+		foreach ( $this->get_usable_licenses() as $license ) {
 			if ( $license->has_tag( $product->get_tag() ) ) {
 				return true;
 			}
 		}
+
+		//check old licenses (legacy pre-TPM local grant, independent of the EDD pool)
+		$thrive_license = get_option( 'thrive_license', array() );
+		$thrive_license = is_array( $thrive_license ) ? $thrive_license : array();
+
+		return in_array( 'all', $thrive_license, false ) || in_array( $product->get_tag(), $thrive_license, false );
 	}
 
 	public function get_ttw_license_instances() {
@@ -113,6 +113,39 @@ class TPM_License_Manager {
 		}
 
 		return $this->ttw_license_instances;
+	}
+
+	/**
+	 * The licenses this site may actually use - highest-tier first, EXCLUDING any the account owner
+	 * deactivated for this url (Manage Sites). Scoped to the site's enabled/active license set when
+	 * that set still holds a usable license; otherwise (nothing active yet, or the active license was
+	 * deactivated) it returns every usable owned license so the next valid highest-tier one takes
+	 * over. Single source of truth for BOTH the catalog (is_purchased) and the install binding
+	 * (get_product_license): a product is offered iff a non-deactivated license can license it.
+	 *
+	 * @return TPM_License[] license_id => TPM_License
+	 */
+	public function get_usable_licenses() {
+
+		$pool   = $this->_get_ttw_licenses();
+		$usable = array();
+
+		/** @var TPM_License $license */
+		foreach ( $this->get_ttw_license_instances() as $id => $license ) {
+			if ( ! isset( $pool[ $id ] ) || empty( $pool[ $id ]['site_deactivated'] ) ) {
+				$usable[ $id ] = $license;
+			}
+		}
+
+		$enabled = TPM_License::get_saved_licenses();
+		if ( $enabled ) {
+			$scoped = array_intersect_key( $usable, $enabled );
+			if ( $scoped ) {
+				return $scoped;
+			}
+		}
+
+		return $usable;
 	}
 
 	/**
@@ -135,7 +168,9 @@ class TPM_License_Manager {
 		}
 
 		$params = array(
-			'user_id' => $connection->ttw_id,
+			'user_id'       => $connection->ttw_id,
+			/* Lets the server tag each license with `site_deactivated` for THIS site (Manage Sites). */
+			'user_site_url' => get_site_url(),
 		);
 
 		$route   = '/api/v1/public/get_licenses';
@@ -191,11 +226,22 @@ class TPM_License_Manager {
 	 */
 	public function get_product_license( TPM_Product $product ) {
 
-		/** @var TPM_License $license */
-		foreach ( $this->get_ttw_license_instances() as $license ) {
-
+		/*
+		 * Keep installs within the site's active license: once a license is registered, only it may
+		 * be consumed, so installing a product can't silently pull a broader license from the owned
+		 * pool and widen what the site uses. With nothing registered yet, use the full pool.
+		 */
+		/*
+		 * Bind the highest-tier license that can actually license this product on this site.
+		 * get_usable_licenses() already excludes any license this url is deactivated on (and scopes
+		 * to the active license, falling back to the rest when that one is deactivated), so a
+		 * deactivated license is never bound.
+		 *
+		 * @var TPM_License $license
+		 */
+		foreach ( $this->get_usable_licenses() as $license_id => $license ) {
 			if ( $license->has_tag( $product->get_tag() ) && $license->get_used() < $license->get_max() ) {
-				return $license->get_id();
+				return $license_id;
 			}
 		}
 
@@ -375,6 +421,182 @@ class TPM_License_Manager {
 	public function clear_cache() {
 
 		return tpm_delete_transient( self::NAME );
+	}
+
+	/**
+	 * Keep a connected site on a VALID active license, and report whether it should be disconnected.
+	 * Called on every TPM page load (after the pool is refreshed):
+	 *  - active license still valid                      -> 'noop'.
+	 *  - active license set but every one is deactivated -> 'disconnect' (the account owner revoked
+	 *      the license this site was using; do NOT silently hop to an unrelated one).
+	 *  - no active license yet (e.g. just re-connected)  -> ASSIGN the highest-tier license the site
+	 *      can use so the License Manager shows it pre-selected ('assigned'); 'disconnect' only if
+	 *      there is no usable license at all.
+	 *
+	 * @return string 'noop' | 'assigned' | 'disconnect'
+	 */
+	public function reconcile_active_license() {
+
+		$connection = TPM_Connection::get_instance();
+
+		if ( ! $connection->is_connected() ) {
+			return 'noop';
+		}
+
+		$pool = $this->_get_connection_licenses( $connection );
+		if ( empty( $pool ) ) {
+			return 'noop'; // no data - fail open, never disconnect on a blank
+		}
+
+		$enabled = TPM_License::get_saved_licenses();
+
+		if ( $enabled ) {
+			/* Keep the active license while at least one enabled license is still valid; if the
+			   account owner deactivated the active license, disconnect (don't hop). */
+			foreach ( array_keys( $enabled ) as $enabled_id ) {
+				if ( isset( $pool[ $enabled_id ] ) && empty( $pool[ $enabled_id ]['site_deactivated'] ) ) {
+					$this->clear_disconnect_notice();
+					return 'noop';
+				}
+			}
+
+			$this->_set_disconnect_notice( $pool );
+			return 'disconnect';
+		}
+
+		/* No active license yet: assign the highest-tier usable (non-deactivated) license so the
+		   License Manager pre-selects it. Disconnect only if the site has no usable license at all. */
+		$usable = $this->get_usable_licenses();
+		if ( empty( $usable ) ) {
+			$this->_set_disconnect_notice( $pool );
+			return 'disconnect';
+		}
+
+		$license_id = (int) array_key_first( $usable );
+		update_option( TPM_License::NAME, array( $license_id => $usable[ $license_id ]->get_tags() ) );
+		$this->clear_disconnect_notice();
+
+		return 'assigned';
+	}
+
+	/**
+	 * Reason the Connect screen should explain after a deactivation-driven disconnect, so it shows
+	 * contextual guidance instead of the generic connect prompt. Empty string when there is nothing
+	 * to explain (fresh install / normal disconnect).
+	 *
+	 * @return string '' | 'reactivate' | 'seat_full' | 'no_license'
+	 */
+	public function get_disconnect_notice() {
+
+		$cause = get_option( self::DISCONNECT_NOTICE, '' );
+
+		return is_string( $cause ) ? $cause : '';
+	}
+
+	public function clear_disconnect_notice() {
+
+		delete_option( self::DISCONNECT_NOTICE );
+	}
+
+	/**
+	 * Classify why this site has no usable license, from the pool we already fetched:
+	 *  - 'no_license' : the account owns no license for this site;
+	 *  - 'reactivate' : a deactivated license still has a free seat (just reactivate this site);
+	 *  - 'seat_full'  : every deactivated license is at its site limit (free a seat first).
+	 *
+	 * @param array $pool raw connection-license pool (id => entry with 'site_deactivated' + 'usage').
+	 */
+	protected function _set_disconnect_notice( $pool ) {
+
+		$deactivated = array();
+		foreach ( (array) $pool as $entry ) {
+			if ( ! empty( $entry['site_deactivated'] ) ) {
+				$deactivated[] = $entry;
+			}
+		}
+
+		if ( empty( $deactivated ) ) {
+			$cause = 'no_license';
+		} else {
+			$has_free_seat = false;
+			foreach ( $deactivated as $entry ) {
+				$limit = isset( $entry['usage']['limit'] ) ? (int) $entry['usage']['limit'] : 0;
+				$used  = isset( $entry['usage']['used'] ) ? (int) $entry['usage']['used'] : 0;
+				if ( $limit <= 0 || $used < $limit ) {
+					$has_free_seat = true;
+					break;
+				}
+			}
+			$cause = $has_free_seat ? 'reactivate' : 'seat_full';
+		}
+
+		update_option( self::DISCONNECT_NOTICE, $cause );
+	}
+
+	/**
+	 * Enable a single license on this site by id.
+	 *
+	 * Records this license as the active local selection so is_licensed() picks it up.
+	 * Does NOT change TTW seat usage - switching the active license is a read-only selection here;
+	 * seat counting is EDD's job on the site. The license must exist in the purchased TTW pool
+	 * (get_ttw_license_instances()).
+	 *
+	 * @param int $license_id
+	 *
+	 * @return bool true when the license was enabled locally
+	 */
+	public function enable_license( $license_id ) {
+
+		$license_id = (int) $license_id;
+		$ttw        = $this->get_ttw_license_instances();
+
+		if ( empty( $license_id ) || ! isset( $ttw[ $license_id ] ) ) {
+			return false;
+		}
+
+		/*
+		 * Hard block: never re-enable a license the account owner deactivated for THIS site in the
+		 * Manage Sites area. The server advertises that per-license via `site_deactivated`
+		 * (request-v2.php refuses the reactivation server-side anyway). Read it straight off the raw
+		 * cached pool, since get_ttw_license_instances() keeps only tags/seats.
+		 */
+		$pool = $this->_get_ttw_licenses();
+		if ( isset( $pool[ $license_id ] ) && is_array( $pool[ $license_id ] ) && ! empty( $pool[ $license_id ]['site_deactivated'] ) ) {
+			return false;
+		}
+
+		/* Local only: record this license as the active selection. TPM does NOT change seat usage on
+		   the account - switching is a read-only selection here; seat counting is EDD's job on the site. */
+		/** @var TPM_License $license */
+		$license = $ttw[ $license_id ];
+		$license->save();
+
+		return true;
+	}
+
+	/**
+	 * Disable a single license on this site by id.
+	 *
+	 * Local only: removes the license from the local active selection. Does NOT touch TTW seat
+	 * usage - switching the active license must never deactivate the site on the old license
+	 * (seat counting is EDD's job on the site, not TPM's).
+	 *
+	 * @param int $license_id
+	 *
+	 * @return bool true when the license was removed locally
+	 */
+	public function disable_license( $license_id ) {
+
+		$license_id = (int) $license_id;
+		$license    = $this->get_license_instance( $license_id );
+
+		if ( empty( $license_id ) || ! ( $license instanceof TPM_License ) ) {
+			return false;
+		}
+
+		$license->delete();
+
+		return true;
 	}
 
 	/**

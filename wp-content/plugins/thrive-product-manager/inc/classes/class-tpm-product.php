@@ -44,7 +44,7 @@ class TPM_Product {
 
 		$data = array(
 			'name'        => $this->name,
-			'description' => empty( $this->description ) ? $this->name : $this->description,
+			'description' => str_ireplace( 'wordpress', 'WordPress', empty( $this->description ) ? $this->name : $this->description ),
 			'logo_url'    => $this->logo_url,
 			'tag'         => $this->tag,
 			'api_slug'    => $this->api_slug,
@@ -61,6 +61,19 @@ class TPM_Product {
 	 * @return bool
 	 */
 	public function is_licensed() {
+
+		/**
+		 * When the site has made an explicit Thrive Product Manager License Manager selection, that
+		 * selection is authoritative — defer entirely to it and IGNORE the legacy `thrive_license`
+		 * option. That option is additive and is never shrunk on sync, so a stale ['all'] left over
+		 * from a long-expired all-access membership keeps over-granting every product even though the
+		 * account is only entitled to (e.g.) Leads. Falling back to the legacy option only when no
+		 * License Manager selection exists preserves backwards compatibility for pre-License-Manager
+		 * (TD 3.4-era) sites.
+		 */
+		if ( TPM_License::get_saved_licenses() ) {
+			return TPM_License_Manager::get_instance()->is_licensed( $this );
+		}
 
 		$thrive_license = get_option( 'thrive_license', array() );
 		$thrive_license = is_array( $thrive_license ) ? $thrive_license : array();

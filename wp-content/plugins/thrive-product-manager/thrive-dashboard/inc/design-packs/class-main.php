@@ -191,7 +191,7 @@ class Main {
 				'accessible'       => true,
 				'displayedName'    => 'landing page',
 				'redirect_message' => 'Learn more',
-				'redirect_link'    => 'https://help.thrivethemes.com/en/articles/6353871-where-can-i-find-my-page-post-content-and-landing-pages-after-importing-a-design-kit',
+				'redirect_link'    => 'https://thrivethemes.com/docs/finding-the-page-post-content-and-landing-pages-after-importing-a-design-pack/',
 			],
 			[
 				'type'             => 'page',
@@ -200,7 +200,7 @@ class Main {
 				'accessible'       => true,
 				'displayedName'    => 'page',
 				'redirect_message' => 'Learn more',
-				'redirect_link'    => 'https://help.thrivethemes.com/en/articles/6353871-where-can-i-find-my-page-post-content-and-landing-pages-after-importing-a-design-kit',
+				'redirect_link'    => 'https://thrivethemes.com/docs/finding-the-page-post-content-and-landing-pages-after-importing-a-design-pack/',
 			],
 			[
 				'type'             => 'post',
@@ -209,7 +209,7 @@ class Main {
 				'accessible'       => true,
 				'displayedName'    => 'post',
 				'redirect_message' => 'Learn more',
-				'redirect_link'    => 'https://help.thrivethemes.com/en/articles/6353871-where-can-i-find-my-page-post-content-and-landing-pages-after-importing-a-design-kit',
+				'redirect_link'    => 'https://thrivethemes.com/docs/finding-the-page-post-content-and-landing-pages-after-importing-a-design-pack/',
 			],
 		];
 

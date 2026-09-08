@@ -510,6 +510,7 @@ if (!class_exists('Tve_Dash_Growth_Tools_Config')) {
                 'baseUrl'          => $this->tva_get_route_url( 'growth-tools' ),
                 'tools_category'   => json_encode( $this->categories() ),
                 'is_TPM_installed' => is_TPM_installed(),
+                'nonce'            => wp_create_nonce( 'wp_rest' ),
             ) );
         }
 
