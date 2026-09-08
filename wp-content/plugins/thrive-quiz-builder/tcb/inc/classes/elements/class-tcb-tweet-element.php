@@ -152,7 +152,7 @@ class TCB_Tweet_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'click_to_tweet',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425790-how-to-use-the-click-to-tweet-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-post-to-x-click-to-tweet-element-in-thrive-architect/',
 			],
 		];
 	}

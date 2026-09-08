@@ -905,6 +905,7 @@ class TCB_Post_List {
 	 */
 	public static function get_author_posts_url( $id = 0 ) {
 		$post = get_post( $id );
+		$link = '';
 
 		if ( $post !== null ) {
 			$link = get_author_posts_url( $post->post_author );
@@ -914,7 +915,7 @@ class TCB_Post_List {
 			$link = '#';
 		}
 
-		return rtrim( $link, '/' );
+		return $link;
 	}
 
 	/**
@@ -929,7 +930,7 @@ class TCB_Post_List {
 			$link = '#';
 		}
 
-		return rtrim( $link, '/' );
+		return $link;
 	}
 
 	/**

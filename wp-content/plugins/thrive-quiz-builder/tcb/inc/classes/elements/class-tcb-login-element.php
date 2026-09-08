@@ -215,7 +215,7 @@ class TCB_Login_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'login_registration',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425883-how-to-use-the-login-registration-form-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-login-and-registration-form-element-in-thrive-architect/',
 			],
 		];
 	}

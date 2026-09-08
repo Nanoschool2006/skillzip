@@ -134,7 +134,7 @@ msgid "Generate Random Result"
 msgstr ""
 
 #: ../includes/layouts/editor.php:156
-msgid "Please make sure that your website is set as HTTPS (Wordpress Address - URL & Site Address -URL) from Wordpress - General Settings"
+msgid "Please make sure that your website is set as HTTPS (WordPress Address - URL & Site Address - URL) from WordPress - General Settings"
 msgstr ""
 
 #: ../includes/layouts/editor.php:169

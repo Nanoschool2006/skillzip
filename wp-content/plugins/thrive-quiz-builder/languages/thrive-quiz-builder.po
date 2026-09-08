@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../includes/class-tqb-db.php:2056
+#: ../includes/class-tqb-db.php:2160
 msgid "Copy of "
 msgstr ""
 
@@ -25,15 +25,15 @@ msgstr ""
 msgid "Method %s not implemented"
 msgstr ""
 
-#: ../includes/class-tqb-frontend-ajax-controller.php:156
+#: ../includes/class-tqb-frontend-ajax-controller.php:159
 msgid "Share Badge not available"
 msgstr ""
 
-#: ../includes/class-tqb-frontend-ajax-controller.php:169
+#: ../includes/class-tqb-frontend-ajax-controller.php:172
 msgid "Badge could not be generated"
 msgstr ""
 
-#: ../includes/class-tqb-frontend-ajax-controller.php:291
+#: ../includes/class-tqb-frontend-ajax-controller.php:348
 msgid "You have nothing"
 msgstr ""
 
@@ -486,7 +486,7 @@ msgstr ""
 msgid "The quiz could not be duplicated"
 msgstr ""
 
-#: ../includes/admin/i18n.php:94, ../includes/managers/class-tqb-quiz-manager.php:1743, ../includes/admin/views/templates/modals/copy-quiz-shortcode.phtml:17, ../includes/admin/views/templates/quiz/edit.phtml:19
+#: ../includes/admin/i18n.php:94, ../includes/managers/class-tqb-quiz-manager.php:1978, ../includes/admin/views/templates/modals/copy-quiz-shortcode.phtml:17, ../includes/admin/views/templates/quiz/edit.phtml:19
 msgid "Copy"
 msgstr ""
 
@@ -698,7 +698,7 @@ msgstr ""
 msgid "The shortcode is broken"
 msgstr ""
 
-#: ../includes/managers/class-tqb-quiz-manager.php:643
+#: ../includes/managers/class-tqb-quiz-manager.php:782
 msgid "There is an error in the quiz structure"
 msgstr ""
 

@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="tvd-row">
 	<div class="tvd-col tvd-12">
 		<p class="tve-form-description tvd-note-text">
-			<a href="https://help.thrivethemes.com/en/articles/8707465-setting-up-an-api-connection-with-sendlayer" target="_blank"><?php echo esc_html__( 'I need help with this', 'thrive-dash' ) ?></a>.
+			<a href="https://thrivethemes.com/docs/setting-up-an-api-connection-with-sendlayer/" target="_blank"><?php echo esc_html__( 'I need help with this', 'thrive-dash' ) ?></a>.
 		</p>
 	</div>
 </div>

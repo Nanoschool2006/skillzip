@@ -153,7 +153,7 @@ nocache_headers();
 			<div class="tie-col tie-s9">
 				<?php $upload_dir = wp_upload_dir(); ?>
 				<?php if ( is_ssl() && strpos( $upload_dir['url'], 'https://' ) === false ) : ?>
-					<div class="tie-fig-notice"><?php echo __( 'Please make sure that your website is set as HTTPS (Wordpress Address - URL & Site Address -URL) from Wordpress - General Settings', 'thrive-image-editor' ); ?></div>
+					<div class="tie-fig-notice"><?php echo __( 'Please make sure that your website is set as HTTPS (WordPress Address - URL & Site Address - URL) from WordPress - General Settings', 'thrive-image-editor' ); ?></div>
 				<?php endif; ?>
 			</div>
 		</div>

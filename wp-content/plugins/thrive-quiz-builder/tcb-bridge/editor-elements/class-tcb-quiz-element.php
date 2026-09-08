@@ -146,7 +146,7 @@ class TCB_Quiz_Element extends TCB_Element_Abstract {
 			'instructions' => array(
 				'type' => 'help',
 				'url'  => 'quiz',
-				'link' => 'https://help.thrivethemes.com/en/articles/4426055-how-to-add-a-finished-quiz-to-your-website',
+				'link' => 'https://thrivethemes.com/docs/how-to-publish-and-display-your-quiz/',
 			),
 		);
 	}

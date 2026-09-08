@@ -84,7 +84,7 @@ class TCB_Block_Element extends TCB_Section_Element {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'block',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425843-how-to-use-the-block-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-block-element-in-thrive-architect/',
 			],
 		];
 	}

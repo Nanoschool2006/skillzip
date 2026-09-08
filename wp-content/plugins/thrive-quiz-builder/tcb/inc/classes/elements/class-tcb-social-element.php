@@ -277,7 +277,7 @@ class TCB_Social_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'social_share',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425796-how-to-use-the-social-share-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-social-elements-in-thrive-architect/',
 			],
 		];
 	}

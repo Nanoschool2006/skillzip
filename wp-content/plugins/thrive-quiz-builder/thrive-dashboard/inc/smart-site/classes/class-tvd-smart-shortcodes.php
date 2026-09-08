@@ -80,6 +80,12 @@ final class TVD_Smart_Shortcodes {
 		if ( ! empty( $args['id'] ) ) {
 			$field = $this->db->get_fields( array(), $args['id'] );
 
+			/* Fallback for Twitter/X: check both 'x' and 't' keys since they may be stored with either */
+			if ( empty( $field ) && in_array( $args['id'], [ 't', 'x' ], true ) ) {
+				$fallback_id = $args['id'] === 't' ? 'x' : 't';
+				$field       = $this->db->get_fields( array(), $fallback_id );
+			}
+
 			if ( ! empty( $field['data'] ) ) {
 				$field_data = maybe_unserialize( $field['data'] );
 				if ( isset( $field_data['phone'] ) ) {

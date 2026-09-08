@@ -19,18 +19,24 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 
 	const DEBUG_LOCAL = false;
 
-	const API_URL         = 'http://landingpages.thrivethemes.com/cloud-api/index-api.php';
-	const API_SERVICE     = 'http://service-api.thrivethemes.com/cloud-templates-api';
-	const API_SERVICE_DEV = 'http://thrive.service/cloud-api/index-api.php';
+	const API_URL     = 'https://landingpages.thrivethemes.com/cloud-api/index-api.php';
+	const API_SERVICE = 'https://service-api.thrivethemes.com/cloud-templates-api';
+
+	const SECRET_KEY = '@#$()%*%$^&*(#@$%@#$%93827456MASDFJIK3245';
 
 	/**
 	 * @var TCB_Landing_Page_Cloud_Templates_Api
 	 */
 	protected static $_instance = null;
 
-	protected $received_auth_header = '';
+	/**
+	 * Static in-memory cache for credentials within a single PHP request.
+	 *
+	 * @var array|null
+	 */
+	private static $_credentials_cache = null;
 
-	protected $secret_key = '@#$()%*%$^&*(#@$%@#$%93827456MASDFJIK3245';
+	protected $received_auth_header = '';
 
 	/**
 	 * holds the last response from the API server
@@ -205,7 +211,8 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 			}
 		}
 
-		$params['pw'] = self::API_PASS;
+		$credentials  = self::get_api_credentials();
+		$params['pw'] = $credentials['api_pass'];
 		$headers      = array(
 			'X-Thrive-Authenticate' => $this->_buildAuthString( $params ),
 		);
@@ -215,7 +222,7 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 			'body'    => $params,
 		];
 
-		$url = defined( 'TCB_CLOUD_API_LOCAL' ) && TCB_CLOUD_API_LOCAL ? TCB_CLOUD_API_LOCAL : self::API_SERVICE;
+		$url = defined( 'TCB_CLOUD_API_LOCAL' ) && TCB_CLOUD_API_LOCAL ? TCB_CLOUD_API_LOCAL : $credentials['api_service'];
 
 		$url = add_query_arg( array(
 			'p' => $this->calc_hash( $params ),
@@ -256,7 +263,8 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 	 * @return string md5 hash of the string above
 	 */
 	protected function _buildAuthString( $data = null ) {
-		$string = '';
+		$credentials = self::get_api_credentials();
+		$string      = '';
 
 		if ( null === $data ) {
 			$data = $_POST;
@@ -267,7 +275,7 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 				$value = serialize( $value );
 			}
 			$string .= $field . '=' . $value;
-			$string .= '|' . self::API_KEY . '|';
+			$string .= '|' . $credentials['api_key'] . '|';
 		}
 
 		return md5( $string );
@@ -281,7 +289,9 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 	 * @return string
 	 */
 	public function calc_hash( $data ) {
-		return md5( $this->secret_key . serialize( $data ) . $this->secret_key );
+		$credentials = self::get_api_credentials();
+
+		return md5( $credentials['secret_key'] . serialize( $data ) . $credentials['secret_key'] );
 	}
 
 	/**
@@ -296,6 +306,130 @@ class TCB_Landing_Page_Cloud_Templates_Api {
 		if ( $this->received_auth_header != $this->_buildAuthString( $data ) ) {
 			throw new Exception( 'Invalid data received from the API' );
 		}
+	}
+
+	/**
+	 * Get cloud template API credentials from the secrets endpoint with transient caching.
+	 *
+	 * @return array {api_key, api_pass, secret_key, api_service}
+	 */
+	public static function get_api_credentials() {
+		if ( null !== self::$_credentials_cache ) {
+			return self::$_credentials_cache;
+		}
+
+		$cached = get_transient( 'tcb_cloud_api_credentials' );
+		if ( false !== $cached && is_array( $cached ) ) {
+			self::$_credentials_cache = $cached;
+
+			return $cached;
+		}
+
+		/**
+		 * A recent failure short-circuits the fetch. Without this, an endpoint that is down
+		 * - or simply not deployed yet - costs a fresh blocking HTTP timeout on every page
+		 * load that touches cloud templates, because only successes are cached below.
+		 */
+		if ( get_transient( 'tcb_cloud_api_credentials_retry' ) ) {
+			return self::get_fallback_credentials();
+		}
+
+		$response = wp_remote_get( 'https://thrivethemesapi.com/api/secrets/v1/api_key_cloud_templates', [
+			'timeout'   => 5,
+			'sslverify' => true,
+		] );
+
+		if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+			return self::fall_back_and_throttle();
+		}
+
+		$data = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		if ( empty( $data['success'] ) || ! isset( $data['data']['value'] ) ) {
+			return self::fall_back_and_throttle();
+		}
+
+		$value = $data['data']['value'];
+
+		/**
+		 * These are opaque server-to-server credentials, not user input, so they are taken
+		 * verbatim: any filter that rewrites the string breaks request signing.
+		 * sanitize_text_field() strips percent-encoded octets, which silently dropped the
+		 * "%93" out of the secret key and made every calc_hash() signature invalid.
+		 */
+		$credentials = [
+			'api_key'     => is_string( $value['api_key'] ?? null ) ? $value['api_key'] : '',
+			'api_pass'    => is_string( $value['api_pass'] ?? null ) ? $value['api_pass'] : '',
+			'secret_key'  => is_string( $value['secret_key'] ?? null ) ? $value['secret_key'] : '',
+			'api_service' => is_string( $value['api_service'] ?? null ) ? $value['api_service'] : '',
+		];
+
+		/**
+		 * A partial payload must not be cached: calc_hash() needs secret_key and _request()
+		 * needs api_service, so caching one would serve unusable credentials for 24h and
+		 * fail every cloud request until the transient expired.
+		 */
+		foreach ( [ 'api_key', 'api_pass', 'secret_key' ] as $required ) {
+			if ( '' === $credentials[ $required ] ) {
+				return self::fall_back_and_throttle();
+			}
+		}
+
+		if ( ! filter_var( $credentials['api_service'], FILTER_VALIDATE_URL ) ) {
+			return self::fall_back_and_throttle();
+		}
+
+		set_transient( 'tcb_cloud_api_credentials', $credentials, 24 * HOUR_IN_SECONDS );
+		self::$_credentials_cache = $credentials;
+
+		return $credentials;
+	}
+
+	/**
+	 * Fall back after a failed fetch, and throttle the next attempt.
+	 *
+	 * Kept separate from get_fallback_credentials() so that returning the fallback because a
+	 * throttle is already in place does not keep pushing the retry window forward, which
+	 * would stop a recovered endpoint from ever being picked up again.
+	 *
+	 * @return array
+	 */
+	private static function fall_back_and_throttle() {
+		set_transient( 'tcb_cloud_api_credentials_retry', 1, 15 * MINUTE_IN_SECONDS );
+
+		return self::get_fallback_credentials();
+	}
+
+	/**
+	 * Fallback credentials used when the secrets API is unreachable.
+	 *
+	 * @return array
+	 */
+	private static function get_fallback_credentials() {
+		$fallback = [
+			'api_key'     => self::API_KEY,
+			'api_pass'    => self::API_PASS,
+			'secret_key'  => self::SECRET_KEY,
+			'api_service' => self::API_SERVICE,
+		];
+
+		self::$_credentials_cache = $fallback;
+
+		return $fallback;
+	}
+
+	/**
+	 * Validate a config array's checksum against the stored check value.
+	 *
+	 * @param string $check  The checksum value to validate against.
+	 * @param array  $config The config data (without the 'check' key).
+	 *
+	 * @return bool
+	 */
+	public static function validate_config_checksum( $check, $config ) {
+		$credentials = self::get_api_credentials();
+
+		return $check === md5( $credentials['api_key'] . serialize( $config ) );
 	}
 
 	/**
@@ -1565,7 +1699,9 @@ class TCB_Landing_Page_Transfer {
 		 * Also support the base64-encoded config files
 		 */
 		if ( empty( $config ) ) {
-			$config = @unserialize( @base64_decode( $contents ) );
+			/* config came from an uploaded archive - use the safe unserializer (allowed_classes => false) to prevent PHP object injection */
+			$decoded = @base64_decode( $contents );
+			$config  = is_serialized( $decoded ) ? thrive_safe_unserialize( $decoded ) : false;
 		}
 
 
@@ -2395,7 +2531,7 @@ class TCB_Landing_Page_Transfer {
 		$check = $config['check'];
 		unset( $config['check'] );
 
-		if ( $check != md5( TCB_Landing_Page_Cloud_Templates_Api::API_KEY . serialize( $config ) ) ) {
+		if ( ! TCB_Landing_Page_Cloud_Templates_Api::validate_config_checksum( $check, $config ) ) {
 			throw new Exception( __( 'Could not validate the configuration file for this template', 'thrive-cb' ) );
 		}
 

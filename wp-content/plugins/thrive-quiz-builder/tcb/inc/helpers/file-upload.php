@@ -378,6 +378,11 @@ function upload_error_handler( $error, $code = 400 ) {
  * Handle file uploads submitted through the Lead Gen element
  */
 function handle_upload() {
+	/* CSRF protection: require a valid nonce tied to the current session and nonce-tick window */
+	if ( ! check_ajax_referer( 'tcb_file_upload', 'nonce', false ) ) {
+		upload_error_handler( 'Invalid request', 403 );
+	}
+
 	if ( empty( $_REQUEST['id'] ) ) {
 		upload_error_handler( 'Missing required parameter' );
 	}

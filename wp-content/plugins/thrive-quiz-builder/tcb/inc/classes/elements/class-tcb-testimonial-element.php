@@ -61,7 +61,7 @@ class TCB_Testimonial_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'testimonial',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425805-how-to-add-a-testimonial-to-your-page-with-thrive-architect',
+				'link' => 'https://thrivethemes.com/docs/how-to-get-started-with-thrive-ovation/',
 			],
 		];
 	}

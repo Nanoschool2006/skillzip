@@ -775,10 +775,14 @@ class Thrive_Dash_List_Connection_ConvertKit extends Thrive_Dash_List_Connection
 
 		foreach ( $tags as $tag ) {
 			if ( is_numeric( $tag ) ) {
-				// It's a tag ID
+				// Could be a tag ID or a numeric tag name (e.g. "2024")
+				// PHP casts numeric string keys to integers, so both cases are handled by this lookup
 				$tag_id = (int) $tag;
 				if ( isset( $existing_tags_map[ $tag_id ] ) ) {
-					$existing_tag_ids[] = $tag_id;
+					$existing_tag_ids[] = $existing_tags_map[ $tag_id ];
+				} else {
+					// Treat as a new tag name to be created
+					$new_tag_names[] = $tag;
 				}
 			} else {
 				// It's a tag name

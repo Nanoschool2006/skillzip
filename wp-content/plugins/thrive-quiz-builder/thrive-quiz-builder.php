@@ -3,7 +3,7 @@
  * Plugin Name: Thrive Quiz Builder
  * Plugin URI: https://thrivethemes.com
  * Description: The plugin is built to deliver the following benefits to users: engage visitors with fun and interesting quizzes, lower bounce rate, generate more leads and gain visitor insights to find out about their interests.
- * Version: 10.8.9.1
+ * Version: 10.9.3.3
  * Author: Thrive Themes
  * Author URI: https://thrivethemes.com
  * Text Domain: thrive-quiz-builder
@@ -21,7 +21,7 @@ if ( ! class_exists( 'Thrive_Quiz_Builder' ) ) :
 		/**
 		 * Plugin version
 		 */
-		const V = '10.8.9.1';
+		const V = '10.9.3.3';
 
 		/**
 		 * Quiz Builder Database Version
@@ -275,11 +275,11 @@ if ( ! class_exists( 'Thrive_Quiz_Builder' ) ) :
 			add_action( 'init', 'TQB_Blocks::init' );
 			add_action( 'thrive_dashboard_loaded', array( $this, 'dash_loaded' ) );
 
-			/**
-			 * Register impression and conversion hooks
-			 */
-			add_action( 'tqb_register_impression', array( 'TQB_Quiz_Manager', 'tqb_register_impression' ), 10, 2 );
-			add_action( 'tqb_register_conversion', array( 'TQB_Quiz_Manager', 'tqb_register_conversion' ), 10, 2 );
+		/**
+		 * Register impression and conversion hooks
+		 */
+		add_action( 'tqb_register_impression', array( 'TQB_Quiz_Manager', 'tqb_register_impression' ), 10, 2 );
+		add_action( 'tqb_register_conversion', array( 'TQB_Quiz_Manager', 'tqb_register_conversion' ), 10, 2 );
 			add_action(
 				'tqb_register_skip_optin',
 				array(
@@ -576,6 +576,16 @@ if ( ! class_exists( 'Thrive_Quiz_Builder' ) ) :
 
 				if ( empty( $data[ $key ] ) ) {
 					$data[ $key ] = TQB_Quiz_Manager::get_shortcode_content( $id );
+				}
+
+				if ( ! empty( $data[ $key ]['deferred_impression'] ) ) {
+					/**
+					 * Carry the page's post ID in the deferred payload: when the quiz arrives
+					 * through another AJAX layer, TQB_Front is localized during admin-ajax with
+					 * post_id = get_the_ID() = false, so the JS fallback cannot supply it and
+					 * viewport impressions would be logged with post_id 0 (see #2957).
+					 */
+					$data[ $key ]['deferred_impression']['post_id'] = $post_id;
 				}
 
 				$data[ $key ]['all_questions'] = $questions;

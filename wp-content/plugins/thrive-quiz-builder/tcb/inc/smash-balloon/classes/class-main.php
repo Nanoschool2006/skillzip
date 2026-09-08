@@ -25,22 +25,13 @@ class Main {
 			Hooks::add();
 		}
 
-		// Load Smash Balloon missing scripts
-		$plugins = static::sb_plugins_info();
-
-		if ( $plugins['instagram']['is_active'] ) {
+		// Load missing Smash Balloon scripts when each plugin is loaded.
+		if ( function_exists( 'sb_instagram_scripts_enqueue' ) ) {
 			sb_instagram_scripts_enqueue( true );
 		}
-
-		if ( $plugins['youtube']['is_active'] ) {
-			do_action('sby_enqueue_scripts', true);
-		}
-
-		if ( $plugins['tiktok']['is_active'] ) {
-			do_action('sbtt_enqueue_scripts', true);
-		}
-
-		if ( $plugins['social-wall']['is_active'] ) {
+		do_action( 'sby_enqueue_scripts', true );
+		do_action( 'sbtt_enqueue_scripts', true );
+		if ( function_exists( 'sbsw_scripts_enqueue' ) ) {
 			sbsw_scripts_enqueue( true );
 		}
 	}

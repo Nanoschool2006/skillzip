@@ -70,7 +70,7 @@ class TCB_Callaction_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'call_to_action',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425745-adding-a-call-to-action-element-with-thrive-architect',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-call-to-action-element-in-thrive-architect/',
 			],
 		];
 	}

@@ -153,7 +153,7 @@ class TCB_Commentsfacebook_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'facebook_comments',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425808-how-to-add-facebook-disqus-comments-in-thrive-architect',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-third-party-images-and-cdn-services-with-thrive-architect/',
 			],
 		];
 	}

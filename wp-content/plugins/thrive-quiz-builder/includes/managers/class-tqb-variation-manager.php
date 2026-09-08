@@ -221,7 +221,11 @@ class TQB_Variation_Manager {
 	public static function get_editor_url( $post_id = 0, $variation_key = 0 ) {
 		$cache = isset( $GLOBALS['TQB_CACHE_PERMALINKS'] ) ? $GLOBALS['TQB_CACHE_PERMALINKS'] : array();
 		if ( ! isset( $cache[ $post_id ] ) ) {
-			$cache[ $post_id ]               = set_url_scheme( get_edit_post_link( $post_id, '' ) );
+			$edit_link = get_edit_post_link( $post_id, '' );
+			if ( ! $edit_link ) {
+				return '';
+			}
+			$cache[ $post_id ]               = set_url_scheme( $edit_link );
 			$GLOBALS['TQB_CACHE_PERMALINKS'] = $cache;
 		}
 

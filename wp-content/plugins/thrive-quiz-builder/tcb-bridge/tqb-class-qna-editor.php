@@ -82,10 +82,11 @@ class TQB_QNA_Editor {
 	protected static function register_components() {
 
 		$components = array(
-			'tqb_question' => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/question.php' ),
-			'answer_item'  => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/answer-item.php' ),
-			'tqb_icon'     => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/icon.php' ),
-			'answer_icon'  => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/answer-icon.php' ),
+			'tqb_question'     => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/question.php' ),
+			'answer_item'      => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/answer-item.php' ),
+			'tqb_icon'         => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/icon.php' ),
+			'answer_icon'      => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/answer-icon.php' ),
+			'tqb_progress_bar' => tqb()->plugin_path( 'tcb-bridge/editor-layouts/menus/qna/tqb-progress-bar.php' ),
 		);
 
 		$base_filter = 'tcb_menu_path_';
@@ -123,6 +124,8 @@ class TQB_QNA_Editor {
 		require_once tqb()->plugin_path( 'tcb-bridge/editor-elements/class-tcb-tqb-feedback-text-element.php' );
 		require_once tqb()->plugin_path( 'tcb-bridge/editor-elements/class-tcb-tqb-answer-icon-element.php' );
 		require_once tqb()->plugin_path( 'tcb-bridge/editor-elements/class-tcb-tqb-question-container-element.php' );
+		require_once tqb()->plugin_path( 'tcb-bridge/editor-elements/class-tcb-tqb-progress-bar-element.php' );
+		require_once tqb()->plugin_path( 'tcb-bridge/editor-elements/class-tcb-tqb-progress-bar-label-element.php' );
 
 		$elements['tqb_qna_text']             = new TCB_TQB_QNA_Text( 'tqb_qna_text' );
 		$elements['tqb_question_text']        = new TCB_TQB_Question_Text( 'tqb_question_text' );
@@ -136,6 +139,8 @@ class TQB_QNA_Editor {
 		$elements['tqb_question']             = new TCB_Question_Element( 'tqb_question' );
 		$elements['tqb_answer_feedback_text'] = new TCB_TQB_Answer_Feedback_Text( 'tqb_answer_feedback_text' );
 		$elements['tqb_question_container']   = new TCB_TQB_Question_Container_Element( 'tqb_question_container' );
+		$elements['tqb_progress_bar']         = new TCB_TQB_Progress_Bar( 'tqb_progress_bar' );
+		$elements['tqb_progress_bar_label']   = new TCB_TQB_Progress_Bar_Text( 'tqb_progress_bar_label' );
 
 		return $elements;
 	}
@@ -179,7 +184,7 @@ class TQB_QNA_Editor {
 
 		tqb_enqueue_style(
 			'tqb-internal-qna',
-			tqb()->plugin_url( 'tcb-bridge/assets/css/qna_editor.css' )
+			tqb()->plugin_url( 'tcb-bridge/assets/css/editor.css' )
 		);
 
 		$layouts[] = tqb()->plugin_path( 'tcb-bridge/editor/page/qna.php' );

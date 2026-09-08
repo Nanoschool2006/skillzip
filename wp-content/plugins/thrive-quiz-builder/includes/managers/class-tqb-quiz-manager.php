@@ -481,7 +481,14 @@ class TQB_Quiz_Manager {
 
 				if ( ! empty( $shortcode_content['page'] ) ) {
 					$shortcode_content['page_type'] = 'splash';
-					do_action( 'tqb_register_impression', $shortcode_content['page'], $user_unique );
+					// Defer impression tracking to viewport-based JavaScript tracking
+					// Store impression data for later use when element enters viewport
+					$shortcode_content['deferred_impression'] = array(
+						'page_id'      => $shortcode_content['page']['page_id'],
+						'variation_id' => isset( $shortcode_content['page']['variation_id'] ) ? $shortcode_content['page']['variation_id'] : null,
+						'user_unique'  => $user_unique,
+						'page_type'    => 'splash',
+					);
 					break;
 				}
 
@@ -524,7 +531,24 @@ class TQB_Quiz_Manager {
 						update_user_meta( $current_user_id, 'tqb_quiz_completed_triggered', $quiz_completed_triggered );
 					}
 
-					do_action( 'tqb_register_impression', $shortcode_content['question'], $user_unique );
+					if ( null === $page_type ) {
+						/**
+						 * Splash-less quiz on its initial render (fall-through from the null case):
+						 * defer impression tracking to viewport-based JavaScript tracking,
+						 * the same way the splash page above does.
+						 *
+						 * Question-to-question transitions arrive with a non-null $page_type and
+						 * keep registering the impression immediately.
+						 */
+						$shortcode_content['deferred_impression'] = array(
+							'page_id'      => $quiz_id,
+							'variation_id' => null,
+							'user_unique'  => $user_unique,
+							'page_type'    => 'qna',
+						);
+					} else {
+						do_action( 'tqb_register_impression', $shortcode_content['question'], $user_unique );
+					}
 
 					break;
 				} else {
@@ -635,7 +659,122 @@ class TQB_Quiz_Manager {
 					 *
 					 * @api
 					 */
-					do_action( 'thrive_quizbuilder_quiz_completed', TQB_Quiz_Manager::get_quiz_details( $quiz_id, $user_unique, $points['explicit'], $email ), $user_data, $form_data, $post_id );
+					$quiz_details = TQB_Quiz_Manager::get_quiz_details( $quiz_id, $user_unique, $points['explicit'], $email );
+					do_action( 'thrive_quizbuilder_quiz_completed', $quiz_details, $user_data, $form_data, $post_id );
+
+					$tqb_user_id       = TQB_Quiz_Manager::get_quiz_user( $user_unique, $quiz_id );
+					$reporting_manager = new TQB_Reporting_Manager( $quiz_id );
+					$quiz_tags         = $tqb_user_id ? $reporting_manager->get_users_chosen_tags( $tqb_user_id ) : array();
+
+					// Sanitize user_points: legacy code sets boolean true for personality
+					// quizzes with no answer data. Normalize non-numeric values to null
+					// so the hook payload always contains a numeric score or empty string.
+					$raw_score = isset( $points['user_points'] ) ? $points['user_points'] : null;
+					if ( ! is_numeric( $raw_score ) ) {
+						$raw_score = null;
+					}
+
+					// Build category data for personality quizzes.
+					$quiz_type_str    = isset( $points['quiz_type'] ) ? $points['quiz_type'] : '';
+					$categories       = array();
+					$result_categories = array();
+
+					if ( 'personality' === $quiz_type_str ) {
+						$categories       = self::get_category_scores( $user_unique, $quiz_id );
+						$result_categories = wp_list_pluck( $categories, 'name' );
+					}
+
+					/**
+					 * Fires after a quiz is completed (result page reached).
+					 *
+					 * Standardized hook that fires alongside the legacy
+					 * 'thrive_quizbuilder_quiz_completed' hook. Both hooks fire for
+					 * the same event. Listeners should be idempotent to avoid
+					 * duplicate side effects.
+					 *
+					 * Field availability by quiz type:
+					 *
+					 *  Field             | number        | percentage          | personality          | right_wrong         | survey
+					 *  ------------------|---------------|---------------------|----------------------|---------------------|-------
+					 *  result            | "7"           | "85%"               | "Category A"         | "7/10"              | ""
+					 *  result_numeric    | 7.0           | 85.0                | 0.0                  | 7.0                 | 0.0
+					 *  result_id         | 0 *           | 0 *                 | winning category ID  | 0 *                 | 0
+					 *  score             | sum of points | sum of points       | winning category pts | correct answer count| ""
+					 *  max_score         | 0             | highest possible pts| 0                    | total questions     | 0
+					 *  categories        | []            | []                  | [{id,name,points}]   | []                  | []
+					 *  result_categories | []            | []                  | ["Cat A","Cat B"]    | []                  | []
+					 *
+					 *  * result_id is populated when result intervals are configured for the quiz,
+					 *    mapping score ranges to specific result pages. For personality quizzes it
+					 *    is always set because the result IS the winning category.
+					 *
+					 * @param array $data {
+					 *     Quiz completion data.
+					 *
+					 *     @type int    $user_id           WordPress user ID (0 for guests).
+					 *     @type int    $quiz_id           Quiz post ID.
+					 *     @type string $result            User-facing result string shown on the result page.
+					 *     @type float  $result_numeric    Numeric score for computation. Parsed from result string
+					 *                                     (e.g. "85%" becomes 85.0). 0.0 when not applicable.
+					 *     @type string $result_type       Quiz type: number, percentage, personality, right_wrong, survey.
+					 *     @type int    $result_id         Result/category ID. Always set for personality quizzes;
+					 *                                     set for other types only when result intervals are configured.
+					 *     @type string $score             Raw point total. For personality quizzes this is the winning
+					 *                                     category's accumulated points (internal tiebreaker, not user-facing).
+					 *     @type int    $max_score         Maximum possible score. Set for percentage quizzes (highest
+					 *                                     achievable point total) and right_wrong quizzes (total questions).
+					 *     @type array  $categories        Category breakdown for personality quizzes. Each entry:
+					 *                                     {id: int, name: string, points: int}. Sorted highest to lowest.
+					 *                                     Empty array for non-personality quiz types.
+					 *     @type array  $result_categories Ordered category names (highest score to lowest) for personality
+					 *                                     quizzes. Empty array for non-personality quiz types.
+					 *     @type string $email             User email from quiz opt-in form, or logged-in user email.
+					 *     @type int    $post_id           Page/post ID where the quiz is embedded.
+					 *     @type array  $tags              Tags from the user's chosen answers, scoped to this quiz.
+					 *     @type array  $answers           User's answers. Each entry contains:
+					 *                                     'id', 'question_id', 'answer_text', 'q_text', 'q_type', 'a_text'.
+					 *     @type int    $timestamp         Unix timestamp of completion.
+					 * }
+					 */
+					// Determine max_score based on quiz type.
+					$max_score = 0;
+					if ( isset( $points['max_points'] ) ) {
+						// Percentage quizzes store the highest achievable point total.
+						$max_score = $points['max_points'];
+					} elseif ( 'right_wrong' === $quiz_type_str && isset( $points['total_questions'] ) ) {
+						// Right/wrong quizzes: total questions is the max possible correct answers.
+						$max_score = $points['total_questions'];
+					}
+
+					$hook_payload = array(
+						'user_id'           => (int) get_current_user_id(),
+						'quiz_id'           => (int) $quiz_id,
+						'result'            => (string) $points['explicit'],
+						'result_numeric'    => (float) self::parse_numeric_result( $points['explicit'] ),
+						'result_type'       => (string) $quiz_type_str,
+						'result_id'         => (int) ( isset( $points['result_id'] ) ? $points['result_id'] : 0 ),
+						'score'             => (string) ( $raw_score !== null ? $raw_score : '' ),
+						'max_score'         => (int) $max_score,
+						'categories'        => $categories,
+						'result_categories' => $result_categories,
+						'email'             => (string) $email,
+						'post_id'           => (int) $post_id,
+						'tags'              => (array) $quiz_tags,
+						'answers'           => (array) ( isset( $quiz_details['answers'] ) ? $quiz_details['answers'] : array() ),
+						'timestamp'         => (int) time(),
+					);
+
+					tve_debug_log( sprintf(
+						'Hook thrivethemes_quiz_completed: quiz_id=%d, user_id=%d, type=%s, result=%s, tags=%d, answers=%d',
+						$hook_payload['quiz_id'],
+						$hook_payload['user_id'],
+						$hook_payload['result_type'],
+						$hook_payload['result'],
+						count( $hook_payload['tags'] ),
+						count( $hook_payload['answers'] )
+					) );
+
+					do_action( 'thrivethemes_quiz_completed', $hook_payload );
 				}
 				break;
 		}
@@ -925,7 +1064,8 @@ class TQB_Quiz_Manager {
 		$data['variation_id'] = isset( $variation['variation_id'] ) ? $variation['variation_id'] : null;
 		$data['user_unique']  = $user_unique;
 		$data['page_id']      = $variation['page_id'];
-		$data['post_id']      = get_the_ID();
+		/* get_the_ID() is empty in AJAX context, so viewport-tracked impressions pass the post ID explicitly */
+		$data['post_id']      = ! empty( $variation['post_id'] ) ? (int) $variation['post_id'] : get_the_ID();
 
 		$page_manager = new TQB_Page_Manager( $variation['page_id'] );
 		$active_test  = $page_manager->get_tests_for_page( array(
@@ -1370,6 +1510,101 @@ class TQB_Quiz_Manager {
 		global $tqbdb;
 
 		return $tqbdb->calculate_user_points( $user_unique, $quiz_id );
+	}
+
+	/**
+	 * Get per-category scores for a personality quiz, sorted highest to lowest.
+	 *
+	 * Queries the same answer data as calculate_user_points() but returns
+	 * all categories (not just the winner), enriched with category names
+	 * from the results table.
+	 *
+	 * @param string $user_unique User unique identifier.
+	 * @param int    $quiz_id     Quiz post ID.
+	 *
+	 * @return array Array of {id: int, name: string, points: int}, sorted by points descending.
+	 */
+	public static function get_category_scores( $user_unique, $quiz_id ) {
+		global $tqbdb;
+
+		if ( empty( $tqbdb ) || empty( $user_unique ) || empty( $quiz_id ) ) {
+			return array();
+		}
+
+		$quiz_user = $tqbdb->get_quiz_user( $user_unique, $quiz_id );
+		if ( empty( $quiz_user ) ) {
+			return array();
+		}
+
+		// Get all result categories for this quiz (id, text).
+		$all_results = $tqbdb->get_quiz_results( $quiz_id );
+		if ( empty( $all_results ) || ! is_array( $all_results ) ) {
+			return array();
+		}
+
+		// Get per-category user points (same query structure as calculate_user_points).
+		$user_scores = $tqbdb->get_user_category_scores( $user_unique, $quiz_id );
+
+		// Index user scores by result_id.
+		$scores_by_id = array();
+		foreach ( $user_scores as $row ) {
+			if ( isset( $row['result_id'] ) ) {
+				$scores_by_id[ (int) $row['result_id'] ] = (int) $row['user_points'];
+			}
+		}
+
+		// Build enriched array with all categories (0 points for unscored).
+		$categories = array();
+		foreach ( $all_results as $result ) {
+			if ( ! isset( $result['id'], $result['text'] ) ) {
+				continue;
+			}
+			$rid          = (int) $result['id'];
+			$categories[] = array(
+				'id'     => $rid,
+				'name'   => $result['text'],
+				'points' => isset( $scores_by_id[ $rid ] ) ? $scores_by_id[ $rid ] : 0,
+			);
+		}
+
+		// Sort by points descending, alphabetical tiebreaker.
+		usort( $categories, static function ( $a, $b ) {
+			$diff = $b['points'] - $a['points'];
+
+			return 0 !== $diff ? $diff : strcmp( $a['name'], $b['name'] );
+		} );
+
+		return $categories;
+	}
+
+	/**
+	 * Parse a numeric value from a result display string.
+	 *
+	 * Strips non-numeric characters (e.g. "%" or "/10" suffix) and returns
+	 * a float. For personality quiz results (category names) this returns 0.0.
+	 *
+	 * @param string $result The user-facing result string (e.g. "85%", "7/10", "Category A").
+	 *
+	 * @return float Numeric value extracted from the result, or 0.0.
+	 */
+	public static function parse_numeric_result( $result ) {
+		if ( ! is_string( $result ) && ! is_numeric( $result ) ) {
+			return 0.0;
+		}
+
+		$result = (string) $result;
+
+		// Handle "X/Y" format (right_wrong quizzes): extract X.
+		if ( strpos( $result, '/' ) !== false ) {
+			$parts = explode( '/', $result, 2 );
+
+			return is_numeric( $parts[0] ) ? (float) $parts[0] : 0.0;
+		}
+
+		// Strip % and whitespace then parse.
+		$numeric = str_replace( array( '%', ' ' ), '', $result );
+
+		return is_numeric( $numeric ) ? (float) $numeric : 0.0;
 	}
 
 	/**
@@ -1979,7 +2214,11 @@ class TQB_Quiz_Manager {
 			return $url;
 		}
 
-		$url = set_url_scheme( get_edit_post_link( $this->quiz->ID, '' ) );
+		$edit_link = get_edit_post_link( $this->quiz->ID, '' );
+		if ( ! $edit_link ) {
+			return $url;
+		}
+		$url = set_url_scheme( $edit_link );
 
 		return esc_url(
 			add_query_arg(

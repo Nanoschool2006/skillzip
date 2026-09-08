@@ -131,6 +131,9 @@ class TQB_Frontend_Ajax_Controller {
 			case 'prewarm_twitter_share':
 				return $this->prewarm_twitter_share();
 
+			case 'viewport_impression':
+				return $this->viewport_impression();
+
 			default:
 				return null;
 		}
@@ -241,6 +244,60 @@ class TQB_Frontend_Ajax_Controller {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Handle viewport-based impression tracking via AJAX
+	 * Called from JavaScript when splash page enters viewport
+	 *
+	 * @return array Success/error response
+	 */
+	protected function viewport_impression() {
+		// Extract parameters
+		$page_id      = $this->param( 'page_id' ) ? absint( $this->param( 'page_id' ) ) : 0;
+		$variation_id = $this->param( 'variation_id' ) ? absint( $this->param( 'variation_id' ) ) : null;
+		$user_unique  = $this->param( 'user_unique' ) ? sanitize_text_field( $this->param( 'user_unique' ) ) : '';
+
+		// Validate required fields
+		if ( empty( $page_id ) || empty( $user_unique ) ) {
+			return array(
+				'success' => false,
+				'message' => 'Missing required fields',
+			);
+		}
+
+		/**
+		 * Skip only when an impression was already tracked for this specific quiz user.
+		 * A page-level repeat (reload minting a new user_unique) is NOT skipped here:
+		 * tqb_register_impression() logs it as a duplicate-flagged row - exactly like the
+		 * question-answer path - so conversion rows always have an impression-side
+		 * counterpart. Reports exclude duplicate rows instead (see
+		 * TQB_Database::get_flow_splash_impressions()), which is what prevents reloads
+		 * from inflating impression counts.
+		 */
+		$cookie_key = 'tqb-impression-' . $page_id . '-' . str_replace( '.', '_', $user_unique );
+		if ( isset( $_COOKIE[ $cookie_key ] ) ) {
+			return array(
+				'success' => true,
+				'message' => 'Impression already tracked',
+				'skipped' => true,
+			);
+		}
+
+		// Build variation array for impression registration
+		$variation = array(
+			'page_id'      => $page_id,
+			'variation_id' => $variation_id,
+			'post_id'      => absint( $this->param( 'tqb-post-id' ) ),
+		);
+
+		// Register the impression using existing method
+		TQB_Quiz_Manager::tqb_register_impression( $variation, $user_unique );
+
+		return array(
+			'success' => true,
+			'message' => 'Impression tracked successfully',
+		);
 	}
 
 	/**

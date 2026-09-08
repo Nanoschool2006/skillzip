@@ -17,6 +17,38 @@ use TCB\inc\helpers\FormSettings;
  * Class Tho_Db
  */
 class TQB_Database {
+
+	/**
+	 * Columns of the quiz users table that get_users() may sort by.
+	 *
+	 * ORDER BY takes an identifier, which cannot be bound as a placeholder, so it is matched against
+	 * this list instead.
+	 *
+	 * Derived from the full migration history, not just the install file: later migrations both add
+	 * and remove columns, so `ip_address` is absent (dropped by gdpr-1.0.2.php) and `date_finished`,
+	 * `object_id` and `wp_user_id` are present.
+	 *
+	 * @see includes/database/migrations/install-1.0.0.php     base columns
+	 * @see includes/database/migrations/gdpr-1.0.2.php        drops ip_address
+	 * @see includes/database/migrations/points-1.0.1.php      points
+	 * @see includes/database/migrations/usropti-1.0.3.php     quiz_id
+	 * @see includes/database/migrations/user-id-1.0.7.php     wp_user_id, object_id
+	 * @see includes/database/migrations/date-finished-1.0.8.php  date_finished
+	 */
+	const USERS_SORTABLE_COLUMNS = array(
+		'id',
+		'random_identifier',
+		'quiz_id',
+		'email',
+		'points',
+		'date_started',
+		'date_finished',
+		'completed_quiz',
+		'ignore_user',
+		'object_id',
+		'wp_user_id',
+		'social_badge_link',
+	);
 	/**
 	 * @var $wpdb wpdb
 	 */
@@ -271,7 +303,7 @@ class TQB_Database {
 
 		if ( ! empty( $filters['post_id'] ) ) {
 			if ( is_array( $filters['post_id'] ) ) {
-				$sql .= ' AND page_id IN (' . implode( ',', $filters['post_id'] ) . ')';
+				$sql .= ' AND page_id IN (' . implode( ',', array_map( 'absint', $filters['post_id'] ) ) . ')';
 			} else {
 				$sql       .= ' AND page_id = %d';
 				$params [] = $filters['post_id'];
@@ -467,7 +499,7 @@ class TQB_Database {
 		$params = array();
 
 		if ( ! empty( $filters['page_id'] ) && is_array( $filters['page_id'] ) ) {
-			$where .= ' AND page_id IN (' . implode( ',', $filters['page_id'] ) . ')';
+			$where .= ' AND page_id IN (' . implode( ',', array_map( 'absint', $filters['page_id'] ) ) . ')';
 		}
 
 		$sql .= $where;
@@ -1370,8 +1402,15 @@ class TQB_Database {
 			$where .= " AND date_started > '" . $this->wordpress_to_server_date( $filters['since']['date'] ) . "'";
 		}
 
-		if ( ! empty( $filters['location'] ) ) {
-			$where .= ' AND object_id = ' . esc_sql( $filters['location'] );
+		if ( ! empty( $filters['location'] ) && is_numeric( $filters['location'] ) ) {
+			/*
+			 * location is a post/object id from the reporting request. esc_sql() was no protection
+			 * here: the comparison is unquoted, so escaping quotes leaves digits-plus-SQL intact.
+			 * The is_numeric guard is defence in depth rather than a fix for an observed failure:
+			 * the reporting manager already strips its 'all' default before building $params, so
+			 * only a numeric id or nothing reaches here on the live paths.
+			 */
+			$where .= ' AND object_id = ' . absint( $filters['location'] );
 		}
 
 		$params['quiz_id'] = $quiz_id;
@@ -1405,15 +1444,30 @@ class TQB_Database {
 			$where .= " AND date > '" . $this->wordpress_to_server_date( $filters['since']['date'] ) . "'";
 		}
 
-		if ( ! empty( $filters['location'] ) && empty ( $filters['no_splash'] ) ) {
+		/*
+		 * is_numeric matches the guard on the other location sites. Without it a non-numeric value
+		 * would absint() to 0 and filter on object_id = 0, returning an empty flow report instead of
+		 * skipping the clause.
+		 */
+		if ( ! empty( $filters['location'] ) && is_numeric( $filters['location'] ) && empty( $filters['no_splash'] ) ) {
 			$join  = ' INNER JOIN ' . tqb_table_name( 'users' ) . ' AS users ON event_log.user_unique = users.random_identifier';
-			$where .= ' AND users.object_id = ' . esc_sql( $filters['location'] );
-		} else if ( ! empty( $filters['location'] ) && ! empty ( $filters['no_splash'] ) ) {
+			$where .= ' AND users.object_id = ' . absint( $filters['location'] );
+		} elseif ( ! empty( $filters['location'] ) && is_numeric( $filters['location'] ) && ! empty( $filters['no_splash'] ) ) {
 			/**
 			 * if there is no splash page we have to count all the impressions on a qna page and display it for each location
 			 */
-			$where .= ' AND event_log.post_id = ' . esc_sql( $filters['location'] );
+			$where .= ' AND event_log.post_id = ' . absint( $filters['location'] );
 		}
+
+		/**
+		 * Count unique events only. Repeat views/conversions (page reload minting a new
+		 * user_unique) are logged as duplicate-flagged rows so every conversion keeps an
+		 * impression-side counterpart, but counting them would inflate the flow numbers.
+		 * The column is only written when the row IS a duplicate, hence the NULL check.
+		 *
+		 * @see https://github.com/awesomemotive/thrive-themes/issues/2957
+		 */
+		$where .= ' AND ( event_log.duplicate IS NULL OR event_log.duplicate = 0 )';
 
 		$where .= ' GROUP BY event_type';
 
@@ -1471,11 +1525,21 @@ class TQB_Database {
 			$where .= " AND date > '" . $this->wordpress_to_server_date( $filters['since']['date'] ) . "'";
 		}
 
-		if ( ! empty( $filters['location'] ) ) {
-			$where .= ' AND post_id = ' . esc_sql( $filters['location'] );
+		if ( ! empty( $filters['location'] ) && is_numeric( $filters['location'] ) ) {
+			$where .= ' AND post_id = ' . absint( $filters['location'] );
 		}
 
 		$where .= ' AND event_type = 1';
+
+		/**
+		 * Count unique impressions only. Repeat views (page reload minting a new
+		 * user_unique) are logged as duplicate-flagged rows so conversions always have
+		 * an impression-side counterpart, but counting them would inflate the numbers.
+		 * The column is only written when the row IS a duplicate, hence the NULL check.
+		 *
+		 * @see https://github.com/awesomemotive/thrive-themes/issues/2957
+		 */
+		$where .= ' AND ( duplicate IS NULL OR duplicate = 0 )';
 
 		$params['page_id'] = $page_id;
 		$sql               = 'SELECT IFNULL(COUNT(*), 0) as count, event_type FROM ' . tqb_table_name( 'event_log' ) . ' AS event_log' . $where;
@@ -1579,9 +1643,9 @@ class TQB_Database {
 
 		$order = ' ORDER BY id DESC ';
 		if ( ! empty( $params['per_page'] ) && is_numeric( $params['per_page'] ) ) {
-			$order .= ' LIMIT ' . $params['per_page'];
+			$order .= ' LIMIT ' . absint( $params['per_page'] );
 			if ( ! empty( $params['offset'] ) && is_numeric( $params['offset'] ) ) {
-				$order .= ' OFFSET ' . $params['offset'];
+				$order .= ' OFFSET ' . absint( $params['offset'] );
 			}
 		}
 
@@ -1603,9 +1667,9 @@ class TQB_Database {
 
 		$order = ' ORDER BY id DESC ';
 		if ( ! empty( $params['per_page'] ) && is_numeric( $params['per_page'] ) ) {
-			$order .= ' LIMIT ' . $params['per_page'];
+			$order .= ' LIMIT ' . absint( $params['per_page'] );
 			if ( ! empty( $params['offset'] ) && is_numeric( $params['offset'] ) ) {
-				$order .= ' OFFSET ' . $params['offset'];
+				$order .= ' OFFSET ' . absint( $params['offset'] );
 			}
 		}
 
@@ -1623,6 +1687,9 @@ class TQB_Database {
 	 * @return string
 	 */
 	protected function get_sql_for_quiz_users( $quiz_id, $params = array() ) {
+		/* $quiz_id arrives raw from the reporting request body; it is a post id. */
+		$quiz_id = absint( $quiz_id );
+
 		$where_guest = ' WHERE quiz_id = ' . $quiz_id . ' AND ignore_user IS NULL AND wp_user_id = 0 ';
 		$where_user  = ' WHERE quiz_id = ' . $quiz_id . ' AND ignore_user IS NULL AND wp_user_id != 0 ';
 
@@ -1678,26 +1745,26 @@ class TQB_Database {
 		switch ( $params['quiz_type'] ) {
 			case 'number':
 				if ( ! empty( $params['result_min'] ) ) {
-					$where .= 'AND points >=' . esc_sql( $params['result_min'] ) . ' ';
+					$where .= 'AND points >=' . (float) $params['result_min'] . ' ';
 				}
 				if ( ! empty( $params['result_max'] ) ) {
-					$where .= 'AND points <=' . esc_sql( $params['result_max'] ) . ' ';
+					$where .= 'AND points <=' . (float) $params['result_max'] . ' ';
 				}
 				break;
 			case 'percentage':
 				if ( ! empty( $params['result_min'] ) ) {
-					$where .= 'AND SUBSTRING_INDEX(points, "%", 1) >=' . esc_sql( $params['result_min'] ) . ' ';
+					$where .= 'AND SUBSTRING_INDEX(points, "%", 1) >=' . (float) $params['result_min'] . ' ';
 				}
 				if ( ! empty( $params['result_max'] ) ) {
-					$where .= 'AND SUBSTRING_INDEX(points, "%", 1) <=' . esc_sql( $params['result_max'] ) . ' ';
+					$where .= 'AND SUBSTRING_INDEX(points, "%", 1) <=' . (float) $params['result_max'] . ' ';
 				}
 				break;
 			case 'right_wrong':
 				if ( ! empty( $params['result_min'] ) ) {
-					$where .= 'AND SUBSTRING_INDEX(points, "/", 1) >=' . esc_sql( $params['result_min'] ) . ' ';
+					$where .= 'AND SUBSTRING_INDEX(points, "/", 1) >=' . (float) $params['result_min'] . ' ';
 				}
 				if ( ! empty( $params['result_max'] ) ) {
-					$where .= 'AND SUBSTRING_INDEX(points, "/", 1) <=' . esc_sql( $params['result_max'] ) . ' ';
+					$where .= 'AND SUBSTRING_INDEX(points, "/", 1) <=' . (float) $params['result_max'] . ' ';
 				}
 				break;
 			case 'personality':
@@ -1769,7 +1836,21 @@ class TQB_Database {
 		}
 
 		if ( ! empty( $filters['order_by'] ) && ! empty( $filters['order_direction'] ) ) {
-			$sql .= ' ORDER BY ' . $this->wpdb->_escape( $filters['order_by'] ) . ' ' . $this->wpdb->_escape( $filters['order_direction'] );
+			/*
+			 * $wpdb->_escape() cannot make an identifier safe - it escapes quotes and leaves
+			 * backticks, spaces, commas and SQL keywords untouched, so it was doing nothing useful in
+			 * a column position. Both halves are matched against fixed sets; an unrecognised column
+			 * means no ORDER BY rather than an injected one.
+			 *
+			 * Current callers pass hardcoded values ('id' / 'DESC'), so this is defence in depth.
+			 */
+			$_order_by = in_array( $filters['order_by'], self::USERS_SORTABLE_COLUMNS, true ) ? $filters['order_by'] : '';
+
+			if ( $_order_by ) {
+				$_order_dir = 'ASC' === strtoupper( (string) $filters['order_direction'] ) ? 'ASC' : 'DESC';
+
+				$sql .= ' ORDER BY `' . $_order_by . '` ' . $_order_dir;
+			}
 		}
 
 		if ( ! empty( $filters['limit'] ) && is_numeric( $filters['limit'] ) ) {
@@ -1877,13 +1958,36 @@ class TQB_Database {
 	}
 
 	/**
-	 * Get user's points from a quiz
+	 * Get per-category (result_id) user point totals for a quiz.
 	 *
-	 * @param $user_unique
-	 * @param $quiz_id
+	 * Returns all result_id groups with their summed points, without
+	 * selecting a winner. Used by the hook payload to build the full
+	 * category breakdown.
 	 *
-	 * @return array|null
+	 * @param string $user_unique User unique identifier.
+	 * @param int    $quiz_id     Quiz ID.
+	 *
+	 * @return array Array of rows with 'user_points' and 'result_id' keys.
 	 */
+	public function get_user_category_scores( $user_unique, $quiz_id ) {
+		$user = $this->get_quiz_user( $user_unique, $quiz_id );
+		if ( empty( $user ) ) {
+			return array();
+		}
+
+		$sql  = 'SELECT IFNULL(SUM( answer.points ), 0) AS user_points, answer.result_id';
+		$sql .= ' FROM ' . tge_table_name( 'answers' ) . ' AS answer';
+		$sql .= ' INNER JOIN ' . tge_table_name( 'questions' ) . ' AS question ON question.id = answer.question_id';
+		$sql .= ' INNER JOIN ' . tqb_table_name( 'user_answers' ) . ' AS user_answers ON answer.id = user_answers.answer_id';
+		$sql .= ' WHERE (answer.result_id != 0 OR answer.result_id IS NULL)';
+		$sql .= ' AND user_answers.quiz_id = %d AND user_answers.user_id = %d AND question.q_type != 3';
+		$sql .= ' GROUP BY answer.result_id';
+
+		$data = $this->wpdb->get_results( $this->prepare( $sql, array( $quiz_id, $user['id'] ) ), ARRAY_A );
+
+		return is_array( $data ) ? $data : array();
+	}
+
 	public function calculate_user_points( $user_unique, $quiz_id ) {
 
 		$user = $this->get_quiz_user( $user_unique, $quiz_id );
@@ -1910,7 +2014,7 @@ class TQB_Database {
 
 		$end_result['user_points']    = null;
 		$end_result['result_id']      = null;
-		$end_result['quiz_completed'] = $user['completed_quiz'] == 1;
+		$end_result['quiz_completed'] = ! empty( $user['completed_quiz'] );
 
 		// Build category breakdown from all result groups before picking the winner.
 		$end_result['category_breakdown'] = array();
@@ -2122,7 +2226,8 @@ class TQB_Database {
 		if ( empty( $filters['location'] ) || $filters['location'] === 'all' ) {
 			$quiz_location = '';
 		} else {
-			$quiz_location = ' AND object_id=' . $filters['location'];
+			/* Raw before: no escaping at all. The 'all' sentinel is handled by the branch above. */
+			$quiz_location = ' AND object_id=' . absint( $filters['location'] );
 		}
 
 		$sql = 'SELECT IFNULL(COUNT( user.id ), 0) AS user_count, quiz_id, ' . $date_interval;
@@ -2280,7 +2385,36 @@ class TQB_Database {
 				$date_interval = ' AND `user`.`date_started` >= ' . $start_date . ' ';
 				break;
 			case Thrive_Quiz_Builder::TQB_CUSTOM_DATE_RANGE :
-				$start_date    = $filter['start_date'];
+				/*
+				 * Both bounds come from the reporting request. Every other branch of this switch
+				 * builds its date with date(), which is what makes those safe; start_date was taken
+				 * verbatim and interpolated inside a "..." literal below, so a double quote closed
+				 * the literal. Laundering it through strtotime()/date() matches how end_date is
+				 * already handled and guarantees the shape of the value.
+				 */
+				$start_ts = strtotime( (string) $filter['start_date'] );
+				if ( $start_ts ) {
+					/*
+					 * No $timezone_diff and no time component here, unlike every other branch. The
+					 * picker sends a yyyy-mm-dd the user already read as a local date, and the old
+					 * code emitted it verbatim - adding the site offset would move the lower bound
+					 * by hours and change which rows the report counts on any non-UTC site, and
+					 * appending 00:00:00 would change the value handed to
+					 * tqb_generate_dates_interval() for the chart axis. Reformatting through date()
+					 * is what guarantees the shape; the value itself must stay as-is.
+					 */
+					// phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- see the note above on why this one must not use the site offset.
+					$start_date = date( 'Y-m-d', $start_ts );
+				} else {
+					/*
+					 * Unparseable, which the picker cannot produce - only a hand-built request can.
+					 * Fall back to the same value TQB_LAST_7_DAYS emits rather than reflecting the
+					 * input, which previously reached the SQL literal untouched.
+					 */
+					// phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date -- matches the sibling branches.
+					$start_date = date( 'Y-m-d', ( strtotime( '-7 days' ) + $timezone_diff ) );
+				}
+
 				$end_date      = date( 'Y-m-d H:i:s', ( strtotime( '+1 day', ( strtotime( $filter['end_date'] ) - 1 ) ) + $timezone_diff ) );
 				$date_interval = ' AND `user`.`date_started` >= "' . $start_date . '" AND `user`.`date_started` < "' . $end_date . '" ';
 				break;
@@ -2320,10 +2454,10 @@ class TQB_Database {
 		$sql .= ' INNER JOIN ' . tqb_table_name( 'users' ) . ' AS user ON user.id = user_answer.user_id ';
 		$sql .= ' LEFT JOIN ' . tge_table_name( 'questions' ) . ' AS question ON question.id = answer.question_id ';
 
-		$sql .= '  WHERE answer.quiz_id = ' . $quiz_id . ' AND user.ignore_user IS NULL';// ' AND user.completed_quiz = 1';
+		$sql .= '  WHERE answer.quiz_id = ' . absint( $quiz_id ) . ' AND user.ignore_user IS NULL';// ' AND user.completed_quiz = 1';
 
-		if ( ! empty( $params['location'] ) ) {
-			$sql .= ' AND user.object_id = ' . esc_sql( $params['location'] );
+		if ( ! empty( $params['location'] ) && is_numeric( $params['location'] ) ) {
+			$sql .= ' AND user.object_id = ' . absint( $params['location'] );
 		}
 
 		$sql .= ' GROUP BY answer.question_id, answer.id ';
@@ -2426,7 +2560,18 @@ class TQB_Database {
 		question.q_type AS question_type
 		';
 
-		// Filter columns in sql
+		/*
+		 * Filter columns in sql.
+		 *
+		 * These keys and values are SQL identifiers and expressions, not values, so esc_sql() below
+		 * is not what makes them safe - it cannot protect an identifier position. What makes them
+		 * safe is that they are server-owned: the only caller of this method
+		 * (TQB_Reporting_Manager::get_full_csv_questions_report, which backs the live questions CSV
+		 * export at class-tqb-admin.php:245 - reachable, not dead code) passes a hardcoded map, and
+		 * no request path supplies 'columns' or 'group_by'. Do not start accepting either from a
+		 * request without rewriting this into an allowlist first - the map's keys include expressions
+		 * such as IFNULL(COUNT( user_answer.id ), 0), so a plain column allowlist will not fit.
+		 */
 		if ( ! empty( $filters['columns'] ) && is_array( $filters['columns'] ) ) {
 			$columns = implode( ', ', array_map(
 				function ( $v, $k ) {
@@ -2443,7 +2588,7 @@ class TQB_Database {
 		$sql .= ' LEFT JOIN ' . tqb_table_name( 'user_answers' ) . ' AS user_answer ON answer.id = user_answer.answer_id ';
 		$sql .= ' INNER JOIN ' . tqb_table_name( 'users' ) . ' AS `user` ON user.id = user_answer.user_id ';
 		$sql .= ' LEFT JOIN ' . tge_table_name( 'questions' ) . ' AS question ON question.id = answer.question_id ';
-		$sql .= ' WHERE answer.quiz_id = ' . $quiz_id . ' AND user.ignore_user IS NULL';
+		$sql .= ' WHERE answer.quiz_id = ' . absint( $quiz_id ) . ' AND user.ignore_user IS NULL';
 
 		// Filter GROUP BY in sql
 		if ( ! empty( $filters['group_by'] ) && is_array( $filters['group_by'] ) ) {

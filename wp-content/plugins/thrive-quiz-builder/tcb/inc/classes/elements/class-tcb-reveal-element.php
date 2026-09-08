@@ -109,7 +109,7 @@ class TCB_Reveal_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'content_reveal',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425778-how-to-use-the-content-reveal-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-content-reveal-element-in-thrive-architect/',
 			],
 		];
 	}

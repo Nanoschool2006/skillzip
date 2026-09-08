@@ -23,33 +23,44 @@ unset( $available_apis['zoom'] );
 <?php include TVE_DASH_PATH . '/templates/header.phtml'; ?>
 <div class="tvd-v-spacer"></div>
 <div class="tvd-container tvd-hide tvd-show-onload">
-	<h3 class="tvd-section-title"><?php echo esc_html__( "Active Connections", 'thrive-dash' ) ?></h3>
-	<div class="tvd-row tvd-api-list"></div>
+	<div class="td-api-tabs-bar">
+		<button type="button" class="td-tab-btn active" data-tab="connections"><?php echo esc_html__( 'Active Connections', 'thrive-dash' ); ?></button>
+		<button type="button" class="td-tab-btn" data-tab="api-keys"><?php echo esc_html__( 'API Keys', 'thrive-dash' ); ?> <span class="td-tab-badge"><?php echo esc_html__( 'NEW', 'thrive-dash' ); ?></span></button>
+	</div>
 
-	<?php if ( ! empty( Thrive_Dash_List_Manager::get_third_party_autoresponders() ) ) : ?>
-		<h3 class="tvd-section-title"><?php echo esc_html__( 'Third Party Connections', 'thrive-dash' ) ?></h3>
-		<div class="tvd-row tvd-third-party-api-list"></div>
-	<?php endif; ?>
+	<div class="td-tab-panel active" id="td-panel-connections">
+		<h3 class="tvd-section-title"><?php echo esc_html__( "Active Connections", 'thrive-dash' ) ?></h3>
+		<div class="tvd-row tvd-api-list"></div>
 
-	<div class="tvd-row">
-		<div class="tvd-col tvd-s12">
-			<div style="height: 100px"></div>
+		<?php if ( ! empty( Thrive_Dash_List_Manager::get_third_party_autoresponders() ) ) : ?>
+			<h3 class="tvd-section-title"><?php echo esc_html__( 'Third Party Connections', 'thrive-dash' ) ?></h3>
+			<div class="tvd-row tvd-third-party-api-list"></div>
+		<?php endif; ?>
+
+		<div class="tvd-row">
+			<div class="tvd-col tvd-s12">
+				<div style="height: 100px"></div>
+			</div>
+		</div>
+
+		<div class="tvd-row tvd-connections-footer">
+			<div class="tvd-col tvd-s12 tvd-m6">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=tve_dash_section' ) ); ?>"
+				   class="tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-gray">
+					<?php echo esc_html__( "Back To Dashboard", 'thrive-dash' ); ?>
+				</a>
+			</div>
+			<div class="tvd-col tvd-s12 tvd-m6">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=tve_dash_api_error_log' ) ); ?>"
+				   class="tvd-btn-flat tvd-btn-flat-primary tvd-btn-flat-dark tvd-waves-effect tvd-right tvd-btn-small">
+					<?php echo esc_html__( "View Error Logs", 'thrive-dash' ); ?>
+				</a>
+			</div>
 		</div>
 	</div>
 
-	<div class="tvd-row tvd-connections-footer">
-		<div class="tvd-col tvd-s12 tvd-m6">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=tve_dash_section' ) ); ?>"
-			   class="tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-gray">
-				<?php echo esc_html__( "Back To Dashboard", 'thrive-dash' ); ?>
-			</a>
-		</div>
-		<div class="tvd-col tvd-s12 tvd-m6">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=tve_dash_api_error_log' ) ); ?>"
-			   class="tvd-btn-flat tvd-btn-flat-primary tvd-btn-flat-dark tvd-waves-effect tvd-right tvd-btn-small">
-				<?php echo esc_html__( "View Error Logs", 'thrive-dash' ); ?>
-			</a>
-		</div>
+	<div class="td-tab-panel" id="td-panel-api-keys">
+		<?php \TVE\Dashboard\Public_API\TD_API_Admin::render_tab_content(); ?>
 	</div>
 </div>
 

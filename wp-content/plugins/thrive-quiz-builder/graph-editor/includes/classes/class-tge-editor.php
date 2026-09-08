@@ -232,7 +232,7 @@ class TGE_Editor {
 				'maximize'                    => __( 'Maximize', 'thrive-graph-editor' ),
 				'tags_switcher_off_tooltip'   => __( 'Disable attaching tags to answers.', 'thrive-graph-editor' ),
 				'tags_switcher_on_tooltip'    => __( 'Enable attaching tags to answers.', 'thrive-graph-editor' ),
-				'tags_switcher_on_toast'      => sprintf( __( 'Attaching tags to answers is now enabled. If your API connection supports it, %s these tags can be sent to your mailing list. For more details %s', 'thrive-graph-editor' ), '<br/>', '<a class="tvd-white-text" href="https://help.thrivethemes.com/en/articles/4426071-how-to-build-tagged-answers-in-thrive-quiz-builder" target="_blank">' . __( 'check this tutorial.' ) . '</a>' ),
+				'tags_switcher_on_toast'      => sprintf( __( 'Attaching tags to answers is now enabled. If your API connection supports it, %s these tags can be sent to your mailing list. For more details %s', 'thrive-graph-editor' ), '<br/>', '<a class="tvd-white-text" href="https://thrivethemes.com/docs/how-to-build-tagged-answers-for-audience-segmentation/" target="_blank">' . __( 'check this tutorial.' ) . '</a>' ),
 				'tags_switcher_off_toast'     => __( 'Attaching tags to answers is now disabled but the settings are saved for later use.', 'thrive-graph-editor' ),
 				'media'                       => array(
 					'question_title'          => __( 'Select image for your question', 'thrive-graph-editor' ),

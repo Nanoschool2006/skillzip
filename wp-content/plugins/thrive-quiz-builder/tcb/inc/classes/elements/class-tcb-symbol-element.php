@@ -118,7 +118,7 @@ class TCB_Symbol_Element extends TCB_Symbol_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'templates_symbols',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425777-how-to-use-the-templates-and-symbols-element-formerly-content-template',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-templates-and-symbols-element-in-thrive-architect/',
 			],
 		];
 	}

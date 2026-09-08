@@ -29,7 +29,11 @@ class Thrive_Dash_List_Connection_FileUpload_GoogleDrive
 	public function getAuthorizeUrl() {
 		$this->save(); // save the client_id and client_secret for later use
 
-		return $this->get_api()->get_authorize_url();
+		/* Request the full `drive` scope so uploads can target user-created folders
+		 * and folders on Shared Drives. The default `drive.file` scope only grants
+		 * access to files/folders created by this app, which fails for folder URLs
+		 * the user entered manually. */
+		return $this->get_api()->get_authorize_url( array( 'drive' ) );
 	}
 
 	/**
@@ -118,7 +122,18 @@ class Thrive_Dash_List_Connection_FileUpload_GoogleDrive
 		try {
 			$file = $this->get_api()->multipart_upload( $file_contents, $metadata );
 		} catch ( Thrive_Dash_Api_Google_Exception $e ) {
-			return new WP_Error( 'tcb_file_upload_error', $e->getMessage() );
+			$message = $e->getMessage();
+
+			/* A "File not found" response on a folder the user has confirmed exists
+			 * almost always means the connection's OAuth token was issued with the
+			 * narrower `drive.file` scope (pre-#3350) and cannot see Shared Drive
+			 * or user-created folders. Surface an actionable hint so the user can
+			 * reconnect and obtain a token with the full `drive` scope. */
+			if ( false !== stripos( $message, 'file not found' ) ) {
+				$message .= ' ' . __( 'If this folder is on a Shared Drive or was created manually in Google Drive, please disconnect and reconnect Google Drive in Thrive Dashboard to grant the required access.', 'thrive-dash' );
+			}
+
+			return new WP_Error( 'tcb_file_upload_error', $message );
 		}
 
 		return $file['id'];

@@ -526,8 +526,20 @@ class TGE_Database {
 			$value = 'NULL';
 		}
 
-		$ids = implode( ',', $results_ids );
-		$sql = 'UPDATE ' . tge_table_name( 'answers' ) . ' SET `result_id` = ' . $value . ' WHERE result_id IN (' . $ids . ')';
+		/*
+		 * Cast the id list. Current callers pass DB-sourced integers - set_answers_on_none() receives
+		 * an array_diff() of ids read back from the results table - so this is defence in depth rather
+		 * than a live hole. It is hardened anyway because this is a destructive UPDATE reaching
+		 * query() with no prepare() at all, and because the sibling handler on the same
+		 * tqb-quiz-results-modified hook already casts its ids.
+		 */
+		$ids = array_filter( array_map( 'absint', (array) $results_ids ) );
+
+		if ( empty( $ids ) ) {
+			return 0;
+		}
+
+		$sql = 'UPDATE ' . tge_table_name( 'answers' ) . ' SET `result_id` = ' . $value . ' WHERE result_id IN (' . implode( ',', $ids ) . ')';
 
 		return $this->wpdb->query( $sql );
 	}

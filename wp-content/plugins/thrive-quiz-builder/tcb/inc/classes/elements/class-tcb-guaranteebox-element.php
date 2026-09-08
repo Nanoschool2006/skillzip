@@ -69,7 +69,7 @@ class TCB_Guaranteebox_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'guarantee_box',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425744-adding-guarantee-boxes-to-your-thrive-architect-pages',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-call-to-action-element-in-thrive-architect/',
 			],
 		];
 	}

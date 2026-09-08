@@ -16,7 +16,7 @@
 		</h2>
 		<p>
 			<?php echo __( 'If you activate this feature, you will be able to set up a "Coming Soon" page, that your visitors will be redirected to, while you build your website. However, the logged in users will still be able to see your website.', 'thrive-dash' ); ?>
-			<a class="learn-more-link" href="https://help.thrivethemes.com/en/articles/5366468-add-a-coming-soon-page-to-your-website" target="_blank">
+			<a class="learn-more-link" href="https://thrivethemes.com/docs/adding-a-coming-soon-page-to-your-website/" target="_blank">
 				<?php echo __( 'Learn more', 'thrive-dash' ); ?>
 			</a>
 		</p>

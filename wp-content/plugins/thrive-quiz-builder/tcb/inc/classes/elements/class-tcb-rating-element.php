@@ -173,7 +173,7 @@ class TCB_Rating_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'star_rating',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425791-how-to-use-the-divider-and-star-rating-elements',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-divider-and-star-rating-elements-in-thrive-architect/',
 			],
 		];
 	}
