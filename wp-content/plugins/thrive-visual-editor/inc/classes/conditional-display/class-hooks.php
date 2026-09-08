@@ -224,7 +224,7 @@ class Hooks {
 			            '<div class="tve-preview-conditions-info">
 							<div class="tve-preview-conditions-tooltip">
 							           This page contains conditional displays on some content . You can preview how the page looks for users that match different conditions by selecting them below.
-							<a class="tve-preview-conditions-tooltip-link" target="_blank" href="https://help.thrivethemes.com/en/articles/5814058-how-to-use-the-conditional-display-option">Learn more </a>
+							<a class="tve-preview-conditions-tooltip-link" target="_blank" href="https://thrivethemes.com/docs/how-to-use-conditional-display-in-thrive-architect/">Learn more </a>
 							</div>
 						</div> ' .
 			            '<button class="tve-preview-conditions-close"></button> ',

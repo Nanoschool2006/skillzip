@@ -541,7 +541,7 @@ function tve_dash_get_webhook_trigger_integrated_apis() {
 			'label'      => 'ActiveCampaign',
 			'image'      => TVE_DASH_URL . '/inc/auto-responder/views/images/activecampaign.png',
 			'selected'   => false,
-			'kb_article' => 'https://help.thrivethemes.com/en/articles/4625431-how-to-set-up-incoming-webhooks-in-thrive-ultimatum-using-activecampaign',
+			'kb_article' => 'https://thrivethemes.com/docs/how-to-set-up-activecampaign-webhooks-for-thrive-ultimatum/',
 		),
 		'drip'           => array(
 			'key'        => 'drip',
@@ -566,7 +566,7 @@ function tve_dash_get_webhook_trigger_integrated_apis() {
 			'custom_integration' => true,
 			'data'               => Thrive_Dash_List_Manager::connection_instance( 'mailpoet' )->get_lists(),
 			'selected'           => false,
-			'kb_article'         => 'https://help.thrivethemes.com/en/articles/4625431-how-to-connect-mailpoet-with-thrive-architect',
+			'kb_article'         => 'https://thrivethemes.com/docs/setting-up-an-api-connection-with-mailpoet/',
 		),
 		'infusionsoft'   => array(
 			'key'        => 'infusionsoft',

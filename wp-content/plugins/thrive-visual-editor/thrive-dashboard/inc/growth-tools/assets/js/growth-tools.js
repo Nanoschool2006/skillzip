@@ -1,6 +1,15 @@
 ( function( $ ) {
     // Wait for the DOM to be ready
     $(document).ready(() => {
+        // Bail early if the REST nonce wasn't localized (e.g. stale/cached
+        // assets). Without it every REST call would send X-WP-Nonce: "undefined"
+        // and silently 403, so surface a clear message once instead of firing a
+        // page full of doomed requests.
+        if ( typeof TVD_AM_CONST === 'undefined' || ! TVD_AM_CONST.nonce ) {
+            TVE_Dash.err( 'Could not load growth tools: security token missing. Please reload the page.', 5000, null, 'top' );
+            return;
+        }
+
         // Import necessary modules
         const CategoriesCollection = require('./collections/categories');
         const SearchView = require('./views/search');
@@ -38,6 +47,9 @@
                 categoriesCollection.url = TVD_AM_CONST.baseUrl;
 
                 categoriesCollection.fetch({
+                    beforeSend: function( xhr ) {
+                        xhr.setRequestHeader( 'X-WP-Nonce', TVD_AM_CONST.nonce );
+                    },
                     success: function( collection ) {
                         if ( collection.length === 0 ) {
                             // Handle case where no data is returned
@@ -52,8 +64,11 @@
                         }
                     },
                     error: function( collection, response ) {
-                        // Error handling
-                        TVE_Dash.err( 'Error fetching data:', response, 3000, null, 'top' );
+                        // err() takes ( message, duration, callback, position ) -
+                        // build the message from the response so the real error
+                        // (e.g. a 403) is shown instead of being passed as duration.
+                        const message = response?.responseJSON?.message || response?.statusText || 'Unknown error';
+                        TVE_Dash.err( 'Error fetching growth tools: ' + message, 3000, null, 'top' );
                     },
                     complete: function() {
                         // Hide loader after rendering
@@ -72,6 +87,9 @@
                 categoriesCollection.url = TVD_AM_CONST.baseUrl + '?category=' + category + '&query=' + search;
 
                 categoriesCollection.fetch({
+                    beforeSend: function( xhr ) {
+                        xhr.setRequestHeader( 'X-WP-Nonce', TVD_AM_CONST.nonce );
+                    },
                     success: function( collection ) {
                         if ( collection.length === 0 ) {
                             // Handle case where no data is returned
@@ -86,8 +104,11 @@
                         }
                     },
                     error: function( collection, response ) {
-                        // Error handling
-                        TVE_Dash.err( 'Error fetching data:', response, 3000, null, 'top' );
+                        // err() takes ( message, duration, callback, position ) -
+                        // build the message from the response so the real error
+                        // (e.g. a 403) is shown instead of being passed as duration.
+                        const message = response?.responseJSON?.message || response?.statusText || 'Unknown error';
+                        TVE_Dash.err( 'Error fetching growth tools: ' + message, 3000, null, 'top' );
                     },
                     complete: function() {
                         // Hide loader after rendering
@@ -130,6 +151,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-WP-Nonce': TVD_AM_CONST.nonce,
                     },
                     body: JSON.stringify( data ),
                 };
@@ -180,6 +202,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-WP-Nonce': TVD_AM_CONST.nonce,
                     },
                     body: JSON.stringify( data ),
                 };
@@ -231,6 +254,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-WP-Nonce': TVD_AM_CONST.nonce,
                     },
                     body: JSON.stringify( data ),
                 };

@@ -158,8 +158,13 @@ class TCB_Section_Element extends TCB_Element_Abstract {
 			],
 			'borders'             => [
 				'config' => [
-					'Borders' => [],
-					'Corners' => [],
+					'Borders' => [
+						'to'        => '>.tve-page-section-out',
+						'important' => true,
+					],
+					'Corners' => [
+						'to' => '>.tve-page-section-out',
+					],
 				],
 			],
 			'typography'          => [
@@ -225,7 +230,7 @@ class TCB_Section_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'background_section',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425770-how-to-use-the-background-section-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-background-section-element-in-thrive-architect/',
 			],
 		];
 	}

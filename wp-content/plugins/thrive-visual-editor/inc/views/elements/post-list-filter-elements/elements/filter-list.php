@@ -1,6 +1,9 @@
 <li class="thrv_wrapper tve_no_icons dynamic-item-with-icon <?php echo esc_attr( $data['classes'] ); ?>"
 	data-id="<?php echo esc_attr( $data['id'] ); ?>"
 	data-name="<?php echo esc_attr( $data['name'] ); ?>"
+	<?php if ( ! empty( $data['slug'] ) ) : ?>
+	data-slug="<?php echo esc_attr( $data['slug'] ); ?>"
+	<?php endif; ?>
 	data-selector="<?php echo ! empty( $data['css'] ) ? '.tcb-post-list-filter' . esc_attr( $data['css'] ) : ''; ?>">
 	<div class="tcb-styled-list-icon"
 		 data-selector="<?php echo ! empty( $data['css'] ) ? '.tcb-post-list-filter' . esc_attr( $data['css'] ) . ' .tcb-styled-list-icon .thrv_icon' : ''; ?>">

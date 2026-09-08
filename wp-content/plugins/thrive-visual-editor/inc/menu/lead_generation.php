@@ -34,7 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="control-grid">
 				<div class="label">
 					<?php echo esc_html__( 'Form fields', 'thrive-cb' ); ?>
-					<span class="click" data-type="help" data-url="lg_custom_fields" data-link="https://help.thrivethemes.com/en/articles/4425882-how-to-add-a-custom-field-to-the-lead-generation-element" data-fn="redirectToInstructionsUrl"><?php tcb_icon( 'help-instructions' ); ?></span>
+					<span class="click" data-type="help" data-url="lg_custom_fields" data-link="https://thrivethemes.com/docs/autoresponders-that-supports-the-custom-field-integration-with-the-lead-generation-element/" data-fn="redirectToInstructionsUrl"><?php tcb_icon( 'help-instructions' ); ?></span>
 				</div>
 				<div class="full">
 					<a class="tcb-right click tve-lg-add-field" data-fn="addLGField">
@@ -66,7 +66,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="control-grid">
 				<div class="label">
 					<?php echo esc_html__( 'Form fields', 'thrive-cb' ); ?>
-					<span class="click" data-type="help" data-url="lg_custom_fields" data-link="https://help.thrivethemes.com/en/articles/4425882-how-to-add-a-custom-field-to-the-lead-generation-element" data-fn="redirectToInstructionsUrl"><?php tcb_icon( 'help-instructions' ); ?></span>
+					<span class="click" data-type="help" data-url="lg_custom_fields" data-link="https://thrivethemes.com/docs/autoresponders-that-supports-the-custom-field-integration-with-the-lead-generation-element/" data-fn="redirectToInstructionsUrl"><?php tcb_icon( 'help-instructions' ); ?></span>
 				</div>
 				<div class="full">
 					<a class="tcb-right click tve-lg-add-field" data-fn="addLGField">

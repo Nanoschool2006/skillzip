@@ -737,11 +737,14 @@ class Thrive_Dash_List_Connection_ActiveCampaign extends Thrive_Dash_List_Connec
 
 			$field_id = absint( $field_id );
 
-			if ( ! $this->is_datetime_field( $field_id, $field_data, $field_types ) ) {
+			if ( $this->is_datetime_field( $field_id, $field_data, $field_types ) ) {
+				$this->sanitize_datetime_field( $contact, $field_id, $field_data );
 				continue;
 			}
 
-			$this->sanitize_datetime_field( $contact, $field_id, $field_data );
+			if ( $this->is_date_field( $field_id, $field_data, $field_types ) ) {
+				$this->sanitize_date_field( $contact, $field_id, $field_data );
+			}
 		}
 
 		return $contact;
@@ -764,6 +767,25 @@ class Thrive_Dash_List_Connection_ActiveCampaign extends Thrive_Dash_List_Connec
 		}
 
 		return 'datetime' === $field_type;
+	}
+
+	/**
+	 * Check if a field is a date field type (YYYY-MM-DD, not datetime)
+	 *
+	 * @param int   $field_id    The field ID
+	 * @param array $field_data  The field data array
+	 * @param array $field_types Array of field types by ID
+	 *
+	 * @return bool True if date field, false otherwise
+	 */
+	protected function is_date_field( $field_id, $field_data, $field_types ) {
+		$field_type = isset( $field_types[ $field_id ] ) ? sanitize_text_field( $field_types[ $field_id ] ) : '';
+
+		if ( empty( $field_type ) && ! empty( $field_data['type'] ) ) {
+			$field_type = sanitize_text_field( $field_data['type'] );
+		}
+
+		return 'date' === $field_type;
 	}
 
 	/**
@@ -793,6 +815,33 @@ class Thrive_Dash_List_Connection_ActiveCampaign extends Thrive_Dash_List_Connec
 			$contact['fields'][ $field_id ]['val'] = $formatted_value;
 		} else {
 			// If we can't format it, remove the field to avoid API errors
+			unset( $contact['fields'][ $field_id ] );
+		}
+	}
+
+	/**
+	 * Sanitize a date field value in contact data (expects YYYY-MM-DD)
+	 *
+	 * @param array $contact    The contact data array (passed by reference)
+	 * @param int   $field_id   The field ID
+	 * @param array $field_data The field data array
+	 *
+	 * @return void
+	 */
+	protected function sanitize_date_field( &$contact, $field_id, $field_data ) {
+		$field_value = isset( $field_data['val'] ) ? $field_data['val'] : '';
+
+		if ( '' === $field_value || null === $field_value ) {
+			unset( $contact['fields'][ $field_id ] );
+
+			return;
+		}
+
+		$formatted_value = $this->format_date_for_api( $field_value );
+
+		if ( ! empty( $formatted_value ) ) {
+			$contact['fields'][ $field_id ]['val'] = $formatted_value;
+		} else {
 			unset( $contact['fields'][ $field_id ] );
 		}
 	}
@@ -878,6 +927,59 @@ class Thrive_Dash_List_Connection_ActiveCampaign extends Thrive_Dash_List_Connec
 	}
 
 	/**
+	 * Format a date value to YYYY-MM-DD format for ActiveCampaign API
+	 *
+	 * @param string|mixed $date_value The date value to format
+	 *
+	 * @return string YYYY-MM-DD formatted date string, or empty string if invalid
+	 */
+	protected function format_date_for_api( $date_value ) {
+		if ( empty( $date_value ) ) {
+			return '';
+		}
+
+		$date_value = sanitize_text_field( $date_value );
+
+		if ( empty( $date_value ) ) {
+			return '';
+		}
+
+		if ( '0000-00-00' === $date_value ) {
+			return '';
+		}
+
+		// Already in the correct format — validate the calendar value too
+		if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date_value ) ) {
+			$dt = DateTime::createFromFormat( 'Y-m-d', $date_value );
+			if ( false !== $dt && $dt->format( 'Y-m-d' ) === $date_value ) {
+				return $date_value;
+			}
+
+			return '';
+		}
+
+		// Not already YYYY-MM-DD — try to parse from any known format
+		$datetime = $this->parse_datetime_value( $date_value );
+
+		if ( false !== $datetime ) {
+			// Validate the parsed result, not just the input. The strtotime()
+			// fallback in parse_datetime_value() turns a zero datetime such as
+			// '0000-00-00 00:00:00' into '-0001-11-30', which AC rejects with the
+			// very error this method exists to prevent. Reject implausible years
+			// and non-calendar dates so we never POST such a value.
+			$year  = (int) $datetime->format( 'Y' );
+			$month = (int) $datetime->format( 'n' );
+			$day   = (int) $datetime->format( 'j' );
+
+			if ( $year >= 1000 && checkdate( $month, $day, $year ) ) {
+				return $datetime->format( 'Y-m-d' );
+			}
+		}
+
+		return '';
+	}
+
+	/**
 	 * Parse datetime value from various formats
 	 *
 	 * @param string $datetime_value The datetime value to parse
@@ -902,8 +1004,12 @@ class Thrive_Dash_List_Connection_ActiveCampaign extends Thrive_Dash_List_Connec
 
 		foreach ( $formats as $format ) {
 			$datetime = DateTime::createFromFormat( $format, $datetime_value );
+			$errors   = DateTime::getLastErrors();
 
-			if ( false !== $datetime ) {
+			// Reject calendar overflows (e.g. 02/30/2024) and ambiguous misreads that
+			// createFromFormat() silently normalizes and reports via warnings, so we do
+			// not send a different date to the API than the one the user entered.
+			if ( false !== $datetime && ( false === $errors || ( 0 === $errors['warning_count'] && 0 === $errors['error_count'] ) ) ) {
 				return $datetime;
 			}
 		}

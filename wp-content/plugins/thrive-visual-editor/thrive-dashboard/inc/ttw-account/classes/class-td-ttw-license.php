@@ -47,6 +47,8 @@ class TD_TTW_License {
 		'grace_period_in_days',
 		'in_grace_period',
 		'complementary',
+		'lifetime',
+		'deactivated',
 	];
 
 	public function __construct( $data ) {
@@ -64,6 +66,11 @@ class TD_TTW_License {
 	 * @return bool
 	 */
 	public function is_active() {
+
+		// A site the owner deactivated for this license is not active here, regardless of status.
+		if ( $this->is_deactivated() ) {
+			return false;
+		}
 
 		return in_array(
 			       (int) $this->status,
@@ -111,7 +118,8 @@ class TD_TTW_License {
 	 */
 	public function is_in_grace_period() {
 
-		if ( $this->is_active() ) {
+		// Owner-deactivated for this site: not active and not in grace — no access path.
+		if ( $this->is_deactivated() || $this->is_active() ) {
 			return false;
 		}
 
@@ -147,6 +155,34 @@ class TD_TTW_License {
 	public function get_expiration() {
 
 		return $this->expiration;
+	}
+
+	/**
+	 * Whether this is a lifetime (never-expiring) license.
+	 *
+	 * Driven by the `lifetime` flag from /get_licenses_details. Lifetime licenses carry a
+	 * far-future expiration date (so they never expire), but the UI should show "Lifetime"
+	 * rather than that date.
+	 *
+	 * @return bool
+	 */
+	public function is_lifetime() {
+
+		return ! empty( $this->lifetime );
+	}
+
+	/**
+	 * Whether the account owner has deactivated THIS license on the current site (per-(license, site),
+	 * via the account-area Deactivate button). Driven by the `deactivated` flag from
+	 * /get_licenses_details, which the server computes for the calling site only. A deactivated
+	 * license grants no access here — is_active() and is_in_grace_period() both return false — until
+	 * the owner reactivates it.
+	 *
+	 * @return bool
+	 */
+	public function is_deactivated() {
+
+		return ! empty( $this->deactivated );
 	}
 
 	/**

@@ -87,7 +87,9 @@ class TCB_Color_Manager {
 		 *
 		 * @param array $colors
 		 */
-		return apply_filters( 'tcb_global_colors_list', $colors );
+		$colors = apply_filters( 'tcb_global_colors_list', $colors );
+
+		return is_array( $colors ) ? $colors : [];
 	}
 }
 

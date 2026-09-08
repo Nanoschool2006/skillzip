@@ -244,7 +244,7 @@ class TCB_Toggle_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'toggle',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425878-how-to-use-the-toggle-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-toggle-element-in-thrive-architect/',
 			],
 		];
 	}

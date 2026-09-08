@@ -105,6 +105,21 @@ abstract class Report_App {
 							$data_type = $request->get_param( 'report-data-type' );
 							$query     = $request->get_param( 'query' ) ?? [];
 
+							/*
+							 * The COUNT() target is server-owned and cannot be validated as a column,
+							 * because report classes legitimately set it to an expression - see
+							 * Course_Finish::parse_query() and
+							 * Lesson_Complete::get_completion_rate_data(), which both use a DISTINCT
+							 * CONCAT to stop double-counting (#2544).
+							 *
+							 * It is stripped here, at the request boundary, rather than inside
+							 * parse_query(): by that point a report class's own $query is
+							 * indistinguishable from the request's, so stripping there would discard
+							 * the internal expressions too.
+							 */
+							if ( is_array( $query ) ) {
+								unset( $query['count'] );
+							}
 
 							$fn_name = "get_{$data_type}_data";
 

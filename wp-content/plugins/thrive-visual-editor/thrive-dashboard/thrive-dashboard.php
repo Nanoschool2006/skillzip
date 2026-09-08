@@ -30,7 +30,7 @@ defined( 'TVE_SECRET' ) || define( 'TVE_SECRET', 'tve_secret' );
  * Dashboard Database Version
  * Meanwhile the 1.0.4 migration was deleted, so the next file should be 1.0.5
  */
-defined( 'TVE_DASH_DB_VERSION' ) || define( 'TVE_DASH_DB_VERSION', '1.0.5' );
+defined( 'TVE_DASH_DB_VERSION' ) || define( 'TVE_DASH_DB_VERSION', '1.0.8' );
 
 /**
  * REQUIRED FILES
@@ -38,12 +38,12 @@ defined( 'TVE_DASH_DB_VERSION' ) || define( 'TVE_DASH_DB_VERSION', '1.0.5' );
 require_once TVE_DASH_PATH . '/traits/trait-singleton.php';
 
 require_once TVE_DASH_PATH . '/classes/class-tve-wpdb.php';
+require_once TVE_DASH_PATH . '/classes/class-thrive-user-tags.php';
 
 require_once TVE_DASH_PATH . '/rest-api/init.php';
 require_once TVE_DASH_PATH . '/inc/util.php';
 require_once TVE_DASH_PATH . '/inc/hooks.php';
 require_once TVE_DASH_PATH . '/inc/functions.php';
-require_once TVE_DASH_PATH . '/inc/crons.php';
 require_once TVE_DASH_PATH . '/inc/plugin-updates/plugin-update-checker.php';
 require_once TVE_DASH_PATH . '/inc/notification-manager/class-td-nm.php';
 require_once TVE_DASH_PATH . '/inc/db-manager/class-td-db-migration.php';
@@ -77,6 +77,7 @@ require_once TVE_DASH_PATH . '/inc/access-manager/class-tvd-am-login-redirect.ph
 require_once TVE_DASH_PATH . '/inc/pdf/class-pdf-from-url.php';
 require_once TVE_DASH_PATH . '/inc/metrics/class-main.php';
 require_once TVE_DASH_PATH . '/inc/webhooks/class-main.php';
+require_once TVE_DASH_PATH . '/inc/public-api/class-main.php';
 
 // Load shared utilities
 require_once TVE_DASH_PATH . '/inc/utils/class-tt-http-error-map.php';
@@ -140,6 +141,7 @@ add_action( 'init',
 		TVE\Dashboard\Design_Packs\Main::init();
 		TVE\Dashboard\Metrics\Main::init();
 		TVE\Dashboard\Webhooks\Main::init();
+		TVE\Dashboard\Public_API\Main::init();
 		Tve_Dash_Growth_Tools::init();
 		App_Notification::instance();
 	}, - 1 );

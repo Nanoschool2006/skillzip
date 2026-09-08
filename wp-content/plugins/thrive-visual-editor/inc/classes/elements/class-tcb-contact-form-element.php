@@ -204,7 +204,7 @@ class TCB_Contact_Form_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'contact_form',
-				'link' => 'https://help.thrivethemes.com/en/articles/4430139-how-to-use-the-contact-form-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-contact-form-element-in-thrive-architect/',
 			],
 		];
 	}

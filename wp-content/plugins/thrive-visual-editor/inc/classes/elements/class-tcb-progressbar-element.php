@@ -345,7 +345,7 @@ class TCB_Progressbar_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'progress_bar',
-				'link' => 'https://help.thrivethemes.com/en/articles/4790886-how-to-use-the-progress-bar-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-progress-bar-element-in-thrive-architect/',
 			],
 		];
 	}

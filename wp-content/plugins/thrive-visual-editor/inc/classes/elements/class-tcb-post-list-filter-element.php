@@ -211,7 +211,7 @@ class TCB_Post_List_Filter_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'post_list_filter',
-				'link' => 'https://help.thrivethemes.com/en/articles/6533678-how-to-use-the-post-list-filter-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-post-list-element-in-thrive-architect/',
 			],
 		];
 	}

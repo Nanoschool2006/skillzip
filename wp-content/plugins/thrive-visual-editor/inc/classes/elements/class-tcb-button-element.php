@@ -340,7 +340,7 @@ class TCB_Button_Element extends TCB_Cloud_Template_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'button',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425768-how-to-use-the-button-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-button-element-in-thrive-architect/',
 			],
 		];
 	}

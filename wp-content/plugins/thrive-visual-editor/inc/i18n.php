@@ -129,8 +129,8 @@ return array(
 		'file_required'        => __( 'Required file error', 'thrive-cb' ),
 		'upload_progress'      => __( 'While the upload is in progress', 'thrive-cb' ),
 		'password_score'       => __( 'Weak password', 'thrive-cb' ),
-		'link_invalid'         => __( 'Invalid youtube link', 'thrive-cb' ),
-		'youtube_link_invalid' => __( 'Invalid external link', 'thrive-cb' ),
+		'link_invalid'         => __( 'Invalid external link', 'thrive-cb' ),
+		'youtube_link_invalid' => __( 'Invalid youtube link', 'thrive-cb' ),
 	),
 	'lg_errors'                          => array(
 		'email'                => __( 'Email address invalid', 'thrive-cb' ),
@@ -583,5 +583,22 @@ return array(
 		'tiktokUpdatedMessage' => __( 'TikTok updated its shortcode. To correctly render your feeds, click on "save work" and refresh your page. Thank you!', 'thrive-cb' ),
 	),
 	'webhook_save_error'                 => __( 'Cannot save the webhook. Refresh the page and try again.', 'thrive-dashboard' ),
+	/* Navigator synthetic element names */
+	'nav_input'                          => __( 'Input', 'thrive-cb' ),
+	'nav_menu_item'                      => __( 'Menu Item', 'thrive-cb' ),
+	'nav_column'                         => __( 'Column', 'thrive-cb' ),
+	'nav_element'                        => __( 'Element', 'thrive-cb' ),
+	'nav_facebook_share'                 => __( 'Facebook Share', 'thrive-cb' ),
+	'nav_linkedin_share'                 => __( 'LinkedIn Share', 'thrive-cb' ),
+	'nav_x_share'                        => __( 'X Share', 'thrive-cb' ),
+	'nav_twitter_share'                  => __( 'Twitter Share', 'thrive-cb' ),
+	'nav_pinterest_share'                => __( 'Pinterest Share', 'thrive-cb' ),
+	'nav_xing_share'                     => __( 'Xing Share', 'thrive-cb' ),
+	'nav_social_share'                   => __( 'Social Share', 'thrive-cb' ),
+	'nav_author_field'                   => __( 'Author Field', 'thrive-cb' ),
+	'nav_email_field'                    => __( 'Email Field', 'thrive-cb' ),
+	'nav_url_field'                      => __( 'URL Field', 'thrive-cb' ),
+	'nav_comment_field'                  => __( 'Comment Field', 'thrive-cb' ),
+	'nav_comment_text'                   => __( 'Comment Text', 'thrive-cb' ),
 );
 // phpcs:enable

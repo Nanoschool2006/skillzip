@@ -114,6 +114,29 @@ trait Report {
 			'group_by'       => [],
 		], $query );
 
+		/*
+		 * Identifiers Logs is allowed to emit for this report, beyond the physical columns.
+		 *
+		 * Reports group and sort by the SELECT aliases the field classes produce - Created emits
+		 * `DATE_FORMAT(...) AS date`, so reports group by `date`, which is not a column. This set is
+		 * derived from the registered field classes, so it is plugin-defined; assigning it after the
+		 * array_merge above is deliberate, so a request cannot supply its own.
+		 */
+		$reports_query['allowed_columns'] = [];
+
+		if ( method_exists( static::class, 'get_registered_fields' ) ) {
+			foreach ( static::get_registered_fields() as $field_class ) {
+				// $field_class is an Event_Field implementation.
+				$reports_query['allowed_columns'][] = $field_class::key();
+			}
+		}
+
+		/*
+		 * `count` is an alias the SELECT emits whenever there is a GROUP BY (COUNT(...) AS count),
+		 * and get_data_labels() exposes it as a table column, so the UI can legitimately sort by it.
+		 */
+		$reports_query['allowed_columns'][] = 'count';
+
 		if ( empty( $reports_query['date_format'] ) ) {
 			$reports_query['date_format'] = Logs::get_instance()->get_date_format( $query['filters']['date']['from'] ?? 0, $query['filters']['date']['to'] ?? 0 );
 		}
@@ -181,8 +204,20 @@ trait Report {
 				$event_field = static::get_registered_field( $field );
 
 				if ( $event_field === null ) {
-					/* add raw field */
-					$selected_fields[] = $field;
+					/*
+					 * Unknown field: drop it.
+					 *
+					 * This used to append $field raw, and the result lands in Logs::$select, which
+					 * prepare_query() concatenates OUTSIDE $wpdb->prepare() - so a request-supplied
+					 * query[fields][] entry was emitted verbatim into the SELECT list, where a
+					 * subquery returns its value straight back in the response.
+					 *
+					 * Dropping rather than validating is deliberate: registered fields legitimately
+					 * produce expressions, not bare columns (see Created::get_query_select_field(),
+					 * which emits DATE_FORMAT(...)), so a column allowlist cannot be applied to the
+					 * output. Everything legitimate comes from the branch below.
+					 */
+					continue;
 				} else {
 					/* get select query from field class */
 					$selected_fields[] = $event_field::get_query_select_field( static::get_field_table_col( $event_field::key() ) );

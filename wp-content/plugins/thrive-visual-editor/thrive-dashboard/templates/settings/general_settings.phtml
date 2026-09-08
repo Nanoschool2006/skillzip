@@ -11,6 +11,27 @@
         #aff-invalid {
             display: none;
         }
+
+        .td-settings-api-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: #fff;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .td-settings-api-card .td-settings-api-desc {
+            margin: 4px 0 0;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .td-settings-api-card .tvd-btn-small {
+            white-space: nowrap;
+            margin-left: 20px;
+        }
 	</style>
 
 	<div class="tvd-container">
@@ -84,6 +105,16 @@
 				<?php endforeach; ?>
 			</div>
 		</div>
+	</div>
+
+	<div class="td-settings-api-card tvd-container">
+		<div class="td-settings-api-info">
+			<strong><?php esc_html_e( 'API Keys', 'thrive-dash' ); ?></strong>
+			<p class="td-settings-api-desc"><?php esc_html_e( 'Create and manage API keys for external service integrations.', 'thrive-dash' ); ?></p>
+		</div>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=tve_dash_api_connect&tab=api-keys' ) ); ?>" class="tvd-waves-effect tvd-waves-light tvd-btn-small tvd-btn-blue">
+			<?php esc_html_e( 'Manage', 'thrive-dash' ); ?>
+		</a>
 	</div>
 
 	<div class="tvd-col tvd-m6">

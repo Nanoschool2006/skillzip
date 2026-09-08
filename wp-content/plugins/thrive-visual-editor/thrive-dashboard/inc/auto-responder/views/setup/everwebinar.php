@@ -9,7 +9,7 @@
 			</label>
 		</div>
 	</form>
-	<p><?php echo __( 'For more information please read the following', 'thrive-dash' ) ?> <a href="https://help.thrivethemes.com/en/articles/5151467-how-to-set-up-use-an-api-connection-with-everwebinar" target="_blank"><strong><?php echo __( 'Knowledge Base Article', 'thrive-dash' ) ?></strong></a></p>
+	<p><?php echo __( 'For more information please read the following', 'thrive-dash' ) ?> <a href="https://thrivethemes.com/docs/setting-up-an-api-connection-with-everwebinar/" target="_blank"><strong><?php echo __( 'Knowledge Base Article', 'thrive-dash' ) ?></strong></a></p>
 	<?php $this->display_video_link(); ?>
 </div>
 <div class="tvd-card-action">

@@ -412,7 +412,7 @@ class TCB_Text_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'text',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425764-how-to-use-the-text-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-text-element-in-thrive-architect/',
 			],
 		];
 	}

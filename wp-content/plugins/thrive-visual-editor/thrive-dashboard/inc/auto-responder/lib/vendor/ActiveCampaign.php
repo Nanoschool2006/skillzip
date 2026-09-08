@@ -315,7 +315,10 @@ class Thrive_Dash_Api_ActiveCampaign {
 				$data = @json_decode( $response, true );
 				break;
 			case 'serialize':
-				$data = @unserialize( $response );
+				// ActiveCampaign serialize-format responses are PHP-serialized stdClass/array payloads from the
+				// authenticated API. thrive_safe_unserialize() (allowed_classes => false) mangles objects into
+				// __PHP_Incomplete_Class; allow stdClass so the parsed response stays usable. Not request input.
+				$data = unserialize( $response, array( 'allowed_classes' => array( 'stdClass' ) ) );
 				break;
 			case 'xml':
 			default:

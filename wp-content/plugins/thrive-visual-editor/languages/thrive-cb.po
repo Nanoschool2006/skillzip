@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-26 14:11+0000\n"
+"POT-Creation-Date: 2026-08-25 11:34+0000\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -90,11 +90,11 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: ../admin/includes/class-tcb-symbols-rest-controller.php:107, ../admin/includes/class-tcb-symbols-rest-controller.php:158, ../admin/includes/class-tcb-symbols-rest-controller.php:167, ../inc/classes/class-tcb-editor-ajax.php:1623, ../inc/classes/class-tcb-editor-ajax.php:1633, ../inc/classes/class-tcb-editor-ajax.php:1656, ../inc/classes/class-tcb-editor-ajax.php:1680, ../inc/classes/class-tcb-editor-ajax.php:1692, ../inc/classes/class-tcb-editor-ajax.php:1715, ../inc/classes/class-tcb-editor-ajax.php:1752, ../inc/classes/class-tcb-editor-ajax.php:1781, ../inc/classes/class-tcb-editor-ajax.php:1799, ../inc/classes/class-tcb-editor-ajax.php:1857, ../inc/classes/class-tcb-editor-ajax.php:1896
+#: ../admin/includes/class-tcb-symbols-rest-controller.php:107, ../admin/includes/class-tcb-symbols-rest-controller.php:158, ../admin/includes/class-tcb-symbols-rest-controller.php:167, ../inc/classes/class-tcb-editor-ajax.php:1661, ../inc/classes/class-tcb-editor-ajax.php:1671, ../inc/classes/class-tcb-editor-ajax.php:1694, ../inc/classes/class-tcb-editor-ajax.php:1718, ../inc/classes/class-tcb-editor-ajax.php:1730, ../inc/classes/class-tcb-editor-ajax.php:1753, ../inc/classes/class-tcb-editor-ajax.php:1790, ../inc/classes/class-tcb-editor-ajax.php:1819, ../inc/classes/class-tcb-editor-ajax.php:1837, ../inc/classes/class-tcb-editor-ajax.php:1895, ../inc/classes/class-tcb-editor-ajax.php:1934
 msgid "Invalid element type"
 msgstr ""
 
-#: ../admin/includes/class-tcb-symbols-rest-controller.php:162, ../inc/classes/class-tcb-editor-ajax.php:1684, ../inc/classes/class-tcb-editor-ajax.php:1719
+#: ../admin/includes/class-tcb-symbols-rest-controller.php:162, ../inc/classes/class-tcb-editor-ajax.php:1722, ../inc/classes/class-tcb-editor-ajax.php:1757
 msgid "Missing template id"
 msgstr ""
 
@@ -1126,87 +1126,87 @@ msgstr ""
 msgid "Continue Reading"
 msgstr ""
 
-#: ../inc/functions.php:2874
+#: ../inc/functions.php:2875
 msgid "Thrive Leads Shortcode could not be rendered, please check it in Thrive Leads Section!"
 msgstr ""
 
-#: ../inc/functions.php:3477
+#: ../inc/functions.php:3478
 msgid "No menu items have been found."
 msgstr ""
 
-#: ../inc/functions.php:3726
+#: ../inc/functions.php:3727
 msgid "Thrive Architect Content"
 msgstr ""
 
-#: ../inc/functions.php:3727
+#: ../inc/functions.php:3728
 msgid "Thrive Architect Custom CSS"
 msgstr ""
 
-#: ../inc/functions.php:3728, ../inc/classes/class-tcb-editor.php:805, ../inc/classes/elements/class-tcb-landing-page-element.php:47
+#: ../inc/functions.php:3729, ../inc/classes/class-tcb-editor.php:805, ../inc/classes/elements/class-tcb-landing-page-element.php:47
 msgid "Landing Page"
 msgstr ""
 
-#: ../inc/functions.php:4167
+#: ../inc/functions.php:4196
 msgid "Something went wrong! Please contact site owner"
 msgstr ""
 
-#: ../inc/functions.php:4181, ../inc/i18n.php:153
+#: ../inc/functions.php:4210, ../inc/i18n.php:153
 msgid "We are detecting suspicious activity from your device. Please try in another browser or contact the website administrator."
 msgstr ""
 
-#: ../inc/functions.php:4236
+#: ../inc/functions.php:4265
 msgid "User consent is required"
 msgstr ""
 
-#: ../inc/functions.php:4275
+#: ../inc/functions.php:4314
 msgid "No connection for this form"
 msgstr ""
 
-#: ../inc/functions.php:4519
+#: ../inc/functions.php:4558
 msgid "All categories"
 msgstr ""
 
-#: ../inc/functions.php:4660
+#: ../inc/functions.php:4699
 msgid "%s ago"
 msgstr ""
 
-#: ../inc/functions.php:4923
+#: ../inc/functions.php:4978
 msgid "Copy"
 msgstr ""
 
-#: ../inc/functions.php:4924
+#: ../inc/functions.php:4979
 msgid "ERROR: The username field is empty."
 msgstr ""
 
-#: ../inc/functions.php:4925
+#: ../inc/functions.php:4980
 msgid "ERROR: The password field is empty."
 msgstr ""
 
-#: ../inc/functions.php:4926
+#: ../inc/functions.php:4981
 msgid "ERROR: Enter a username or email address."
 msgstr ""
 
-#: ../inc/functions.php:4927
+#: ../inc/functions.php:4982
 msgid "At least %s characters are needed"
 msgstr ""
 
-#: ../inc/functions.php:4928, ../inc/backbone/controls/preview-list-inline-item.php:6
+#: ../inc/functions.php:4983, ../inc/backbone/controls/preview-list-inline-item.php:6
 msgid "No headings found"
 msgstr ""
 
-#: ../inc/functions.php:4930
+#: ../inc/functions.php:4985
 msgid "<strong>Error</strong>: This field is required"
 msgstr ""
 
-#: ../inc/functions.php:4931
+#: ../inc/functions.php:4986
 msgid "<strong>Error</strong>: Please type your email address"
 msgstr ""
 
-#: ../inc/functions.php:4932
+#: ../inc/functions.php:4987
 msgid "<strong>Error</strong>: The email address isn&#8217;t correct"
 msgstr ""
 
-#: ../inc/functions.php:4933
+#: ../inc/functions.php:4988
 msgid "<strong>Error</strong>: Password mismatch"
 msgstr ""
 
@@ -1687,11 +1687,11 @@ msgid "Weak password"
 msgstr ""
 
 #: ../inc/i18n.php:132
-msgid "Invalid youtube link"
+msgid "Invalid external link"
 msgstr ""
 
 #: ../inc/i18n.php:133
-msgid "Invalid external link"
+msgid "Invalid youtube link"
 msgstr ""
 
 #: ../inc/i18n.php:136, ../inc/i18n.php:165
@@ -2078,7 +2078,7 @@ msgstr ""
 msgid "Fetching data..."
 msgstr ""
 
-#: ../inc/i18n.php:279
+#: ../inc/i18n.php:279, ../inc/i18n.php:590
 msgid "Element"
 msgstr ""
 
@@ -3135,6 +3135,66 @@ msgstr ""
 msgid "TikTok updated its shortcode. To correctly render your feeds, click on \"save work\" and refresh your page. Thank you!"
 msgstr ""
 
+#: ../inc/i18n.php:587
+msgid "Input"
+msgstr ""
+
+#: ../inc/i18n.php:588, ../inc/classes/elements/class-tcb-menu-item-element.php:18
+msgid "Menu Item"
+msgstr ""
+
+#: ../inc/i18n.php:589, ../inc/classes/elements/class-tcb-column-element.php:32
+msgid "Column"
+msgstr ""
+
+#: ../inc/i18n.php:591
+msgid "Facebook Share"
+msgstr ""
+
+#: ../inc/i18n.php:592
+msgid "LinkedIn Share"
+msgstr ""
+
+#: ../inc/i18n.php:593
+msgid "X Share"
+msgstr ""
+
+#: ../inc/i18n.php:594
+msgid "Twitter Share"
+msgstr ""
+
+#: ../inc/i18n.php:595
+msgid "Pinterest Share"
+msgstr ""
+
+#: ../inc/i18n.php:596
+msgid "Xing Share"
+msgstr ""
+
+#: ../inc/i18n.php:597, ../inc/classes/elements/class-tcb-social-element.php:23
+msgid "Social Share"
+msgstr ""
+
+#: ../inc/i18n.php:598
+msgid "Author Field"
+msgstr ""
+
+#: ../inc/i18n.php:599
+msgid "Email Field"
+msgstr ""
+
+#: ../inc/i18n.php:600
+msgid "URL Field"
+msgstr ""
+
+#: ../inc/i18n.php:601
+msgid "Comment Field"
+msgstr ""
+
+#: ../inc/i18n.php:602
+msgid "Comment Text"
+msgstr ""
+
 #: ../inc/license_notice.php:11
 msgid "You need to %s before you can use the editor!"
 msgstr ""
@@ -3359,83 +3419,83 @@ msgstr ""
 msgid "You do not have the required permission for this action"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:625, ../inc/classes/class-tcb-editor-ajax.php:626
+#: ../inc/classes/class-tcb-editor-ajax.php:664, ../inc/classes/class-tcb-editor-ajax.php:665
 msgid "Some of the required files were not found. Please try re-downloading this template"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:631, ../inc/classes/class-tcb-editor-ajax.php:641
+#: ../inc/classes/class-tcb-editor-ajax.php:670, ../inc/classes/class-tcb-editor-ajax.php:680
 msgid "All changes saved."
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1032
+#: ../inc/classes/class-tcb-editor-ajax.php:1070
 msgid "Content template deleted"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1042, ../inc/classes/class-tcb-editor-ajax.php:1057
+#: ../inc/classes/class-tcb-editor-ajax.php:1080, ../inc/classes/class-tcb-editor-ajax.php:1095
 msgid "Invalid Post Parameter"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1188
+#: ../inc/classes/class-tcb-editor-ajax.php:1226
 msgid "Invalid Parameters! A color must contain a name and a color string!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1609
+#: ../inc/classes/class-tcb-editor-ajax.php:1647
 msgid "Lightbox created"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1776
+#: ../inc/classes/class-tcb-editor-ajax.php:1814
 msgid "Missing ID"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1818
+#: ../inc/classes/class-tcb-editor-ajax.php:1856
 msgid "Missing symbol title"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1852, ../inc/classes/class-tcb-symbol-element-abstract.php:271, ../inc/classes/class-tcb-symbol-element-abstract.php:433
+#: ../inc/classes/class-tcb-editor-ajax.php:1890, ../inc/classes/class-tcb-symbol-element-abstract.php:271, ../inc/classes/class-tcb-symbol-element-abstract.php:433
 msgid "Missing symbol id"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1891
+#: ../inc/classes/class-tcb-editor-ajax.php:1929
 msgid "Missing preview file"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:1962
+#: ../inc/classes/class-tcb-editor-ajax.php:2000
 msgid "Invalid arguments"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2173
+#: ../inc/classes/class-tcb-editor-ajax.php:2211
 msgid "You are not allowed to update this meta"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2299
+#: ../inc/classes/class-tcb-editor-ajax.php:2337
 msgid "File upload for post %s"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2432, ../inc/classes/class-tcb-editor-ajax.php:2470
+#: ../inc/classes/class-tcb-editor-ajax.php:2470, ../inc/classes/class-tcb-editor-ajax.php:2508
 msgid "Invalid task"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2459
+#: ../inc/classes/class-tcb-editor-ajax.php:2497
 msgid "Invalid template"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2501
+#: ../inc/classes/class-tcb-editor-ajax.php:2539
 msgid "Content exported successfully!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2494, ../inc/classes/class-tcb-editor-ajax.php:2559, ../inc/helpers/file-upload.php:257
+#: ../inc/classes/class-tcb-editor-ajax.php:2532, ../inc/classes/class-tcb-editor-ajax.php:2597, ../inc/helpers/file-upload.php:257
 msgid "Invalid request"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2537
+#: ../inc/classes/class-tcb-editor-ajax.php:2575
 msgid "Content imported successfully!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2567
+#: ../inc/classes/class-tcb-editor-ajax.php:2605
 msgid "Landing Page exported successfully!"
 msgstr ""
 
-#: ../inc/classes/class-tcb-editor-ajax.php:2601
+#: ../inc/classes/class-tcb-editor-ajax.php:2639
 msgid "Landing Page imported successfully!"
 msgstr ""
 
@@ -5137,7 +5197,7 @@ msgstr ""
 msgid "More Features"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:17, ../inc/views/sidebar-right.php:21, ../inc/views/sidebar-right.php:104
+#: ../inc/views/sidebar-right.php:17, ../inc/views/sidebar-right.php:21, ../inc/views/sidebar-right.php:112
 msgid "Add Element"
 msgstr ""
 
@@ -5149,7 +5209,7 @@ msgstr ""
 msgid "Display Conditions"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:62, ../inc/views/sidebar-right.php:132
+#: ../inc/views/sidebar-right.php:62, ../inc/views/sidebar-right.php:169
 msgid "Settings"
 msgstr ""
 
@@ -5161,39 +5221,59 @@ msgstr ""
 msgid "Create New Test"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:88, ../inc/classes/notifications/class-main.php:61
+#: ../inc/views/sidebar-right.php:82, ../inc/views/sidebar-right.php:86, ../inc/views/sidebar-right.php:128
+msgid "Navigator"
+msgstr ""
+
+#: ../inc/views/sidebar-right.php:96, ../inc/classes/notifications/class-main.php:61
 msgid "Notifications"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:93, ../inc/views/modals/help-corner.php:47, ../inc/views/modals/help-lightbox.php:64
+#: ../inc/views/sidebar-right.php:101, ../inc/views/modals/help-corner.php:47, ../inc/views/modals/help-lightbox.php:64
 msgid "Help Corner"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:95
+#: ../inc/views/sidebar-right.php:103
 msgid "Expand Sidebar"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:95
+#: ../inc/views/sidebar-right.php:103
 msgid "Toggle Sidebar"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:97
+#: ../inc/views/sidebar-right.php:105
 msgid "Collapse Sidebar"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:109
+#: ../inc/views/sidebar-right.php:117, ../inc/views/sidebar-right.php:133
 msgid "Search elements..."
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:120
+#: ../inc/views/sidebar-right.php:138
+msgid "Page elements"
+msgstr ""
+
+#: ../inc/views/sidebar-right.php:140
+msgid "No elements on this page."
+msgstr ""
+
+#: ../inc/views/sidebar-right.php:143
+msgid "No elements found."
+msgstr ""
+
+#: ../inc/views/sidebar-right.php:150
+msgid "Updating..."
+msgstr ""
+
+#: ../inc/views/sidebar-right.php:157
 msgid "Style Editor"
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:138
+#: ../inc/views/sidebar-right.php:175
 msgid "Search setting..."
 msgstr ""
 
-#: ../inc/views/sidebar-right.php:151
+#: ../inc/views/sidebar-right.php:188
 msgid "Conditioned content"
 msgstr ""
 
@@ -6687,10 +6767,6 @@ msgstr ""
 msgid "Vertical Align"
 msgstr ""
 
-#: ../inc/classes/elements/class-tcb-column-element.php:32
-msgid "Column"
-msgstr ""
-
 #: ../inc/classes/elements/class-tcb-column-element.php:69, ../inc/classes/elements/class-tcb-columns-element.php:90, ../inc/classes/elements/class-tcb-header-element.php:165, ../inc/classes/elements/class-tcb-image-caption-element.php:87, ../inc/classes/elements/class-tcb-video-cover-element.php:86, ../inc/woocommerce/classes/shortcodes/mini-cart/sub-elements/class-cart-count.php:72
 msgid "Vertical position"
 msgstr ""
@@ -7851,10 +7927,6 @@ msgstr ""
 msgid "Open Menu Icon"
 msgstr ""
 
-#: ../inc/classes/elements/class-tcb-menu-item-element.php:18
-msgid "Menu Item"
-msgstr ""
-
 #: ../inc/classes/elements/class-tcb-menu-item-element.php:64, ../inc/classes/elements/class-tcb-tabs-element.php:117
 msgid "Hover Effect"
 msgstr ""
@@ -8551,12 +8623,8 @@ msgstr ""
 msgid "Content covers entire screen width"
 msgstr ""
 
-#: ../inc/classes/elements/class-tcb-section-element.php:193
+#: ../inc/classes/elements/class-tcb-section-element.php:198
 msgid "Inherit Width from Landing Page"
-msgstr ""
-
-#: ../inc/classes/elements/class-tcb-social-element.php:23
-msgid "Social Share"
 msgstr ""
 
 #: ../inc/classes/elements/class-tcb-social-element.php:74, ../inc/classes/elements/class-tcb-social-follow-element.php:112
@@ -9374,6 +9442,94 @@ msgstr ""
 msgid "Article Components"
 msgstr ""
 
+#: ../inc/classes/rest/class-tcb-content-rest.php:66
+msgid "You must be authenticated to perform this action."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:74
+msgid "Your account does not have access to Thrive Architect."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:84
+msgid "Invalid post id."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:93
+msgid "Post not found."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:101
+msgid "This post type is not editable with Thrive Architect."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:109
+msgid "You are not allowed to edit this post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:142
+msgid "Request body is not valid JSON."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:184
+msgid "Target post ID."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:189
+msgid "Full Thrive Architect HTML for the post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:194
+msgid "Generated inline CSS rules (the contents of `tve_custom_css`)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:199
+msgid "User-defined custom CSS for this post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:204
+msgid "Per-post global options (font_cls, etc.)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:209
+msgid "Landing page template key, or empty/0 for a regular post."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:214
+msgid "Page-level event triggers configured in the editor."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:219
+msgid "Whether the content references the Thrive icon pack."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:224
+msgid "Whether the content uses the masonry layout helper."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:229
+msgid "Whether the content uses the typefocus helper."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:234
+msgid "Whether the content uses the Wistia popover helper."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:239
+msgid "Header section post ID. Coerced via (int); empty string and null are treated as no override (0)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:243
+msgid "Footer section post ID. Coerced via (int); empty string and null are treated as no override (0)."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:247
+msgid "Stripped plain-text fallback rendered into post_content."
+msgstr ""
+
+#: ../inc/classes/rest/class-tcb-content-rest.php:252
+msgid "List of custom font classes to register for this post."
+msgstr ""
+
 #: ../inc/classes/symbols/class-tcb-symbol-template.php:369
 msgid "(Imported)"
 msgstr ""
@@ -9438,35 +9594,35 @@ msgstr ""
 msgid "Feed"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:87
+#: ../inc/smash-balloon/classes/class-main.php:78
 msgid "Custom Facebook Feed"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:95
+#: ../inc/smash-balloon/classes/class-main.php:86
 msgid "Instagram Feed"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:103
+#: ../inc/smash-balloon/classes/class-main.php:94
 msgid "Custom Twitter Feeds"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:111
+#: ../inc/smash-balloon/classes/class-main.php:102
 msgid "Feeds for YouTube"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:119
+#: ../inc/smash-balloon/classes/class-main.php:110
 msgid "TikTok Feeds"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:127
+#: ../inc/smash-balloon/classes/class-main.php:118
 msgid "Social Wall"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:188
+#: ../inc/smash-balloon/classes/class-main.php:179
 msgid "Select a plugin"
 msgstr ""
 
-#: ../inc/smash-balloon/classes/class-main.php:278
+#: ../inc/smash-balloon/classes/class-main.php:269
 msgid "Select a feed"
 msgstr ""
 
@@ -10238,7 +10394,7 @@ msgstr ""
 msgid "Insert WordPress Content into the page"
 msgstr ""
 
-#: ../inc/views/notifications/notifications-editor.php:28
+#: ../inc/views/notifications/notifications-editor.php:30
 msgid "Note that notifications display over the top of the page content where they are triggered. This page has no background properties."
 msgstr ""
 

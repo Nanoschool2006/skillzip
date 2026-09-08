@@ -91,7 +91,7 @@ class TCB_Wordpress_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'wordpress_content',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425781-how-to-use-the-wordpress-content-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-wordpress-content-element-in-thrive-architect/',
 			],
 		];
 	}

@@ -109,7 +109,7 @@ class TCB_Audio_Element extends TCB_Element_Abstract {
 			'instructions' => [
 				'type' => 'help',
 				'url'  => 'audio_element',
-				'link' => 'https://help.thrivethemes.com/en/articles/4425842-how-to-use-the-audio-element',
+				'link' => 'https://thrivethemes.com/docs/how-to-use-the-audio-element-in-thrive-architect/',
 			],
 		];
 	}

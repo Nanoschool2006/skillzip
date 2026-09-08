@@ -1359,3 +1359,146 @@ function tcb_surecart_lp_body_class( $classes ) {
 }
 
 add_filter( 'tcb_lp_body_class', 'tcb_surecart_lp_body_class' );
+
+/**
+ * Compatibility with Google SiteKit - Google Tag Manager
+ *
+ * Ensures GTM scripts are properly output on Thrive landing pages when users
+ * don't have Thrive Theme Builder installed (only Thrive Architect).
+ *
+ * Landing pages use custom hooks that SiteKit doesn't hook into.
+ * This fix outputs GTM scripts at priority 1 to ensure they load before other scripts.
+ *
+ * Note: If Thrive Theme Builder is installed, the theme's compatibility.php handles this.
+ */
+if ( defined( 'GOOGLESITEKIT_PLUGIN_MAIN_FILE' ) && ! defined( 'THRIVE_THEME' ) ) {
+
+	/**
+	 * Get Google Tag Manager container ID from SiteKit settings
+	 *
+	 * @return string|false Container ID or false if not configured/disabled
+	 */
+	function tcb_get_sitekit_gtm_container_id() {
+		$settings = get_option( 'googlesitekit_tagmanager_settings' );
+
+		if ( empty( $settings ) || ! is_array( $settings ) ) {
+			return false;
+		}
+
+		// Respect user's choice to disable SiteKit snippet output
+		if ( isset( $settings['useSnippet'] ) && $settings['useSnippet'] === false ) {
+			return false;
+		}
+
+		return ! empty( $settings['containerID'] ) ? $settings['containerID'] : false;
+	}
+
+	/**
+	 * Output GTM head script
+	 *
+	 * @param string $container_id GTM container ID
+	 */
+	function tcb_output_gtm_head_script( $container_id ) {
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		// Validate container ID format (GTM-XXXXXXX) - allows uppercase/lowercase letters and numbers
+		if ( ! preg_match( '/^GTM-[A-Za-z0-9]+$/', $container_id ) ) {
+			return;
+		}
+
+		?>
+<!-- Google Tag Manager (Thrive Architect Compatibility) -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','<?php echo esc_js( $container_id ); ?>');</script>
+<!-- End Google Tag Manager -->
+		<?php
+	}
+
+	/**
+	 * Output GTM noscript tag
+	 *
+	 * @param string $container_id GTM container ID
+	 */
+	function tcb_output_gtm_noscript( $container_id ) {
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		// Validate container ID format - allows uppercase/lowercase letters and numbers
+		if ( ! preg_match( '/^GTM-[A-Za-z0-9]+$/', $container_id ) ) {
+			return;
+		}
+
+		?>
+<!-- Google Tag Manager (noscript) (Thrive Architect Compatibility) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo esc_attr( $container_id ); ?>"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+		<?php
+	}
+
+	/**
+	 * Ensure GTM head script is output on landing pages (with duplicate prevention)
+	 */
+	function tcb_ensure_sitekit_gtm_head() {
+		static $already_output = false;
+
+		if ( $already_output ) {
+			return;
+		}
+
+		// Skip in editor context
+		if ( function_exists( 'is_editor_page_raw' ) && is_editor_page_raw() ) {
+			return;
+		}
+
+		$container_id = tcb_get_sitekit_gtm_container_id();
+
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		tcb_output_gtm_head_script( $container_id );
+		$already_output = true;
+	}
+
+	/**
+	 * Ensure GTM noscript is output on landing pages (with duplicate prevention)
+	 */
+	function tcb_ensure_sitekit_gtm_body_open() {
+		static $already_output = false;
+
+		if ( $already_output ) {
+			return;
+		}
+
+		// Skip in editor context
+		if ( function_exists( 'is_editor_page_raw' ) && is_editor_page_raw() ) {
+			return;
+		}
+
+		$container_id = tcb_get_sitekit_gtm_container_id();
+
+		if ( empty( $container_id ) ) {
+			return;
+		}
+
+		tcb_output_gtm_noscript( $container_id );
+		$already_output = true;
+	}
+
+	// Landing pages - output GTM script in landing page head
+	add_action( 'tcb_landing_head_frontend', static function () {
+		tcb_ensure_sitekit_gtm_head();
+	}, 1 );
+
+	// Landing pages - output noscript after landing page body opens
+	add_action( 'tcb_landing_body_open_frontend', static function () {
+		tcb_ensure_sitekit_gtm_body_open();
+	}, 1 );
+}
