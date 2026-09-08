@@ -1,8 +1,0 @@
-.form-inline {
-  // Kick in the inline
-  @include media-breakpoint-up(sm) {
-    label {
-      display: inline !important;
-    }
-  }
-}
